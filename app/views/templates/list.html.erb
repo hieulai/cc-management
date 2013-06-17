@@ -1,0 +1,30 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h1>Available Templates</h1>
+	<%= link_to("Instructions >>", {:action => 'show'}) %>
+	</br>
+	</br>
+	<%= link_to("Create New Template >>", {:action => 'new'}) %>
+	</br>
+	</br>
+	<table class="grid-view" summary="Project List">
+		<tr class="header">
+			<th>Actions</th>
+			<th>Name</th>
+			<th>Notes</th>
+		</tr>
+		<% @templates.each do |template| %>
+		<tr>
+			<td class="center">
+				<%= link_to("Edit", {:action => 'edit', :id => template.id}, :class => 'action edit') %>
+				<%= link_to("Delete", {:action => 'delete', :id => template.id}, :class => 'action delete') %>
+			</td>
+			<td><%= template.name %></td>
+			<td><%=  %></td>
+		
+			
+		</tr>
+		<% end %>
+	</table>
+</div>
+

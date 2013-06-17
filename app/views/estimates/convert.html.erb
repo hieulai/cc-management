@@ -1,0 +1,19 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Convert Estimate</h2>
+	
+	<%= form_for(:estimate, :url => {:action => 'conversion', :id => @estimate.id}) do |f| %>
+	
+	<table>
+		<tr>
+			<th>EstimateStatus</th>
+			<td><%= f.select(:status, ['Current Estimate', 'Past Estimate']) %>
+		</tr>
+	</table>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Convert Estimate") %>
+	</div>
+	
+	<% end %>
+</div>

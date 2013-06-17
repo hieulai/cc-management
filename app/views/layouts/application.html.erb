@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SimpleCms</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag :application %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+	<div id='page'>
+		
+		<div id='header'>
+			<h1>Construction Central</h1>
+			<div id='username'><%= link_to("Logout", '#') %></div>
+		</div>
+	
+		<div id='mainmenu'>
+			<ul>
+				<li><%= link_to("Prospecting", '#', {:action => 'show'}, :class => 'action edit')%></li> 
+				<li><%= link_to("Leads", {:controller => 'projects', :action => 'list_current_leads'}, :class => 'menu item')%></li>
+					
+					<li><%= link_to("Estimating", {:controller => 'estimates', :action => 'list_current'}, :class => 'menu item')%></li>
+					<li><%= link_to("Contracts", '#', {:action => 'show'}, :class => 'action edit')%></li>
+					<li><%= link_to("Project Mgmt", {:controller => 'projects', :action => 'list_current_projects'}, :class => 'menu item')%></li>
+					<li><%= link_to("People", '#', {:action => 'show'}, :class => 'action edit')%></li>
+					<li><%= link_to("Accounting", '#', {:action => 'show'}, :class => 'action edit')%></li>
+					<li><%= link_to("Preferences", '#', {:action => 'show'}, :class => 'action edit')%></li>
+					<li><%= link_to("Admin", '#', {:action => 'show'}, :class => 'action edit')%></li>
+				</ul>
+		</div>
+		<div id='content'>
+			<%= yield %>
+		</div>
+	</div>
+</body>
+</html>
+

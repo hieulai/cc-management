@@ -1,0 +1,31 @@
+<table summary="Template form fields">
+	<tr>
+		<th>Item Name</th>
+		<td><%= f.text_field(:name) %>
+	</tr>
+	<tr>
+		<th>Category</th>
+		<td><%= select(:category, :id, @categories.collect{|s|[s.name, s.id]}, {:include_blank => true}) %></td>
+	</tr>
+	<tr>
+		<th>Description on Estimate</th>
+		<td><%= f.text_field(:description, :size => 100) %>
+	</tr>
+	<tr>
+		<th>Cost</th>
+		<td><%= f.text_field(:cost) %>
+	</tr>
+	<tr>
+		<th>Unit of Measure</th>
+		<td><%= f.text_field(:unit) %>
+	</tr>
+	<tr>
+		<th>Preset Margin</th>
+		<td><%= f.text_field(:margin) %>
+	</tr>
+	<tr>
+		<th>Item Notes</th>
+		<td><%= f.text_area(:notes) %></td>
+	</tr>
+</table>
+	

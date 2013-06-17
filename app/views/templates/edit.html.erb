@@ -1,0 +1,40 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Edit Template</h2>
+	
+	<%= form_for @template, :url => {:action => 'update', :id => @template.id} do |f| %>
+	
+		<p>
+			Template Name
+			<%= f.text_field(:name) %>
+		</p>
+		<% @template.categories.each do |category| %>
+			<p style="margin-left: 40px">
+				<%= category.name %>
+				
+			</p>
+			<% category.items.each do |item| %>
+				<p style="margin-left: 80px">
+					<%= item.name %>
+				</p>
+			<% end %>
+			<p style="margin-left: 80px">
+				<%= label :name, "+ Item"%>
+				<%= select(:item, :id, @items.collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
+			</p>
+		<% end %>
+		<p style="margin-left: 40px">
+			<%= label :name, "+ Category"%>
+			<%= select(:category, :id, @categories.collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
+		</p>
+	
+		
+	
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update Template") %>
+	</div>
+	
+	<% end %>
+	
+</div>

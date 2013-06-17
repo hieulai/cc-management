@@ -1,0 +1,293 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require jquery.ui.all
+ *= require_tree .
+ */
+
+body
+{
+	margin: 0;
+	padding: 0;
+	color: #555;
+	font: normal 10pt Arial,Helvetica,sans-serif;
+	background: #EFEFEF;
+}
+
+h1
+{
+	text-align:center;
+	margin-top: 10px;
+}
+
+#page
+{
+	width: 80%;
+	background: white;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+	border: 1px solid #C9E0ED;
+}
+
+#header
+{
+	margin: 0;
+	padding: 0;
+	border-top: 3px solid #C9E0ED;
+	background: white;
+}
+
+#header h1
+{
+	font-size: 3em;
+	text-align: left;
+}
+
+#username
+{
+	float: right;
+	padding: 10px;	
+}
+
+#footer
+{
+	padding: 10px;
+	margin: 10px 20px;
+	font-size: 0.8em;
+	text-align: center;
+	border-top: 1px solid #C9E0ED;
+}
+
+#mainmenu
+{
+	clear: both;
+	background:#6399cd url(bg.gif) repeat-x left top;
+	height: 60px;
+}
+
+#mainmenu li
+{
+	padding:15px 5px 10px 5px;
+	margin: 0px;
+}
+
+
+#mainmenu ul li
+{
+	display: inline;
+	float: left;
+	text-align:center;
+}
+
+#mainmenu ul li a
+{
+	color:#ffffff;
+	background-color:transparent;
+	font-size:1.7em;
+	font-weight:bold;
+	text-decoration:none;
+	/*padding:0px;*/
+	text-decoration:none; 
+	display:block; 
+	width:155px;
+}
+
+#mainmenu ul li a:hover
+{
+	font-weight:bold;
+	color: white;
+	background-color:gray;
+	/* Removing hover feature on main menu
+	color: #6399cd;
+	background-color:#EFF4FA;
+	text-decoration:none;
+	*/
+}
+
+#mainmenu ul li.active a 
+{
+	color: #6399cd;
+	background-color:#EFF4FA;
+	text-decoration:none;
+}
+
+
+#submenu
+{
+	clear: both;
+	background: gray;
+	/*background:white url(bg.gif) repeat-x left top;*/
+}
+
+#submenu ul
+{
+	padding:6px 20px 5px 20px;
+	margin:0px;
+}
+
+#submenu ul li
+{
+	display: inline;
+}
+
+#submenu ul li a
+{
+	color:#6399cd;
+	background-color:#EFF4FA;
+	font-size:1.5em;
+	font-weight:bold;
+	text-decoration:none;
+	padding:5px 8px;
+}
+
+#submenu ul li a:hover, #mainmenu ul li.active a
+{
+	color: #6399cd;
+	background-color:white;
+	text-decoration:none;
+}
+
+#submenu ul li.active a
+{
+	color: #6399cd;
+	background-color:white;
+	text-decoration:none;
+}
+
+.center
+{
+	text-align:center;
+}
+
+.right
+{
+	text-align:right;
+}
+
+table.grid-view
+{
+	width: 100%;
+	padding: 15px 0;
+	border-collapse: collapse;
+}
+
+table.grid-view th, td
+{
+	font-size: 0.9em;
+	border: 1px white solid;
+	padding: 0.3em;
+	border: 1px #D0E3EF solid;
+}
+
+table.grid-view th
+{
+	color: white;
+	background-color: #6399cd;
+	text-align: center;
+	font-size: 1.5em;
+}
+
+table.grid-view th a:hover
+{
+	color: #FFF;
+}
+
+table.grid-view th a
+{
+	color: #EEE;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.grid-view table.items th
+{
+	background: url("bg.gif") repeat-x scroll left top white;
+}
+
+
+
+.grid-view table.items th a.asc
+{
+	background:url(up.gif) right center no-repeat;
+	padding-right: 10px;
+}
+
+.grid-view table.items th a.desc
+{
+	background:url(down.gif) right center no-repeat;
+	padding-right: 10px;
+}
+
+.grid-view table.items tr.even
+{
+	background: #F8F8F8;
+}
+
+.grid-view table.items tr.odd
+{
+	background: #E5F1F4;
+}
+
+.grid-view table.items tr.selected
+{
+	background: #BCE774;
+}
+
+table.gridview tbody tr:hover
+{
+	background: #ECFBD4;
+}
+
+.grid-view .link-column img
+{
+	border: 0;
+}
+
+.grid-view .button-column
+{
+	text-align: center;
+	width: 60px;
+}
+
+.grid-view .button-column img
+{
+	border: 0;
+}
+
+.grid-view .checkbox-column
+{
+	width: 15px;
+}
+
+.grid-view .summary
+{
+	margin: 0 0 5px 0;
+	text-align: right;
+}
+
+.grid-view .pager
+{
+	margin: 5px 0 0 0;
+	text-align: right;
+}
+
+.grid-view .empty
+{
+	font-style: italic;
+}
+
+.grid-view .filters input,
+.grid-view .filters select
+{
+	width: 100%;
+	border: 1px solid #ccc;
+}

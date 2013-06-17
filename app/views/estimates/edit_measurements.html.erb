@@ -1,0 +1,19 @@
+<div>
+	
+	<h2>Measurements For: <%= @estimate.project.name %></h2>
+	
+	<%= form_for @estimate, :url => {:action => 'update_measurements', :id => @estimate.id} do |f| %>
+	
+	<table summary="Lead detail view">
+		
+		<%= f.fields_for :measurements do |m| %>
+		<tr>
+			<th><%= m.object.name %></th>
+			<td><%= m.text_field(:amount) %></td>
+			<th><%= m.object.unit %></th>
+		</tr>
+		<% end %>
+	</table>
+	<%= f.submit "Submit" %>
+	<% end %>
+</div>

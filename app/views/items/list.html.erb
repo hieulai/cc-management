@@ -1,0 +1,63 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h1>Items List</h1>
+	<%= link_to("Instructions >>", {:action => 'show'}) %>
+	</br>
+	</br>
+	<%= link_to("Create New Item >>", {:action => 'new'}) %>
+	</br>
+	</br>
+	<table class="grid-view" summary="Project List">
+		<tr class="header">
+			<th>Actions</th>
+			<th>Category</th>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Cost</th>
+			<th>Unit</th>
+			<th>Margin</th>
+			<th>Price</th>
+			<th>Notes</th>
+					
+		</tr>
+		<% @categories.each do |category| %>
+		<% category.items.each do |item|%>
+		<tr>
+			<td class="center">
+				<%= link_to("Edit", {:action => 'edit', :id => item.id}, :class => 'action edit') %>
+				<%= link_to("Delete", {:action => 'delete', :id => item.id}, :class => 'action delete') %>
+			</td>
+			<td><%= category.name %></td>
+			<td><%= item.name %></td>
+			<td><%= item.description %></td>
+			<td>$<%= item.cost %></td>
+			<td><%= item.unit %></td>
+			<td>$<%= item.margin %></td>>
+			<td>$<%= item.cost%></td>
+			<td><%= item.notes %></td>
+		
+			
+		</tr>
+		<% end %>
+		<% end %>
+		<% @items.each do |item| %>
+		
+		<tr>
+			<td class="center">
+				<%= link_to("Edit", {:action => 'edit', :id => item.id}, :class => 'action edit') %>
+				<%= link_to("Delete", {:action => 'delete', :id => item.id}, :class => 'action delete') %>
+			</td>
+			<td><%=  %></td>
+			<td><%= item.name %></td>
+			<td><%= item.description %></td>
+			<td>$<%= item.cost %></td>
+			<td><%= item.unit %></td>
+			<td>$<%= item.margin %></td>>
+			<td>$<%= item.cost %></td>
+			<td><%= item.notes %></td>
+		</tr>
+		
+		<% end %>
+	</table>
+</div>
+

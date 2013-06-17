@@ -1,0 +1,41 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h1>Past Estimates</h1>
+	</br>
+	<%= link_to("Instructions", {:action => 'show'}) %>
+	</br>
+	</br>
+	<table class="grid-view" summary="Project List">
+		<tr class="header">
+			<th>Actions</th>
+			<th>Project Name</th>
+			<th>Template Type</th>
+			<th>Status</th>
+			<th>Due Date</th>
+			<th>Revenue</th>
+			<th>Profit</th>
+			<th>Margin</th>
+			<th>Notes</th>
+		</tr>
+		<% @estimates.each do |estimate| %>
+		<tr>
+			<td class="center">
+				<%= link_to("View", {:action => 'show', :id => estimate.id}, :class => 'action vew') %>
+				<%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :class => 'action edit') %>
+				<%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :class => 'action convert') %>
+				<%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>
+			</td>
+			<td><%= estimate.template %></td>
+			<td><%= estimate.template %></td>
+			<td><%= estimate.progress %></td>
+			<td><%= estimate.deadline %></td>
+			<td><%= estimate.revenue %></td>
+			<td><%= estimate.profit %></td>
+			<td><%= estimate.margin %></td>
+			<td><%= estimate.notes %></td>
+			
+		</tr>
+		<% end %>
+	</table>
+</div>
+

@@ -1,0 +1,54 @@
+	<table summary="Project form fields">
+		<tr>
+			<th>Project Name</th>
+			<td><%= f.text_field(:project_name) %>
+		</tr>
+		<tr>
+			<th>Project Type</th>
+			<td><%= f.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build","Residential:  New Construction", "Residential:  Remodel"]) %>
+		</tr>
+		<tr>
+			<th>Start Date</th>
+			<td><%= f.date_select(:start_date, :order => [:month, :day, :year]) %>
+		</tr>
+		<tr>
+			<th>Deadline</th>
+			<td><%= f.date_select(:deadline, :order => [:month, :day, :year]) %>
+		</tr>
+		<tr>
+			<th>Next Tasks</th>
+			<td><%= f.text_field(:next_tasks) %>
+		</tr>
+		<tr>
+			<th>Anticipated Revenue</th>
+			<td><%= f.text_field(:expected_revenue) %>
+		</tr>
+		<tr>
+			<th>Notes</th>
+			<td><%= f.text_area(:notes) %>
+		</tr>
+	</table>
+		<h2>Client Information</h2>
+	<table>
+		<tr>
+			<th>First Name</th>
+			<td>
+		</tr>
+		<tr>
+			<th>Last Name</th>
+			<td>
+		</tr>
+		<tr>
+			<th>Primary Phone</th>
+			<td>
+		</tr>
+		<tr>
+			<th>Secondary Phone</th>
+			<td>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td>
+		</tr>
+	</table>
+	

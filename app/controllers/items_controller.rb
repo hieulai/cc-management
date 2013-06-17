@@ -1,0 +1,55 @@
+class ItemsController < ApplicationController
+  def list
+    #passes in all items that do not have a category set
+    @items = Item.where(:category_id => nil)
+    #passes in all items that have categories set
+    @categories = Category.all
+  end
+
+  def new
+    @item = Item.new
+    @categories = Category.all
+  end
+
+  def create
+    @category = Category.find(params[:category][:id])
+   #@item = Item.new(params[:item])
+    @item = @category.items.new(params[:item])
+  
+    if @item.save
+      redirect_to(:action => 'list')
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('new')
+    end
+  end
+
+  def edit
+    @item= Item.find(params[:id])
+    @categories = Category.all
+  end
+
+  def update
+    #Find object using form parameters
+    @item = Item.find(params[:id])
+    @category = Category.find(params[:category][:id])
+    #Update subject
+    if @item.update_attributes(params[:item])
+      @category.items << @item
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'list')
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('edit')
+    end
+  end
+
+  def delete
+    @item= Item.find(params[:id])
+  end
+
+  def destroy
+    Item.find(params[:id]).destroy
+    redirect_to(:action => 'list')
+  end
+end

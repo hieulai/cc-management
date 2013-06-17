@@ -1,0 +1,31 @@
+	<table summary="Estimate form fields">
+		<tr>
+					<th>Project Name</th>
+					<td><%= select(:project, :id, Project.where(:status => "Current Lead").collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
+		</tr>
+		<tr>
+			<th>Template Type</th>
+			<td><%= f.select(:template, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build","Residential:  New Construction", "Residential:  Remodel"], {:include_blank => true}) %>
+		</tr>
+		<tr>
+			<th>Progress</th>
+			<td><%= f.select(:progress, ["In Progress", "Awaiting Approval", "Completed & Sent"]) %>
+		</tr>
+		<tr>
+			<th>Due Date</th>
+			<td><%= f.date_select(:deadline, :order => [:month, :day, :year], :include_blank => true) %>
+		</tr>
+		<tr>
+			<th>Revenue</th>
+			<td><%= f.text_field(:revenue) %>
+		</tr>
+		<tr>
+			<th>Profit</th>
+			<td><%= f.text_field(:profit) %>
+		</tr>
+		<tr>
+			<th>Notes</th>
+			<td><%= f.text_area(:notes) %>
+		</tr>
+	</table>
+	

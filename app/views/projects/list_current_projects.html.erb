@@ -1,0 +1,44 @@
+<div>
+	<%= render(:partial => "project_sub_menu")%>
+	<h1>Current Projects</h1>
+	</br>
+	<%= link_to("Instructions", {:action => 'show'})%>
+	</br>
+	</br>
+
+	<table class="grid-view" summary="Project List">
+		<tr class="header">
+			<th>Actions</th>
+			<th>Project</th>
+			<th>Type</th>
+			<th>Start Date</th>
+			<th>Progress</th>
+			<th>Deadline</th>
+			<th>Schedule Variance</th>
+			<th>Next Tasks</th>
+			<th>Notes</th>
+		</tr>
+		<% @clients.each do |client| %>
+		<% client.projects.each do |project| %>
+		<tr>
+			<td class="center">
+				<%= link_to("Tasklist", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
+				<%= link_to("View", {:action => 'show_project', :id => project.id}, :class => 'action vew') %>
+				<%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :class => 'action edit') %>
+				<%= link_to("Convert", {:action => 'convert_project', :id => project.id}, :class => 'action edit') %>
+			</td>
+			<td><%= project.name %></td>
+			<td><%= project.project_type %></td>
+			<td><%= project.start_date %></td>
+			<td class="center"><%= project.progress %></td>
+			<td><%= project.deadline %></td>
+			<td><%= project.schedule_variance %></td>
+			<td><%= project.next_tasks %></td>
+			<td><%= project.project_notes %></td>
+			
+		</tr>
+		<% end %>
+		<% end %>
+	</table>
+</div>
+

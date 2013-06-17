@@ -1,0 +1,15 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Create Lead</h2>
+	<%= form_for(@client, :url => {:action => 'create'}) do |c| %>
+	<%= form_for(@project, :url => {:action => 'create'}) do |p| %>
+	
+	<%= render(:partial => "lead_form", :locals => {:c => c, :p => p })%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Create Lead") %>
+	</div>
+
+	<% end %>
+	<% end %>
+</div>

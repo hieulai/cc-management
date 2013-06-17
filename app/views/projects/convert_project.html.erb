@@ -1,0 +1,19 @@
+<div>
+	<%= render(:partial => "project_sub_menu")%>
+	<h2>Convert Project</h2>
+	
+	<%= form_for @project, :url => {:action => 'conversion_project', :id => @project.id} do |f| %>
+	
+	<table>
+		<tr>
+			<th>Lead Status</th>
+			<td><%= f.select(:status, ['Current Project', 'Past Project', 'Current Lead']) %>
+		</tr>
+	</table>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Convert Project") %>
+	</div>
+	
+	<% end %>
+</div>

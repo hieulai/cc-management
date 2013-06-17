@@ -1,0 +1,6 @@
+<div class="fields">
+	<p style="margin-left: 40px">
+		<%= f.label :name, "Category"%>
+		<%= f.select :categories, :id, @categories.collect{|s|[s.name, s.id]} %>
+	</p>
+</div>

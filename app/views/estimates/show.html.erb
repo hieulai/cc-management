@@ -1,0 +1,35 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Estimate Details For: </h2>
+	
+	<table summary="Estimate detail view">
+		<tr>
+			<th>Created</th>
+			<td><%= @estimate.created_at %>
+		</tr>
+		<tr>
+			<th>Last Updated</th>
+			<td><%= @estimate.updated_at %>
+		</tr>
+		<tr>
+			<th>Estimate Status</th>
+			<td><%= @estimate.progress %>
+		</tr>
+		<tr>
+			<th>Due Date</th>
+			<td><%= @estimate.deadline %>
+		</tr>
+		<tr>
+			<th>Revenue</th>
+			<td><%= @estimate.revenue %>
+		</tr>
+		<tr>
+			<th>Profit</th>
+			<td><%= @estimate.profit %>
+		</tr>
+		<tr>
+			<th>Notes</th>
+			<td><%= @estimate.notes %>
+		</tr>
+	</table>
+</div>

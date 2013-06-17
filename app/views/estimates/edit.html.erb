@@ -1,0 +1,14 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Update Estimate</h2>
+	
+	<%= form_for(:estimate, :url => {:action => 'update', :id => @estimate.id}) do |f| %>
+	
+	<%= render(:partial => "edit_form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update Estimate") %>
+	</div>
+	
+	<% end %>
+</div>

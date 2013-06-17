@@ -1,0 +1,30 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h1>Categories List</h1>
+	<%= link_to("Instructions >>", {:action => 'show'}) %>
+	</br>
+	</br>
+	<%= link_to("Create New Category >>", {:action => 'new'}) %>
+	</br>
+	</br>
+	<table class="grid-view" summary="Project List">
+		<tr class="header">
+			<th>Actions</th>
+			<th>Name</th>
+			<th>Notes</th>
+		</tr>
+		<% @categories.each do |category| %>
+		<tr>
+			<td class="center">
+				<%= link_to("Edit", {:action => 'edit', :id => category.id}, :class => 'action edit') %>
+				<%= link_to("Delete", {:action => 'delete', :id => category.id}, :class => 'action delete') %>
+			</td>
+			<td><%= category.name %></td>
+			<td><%=  %></td>
+		
+			
+		</tr>
+		<% end %>
+	</table>
+</div>
+
