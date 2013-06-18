@@ -1,15 +1,15 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
 	<h2>Create Item</h2>
-	
+
 	<%= form_for @item, :url => {:action => 'create'} do |f| %>
-	
+
 	<%= render(:partial => "new_form", :locals => {:f => f})%>
-	
+
 	<div class="form-buttons">
 		<%= submit_tag("Create") %>
 	</div>
-	
+
 	<% end %>
-	
+
 </div>

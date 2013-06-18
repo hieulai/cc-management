@@ -14,7 +14,7 @@ class CreateItems < ActiveRecord::Migration
       t.text "notes"
       t.timestamps
     end
-    add_index :items, :builder_id 
+    add_index :items, :builder_id
     add_index :items, :template_id
     add_index :items, :category_id
   end

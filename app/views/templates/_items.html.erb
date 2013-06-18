@@ -1,6 +1,8 @@
-<p class="fields", style="margin-left: 100px">
-	<%= f.label :name, "Item"%>
-	<%= f.text_field :name %>
-	<%= link_to_remove_fields "Delete", f %>
-</p>
+<div class="nested-fields" style="margin-left: 100px">
+  <p>
+    <%= f.label :id, "Item"%>
+    <%= f.select :id, @items.collect{ |item| [item.name, item.id] }, prompt: "Select Item" %>
+  </p>
 
+  <%= link_to_remove_association("Remove Item", f) %>
+</div>

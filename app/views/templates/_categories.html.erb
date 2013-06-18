@@ -1,6 +1,16 @@
-<div class="fields">
+<div class="nested-fields">
 	<p style="margin-left: 40px">
-		<%= f.label :name, "Category"%>
-		<%= f.select :categories, :id, @categories.collect{|s|[s.name, s.id]} %>
+		<%= f.label :id, "Category"%>
+		<%= f.select :id, @categories.collect{ |category| [category.name, category.id] }, {prompt: "Select Category"}, class: "template_categories", onchange: "add_item(this)" %>
 	</p>
+
+  <div class="category_items">
+    <% if f.object.items %>
+      <% f.object.items.each do |item| %>
+        <p class="item" data-id="<%= item.id %>"><%= item.name %></p>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= link_to_remove_association("Remove Category", f) %>
 </div>

@@ -1,17 +1,17 @@
 class ClientsController < ApplicationController
-  
+
   def list
     @clients = Client.all
   end
-  
+
   def show
     @client = Client.find(params[:id])
   end
-  
+
   def new
     @client =  Client.new
   end
-  
+
   def create
     #Instantiate a new object using form parameters
     @client = Client.new(params[:client])
@@ -24,11 +24,11 @@ class ClientsController < ApplicationController
       render('new')
     end
   end
-  
+
   def edit
     @client = Client.find(params[:id])
   end
-  
+
   def update
     #Find object using form parameters
     @client = Client.find(params[:id])
@@ -41,7 +41,7 @@ class ClientsController < ApplicationController
       render('edit')
     end
   end
-  
+
   def delete
     @client= Client.find(params[:id])
   end
@@ -50,5 +50,5 @@ class ClientsController < ApplicationController
     Client.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
-  
+
 end

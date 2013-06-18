@@ -14,6 +14,6 @@ class CreateMeasurements < ActiveRecord::Migration
       t.boolean "RR"
       t.timestamps
     end
-    add_index :measurements, :estimate_id  
+    add_index :measurements, :estimate_id
   end
 end

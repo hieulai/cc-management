@@ -11,6 +11,6 @@ class CreateCategories < ActiveRecord::Migration
       t.timestamps
     end
     add_index :categories, :template_id
-    add_index :categories, :builder_id  
+    add_index :categories, :builder_id
   end
 end

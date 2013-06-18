@@ -4,28 +4,28 @@ class EstimatesController < ApplicationController
       #add condition to filter leads by lead_status
       @estimates = Estimate.where(:status => "Current Estimate")
     end
-  
+
     def list_past
       #add condition to filter leads by lead_status
       @estimates = Estimate.where(:status => "Past Estimate")
     end
-    
+
     def list_templates
       @templates = Template.all
     end
-    
+
     def list_itesm
       @items = Item.all
     end
-  
+
     def show
       @estimate = Estimate.find(params[:id])
     end
-  
+
     def new
       @estimate = Estimate.new
     end
-  
+
     def create
       #Reads in the project ID selected by the User
       @project = Project.find(params[:project][:id])
@@ -45,11 +45,11 @@ class EstimatesController < ApplicationController
         render('new')
       end
     end
-  
+
     def edit
       @estimate = Estimate.find(params[:id])
     end
-  
+
     def update
       #Find object using form parameters
       @estimate = Estimate.find(params[:id])
@@ -62,12 +62,12 @@ class EstimatesController < ApplicationController
         render('edit')
       end
     end
-    
+
     def edit_measurements
       @estimate = Estimate.find(params[:id])
-      @measurements = @estimate.measurements 
+      @measurements = @estimate.measurements
     end
-  
+
     def update_measurements
       #Find object using form parameters
       @estimate = Estimate.find(params[:id])
@@ -80,12 +80,12 @@ class EstimatesController < ApplicationController
         render('edit')
       end
     end
-    
+
     def edit_templates
       @estimate = Estimate.find(params[:id])
-      @measurements = @estimate.measurements 
+      @measurements = @estimate.measurements
     end
-  
+
     def update_templates
       #Find object using form parameters
       @estimate = Estimate.find(params[:id])
@@ -98,11 +98,11 @@ class EstimatesController < ApplicationController
         render('edit')
       end
     end
-  
+
     def convert
       @estimate = Estimate.find(params[:id])
     end
-  
+
     def conversion
       #Find object using form parameters
       @estimate = Estimate.find(params[:id])
@@ -115,11 +115,11 @@ class EstimatesController < ApplicationController
         render('convert')
       end
     end
-  
+
     def delete
       @estimate = Estimate.find(params[:id])
     end
-  
+
     def destroy
       Estimate.find(params[:id]).destroy
       redirect_to(:action => 'list_current')
