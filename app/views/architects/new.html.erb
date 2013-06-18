@@ -1,8 +1,8 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Add Client</h2>
+	<h2>Add Architect</h2>
 	
-	<%= form_for @client, :url => {:action => 'create'} do |f| %>
+	<%= form_for @architect, :url => {:action => 'create'} do |f| %>
 	
 	<%= render(:partial => "new_form", :locals => {:f => f})%>
 	

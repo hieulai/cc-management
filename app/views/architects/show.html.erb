@@ -1,0 +1,36 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Architect Details For: <%= @architect.first_name %> </h2>
+	
+	<table summary="Estimate detail view">
+		
+		<tr>
+			<th>Company</th>
+			<td><%= @architect.company %>
+		</tr>
+		<tr>
+			<th>First Name</th>
+			<td><%= @architect.first_name %>
+		</tr>
+		<tr>
+			<th>Last Name</th>
+			<td><%= @architect.last_name %>
+		</tr>
+		<tr>
+			<th>Primary Phone</th>
+			<td><%= @architect.primary_phone %>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td><%= @architect.email %>
+		</tr>
+		<tr>
+			<th>Created At</th>
+			<td><%= @architect.created_at %>
+		</tr>
+		<tr>
+			<th>Last Updated</th>
+			<td><%= @architect.updated_at %>
+		</tr>
+	</table>
+</div>

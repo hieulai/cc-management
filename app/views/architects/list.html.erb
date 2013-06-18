@@ -1,0 +1,39 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h1>Architect Database</h1>
+	<%= link_to("Instructions >>", {:action => 'show'}) %>
+	</br>
+	</br>
+	<%= link_to("Add New Client >>", {:action => 'new'}) %>
+	</br>
+	</br>
+	<table class="grid-view" summary="Project List">
+		<tr class="header">
+			<th>Actions</th>
+			<th>Company</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Primary Phone</th>
+			<th>Email</th>
+					
+		</tr>
+		<% @architects.each do |arch| %>
+		
+		<tr>
+			<td class="center">
+				<%= link_to("Show", {:action => 'show', :id => arch.id}, :class => 'action edit') %>
+				<%= link_to("Edit", {:action => 'edit', :id => arch.id}, :class => 'action edit') %>
+				<%= link_to("Delete", {:action => 'delete', :id => arch.id}, :class => 'action delete') %>
+			</td>
+			<td><%= arch.company %></td>
+			<td><%= arch.first_name %></td>
+			<td><%= arch.last_name %></td>
+			<td><%= arch.primary_phone %></td>
+			<td><%= arch.email %></td>	
+			
+		</tr>
+		<% end %>
+		
+	</table>
+</div>
+

@@ -1,22 +1,21 @@
-class ClientsController < ApplicationController
-  
+class ArchitectsController < ApplicationController
   def list
-    @clients = Client.all
+    @architects = Architect.all
   end
   
   def show
-    @client = Client.find(params[:id])
+    @architect = Architect.find(params[:id])
   end
   
   def new
-    @client =  Client.new
+    @architect =  Architect.new
   end
   
   def create
     #Instantiate a new object using form parameters
-    @client = Client.new(params[:client])
+    @architect = Architect.new(params[:architect])
     #save subject
-    if @client.save
+    if @architect.save
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
@@ -26,14 +25,14 @@ class ClientsController < ApplicationController
   end
   
   def edit
-    @client = Client.find(params[:id])
+    @architect = Architect.find(params[:id])
   end
   
   def update
     #Find object using form parameters
-    @client = Client.find(params[:id])
+    @architect = Architect.find(params[:id])
     #Update subject
-    if @client.update_attributes(params[:client])
+    if @architect.update_attributes(params[:architect])
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
@@ -43,12 +42,11 @@ class ClientsController < ApplicationController
   end
   
   def delete
-    @client= Client.find(params[:id])
+    @architect= Architects.find(params[:id])
   end
 
   def destroy
-    Client.find(params[:id]).destroy
+    Architect.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
-  
 end

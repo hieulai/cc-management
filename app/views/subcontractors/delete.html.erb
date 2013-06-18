@@ -1,0 +1,15 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Delete Client</h2>
+	
+	<%= form_for(:client, :url => {:action => 'destroy', :id => @client.id}) do |f| %>
+	
+	<p>Are you sure you want to delete this client and all it's attached projects?</p>
+	
+	<p class="reference-name"><%= @client.first_name + ' ' + @client.last_name %></p>
+	<div class="form-buttons">
+		<%= submit_tag("Delete") %>
+	</div>
+	
+	<% end %>
+</div>
