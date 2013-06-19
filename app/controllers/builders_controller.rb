@@ -1,9 +1,7 @@
 class BuildersController < ApplicationController
-  index
+  def index
     #verfiy syntax 
     render(projects/index)
   end
-  
-  
 
 end
