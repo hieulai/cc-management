@@ -2,18 +2,13 @@
 		Template Name
 		<%= f.text_field(:name) %>
 	</p>
-	
-	<p><%= select(:categories, :id, @categories.collect{|s|[s.name, s.id]}, {:include_blank => true}) %></p>
-	
-	
 
-	
-	
-	
+	<p><%= select(:categories, :id, @categories.collect{|s|[s.name, s.id]}, {:include_blank => true}) %></p>
 	<!--f.select(:id, @categories.collect{|s|[s.name, s.id]}) 
 	link_to_function "Delete", "remove_fields(this)
 	f.label :name, "Add Item"%>
 			<%= f.select :id, @items.collect{|s|[s.name, s.id]} %>
-		
-		
+
+
 		-->
+
