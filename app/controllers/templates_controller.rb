@@ -14,7 +14,14 @@ class TemplatesController < ApplicationController
   end
 
   def create
+    ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
+    @categories = Category.find(ids)
+    params[:template].delete(:categories_attributes)
     @template = Template.new(params[:template])
+
+    @categories.each do |category|
+      @template.categories << category
+    end
 
     if @template.save
       redirect_to action: 'list'
