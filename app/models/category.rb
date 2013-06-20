@@ -1,7 +1,7 @@
 class Category < ActiveRecord::Base
   belongs_to :builder
-  belongs_to :template
-  has_many :items
+  has_and_belongs_to_many :template
+  has_and_belongs_to_many :items
 
   attr_accessible :name, :cost_total, :margin_total, :price_total, :default, :items_attributes
 

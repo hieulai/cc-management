@@ -18,7 +18,7 @@
 			<th>Margin</th>
 			<th>Price</th>
 			<th>Notes</th>
-					
+
 		</tr>
 		<% @categories.each do |category| %>
 		<% category.items.each do |item|%>
@@ -33,15 +33,13 @@
 			<td>$<%= item.cost %></td>
 			<td><%= item.unit %></td>
 			<td>$<%= item.margin %></td>>
-			<td>$<%= item.cost%></td>
+			<td>$<%= count_price(item)%></td>
 			<td><%= item.notes %></td>
-		
-			
 		</tr>
 		<% end %>
 		<% end %>
 		<% @items.each do |item| %>
-		
+
 		<tr>
 			<td class="center">
 				<%= link_to("Edit", {:action => 'edit', :id => item.id}, :class => 'action edit') %>
@@ -56,7 +54,7 @@
 			<td>$<%= item.cost %></td>
 			<td><%= item.notes %></td>
 		</tr>
-		
+
 		<% end %>
 	</table>
 </div>

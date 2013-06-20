@@ -1,7 +1,7 @@
 class Template < ActiveRecord::Base
   belongs_to :builder
   belongs_to :estimate
-  has_many :categories
+  has_and_belongs_to_many :categories
 
   attr_accessible :name, :cost_total, :margin_total, :price_total, :default, :categories_attributes
 

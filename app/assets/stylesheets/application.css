@@ -55,7 +55,7 @@ h1
 #username
 {
 	float: right;
-	padding: 10px;	
+	padding: 10px;
 }
 
 #footer
@@ -71,12 +71,17 @@ h1
 {
 	clear: both;
 	background:#6399cd url(bg.gif) repeat-x left top;
-	height: 60px;
+	height: 47px;
+	margin-bottom: 20px;
+}
+
+#mainmenu ul {
+	padding: 0 !important;
 }
 
 #mainmenu li
 {
-	padding:15px 5px 10px 5px;
+	padding:15px 10px;
 	margin: 0px;
 }
 
@@ -92,20 +97,21 @@ h1
 {
 	color:#ffffff;
 	background-color:transparent;
-	font-size:1.7em;
+	font-size:14px;
 	font-weight:bold;
 	text-decoration:none;
 	/*padding:0px;*/
-	text-decoration:none; 
-	display:block; 
-	width:155px;
+	text-decoration:none;
+	display:block;
+	width:90px;
 }
 
-#mainmenu ul li a:hover
+#mainmenu ul li:hover
 {
 	font-weight:bold;
 	color: white;
-	background-color:gray;
+	background-color:rgb(48, 101, 151);
+	cursor: pointer;
 	/* Removing hover feature on main menu
 	color: #6399cd;
 	background-color:#EFF4FA;

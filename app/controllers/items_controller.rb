@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   def list
     #passes in all items that do not have a category set
-    @items = Item.where(:category_id => nil)
+    @items = Item.where(category_id: nil)
     #passes in all items that have categories set
     @categories = Category.all
   end
@@ -12,12 +12,12 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @category = Category.find(params[:category][:id])
-   #@item = Item.new(params[:item])
-    @item = @category.items.new(params[:item])
-  
-    if @item.save
-      redirect_to(:action => 'list')
+    @category = Category.find(params[:category][:id]) unless params[:category][:id].blank?
+    @item = Item.new(params[:item])
+
+    if @item.save && @category
+      @item.categories << @category
+      redirect_to(action: 'list')
     else
       #if save fails, redisplay form to user can fix problems
       render('new')
@@ -25,27 +25,29 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @item= Item.find(params[:id])
+    @item = Item.find(params[:id])
     @categories = Category.all
+    @category = @item.categories.first.id unless @item.categories.blank?
   end
 
   def update
     #Find object using form parameters
     @item = Item.find(params[:id])
-    @category = Category.find(params[:category][:id])
+    @category = Category.find(params[:category][:id]) unless params[:category][:id].blank?
     #Update subject
-    if @item.update_attributes(params[:item])
+    if @item.update_attributes(params[:item]) && @category
       @category.items << @item
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
       #if save fails, redisplay form to user can fix problems
+      @categories = Category.all
       render('edit')
     end
   end
 
   def delete
-    @item= Item.find(params[:id])
+    @item = Item.find(params[:id])
   end
 
   def destroy

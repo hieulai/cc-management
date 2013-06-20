@@ -6,7 +6,10 @@ var add_item = function(el){
   $.ajax({
     url: $("#site_url").val()+"/categories/items/"+el.val()+".json",
     dataType: "json",
-    success: function(data, textStatus){
+    beforeSend: function(xhr) {
+      return $("#loading").show();
+    }
+  }).done(function(data, textStatus){
       nestedFields = el.parents(".nested-fields")
       categoryItems = nestedFields.children(".category_items")
       categoryItems.fadeOut()
@@ -15,6 +18,5 @@ var add_item = function(el){
       for(i = 0; i < data.length; i++){
         categoryItems.append("<p class='item' data-id='"+data[i].id+"'>"+data[i].name+"</p>").fadeIn()
       }
-    }
   });
 }
