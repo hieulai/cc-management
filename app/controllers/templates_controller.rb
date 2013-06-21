@@ -1,6 +1,6 @@
 class TemplatesController < ApplicationController
-
   before_filter :find_template, only: [:edit, :update, :delete, :destroy]
+  after_filter :update_categories, only: [:create, :update]
 
   def list
     @templates = Template.all
@@ -14,14 +14,8 @@ class TemplatesController < ApplicationController
   end
 
   def create
-    ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
-    @categories = Category.find(ids)
     params[:template].delete(:categories_attributes)
     @template = Template.new(params[:template])
-
-    @categories.each do |category|
-      @template.categories << category
-    end
 
     if @template.save
       redirect_to action: 'list'
@@ -37,20 +31,12 @@ class TemplatesController < ApplicationController
   end
 
   def update
-    ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
-    @categories = Category.find(ids)
     @template = Template.find(params[:id])
     @item = Item.find(params[:item][:id]) if params[:item]
-    @template.categories.delete_all
-
-    @categories.each do |category|
-      @template.categories << category
-    end
     #Find object using form parameters
 
     #Update subject
     if @template.update_attributes(params[:template])
-        @category.items << @item if @item
       #if save succeeds, redirect to list action
       redirect_to(action: 'list')
     else
@@ -73,6 +59,17 @@ class TemplatesController < ApplicationController
 
   def find_template
     @template = Template.find(params[:id])
+  end
+
+  def update_categories
+    ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
+    @categories = Category.find(ids)
+    @template.categories.delete_all
+
+    @categories.each do |category|
+      @template.categories << category
+    end
+
   end
 
 end
