@@ -44,4 +44,12 @@ class CategoriesController < ApplicationController
       Category.find(params[:id]).destroy
       redirect_to(:action => 'list')
     end
+
+    def items
+      category = Category.find(params[:id])
+
+      respond_to do |format|
+        format.json { render json: category.items.select("id, name") }
+      end
+    end
 end
