@@ -54,4 +54,8 @@ class ItemsController < ApplicationController
     Item.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
+
+  def transfer_data
+    @item = Item.new
+  end
 end

@@ -4,7 +4,7 @@
 var add_item = function(el){
   el = $(el)
   $.ajax({
-    url: $("#site_url").val()+"/categories/items/"+el.val()+".json",
+    url: "/categories/items/"+el.val()+".json",
     dataType: "json",
     beforeSend: function(xhr) {
       return $("#loading").show();

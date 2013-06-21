@@ -71,12 +71,15 @@ h1
 {
 	clear: both;
 	background:#6399cd url(bg.gif) repeat-x left top;
-	height: 47px;
 	margin-bottom: 20px;
+	float: left;
+	width: 100%;
 }
 
 #mainmenu ul {
+	margin: 0 !important;
 	padding: 0 !important;
+	float: left;
 }
 
 #mainmenu li
@@ -103,7 +106,7 @@ h1
 	/*padding:0px;*/
 	text-decoration:none;
 	display:block;
-	width:90px;
+	width:100px;
 }
 
 #mainmenu ul li:hover
