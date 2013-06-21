@@ -5,5 +5,7 @@ class Category < ActiveRecord::Base
 
   attr_accessible :name, :cost_total, :margin_total, :price_total, :default, :items_attributes
 
-  accepts_nested_attributes_for :items, allow_destroy: true
+  # accepts_nested_attributes_for :items, allow_destroy: true
+
+  validates :name, presence: true
 end
