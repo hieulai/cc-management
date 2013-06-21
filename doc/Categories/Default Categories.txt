@@ -1,0 +1,27 @@
+Category.create :name => "Planning & Design"
+Category.create :name => "Permits & Inspections"
+Category.create :name => "Job Site Facilities"
+Category.create :name => "Demolition"
+Category.create :name => "Site Work"
+Category.create :name => "Foundation"
+Category.create :name => "Framing"
+Category.create :name => "Doors & Windows"
+Category.create :name => "Roofing"
+Category.create :name => "Exterior Veneers"
+Category.create :name => "Plumbing"
+Category.create :name => "HVAC"
+Category.create :name => "Electrical"
+Category.create :name => "Insulation"
+Category.create :name => "Drywall & Paint"
+Category.create :name => "Cabinetry & Counters"
+Category.create :name => "Finish Carpentry"
+Category.create :name => "Flooring & Tile"
+Category.create :name => "Appliances"
+Category.create :name => "Hardware"
+Category.create :name => "Specialty"
+Category.create :name => "Landscaping"
+Category.create :name => "Cleaning & Hauling"
+
+
+
+

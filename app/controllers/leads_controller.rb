@@ -1,14 +1,4 @@
 class LeadsController < ApplicationController
-
-  def list_current
-    #add condition to filter leads by lead_status
-    @leads = Lead.where(:lead_status => "Current Lead").order("leads.project_name ASC")
-  end
-  
-  def list_past
-    #add condition to filter leads by lead_status
-    @leads = Lead.where(:lead_status => "Lost Lead").order("leads.project_name ASC")
-  end
   
   def show
     @lead = Lead.find(params[:id])

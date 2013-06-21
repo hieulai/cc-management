@@ -33,7 +33,6 @@ class TemplatesController < ApplicationController
   def edit
     @categories = Category.where("template_id IS NULL OR template_id = ?", @template.id)
     @items = Item.all
-    # @template = Template.find(params[:id])
   end
 
   def update
@@ -48,7 +47,6 @@ class TemplatesController < ApplicationController
     end
     #Find object using form parameters
 
-    #Update subject
     if @template.update_attributes(params[:template])
         @category.items << @item if @item
       #if save succeeds, redirect to list action
@@ -60,12 +58,11 @@ class TemplatesController < ApplicationController
   end
 
   def delete
-    # @template = Template.find(params[:id])
+    @template = Template.find(params[:id])
   end
 
   def destroy
     @template.destroy
-
     redirect_to(action: 'list')
   end
 

@@ -1,0 +1,15 @@
+Item.create :name => "Custom Shower Pan", :description => "Labor & Materials: Build custom shower pan.", :unit => each, :cost => 450, :margin => 75
+Item.create :name => "Frisae Carpet", :description => "Labor & Materials: Install frisae style carpet.", :unit => sf, :cost => 1.85, :margin => .50
+Item.create :name => "Vanity Sink", :description => "Allowance: Brushed nickel vanity sink.", :unit => each, :cost => 70, :margin => 0
+Item.create :name => "Under-mount Sink", :description => "Allowance: Stainless steel under-mount kitchen sink.", :unit => each, :cost => 275, :margin => 0
+Item.create :name => "2x4x9 Stud", :description => "Materials: 9ft-2x4 studs", :unit => each, :cost => 2.53, :margin => .20
+Item.create :name => "1/2 OSB Subflooring", :description => "Materials: 4x8 sheets of 1/2in T&G OSB Subflooring", :unit => each, :cost => 13.78, :margin => .50
+Item.create :name => "Ceiling Fan", :description => "Allowance: Builder grade ceiling fan.", :unit => each, :cost => 150, :margin => 0
+Item.create :name => "Labor", :description => "Labor: Build new service panel.", :unit => each, :cost => 1850, :margin => 400
+Item.create :name => "Labor", :description => "Labor: Install all wiring and electrical fixtures.", :unit => sf, :cost => 4.15, :margin => 2
+
+
+
+
+
+

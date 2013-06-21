@@ -1,8 +1,8 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Edit Client Info</h2>
+	<h2>Edit Supplier Info</h2>
 	
-	<%= form_for @client, :url => {:action => 'update', :id => @client.id} do |f| %>
+	<%= form_for @supplier, :url => {:action => 'update', :id => @supplier.id} do |f| %>
 	
 	<%= render(:partial => "new_form", :locals => {:f => f})%>
 	

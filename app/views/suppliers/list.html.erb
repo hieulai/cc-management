@@ -1,10 +1,10 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h1>Client Database</h1>
+	<h1>Supplier Database</h1>
 	<%= link_to("Instructions >>", {:action => 'show'}) %>
 	</br>
 	</br>
-	<%= link_to("Add New Client >>", {:action => 'new'}) %>
+	<%= link_to("Add New Supplier >>", {:action => 'new'}) %>
 	</br>
 	</br>
 	<table class="grid-view" summary="Project List">
@@ -15,29 +15,21 @@
 			<th>Last Name</th>
 			<th>Primary Phone</th>
 			<th>Email</th>
-			<th>Project Name</th>
-			<th>Lead Source</th>
 					
 		</tr>
-		<% @clients.each do |client| %>
+		<% @suppliers.each do |s| %>
 		
 		<tr>
 			<td class="center">
-				<%= link_to("Show", {:action => 'show', :id => client.id}, :class => 'action edit') %>
-				<%= link_to("Edit", {:action => 'edit', :id => client.id}, :class => 'action edit') %>
-				<%= link_to("Delete", {:action => 'delete', :id => client.id}, :class => 'action delete') %>
+				<%= link_to("Show", {:action => 'show', :id => s.id}, :class => 'action edit') %>
+				<%= link_to("Edit", {:action => 'edit', :id => s.id}, :class => 'action edit') %>
+				<%= link_to("Delete", {:action => 'delete', :id => s.id}, :class => 'action delete') %>
 			</td>
-			<td><%= client.company %></td>
-			<td><%= client.first_name %></td>
-			<td><%= client.last_name %></td>
-			<td><%= client.primary_phone %></td>
-			<td><%= client.email %></td>
-			<td>
-				<% client.projects.each do |project| %>
-					<%= project.name %>
-				<% end %>
-			</td>
-			<td><%= client.lead_source %></td>
+			<td><%= s.company %></td>
+			<td><%= s.first_name %></td>
+			<td><%= s.last_name %></td>
+			<td><%= s.primary_phone %></td>
+			<td><%= s.email %></td>	
 			
 		</tr>
 		<% end %>

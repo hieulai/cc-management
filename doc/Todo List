@@ -1,0 +1,20 @@
+Templates
+- The first category in the list doesn't have a "Remove Category" link
+- Let's change the link title from "Remove Category" to "Delete"
+- Let's also display all "Delete" links in-line with the Category drop-down.
+- After I've added a category and go back in to edit the category, it's not storing the data. For example, if I've added 3 categories (Demolition, Framing, Roofing) save the template, and then go back in to edit the template and change Demolition to Plumbing and click "Update". When I go back in the next time it still list the category as Demolition instead of Plumbing.
+
+Items
+- Create Item is not working anymore
+- Edit Item is not working anymore
+- The "Price" column on Items List should be equal to :cost + :margin. I was sure how to setup that up properly. When I coded it, everything failed if there was a nil value for :cost or :margin. We need the formula to work like this:
+if (cost = nil & margin = nil) price = nil
+if (cost = nil & margin = X) price = margin
+if (cost = X & margin = nil) price = cost
+if (cost = x & margin = Y) price = X + Y
+
+Import/Export
+- In the submenu item marked "Import/Export", let's create an upload option for the Builder to attach an Excel file or CSV file with item data that populates the items table. If you need to build different functionality for each type of file than just add a drop-down menu on the Import/Export page that requires the Builder to select "File Format" of either Excel Spreadsheet or CSV.
+
+Main Menu
+- I'm awful with front-end stuff. Can you fix the main menu so that it's not breaking? I want "Prospecting, Leads, Estimating, Contracts, Project Mgmt, People, Accounting, Preferences, and Company" to all appear in a single line. If you want to just through in some kind of JQuery menu, that's fine with me. Whatever you think is best.
