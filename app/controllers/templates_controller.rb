@@ -41,6 +41,7 @@ class TemplatesController < ApplicationController
     @categories = Category.find(ids)
     @template = Template.find(params[:id])
     @item = Item.find(params[:item][:id]) if params[:item]
+    @template.categories.delete_all
 
     @categories.each do |category|
       @template.categories << category
