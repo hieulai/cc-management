@@ -1,40 +1,36 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Client Details For: <%= @client.first_name %> </h2>
+	<h2>Subcontractor Details For: <%= @subcontractor.first_name %> </h2>
 	
 	<table summary="Estimate detail view">
 		
 		<tr>
 			<th>Company</th>
-			<td><%= @client.company %>
+			<td><%= @subcontractor.company %>
 		</tr>
 		<tr>
 			<th>First Name</th>
-			<td><%= @client.first_name %>
+			<td><%= @subcontractor.first_name %>
 		</tr>
 		<tr>
 			<th>Last Name</th>
-			<td><%= @client.last_name %>
+			<td><%= @subcontractor.last_name %>
 		</tr>
 		<tr>
 			<th>Primary Phone</th>
-			<td><%= @client.primary_phone %>
+			<td><%= @subcontractor.primary_phone %>
 		</tr>
 		<tr>
 			<th>Email</th>
-			<td><%= @client.email %>
-		</tr>
-		<tr>
-			<th>Lead Source</th>
-			<td><%= @client.lead_source %>
+			<td><%= @subcontractor.email %>
 		</tr>
 		<tr>
 			<th>Created At</th>
-			<td><%= @client.created_at %>
+			<td><%= @subcontractor.created_at %>
 		</tr>
 		<tr>
 			<th>Last Updated</th>
-			<td><%= @client.updated_at %>
+			<td><%= @subcontractor.updated_at %>
 		</tr>
 	</table>
 </div>
