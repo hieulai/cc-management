@@ -5,4 +5,8 @@ class Client < ActiveRecord::Base
   
   attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone, 
       :address, :city, :state, :zipcode, :notes, :last_contacted, :lead_source
+      
+  def full_name
+     "#{first_name} #{last_name}"
+  end
 end

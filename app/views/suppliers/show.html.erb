@@ -1,36 +1,79 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Supplier Details For: <%= @supplier.first_name %> </h2>
-	
-	<table summary="Estimate detail view">
-		
-		<tr>
-			<th>Company</th>
-			<td><%= @supplier.company %>
-		</tr>
-		<tr>
-			<th>First Name</th>
-			<td><%= @supplier.first_name %>
-		</tr>
-		<tr>
-			<th>Last Name</th>
-			<td><%= @supplier.last_name %>
-		</tr>
-		<tr>
-			<th>Primary Phone</th>
-			<td><%= @supplier.primary_phone %>
-		</tr>
-		<tr>
-			<th>Email</th>
-			<td><%= @supplier.email %>
-		</tr>
-		<tr>
-			<th>Created At</th>
-			<td><%= @supplier.created_at %>
-		</tr>
-		<tr>
-			<th>Last Updated</th>
-			<td><%= @supplier.updated_at %>
-		</tr>
+	<h2>Supplier Details For: <%= @supplier.company %> </h2>
+	<h2>Company Info:</h2>
+	<p>
+		<%= "Company Name:" %>
+		<%= @supplier.company %>
+	</p>
+	<p>
+		<%= "Website:" %>
+		<%= @supplier.website %>
+	</p>
+	<p>
+		<%= "Address:" %>
+		<%= @supplier.address %>
+	</p>
+	<p>
+		<%= "City:" %>
+		<%= @supplier.city %>
+	</p>
+	<p>
+		<%= "State:" %>
+		<%= @supplier.state %>
+	</p>
+	<p>
+		<%= "Zipcode:" %>
+		<%= @supplier.zipcode %>
+	</p>
+
+	<h2>Primary Contact's Info:</h2>
+	<p>
+		<%= "First Name:" %>
+		<%= @supplier.primary_first_name %>
+	</p>
+	<p>
+		<%= "Last Name:" %>
+		<%= @supplier.primary_last_name %>
+	</p>
+	<p>
+		<%= "Phone:" %>
+		<%= @supplier.primary_phone %>
+	</p>
+	<p>
+		<%= "Email:" %>
+		<%= @supplier.primary_email %>
+	</p>
+
+	<h2>Secondary Contact's Info:</h2>
+	<p>
+		<%= "First Name:" %>
+		<%= @supplier.secondary_first_name %>
+	</p>
+	<p>
+		<%= "Last Name:" %>
+		<%= @supplier.secondary_last_name %>
+	</p>
+	<p>
+		<%= "Phone:" %>
+		<%= @supplier.secondary_phone %>
+	</p>
+	<p>
+		<%= "Email:" %>
+		<%= @supplier.secondary_email %>
+	</p>
+
+	<p>
+		<%= "Notes:" %>
+		<%= @supplier.notes %>
+	</p>
+	<p>
+		<%= "Created At:" %>
+		<%= @supplier.created_at %>
+	</p>
+	<p>
+		<%= "Last Updated:" %>
+		<%= @supplier.updated_at %>
+	</p>
 	</table>
 </div>

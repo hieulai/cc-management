@@ -46,7 +46,7 @@ class SuppliersController < ApplicationController
   end
 
   def destroy
-    @supplier.destroy
+    Supplier.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
 end

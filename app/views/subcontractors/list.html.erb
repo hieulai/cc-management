@@ -10,11 +10,12 @@
 	<table class="grid-view" summary="Project List">
 		<tr class="header">
 			<th>Actions</th>
+			<th>Trade</th>
 			<th>Company</th>
-			<th>First Name</th>
-			<th>Last Name</th>
+			<th>Main Contact</th>
 			<th>Primary Phone</th>
 			<th>Email</th>
+			<th>Notes</th>
 					
 		</tr>
 		<% @subcontractors.each do |sub| %>
@@ -25,11 +26,12 @@
 				<%= link_to("Edit", {:action => 'edit', :id => sub.id}, :class => 'action edit') %>
 				<%= link_to("Delete", {:action => 'delete', :id => sub.id}, :class => 'action delete') %>
 			</td>
+			<td><%= sub.trade %></td>
 			<td><%= sub.company %></td>
-			<td><%= sub.first_name %></td>
-			<td><%= sub.last_name %></td>
+			<td><%= sub.first_name + " " + sub.last_name %></td>
 			<td><%= sub.primary_phone %></td>
 			<td><%= sub.email %></td>	
+			<td><%= sub.notes %></td>	
 			
 		</tr>
 		<% end %>

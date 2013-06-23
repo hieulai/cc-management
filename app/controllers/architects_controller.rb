@@ -42,7 +42,7 @@ class ArchitectsController < ApplicationController
   end
   
   def delete
-    @architect= Architects.find(params[:id])
+    @architect= Architect.find(params[:id])
   end
 
   def destroy

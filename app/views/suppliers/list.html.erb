@@ -11,10 +11,12 @@
 		<tr class="header">
 			<th>Actions</th>
 			<th>Company</th>
-			<th>First Name</th>
-			<th>Last Name</th>
+			<th>Main Contact</th>
 			<th>Primary Phone</th>
 			<th>Email</th>
+			<th>Website</th>
+			<th>Notes</th>
+			
 					
 		</tr>
 		<% @suppliers.each do |s| %>
@@ -26,10 +28,11 @@
 				<%= link_to("Delete", {:action => 'delete', :id => s.id}, :class => 'action delete') %>
 			</td>
 			<td><%= s.company %></td>
-			<td><%= s.first_name %></td>
-			<td><%= s.last_name %></td>
+			<td><%= s.primary_first_name + s.primary_last_name %></td>
 			<td><%= s.primary_phone %></td>
-			<td><%= s.email %></td>	
+			<td><%= s.primary_email %></td>	
+			<td><%= s.website %></td>	
+			<td><%= s.notes %></td>	
 			
 		</tr>
 		<% end %>

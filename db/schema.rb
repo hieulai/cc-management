@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(:version => 20130612231435) do
 
   create_table "subcontractors", :force => true do |t|
     t.string   "company"
+    t.string   "trade"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
@@ -182,7 +183,7 @@ ActiveRecord::Schema.define(:version => 20130612231435) do
 
   create_table "suppliers", :force => true do |t|
     t.string   "company"
-    t.string   "primay_first_name"
+    t.string   "primary_first_name"
     t.string   "primary_last_name"
     t.string   "primary_email"
     t.integer  "primary_phone"

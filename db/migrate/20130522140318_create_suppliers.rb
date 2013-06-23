@@ -2,7 +2,7 @@ class CreateSuppliers < ActiveRecord::Migration
   def change
     create_table :suppliers do |t|
       t.string "company"
-      t.string "primay_first_name"
+      t.string "primary_first_name"
       t.string "primary_last_name"
       t.string "primary_email"
       t.integer "primary_phone"

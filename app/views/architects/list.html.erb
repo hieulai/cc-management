@@ -11,10 +11,10 @@
 		<tr class="header">
 			<th>Actions</th>
 			<th>Company</th>
-			<th>First Name</th>
-			<th>Last Name</th>
+			<th>Main Contact</th>
 			<th>Primary Phone</th>
 			<th>Email</th>
+			<th>Notes</th>
 					
 		</tr>
 		<% @architects.each do |arch| %>
@@ -26,10 +26,10 @@
 				<%= link_to("Delete", {:action => 'delete', :id => arch.id}, :class => 'action delete') %>
 			</td>
 			<td><%= arch.company %></td>
-			<td><%= arch.first_name %></td>
-			<td><%= arch.last_name %></td>
+			<td><%= arch.full_name %></td>
 			<td><%= arch.primary_phone %></td>
 			<td><%= arch.email %></td>	
+			<td><%= arch.notes %></td>	
 			
 		</tr>
 		<% end %>

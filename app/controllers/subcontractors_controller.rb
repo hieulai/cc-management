@@ -42,11 +42,11 @@ class SubcontractorsController < ApplicationController
   end
   
   def delete
-    @subcontractor = Subcontractors.find(params[:id])
+    @subcontractor = Subcontractor.find(params[:id])
   end
 
   def destroy
-    @subcontractor.destroy
+    Subcontractor.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
 end

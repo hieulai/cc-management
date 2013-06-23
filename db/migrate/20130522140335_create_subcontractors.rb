@@ -2,6 +2,7 @@ class CreateSubcontractors < ActiveRecord::Migration
   def change
     create_table :subcontractors do |t|
       t.string "company"
+      t.string "trade"
       t.string "first_name"
       t.string "last_name"
       t.string "email"

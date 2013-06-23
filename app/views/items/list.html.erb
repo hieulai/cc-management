@@ -18,7 +18,7 @@
 			<th>Margin</th>
 			<th>Price</th>
 			<th>Notes</th>
-
+		<!-- Displays all items that are attached to a category -->
 		</tr>
 		<% @categories.each do |category| %>
 		<% category.items.each do |item|%>
@@ -38,6 +38,8 @@
 		</tr>
 		<% end %>
 		<% end %>
+		
+		<!-- Displays all items that are NOT attached to a category -->
 		<% @items.each do |item| %>
 
 		<tr>
