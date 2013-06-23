@@ -5,6 +5,8 @@ class Item < ActiveRecord::Base
 
   attr_accessible :name, :description, :qty, :unit, :cost, :margin, :price, :default, :notes
 
+  validates :name, presence: true
+
   def price
     #if cost ! nil & margin ! nil
      # cost + margin

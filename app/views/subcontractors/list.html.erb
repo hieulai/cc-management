@@ -15,7 +15,10 @@
 			<th>Main Contact</th>
 			<th>Primary Phone</th>
 			<th>Email</th>
+<<<<<<< HEAD
 			<th>Notes</th>
+=======
+>>>>>>> 199920213a3c32b35077fb920bab96f42ba82028
 					
 		</tr>
 		<% @subcontractors.each do |sub| %>
@@ -26,12 +29,20 @@
 				<%= link_to("Edit", {:action => 'edit', :id => sub.id}, :class => 'action edit') %>
 				<%= link_to("Delete", {:action => 'delete', :id => sub.id}, :class => 'action delete') %>
 			</td>
+<<<<<<< HEAD
 			<td><%= sub.trade %></td>
 			<td><%= sub.company %></td>
 			<td><%= sub.first_name + " " + sub.last_name %></td>
 			<td><%= sub.primary_phone %></td>
 			<td><%= sub.email %></td>	
 			<td><%= sub.notes %></td>	
+=======
+			<td><%= sub.company %></td>
+			<td><%= sub.first_name %></td>
+			<td><%= sub.last_name %></td>
+			<td><%= sub.primary_phone %></td>
+			<td><%= sub.email %></td>	
+>>>>>>> 199920213a3c32b35077fb920bab96f42ba82028
 			
 		</tr>
 		<% end %>
