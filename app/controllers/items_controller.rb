@@ -5,6 +5,13 @@ class ItemsController < ApplicationController
     #passes in all items that have categories set
     @categories = Category.all
   end
+  
+  def list_for_accounting
+    #passes in all items that do not have a category set
+    @items = Item.where(category_id: nil)
+    #passes in all items that have categories set
+    @categories = Category.all
+  end
 
   def new
     @item = Item.new

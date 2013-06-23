@@ -22,8 +22,8 @@
 		<% @estimates.each do |estimate| %>
 		<tr>
 			<td class="center">
-				<%= link_to("M", {:action => 'edit_measurements', :id => estimate.id}, :class => 'action measurements') %>
-				<%= link_to("T", {:action => 'edit_templates', :id => estimate.id}, :class => 'action measurements') %>
+				<%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :class => 'action measurements') %>
+				<%= link_to("Mat", {:action => 'edit_templates', :id => estimate.id}, :class => 'action measurements') %>
 				<%= link_to("View", {:action => 'show', :id => estimate.id}, :class => 'action vew') %>
 				<%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :class => 'action edit') %>
 				<%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :class => 'action convert') %>

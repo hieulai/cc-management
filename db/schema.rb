@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130612231435) do
+ActiveRecord::Schema.define(:version => 20130620092124) do
 
   create_table "architects", :force => true do |t|
     t.string   "company"
@@ -58,6 +58,22 @@ ActiveRecord::Schema.define(:version => 20130612231435) do
 
   add_index "categories", ["builder_id"], :name => "index_categories_on_builder_id"
   add_index "categories", ["template_id"], :name => "index_categories_on_template_id"
+
+  create_table "categories_items", :id => false, :force => true do |t|
+    t.integer "category_id"
+    t.integer "item_id"
+  end
+
+  add_index "categories_items", ["category_id"], :name => "index_categories_items_on_category_id"
+  add_index "categories_items", ["item_id"], :name => "index_categories_items_on_item_id"
+
+  create_table "categories_templates", :id => false, :force => true do |t|
+    t.integer "category_id"
+    t.integer "template_id"
+  end
+
+  add_index "categories_templates", ["category_id"], :name => "index_categories_templates_on_category_id"
+  add_index "categories_templates", ["template_id"], :name => "index_categories_templates_on_template_id"
 
   create_table "clients", :force => true do |t|
     t.string   "company"

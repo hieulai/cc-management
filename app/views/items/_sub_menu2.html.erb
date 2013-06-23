@@ -1,0 +1,12 @@
+<div id='submenu'>
+	<ul>
+		<li><%= link_to("Receivables", {:controller => 'accounting', :action => 'receivables'})%></li>
+		<li><%= link_to("Payables", {:controller => 'accounting', :action => 'payables'})%></li>
+		<li><%= link_to("Payroll", {:controller => 'accounting', :action => 'payroll'})%></li>
+		<li><%= link_to("Accounts", {:controller => 'accounting', :action => 'accounts'})%></li>
+		<li><%= link_to("Items", {:controller => 'items', :action => 'list_for_accounting'})%></li>
+		<li><%= link_to("Reports", {:controller => 'accounting', :action => 'reports'})%></li>
+		<li><%= link_to("Import/Export", {:controller => 'accounting', :action => 'import_export'})%></li>
+
+	</ul>
+</div>
