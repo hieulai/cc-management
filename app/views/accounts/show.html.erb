@@ -1,0 +1,30 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	
+	<h2>Account Details For: <%= @account.name %> </h2>
+	<h2>Company Info:</h2>
+	<p>
+		<%= "Account Name:" %>
+		<%= @account.name %>
+	</p>
+	<p>
+		<%= "Account Type:" %>
+		<%= @account.category %>
+	</p>
+	<p>
+		<%= "Account Sub Type:" %>
+		<%= @account.subcategory %>
+	</p>
+	<p>
+		<%= "Account Prefix:" %>
+		<%= @account.prefix %>
+	</p>
+	<p>
+		<%= "Balance: $" %>
+		<%= @account.balance %>
+	</p>
+
+
+	
+	
+</div>

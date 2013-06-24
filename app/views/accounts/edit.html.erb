@@ -1,0 +1,15 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Edit Account Info</h2>
+	
+	<%= form_for @account, :url => {:action => 'update', :id => @account.id} do |f| %>
+	
+	<%= render(:partial => "new_form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update") %>
+	</div>
+	
+	<% end %>
+	
+</div>

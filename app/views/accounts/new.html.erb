@@ -1,0 +1,15 @@
+<div>
+	<%= render(:partial => "sub_menu")%>
+	<h2>Add Supplier</h2>
+	
+	<%= form_for @account, :url => {:action => 'create'} do |f| %>
+	
+	<%= render(:partial => "new_form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Create") %>
+	</div>
+	
+	<% end %>
+	
+</div>
