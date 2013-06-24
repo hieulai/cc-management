@@ -14,20 +14,24 @@ class TemplatesController < ApplicationController
 
   def create
     ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
-    @categories = Category.find(ids)
     params[:template].delete(:categories_attributes)
     @template = Template.new(params[:template])
-    @template.categories.delete_all
 
-    @categories.each do |category|
-      @template.categories << category
+    unless ids[0].blank?
+      @template.categories.delete_all
+      @categories = Category.find(ids)
+      @categories.each do |category|
+        @template.categories << category
+      end
     end
 
-    if @template.save
+    if @template.save! && @categories
       redirect_to action: 'list'
     else
       @categories = Category.where("template_id IS NULL")
-      render 'new'
+      @template.categories.build
+      flash.now[:alert] = "please enter the data correctly."
+      render action: :new
     end
   end
 
@@ -39,21 +43,17 @@ class TemplatesController < ApplicationController
 
   def update
     ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
-    @categories = Category.find(ids)
     # @item = Item.find(params[:item][:id]) if params[:item]
     @template = Template.find(params[:id])
-    @template.categories.delete_all
-    @template.categories = @categories
     @template.name = params[:template][:name]
 
-
-    @categories.each do |category|
-      @template.categories << category
+    unless ids[0].blank?
+      @categories = Category.find(ids)
+      @template.categories = @categories
     end
     #Find object using form parameters
 
     if @template.update_attributes(params[:template])
-        @category.items << @item if @item
       #if save succeeds, redirect to list action
       redirect_to(action: 'list')
     else

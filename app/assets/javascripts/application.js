@@ -16,6 +16,16 @@
 //= require cocoon
 //= require_tree .
 
+function bounceEffectRight(element){
+  element.effect("bounce", {
+    direction: "right",
+    distance: 15,
+    times: 4
+  }, 1000);
+  element.focus();
+  return false;
+}
+
 function remove_fields (link){
 	$(link).prev("input[type=hidden]").val("1");
 	$(link).closest('.fields').hide();
