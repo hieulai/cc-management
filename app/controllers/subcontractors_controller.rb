@@ -42,11 +42,7 @@ class SubcontractorsController < ApplicationController
   end
   
   def delete
-<<<<<<< HEAD
     @subcontractor = Subcontractor.find(params[:id])
-=======
-    @subcontractor = Subcontractors.find(params[:id])
->>>>>>> 199920213a3c32b35077fb920bab96f42ba82028
   end
 
   def destroy

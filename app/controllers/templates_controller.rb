@@ -46,7 +46,7 @@ class TemplatesController < ApplicationController
     @template.categories = @categories
     @template.name = params[:template][:name]
 
-# HEAD
+
     @categories.each do |category|
       @template.categories << category
     end
@@ -54,9 +54,6 @@ class TemplatesController < ApplicationController
 
     if @template.update_attributes(params[:template])
         @category.items << @item if @item
-#=======
-    #if @template.save
-#>>>>>>> 199920213a3c32b35077fb920bab96f42ba82028
       #if save succeeds, redirect to list action
       redirect_to(action: 'list')
     else
@@ -65,13 +62,9 @@ class TemplatesController < ApplicationController
     end
   end
 
-#<<<<<<< HEAD
   def delete
-    @template = Template.find(params[:id])
+    # find template with ID is already call in find_template with before filter
   end
-#=======
-  def delete; end
-#>>>>>>> 199920213a3c32b35077fb920bab96f42ba82028
 
   def destroy
     @template.destroy
