@@ -18,11 +18,8 @@ class TemplatesController < ApplicationController
     @template = Template.new(params[:template])
 
     unless ids[0].blank?
-      @template.categories.delete_all
       @categories = Category.find(ids)
-      @categories.each do |category|
-        @template.categories << category
-      end
+      @template.categories = @categories
     end
 
     if @template.save! && @categories
@@ -55,7 +52,7 @@ class TemplatesController < ApplicationController
 
     if @template.update_attributes(params[:template])
       #if save succeeds, redirect to list action
-      redirect_to(action: 'list')
+      redirect_to action: 'list'
     else
       #if save fails, redisplay form to user can fix problems
       render('edit')

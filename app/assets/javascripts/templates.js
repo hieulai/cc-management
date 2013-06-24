@@ -27,12 +27,14 @@ var add_item = function(el){
   });
 }
 
-$('#new_template').submit(function(){
-  var selected = $(".template_categories").children('option:selected');
-  if(selected.val() == ''){
-    bounceEffectRight(selected);
-    alert(console.log(selected));
-  } else {
-    alert(console.log(selected));
-  }
-});
+$(document).ready(function(){
+  $('#new_template').submit(function(){
+    var selected = $(".template_categories").children('option:selected');
+    if(selected.val() == ''){
+      bounceEffectRight(selected);
+      alert(console.log(selected));
+    } else {
+      alert(console.log(selected));
+    }
+  });
+})

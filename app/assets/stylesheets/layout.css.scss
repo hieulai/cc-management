@@ -67,21 +67,21 @@ h1
 
 #mainmenu ul {
 	margin: 0 !important;
-	float: left;
+	text-align: center;
+	padding: 0;
 }
 
 #mainmenu li
 {
-	padding:15px 20px;
+	padding:15px 15px;
 	margin: 0px;
 }
 
 
 #mainmenu ul li
 {
-	display: inline;
-	float: left;
-	text-align:center;
+	display: inline-block;
+	text-align: center;
 }
 
 #mainmenu ul li a
