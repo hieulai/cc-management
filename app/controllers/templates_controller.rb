@@ -10,6 +10,7 @@ class TemplatesController < ApplicationController
     @template.categories.build
     Category.all.each { |category| category.update_attribute(:template_id, nil) if category.template.nil? }
     @categories = Category.where("template_id IS NULL")
+    @items = Item.all
   end
 
   def create

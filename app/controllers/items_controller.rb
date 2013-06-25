@@ -4,6 +4,7 @@ class ItemsController < ApplicationController
     # @items = Item.where(category_id: nil)
     #passes in all items that have categories set
     @categories = Category.all
+    @items = Item.all
   end
 
   def list_for_accounting

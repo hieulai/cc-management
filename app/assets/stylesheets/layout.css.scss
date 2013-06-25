@@ -73,7 +73,6 @@ h1
 
 #mainmenu li
 {
-	padding:15px 15px;
 	margin: 0 0 0 -4px;
 }
 
@@ -95,6 +94,7 @@ h1
 	/*padding:0px;*/
 	text-decoration:none;
 	display:block;
+	padding: 15px;
 }
 
 #mainmenu ul li:hover
@@ -132,7 +132,8 @@ h1
 {
 	clear: both;
 	background: gray;
-	padding: 7px;
+	width: 100%;
+	padding: 5px 0 5px 0;
 	border-left: solid 1px rgb(73, 72, 72);
 	border-right: solid 1px rgb(73, 72, 72);
 	border-bottom: solid 1px rgb(73, 72, 72);
@@ -152,6 +153,7 @@ h1
 	display: inline-block;
 	text-align: center;
 	position: relative;
+	margin: 3px;
 }
 
 #submenu ul li a

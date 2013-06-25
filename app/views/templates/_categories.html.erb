@@ -3,6 +3,13 @@
 		<%= f.label :name, "Category"%>
 		<%= f.select :id, @categories.map{ |category| [category.name, category.id]}, {prompt: "Select Category"}, class: "template_categories", onchange: "add_item(this)" %>
     <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
+    <br/>
+    <div>
+      <%= f.fields_for :items do |item| %>
+        <%= render('items', f: item) %>
+      <% end %>
+      <p style="margin-left: 40px"><%= link_to_add_association 'Add Item', f, :items, partial: 'items' %></p>
+    </div>
 	</p>
 
   <div class="category_items">
