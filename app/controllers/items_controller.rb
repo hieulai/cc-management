@@ -1,11 +1,11 @@
 class ItemsController < ApplicationController
   def list
     #passes in all items that do not have a category set
-    @items = Item.where(category_id: nil)
+    # @items = Item.where(category_id: nil)
     #passes in all items that have categories set
     @categories = Category.all
   end
-  
+
   def list_for_accounting
     #passes in all items that do not have a category set
     @items = Item.where(category_id: nil)

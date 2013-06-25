@@ -1,0 +1,32 @@
+<div id='mainmenu'>
+  <ul>
+    <li>
+        <%= link_to("Prospecting", '#', {:action => 'show'}, :class => 'action edit')%>
+    </li>
+    <li>
+      <%= link_to("Leads", {:controller => 'projects', :action => 'list_current_leads'}, :class => 'menu item')%>
+    </li>
+    <li class="active">
+        <%= link_to("Estimating", {:controller => 'estimates', :action => 'list_current'}, :class => 'menu item')%>
+        <div class="arrow"></div>
+    </li>
+    <li>
+      <%= link_to("Contracts", '#', {:action => 'show'}, :class => 'menu item')%>
+    </li>
+    <li>
+      <%= link_to("Project Mgmt", {:controller => 'projects', :action => 'list_current_projects'}, :class => 'menu item')%>
+    </li>
+    <li>
+      <%= link_to("People", {:controller => 'clients', :action => 'list'}, :class => 'menu item')%>
+    </li>
+    <li>
+      <%= link_to("Accounting", {:controller => 'accounting', :action => 'index'}, :class => 'action edit')%>
+    </li>
+    <li>
+      <%= link_to("Preferences", '#', {:action => 'show'}, :class => 'action edit')%>
+    </li>
+    <li>
+      <%= link_to("Company", '#', {:action => 'show'}, :class => 'action edit')%>
+    </li>
+  </ul>
+</div>
