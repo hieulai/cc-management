@@ -60,29 +60,28 @@ h1
 {
 	clear: both;
 	background:#6399cd url(bg.gif) repeat-x left top;
-	margin-bottom: 20px;
 	float: left;
 	width: 100%;
+	border: 1px solid rgb(48, 101, 151);
 }
 
 #mainmenu ul {
 	margin: 0 !important;
-	padding: 0 !important;
-	float: left;
+	text-align: center;
+	padding: 0;
 }
 
 #mainmenu li
 {
-	padding:15px 10px;
-	margin: 0px;
+	margin: 0 0 0 -4px;
 }
 
 
 #mainmenu ul li
 {
-	display: inline;
-	float: left;
-	text-align:center;
+	display: inline-block;
+	text-align: center;
+	position: relative;
 }
 
 #mainmenu ul li a
@@ -95,7 +94,7 @@ h1
 	/*padding:0px;*/
 	text-decoration:none;
 	display:block;
-	width:100px;
+	padding: 15px;
 }
 
 #mainmenu ul li:hover
@@ -110,19 +109,34 @@ h1
 	text-decoration:none;
 	*/
 }
-
-#mainmenu ul li.active a 
-{
-	color: #6399cd;
-	background-color:#EFF4FA;
-	text-decoration:none;
+ #mainmenu ul li.active{
+	background-color:rgb(48, 101, 151);
 }
 
+ #mainmenu ul li.active .arrow{
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-color: transparent;
+	border-style: solid;
+	margin-left: -9px;
+	border-bottom-color: gray;
+	border-width: 0 9px 9px;
+	display: block;
+	bottom: -1px;
+	left: 50%;
+
+}
 
 #submenu
 {
 	clear: both;
 	background: gray;
+	width: 100%;
+	padding: 5px 0 5px 0;
+	border-left: solid 1px rgb(73, 72, 72);
+	border-right: solid 1px rgb(73, 72, 72);
+	border-bottom: solid 1px rgb(73, 72, 72);
 	/*background:white url(bg.gif) repeat-x left top;*/
 }
 
@@ -130,29 +144,48 @@ h1
 {
 	padding:6px 20px 5px 20px;
 	margin:0px;
+	text-align: center;
+	margin: 0 auto;
 }
 
 #submenu ul li
 {
-	display: inline;
+	display: inline-block;
+	text-align: center;
+	position: relative;
+	margin: 3px;
 }
 
 #submenu ul li a
 {
-	color:#6399cd;
-	background-color:#EFF4FA;
-	font-size:1.5em;
+	color:#fff;
+	font-size:1em;
 	font-weight:bold;
 	text-decoration:none;
 	padding:5px 8px;
+	border: solid 1px transparent;
 }
 
-#submenu ul li a:hover, #mainmenu ul li.active a
+#submenu ul li a:hover
 {
-	color: #6399cd;
-	background-color:white;
+	color: #fff;
+	background-color:rgb(88, 86, 86);
+	// box-shadow: inset 0px 1px 2px rgb(73, 72, 72);
 	text-decoration:none;
+	border: solid 1px rgb(73, 72, 72);
+	border-radius: 3px;
 }
+
+#submenu ul li a.active
+{
+	color: #fff;
+	background-color:rgb(88, 86, 86);
+	// box-shadow: inset 0px 1px 2px rgb(73, 72, 72);
+	text-decoration:none;
+	border: solid 1px rgb(73, 72, 72);
+	border-radius: 3px;
+}
+
 
 #submenu ul li.active a
 {

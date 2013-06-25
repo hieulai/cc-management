@@ -1,11 +1,20 @@
 <div id='submenu'>
 	<ul>
-		<li><%= link_to("Current Estimates", {:controller => 'estimates', :action => 'list_current'})%>
-		<li><%= link_to("Past Estimates", {:controller => 'estimates', :action => 'list_past'})%>
-		<li><%= link_to("Templates", {:controller => 'templates', :action => 'list'})%>
-		<li><%= link_to("Categories", {:controller => 'categories', :action => 'list'})%>
-		<li><%= link_to("Items", {:controller => 'items', :action => 'list'})%>
-		<li><%= link_to("Import/Export")%>
-
+		<li>
+      <%= link_to("Current Estimates", {:controller => 'estimates', :action => 'list_current'}, class: active_page('estimates', 'nav'))%></li>
+		<li>
+      <%= link_to("Past Estimates", {:controller => 'estimates', :action => 'list_past'}, class: active_page('estimates', 'nav'))%></li>
+		<li>
+      <%= link_to("Templates", {:controller => 'templates', :action => 'list'}, class: active_page('templates', 'nav', 'list'))%>
+    </li>
+		<li>
+      <%= link_to("Categories", {:controller => 'categories', :action => 'list'}, class: active_page('categories', 'nav', 'list')
+      )%></li>
+		<li>
+      <%= link_to("Items", {:controller => 'items', :action => 'list'}, class: active_page('items', 'nav', 'list'))%>
+    </li>
+		<li>
+      <%= link_to("Import/Export")%>
+    </li>
 	</ul>
 </div>

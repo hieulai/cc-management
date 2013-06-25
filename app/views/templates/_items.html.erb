@@ -3,6 +3,4 @@
     <%= f.label :id, "Item"%>
     <%= f.select :id, @items.collect{ |item| [item.name, item.id] }, prompt: "Select Item" %>
   </p>
-
-  <%= link_to_remove_association("Remove Item", f) %>
 </div>
