@@ -40,6 +40,7 @@ class TemplatesController < ApplicationController
   end
 
   def update
+    asd
     ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
     # @item = Item.find(params[:item][:id]) if params[:item]
     @template = Template.find(params[:id])

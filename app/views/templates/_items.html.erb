@@ -1,6 +1,6 @@
 <div class="nested-fields" style="margin-left: 100px">
   <p>
     <%= f.label :id, "Item"%>
-    <%= f.select :id, @items.collect{ |item| [item.name, item.id] }, prompt: "Select Item" %>
+    <%= f.select :id, @items.map{ |item| [item.name, item.id] }, prompt: "Select Item" %>
   </p>
 </div>

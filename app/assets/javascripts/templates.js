@@ -3,6 +3,22 @@
 // # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 
+$(document).ready(function(){
+  $('#new_template').submit(function(){
+    var selected = $(".template_categories").children('option:selected');
+    if($('#template_name').val() == ''){
+      bounceEffectRight(selected);
+      alert('error');
+      return false;
+    }else if(selected.val() == ''){
+      bounceEffectRight(selected);
+      return false;
+    }else {
+      return true;
+    }
+  });
+})
+
 var add_item = function(el){
   el = $(el);
   var categoryId = el.attr('id');
@@ -26,15 +42,3 @@ var add_item = function(el){
     }
   });
 }
-
-$(document).ready(function(){
-  $('#new_template').submit(function(){
-    var selected = $(".template_categories").children('option:selected');
-    if(selected.val() == ''){
-      bounceEffectRight(selected);
-      alert(console.log(selected));
-    } else {
-      alert(console.log(selected));
-    }
-  });
-})

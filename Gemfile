@@ -29,9 +29,12 @@ group :production do
   gem 'pg'
 end
 
+gem 'roo'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'cocoon'
+gem 'carrierwave'
+gem 'simple_form'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

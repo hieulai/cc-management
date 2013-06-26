@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">ID</Data></Cell>
+        <Cell><Data ss:Type="String">Name</Data></Cell>
+        <Cell><Data ss:Type="String">Description</Data></Cell>
+        <Cell><Data ss:Type="String">Unit</Data></Cell>
+        <Cell><Data ss:Type="String">Cost</Data></Cell>
+        <Cell><Data ss:Type="String">Margin</Data></Cell>
+        <Cell><Data ss:Type="String">Notes</Data></Cell>
+      </Row>
+    <% @items.each do |item| %>
+      <Row>
+        <Cell><Data ss:Type="Number"><%= item.id %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= item.name %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= item.description %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= item.unit %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= item.cost %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= item.margin %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= item.notes %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

@@ -13,9 +13,9 @@ module ApplicationHelper
 
   def active_page(page_name, menu_type, act_name = nil)
     menu_bar_1, menu_bar_2 = 'nav', 'subnav'
-    if controller_name.eql?(page_name) && menu_bar_1.eql?(menu_type) && act_name.nil?
+    if page_name.include?(controller_name) && menu_bar_1.eql?(menu_type) && act_name.nil?
       'active'
-    elsif controller_name.eql?(page_name) && action_name.eql?(act_name)
+    elsif (controller_name.eql?(page_name)) && action_name.eql?(act_name)
       'active'
     else
       ''

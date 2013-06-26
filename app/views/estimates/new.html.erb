@@ -1,15 +1,15 @@
 <div>
-	<%= render(:partial => "sub_menu")%>
-	<h2>Create Estimate</h2>
-	
-	<%= form_for @estimate, :url => {:action => 'create'} do |f| %>
-	
-	<%= render(:partial => "new_form", :locals => {:f => f, :p => p})%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Create Estimate") %>
-	</div>
-	
-	<% end %>
-	
+  <%= render(:partial => "sub_menu")%>
+  <h2>Create Estimate</h2>
+  
+  <%= form_for @estimate, :url => {:action => 'create'} do |f| %>
+  
+  <%= render(:partial => "new_form", :locals => {:f => f, :p => p})%>
+  
+  <div class="form-buttons">
+    <%= submit_tag("Create Estimate") %>
+  </div>
+  
+  <% end %>
+  
 </div>
