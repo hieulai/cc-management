@@ -35,9 +35,6 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.0.4)
-    carrierwave (0.8.0)
-      activemodel (>= 3.2.0)
-      activesupport (>= 3.2.0)
     cocoon (1.1.2)
     coderay (1.0.9)
     coffee-rails (3.2.2)
@@ -146,7 +143,6 @@ PLATFORMS
 DEPENDENCIES
   better_errors
   binding_of_caller
-  carrierwave
   cocoon
   coffee-rails (~> 3.2.1)
   debugger
