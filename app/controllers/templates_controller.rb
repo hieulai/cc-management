@@ -14,16 +14,27 @@ class TemplatesController < ApplicationController
   end
 
   def create
-    ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
+    categories = params[:template][:categories_attributes]
+    # item_ids = params[:template][:categories_attributes].map{|key, val| val[:items_attributes]}
     params[:template].delete(:categories_attributes)
     @template = Template.new(params[:template])
 
-    unless ids[0].blank?
-      @categories = Category.find(ids)
-      @template.categories = @categories
-    end
+    # unless ids[0].blank?
+      # @categories = Category.find(ids)
+      # @categories.each do |category|
+      #   @template
+      # end
+    # end
 
-    if @template.save! && @categories
+    if @template.save!
+
+      categories.map do |key, val|
+        item_ids = val[:items_attributes].map{ | k, v | v[:id]}
+        @items = Item.find(item_ids)
+        categories_template = @template.categories_templates.create(category_id: val[:id])
+        categories_template.items = @items
+      end
+
       redirect_to action: 'list'
     else
       @categories = Category.where("template_id IS NULL")
@@ -34,13 +45,13 @@ class TemplatesController < ApplicationController
   end
 
   def edit
-    @categories = Category.all
+    @categories, @items = Category.all, Item.all
     @t_categories = @template.categories.pluck(:id)
-    @items = Item.all
+    @t_items = Item.all
+
   end
 
   def update
-    asd
     ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
     # @item = Item.find(params[:item][:id]) if params[:item]
     @template = Template.find(params[:id])

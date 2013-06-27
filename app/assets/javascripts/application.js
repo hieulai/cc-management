@@ -16,7 +16,7 @@
 //= require cocoon
 //= require_tree .
 
-function bounceEffectRight(element){
+var bounceEffectRight = function(element){
   element.effect("bounce", {
     direction: "right",
     distance: 15,
@@ -26,12 +26,12 @@ function bounceEffectRight(element){
   return false;
 }
 
-function remove_fields (link){
+var remove_fields = function(link){
 	$(link).prev("input[type=hidden]").val("1");
 	$(link).closest('.fields').hide();
 }
 
-function add_fields (link, association, content){
+var add_fields = function(link, association, content){
 	var new_id = new Date().getTime();
 	var regexp = new RegExp("new_" + association, "g")
 	$(link).parent().before(content.replace(regexp, new_id));

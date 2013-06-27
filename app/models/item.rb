@@ -1,7 +1,9 @@
 class Item < ActiveRecord::Base
-  belongs_to :template
+  # belongs_to :template
   belongs_to :builder
   has_and_belongs_to_many :categories
+  has_many :categories_templates, through: :categories_templates_items
+  has_many :templates, through: :categories_templates_items
 
   attr_accessible :name, :description, :qty, :unit, :cost, :margin, :price, :default, :notes, :file
 
@@ -17,11 +19,11 @@ class Item < ActiveRecord::Base
     #end
   end
 
-  def self.to_csv(options = {})
-    CSV.generate(options) do |csv|
+  def self.to_csv(items)
+    CSV.generate do |csv|
       csv << column_names
-      all.each do |item|
-        csv << item.attributes.value_at(*column_names)
+      items.each do |item|
+        csv << item.attributes.values_at(*column_names)
       end
     end
   end
@@ -38,11 +40,11 @@ class Item < ActiveRecord::Base
   end
 
   def self.open_spreadsheet(file)
-    case File.extname(file.original_filename)
-    when ".csv" then Csv.new(file.path, nil, :ignore)
+    case File.extname(file[:data].original_filename)
+    when ".csv" then CSV.new(file[:data].tempfile)
     when ".xls" then Excel.new(file.path, nil, :ignore)
     when ".xlsx" then Excelx.new(file.path, nil, :ignore)
-    else raise "Unknown file type: #{file.original_filename}"
+    else raise "Unknown file type: #{file[:data].original_filename}"
     end
   end
 end

@@ -8,10 +8,11 @@ $(document).ready(function(){
     var selected = $(".template_categories").children('option:selected');
     if($('#template_name').val() == ''){
       bounceEffectRight(selected);
-      alert('error');
+      $('#alertError').fadeIn();
       return false;
     }else if(selected.val() == ''){
-      bounceEffectRight(selected);
+      bounceEffectRight($(".template_categories"));
+      selected.hide();
       return false;
     }else {
       return true;

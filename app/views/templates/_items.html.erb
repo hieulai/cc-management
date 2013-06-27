@@ -2,5 +2,6 @@
   <p>
     <%= f.label :id, "Item"%>
     <%= f.select :id, @items.map{ |item| [item.name, item.id] }, prompt: "Select Item" %>
+    <%= link_to_remove_association("Delete", f, style: "margin-left: 5px") %>
   </p>
 </div>

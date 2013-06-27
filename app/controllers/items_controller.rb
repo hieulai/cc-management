@@ -4,12 +4,12 @@ class ItemsController < ApplicationController
     # @items = Item.where(category_id: nil)
     #passes in all items that have categories set
     # @categories = Category.all
-    @items = Item.all
+    @items = Item.select([:id, :name, :description, :cost, :unit, :margin, :notes])
 
     respond_to do |format|
       format.html
-      format.csv {send_data @items.to_csv}
-      format.xls {send_data @items.to_csv(col_sep: "\t")}
+      format.csv {send_data Item.to_csv(@items)}
+      format.xls
     end
   end
 

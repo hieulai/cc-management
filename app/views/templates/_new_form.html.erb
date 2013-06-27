@@ -1,6 +1,7 @@
 <p>
   <%= f.label(:name, 'Template Name') %>
 	<%= f.text_field(:name) %>
+  <span id="alertError" style="display:none;">this field can't be empty</span>
 </p>
 
 <%= f.fields_for :categories do |category| %>
