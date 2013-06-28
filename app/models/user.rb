@@ -1,4 +1,4 @@
-require 'digest/SHA1'
+# require 'digest/SHA1'
 class User < ActiveRecord::Base
  
 
