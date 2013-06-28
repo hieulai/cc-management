@@ -28,6 +28,8 @@ group :production do
   gem 'pg'
 end
 
+gem 'roo'
+gem 'carrierwave'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'cocoon'
