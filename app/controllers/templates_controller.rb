@@ -44,10 +44,10 @@ class TemplatesController < ApplicationController
     @categories, @items = Category.all, Item.all
     @t_categories = @template.categories.pluck(:id)
     @t_items = Item.all
-
   end
 
   def update
+    redirect_to :back, notice: "this function still in progress"
     # categories = params[:template][:categories_templates_attributes]
     # params[:template].delete(:categories_templates_attributes)
 
@@ -62,31 +62,34 @@ class TemplatesController < ApplicationController
     # end
 
     # params[:template].delete(:categories_attributes)
-    @template = Template.find(params[:id])
-    @template.name = params[:template][:name]
+    # @template = Template.find(params[:id])
+    # @template.name = params[:template][:name]
+    # ct_temp = params[:template][:categories_templates_attributes]
+    # params[:template].delete(:categories_templates_attributes)
 
-    if @template.update_attributes(params[:template])
-      # @template.categories_templates.delete_all
-      # #if save succeeds, redirect to list action
-      # unless categories.blank?
-      #   categories.map do |key, val|
-      #     act_ids = @template.categories_templates.pluck(:id)
-      #     unless act_ids.include? val[:id]
-      #       categories_template = @template.categories_templates.create(category_id: val[:id])
-      #       if val[:items_attributes]
-      #         item_ids = val[:items_attributes].map{ | k, v | v[:id]}
-      #         @items = Item.find(item_ids)
-      #         categories_template.items = @items
-      #       end
-      #     end
-      #   end
-      # end
+    # if @template.update_attributes(params[:template])
+    #   @template.categories_templates_attributes.attributes = template_temp[:categories_templates_attributes]
+    #   # @template.categories_templates.delete_all
+    #   # #if save succeeds, redirect to list action
+    #   # unless categories.blank?
+    #   #   categories.map do |key, val|
+    #   #     act_ids = @template.categories_templates.pluck(:id)
+    #   #     unless act_ids.include? val[:id]
+    #   #       categories_template = @template.categories_templates.create(category_id: val[:id])
+    #   #       if val[:items_attributes]
+    #   #         item_ids = val[:items_attributes].map{ | k, v | v[:id]}
+    #   #         @items = Item.find(item_ids)
+    #   #         categories_template.items = @items
+    #   #       end
+    #   #     end
+    #   #   end
+    #   # end
 
-      redirect_to action: 'list'
-    else
-      #if save fails, redisplay form to user can fix problems
-      render('edit')
-    end
+    #   redirect_to action: 'list'
+    # else
+    #   #if save fails, redisplay form to user can fix problems
+    #   render('edit')
+    # end
   end
 
   def delete

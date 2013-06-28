@@ -1,7 +1,7 @@
 <div class="nested-fields">
 	<p style="margin-left: 40px">
-		<%= f.label :name, "Category"%>
-		<%= f.select :id, @categories.map{ |category| [category.name, category.id]}, {prompt: "Select Category"}, class: "template_categories", onchange: "add_item(this)" %>
+		<%= f.label :category_id, "Category"%>
+		<%= f.select :category_id, @categories.map{ |category| [category.name, category.id]}, {prompt: "Select Category"}, class: "template_categories", onchange: "add_item(this)" %>
     <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
     <br/>
     <div>
