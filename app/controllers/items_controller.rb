@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv {send_data Item.to_csv(@items)}
-      format.xls
+      format.xls {send_data Item.to_csv(@items)}
     end
   end
 

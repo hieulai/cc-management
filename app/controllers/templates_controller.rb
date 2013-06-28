@@ -14,18 +14,20 @@ class TemplatesController < ApplicationController
   end
 
   def create
-    categories = params[:template][:categories_attributes]
-    params[:template].delete(:categories_attributes)
+    categories = params[:template][:categories_templates_attributes]
+    params[:template].delete(:categories_templates_attributes)
     @template = Template.new(params[:template])
 
     if @template.save!
-
+      # @template.categories_templates.create(categories)
       unless categories.blank?
         categories.map do |key, val|
-          item_ids = val[:items_attributes].map{ | k, v | v[:id]} if val[:items_attributes]
-          @items = Item.find(item_ids)
           categories_template = @template.categories_templates.create(category_id: val[:id])
-          categories_template.items = @items
+          if val[:items_attributes]
+            item_ids = val[:items_attributes].map{ | k, v | v[:id]}
+            @items = Item.find(item_ids)
+            categories_template.items = @items
+          end
         end
       end
 
@@ -46,6 +48,9 @@ class TemplatesController < ApplicationController
   end
 
   def update
+    # categories = params[:template][:categories_templates_attributes]
+    # params[:template].delete(:categories_templates_attributes)
+
     # if params[:template][:categories_attributes]
     #   categories = params[:template][:categories_attributes]
     #   params[:template].delete(:categories_attributes)
@@ -61,14 +66,18 @@ class TemplatesController < ApplicationController
     @template.name = params[:template][:name]
 
     if @template.update_attributes(params[:template])
-      #if save succeeds, redirect to list action
+      # @template.categories_templates.delete_all
+      # #if save succeeds, redirect to list action
       # unless categories.blank?
       #   categories.map do |key, val|
-      #     categories_template = @template.categories_templates.create(category_id: val[:id])
-      #     if val[:items_attributes]
-      #       item_ids = val[:items_attributes].map{ | k, v | v[:id]}
-      #       @items = Item.find(item_ids)
-      #       categories_template.items = @items
+      #     act_ids = @template.categories_templates.pluck(:id)
+      #     unless act_ids.include? val[:id]
+      #       categories_template = @template.categories_templates.create(category_id: val[:id])
+      #       if val[:items_attributes]
+      #         item_ids = val[:items_attributes].map{ | k, v | v[:id]}
+      #         @items = Item.find(item_ids)
+      #         categories_template.items = @items
+      #       end
       #     end
       #   end
       # end

@@ -8,7 +8,7 @@ $(document).ready(function(){
     var selected = $(".template_categories").children('option:selected');
     if($('#template_name').val() == ''){
       bounceEffectRight(selected);
-      $('#alertError').fadeIn();
+      $('#alertError').fadeIn().delay(5000).fadeOut();
       return false;
     }else if(selected.val() == ''){
       bounceEffectRight($(".template_categories"));
