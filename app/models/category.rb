@@ -1,8 +1,9 @@
 class Category < ActiveRecord::Base
   belongs_to :builder
   has_many :categories_templates
-  has_many :template, through: :categories_templates
-  has_and_belongs_to_many :items
+  has_many :templates, through: :categories_templates
+  has_many :items
+  # has_and_belongs_to_many :items
 
   attr_accessible :name, :cost_total, :margin_total, :price_total, :default, :items_attributes
 

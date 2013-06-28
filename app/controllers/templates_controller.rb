@@ -8,31 +8,25 @@ class TemplatesController < ApplicationController
   def new
     @template = Template.new
     @template.categories.build
-    Category.all.each { |category| category.update_attribute(:template_id, nil) if category.template.nil? }
+    # Category.all.each { |category| category.update_attribute(:template_id, nil) if category.template.nil? }
     @categories = Category.where("template_id IS NULL")
     @items = Item.all
   end
 
   def create
     categories = params[:template][:categories_attributes]
-    # item_ids = params[:template][:categories_attributes].map{|key, val| val[:items_attributes]}
     params[:template].delete(:categories_attributes)
     @template = Template.new(params[:template])
 
-    # unless ids[0].blank?
-      # @categories = Category.find(ids)
-      # @categories.each do |category|
-      #   @template
-      # end
-    # end
-
     if @template.save!
 
-      categories.map do |key, val|
-        item_ids = val[:items_attributes].map{ | k, v | v[:id]}
-        @items = Item.find(item_ids)
-        categories_template = @template.categories_templates.create(category_id: val[:id])
-        categories_template.items = @items
+      unless categories.blank?
+        categories.map do |key, val|
+          item_ids = val[:items_attributes].map{ | k, v | v[:id]} if val[:items_attributes]
+          @items = Item.find(item_ids)
+          categories_template = @template.categories_templates.create(category_id: val[:id])
+          categories_template.items = @items
+        end
       end
 
       redirect_to action: 'list'
@@ -52,19 +46,33 @@ class TemplatesController < ApplicationController
   end
 
   def update
-    ids = params[:template][:categories_attributes].map{|key, val| val[:id]}
-    # @item = Item.find(params[:item][:id]) if params[:item]
+    # if params[:template][:categories_attributes]
+    #   categories = params[:template][:categories_attributes]
+    #   params[:template].delete(:categories_attributes)
+    #   params[:template].delete(:categories_templates_attributes)
+    # else
+    #   categories = params[:template][:categories_attributes]
+    #   params[:template].delete(:categories_attributes)
+    #   params[:template].delete(:categories_templates_attributes)
+    # end
+
+    # params[:template].delete(:categories_attributes)
     @template = Template.find(params[:id])
     @template.name = params[:template][:name]
 
-    unless ids[0].blank?
-      @categories = Category.find(ids)
-      @template.categories = @categories
-    end
-    #Find object using form parameters
-
     if @template.update_attributes(params[:template])
       #if save succeeds, redirect to list action
+      # unless categories.blank?
+      #   categories.map do |key, val|
+      #     categories_template = @template.categories_templates.create(category_id: val[:id])
+      #     if val[:items_attributes]
+      #       item_ids = val[:items_attributes].map{ | k, v | v[:id]}
+      #       @items = Item.find(item_ids)
+      #       categories_template.items = @items
+      #     end
+      #   end
+      # end
+
       redirect_to action: 'list'
     else
       #if save fails, redisplay form to user can fix problems

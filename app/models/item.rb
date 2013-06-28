@@ -1,7 +1,7 @@
 class Item < ActiveRecord::Base
   # belongs_to :template
   belongs_to :builder
-  has_and_belongs_to_many :categories
+  belongs_to :category
   has_many :categories_templates, through: :categories_templates_items
   has_many :templates, through: :categories_templates_items
 
