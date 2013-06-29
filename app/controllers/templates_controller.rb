@@ -22,7 +22,7 @@ class TemplatesController < ApplicationController
       # @template.categories_templates.create(categories)
       unless categories.blank?
         categories.map do |key, val|
-          categories_template = @template.categories_templates.create(category_id: val[:id])
+          categories_template = @template.categories_templates.create(category_id: val[:category_id])
           if val[:items_attributes]
             item_ids = val[:items_attributes].map{ | k, v | v[:id]}
             @items = Item.find(item_ids)
@@ -47,49 +47,47 @@ class TemplatesController < ApplicationController
   end
 
   def update
-    redirect_to :back, notice: "this function still in progress"
-    # categories = params[:template][:categories_templates_attributes]
-    # params[:template].delete(:categories_templates_attributes)
+    categories = params[:template][:categories_templates_attributes]
+    params[:template].delete(:categories_templates_attributes)
+    @template = Template.find(params[:id])
+    @template.name = params[:template][:name]
 
-    # if params[:template][:categories_attributes]
-    #   categories = params[:template][:categories_attributes]
-    #   params[:template].delete(:categories_attributes)
-    #   params[:template].delete(:categories_templates_attributes)
-    # else
-    #   categories = params[:template][:categories_attributes]
-    #   params[:template].delete(:categories_attributes)
-    #   params[:template].delete(:categories_templates_attributes)
-    # end
+    if @template.update_attributes(params[:template])
+      #if save succeeds, redirect to list action
+      unless categories.blank?
+        categories.map do |key, val|
+          cat_temp_ids = @template.categories_templates.pluck(:id)
+          act_ids = @template.categories_templates.pluck(:category_id)
+          if val["_destroy"].eql? "1"
+            categories_template = @template.categories_templates.find(val[:id]).delete
+          elsif cat_temp_ids.include? val[:id].to_i
+            categories_template = @template.categories_templates.find(val[:id])
+            categories_template.update_attribute(:category_id, val[:category_id])
+            if val[:items_attributes]
+              categories_template.items.destroy_all
+              val[:items_attributes].map do |item_key, item_val|
+                unless item_val["_destroy"].eql? "1"
+                  @item = Item.find(item_val[:id])
+                  categories_template.items << @item
+                end
+              end
+            end
+          else
+            categories_template = @template.categories_templates.create(category_id: val[:category_id])
+            if val[:items_attributes]
+              item_ids = val[:items_attributes].map{ | k, v | v[:id]}
+              @items = Item.find(item_ids)
+              categories_template.items = @items
+            end
+          end
+        end
+      end
 
-    # params[:template].delete(:categories_attributes)
-    # @template = Template.find(params[:id])
-    # @template.name = params[:template][:name]
-    # ct_temp = params[:template][:categories_templates_attributes]
-    # params[:template].delete(:categories_templates_attributes)
-
-    # if @template.update_attributes(params[:template])
-    #   @template.categories_templates_attributes.attributes = template_temp[:categories_templates_attributes]
-    #   # @template.categories_templates.delete_all
-    #   # #if save succeeds, redirect to list action
-    #   # unless categories.blank?
-    #   #   categories.map do |key, val|
-    #   #     act_ids = @template.categories_templates.pluck(:id)
-    #   #     unless act_ids.include? val[:id]
-    #   #       categories_template = @template.categories_templates.create(category_id: val[:id])
-    #   #       if val[:items_attributes]
-    #   #         item_ids = val[:items_attributes].map{ | k, v | v[:id]}
-    #   #         @items = Item.find(item_ids)
-    #   #         categories_template.items = @items
-    #   #       end
-    #   #     end
-    #   #   end
-    #   # end
-
-    #   redirect_to action: 'list'
-    # else
-    #   #if save fails, redisplay form to user can fix problems
-    #   render('edit')
-    # end
+      redirect_to action: 'list'
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('edit')
+    end
   end
 
   def delete

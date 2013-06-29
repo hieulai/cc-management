@@ -32,7 +32,7 @@ var add_item = function(el){
       return $("#loading").show();
     }
   }).done(function(data, textStatus){
-    $("input#" + categoryId).val(categoryValue);
+    $("input#" + categoryId ).val(categoryValue);
     nestedFields = el.parents(".nested-fields");
     categoryItems = nestedFields.children(".category_items");
     categoryItems.fadeOut();
