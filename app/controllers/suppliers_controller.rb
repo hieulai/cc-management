@@ -1,4 +1,7 @@
 class SuppliersController < ApplicationController
+  
+  before_filter :confirm_logged_in
+  
   def list
     @suppliers = Supplier.all
   end

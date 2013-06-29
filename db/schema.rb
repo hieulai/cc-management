@@ -261,13 +261,17 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
   add_index "templates", ["estimate_id"], :name => "index_templates_on_estimate_id"
 
   create_table "users", :force => true do |t|
+    t.integer  "builder_id"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
     t.integer  "primary_phone"
-    t.string   "password"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.string   "hashed_password"
+    t.string   "salt"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
+
+  add_index "users", ["builder_id"], :name => "index_users_on_builder_id"
 
 end

@@ -1,5 +1,7 @@
 class LeadsController < ApplicationController
   
+  before_filter :confirm_logged_in
+  
   def show
     @lead = Lead.find(params[:id])
   end

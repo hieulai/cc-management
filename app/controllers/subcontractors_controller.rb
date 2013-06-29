@@ -1,4 +1,7 @@
 class SubcontractorsController < ApplicationController
+  
+  before_filter :confirm_logged_in
+  
   def list
     @subcontractors = Subcontractor.all
   end

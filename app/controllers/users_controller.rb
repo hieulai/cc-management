@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  
+  before_filter :confirm_logged_in, :except => [:login, :process_login, :register, :create]
+  
   def list
     @users = User.all
   end
@@ -7,7 +10,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
   
-  def new
+  def register
     @user =  User.new
   end
   
@@ -51,4 +54,27 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
+  
+  def login
+  
+  end
+  
+  def process_login
+    authorized_user = User.authenticate(params[:email],params[:password])
+    if authorized_user
+      session[:user_id] = authorized_user.id
+      session[:builder_id] = authorized_user.builder_id
+      redirect_to(:controller => 'projects', :action => 'list_current_leads')
+    else
+      flash[:notice] = "Invalid email/password combination."
+      redirect_to(:action => 'login')
+    end
+  end
+  
+  def logout
+    session[:user_id] = nil
+    session[:builder_id] = nil
+    redirect_to(:action => 'login')
+  end
+    
 end

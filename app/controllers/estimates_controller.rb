@@ -1,5 +1,7 @@
 class EstimatesController < ApplicationController
 
+    before_filter :confirm_logged_in
+    
     def list_current
       #add condition to filter leads by lead_status
       @estimates = Estimate.where(:status => "Current Estimate")

@@ -1,5 +1,7 @@
 class ClientsController < ApplicationController
 
+  before_filter :confirm_logged_in
+
   def list
     @clients = Client.all
   end

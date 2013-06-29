@@ -1,6 +1,8 @@
 class AccountingController < ApplicationController
+  before_filter :confirm_logged_in
+  
   def index
- render('receivables')
+    render('receivables')
   end
 
   def receivables

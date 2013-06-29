@@ -1,12 +1,15 @@
 class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
+      t.references :builder
       t.string "first_name"
       t.string "last_name"
       t.string "email"
       t.integer "primary_phone"
-      t.string "password"
+      t.string "hashed_password"
+      t.string "salt"
       t.timestamps
     end
+    add_index :users, :builder_id
   end
 end

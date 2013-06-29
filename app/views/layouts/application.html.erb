@@ -10,7 +10,7 @@
 	<div id='page'>
 		<div id='header'>
 			<h1>Construction Central</h1>
-			<div id='username'><%= link_to("Logout", '#') %></div>
+			<div id='username'><%= link_to("Logout", {:controller => 'users', :action => 'logout'}) %></div>
 		</div>
 		<%= render partial: 'layouts/navigation' %>
 		<div id='content'>

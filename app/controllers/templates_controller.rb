@@ -1,4 +1,6 @@
 class TemplatesController < ApplicationController
+  
+  before_filter :confirm_logged_in
   before_filter :find_template, only: [:edit, :update, :delete, :destroy]
 
   def list

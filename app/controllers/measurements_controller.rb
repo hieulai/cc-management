@@ -1,5 +1,7 @@
 class MeasurementsController < ApplicationController
 
+  before_filter :confirm_logged_in
+  
   def list
     @measurements = Measurement.all
   end

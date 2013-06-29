@@ -1,4 +1,6 @@
 class AccountsController < ApplicationController
+  before_filter :confirm_logged_in
+  
   def list
     @accounts = Account.all
   end

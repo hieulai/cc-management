@@ -1,5 +1,7 @@
 class ProjectsController < ApplicationController
   
+  before_filter :confirm_logged_in
+  
   def list_current_leads
     #Finds all projects for every Client that have a "Current Lead"" status
     @clients = Client.joins(:projects).where(:projects => {:status => "Current Lead"})

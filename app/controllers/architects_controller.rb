@@ -1,4 +1,7 @@
 class ArchitectsController < ApplicationController
+  
+  before_filter :confirm_logged_in
+  
   def list
     @architects = Architect.all
   end

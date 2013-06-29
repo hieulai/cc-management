@@ -1,0 +1,14 @@
+<div>
+	<h2>New Builder Registration</h2>
+	
+	<%= form_for @user, :url => {:action => 'create'} do |f| %>
+	
+	<%= render(:partial => "new_form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Create") %>
+	</div>
+	
+	<% end %>
+	
+</div>
