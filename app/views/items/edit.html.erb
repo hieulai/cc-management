@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "sub_menu")%>
+	<%= render(:partial => "templates/sub_menu")%>
 	<h2>Edit Item</h2>
 	
 	<%= form_for @item, :url => {:action => 'update', :id => @item.id}, html: {id: 'items_form'} do |f| %>

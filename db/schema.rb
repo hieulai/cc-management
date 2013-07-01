@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130623165505) do
+ActiveRecord::Schema.define(:version => 20130627101046) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -81,13 +81,21 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
   add_index "categories_items", ["category_id"], :name => "index_categories_items_on_category_id"
   add_index "categories_items", ["item_id"], :name => "index_categories_items_on_item_id"
 
-  create_table "categories_templates", :id => false, :force => true do |t|
+  create_table "categories_templates", :force => true do |t|
     t.integer "category_id"
     t.integer "template_id"
   end
 
   add_index "categories_templates", ["category_id"], :name => "index_categories_templates_on_category_id"
   add_index "categories_templates", ["template_id"], :name => "index_categories_templates_on_template_id"
+
+  create_table "categories_templates_items", :id => false, :force => true do |t|
+    t.integer "categories_template_id"
+    t.integer "item_id"
+  end
+
+  add_index "categories_templates_items", ["categories_template_id"], :name => "index_categories_templates_items_on_categories_template_id"
+  add_index "categories_templates_items", ["item_id"], :name => "index_categories_templates_items_on_item_id"
 
   create_table "clients", :force => true do |t|
     t.string   "company"
@@ -137,6 +145,7 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
     t.text     "notes"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+    t.string   "file"
   end
 
   add_index "items", ["builder_id"], :name => "index_items_on_builder_id"

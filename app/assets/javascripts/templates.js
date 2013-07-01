@@ -3,6 +3,23 @@
 // # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 
+$(document).ready(function(){
+  $('#new_template').submit(function(){
+    var selected = $(".template_categories").children('option:selected');
+    if($('#template_name').val() == ''){
+      bounceEffectRight(selected);
+      $('#alertError').fadeIn().delay(5000).fadeOut();
+      return false;
+    }else if(selected.val() == ''){
+      bounceEffectRight($(".template_categories"));
+      selected.hide();
+      return false;
+    }else {
+      return true;
+    }
+  });
+})
+
 var add_item = function(el){
   el = $(el);
   var categoryId = el.attr('id');
@@ -15,7 +32,7 @@ var add_item = function(el){
       return $("#loading").show();
     }
   }).done(function(data, textStatus){
-    $("input#" + categoryId).val(categoryValue);
+    $("input#" + categoryId ).val(categoryValue);
     nestedFields = el.parents(".nested-fields");
     categoryItems = nestedFields.children(".category_items");
     categoryItems.fadeOut();
@@ -26,15 +43,3 @@ var add_item = function(el){
     }
   });
 }
-
-$(document).ready(function(){
-  $('#new_template').submit(function(){
-    var selected = $(".template_categories").children('option:selected');
-    if(selected.val() == ''){
-      bounceEffectRight(selected);
-      alert(console.log(selected));
-    } else {
-      alert(console.log(selected));
-    }
-  });
-})

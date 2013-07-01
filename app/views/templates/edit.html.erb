@@ -1,8 +1,9 @@
 <div>
-  <%= render(:partial => "sub_menu")%>
+  <%= render(partial: "sub_menu")%>
   <h2>Edit Template</h2>
+  <h3><%= notice if notice %></h3>
 
-  <%= form_for @template, :url => {:action => 'update', :id => @template.id} do |f| %>
+  <%= form_for @template, url: {action: 'update', id: @template.id} do |f| %>
 
     <%= render(partial: "new_form", locals: {f: f})%>
 

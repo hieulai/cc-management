@@ -6,8 +6,14 @@ class ItemsController < ApplicationController
     #passes in all items that do not have a category set
     # @items = Item.where(category_id: nil)
     #passes in all items that have categories set
-    @categories = Category.all
-    @items = Item.all
+    # @categories = Category.all
+    @items = Item.select([:id, :name, :description, :cost, :unit, :margin, :notes])
+
+    respond_to do |format|
+      format.html
+      format.csv {send_data Item.to_csv(@items)}
+      format.xls {send_data Item.to_csv(@items)}
+    end
   end
 
   def list_for_accounting
@@ -69,4 +75,15 @@ class ItemsController < ApplicationController
   def transfer_data
     @item = Item.new
   end
+
+  def import_export
+    @item = Item.new
+  end
+
+  def import
+    Item.import(params[:item])
+
+    redirect_to :back, notice: "Item imported."
+  end
+
 end

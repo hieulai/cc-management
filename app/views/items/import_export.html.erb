@@ -1,0 +1,20 @@
+<div>
+  <%= render(:partial => "templates/sub_menu")%>
+  <h2>Import / Export</h2>
+  <div>
+    <h3> Export Items: </h3>
+    <p>
+      <%= link_to "CSV", {controller: 'items', action: 'list', format: 'csv'} %> |
+      <%= link_to "Excel", {controller: 'items', action: 'list', format: 'xls'} %>
+    </p>
+  </div>
+
+  <h3> Import Items: </h3>
+  <%= form_for @item, url: {action: 'import'}, multipart: true do |f| %>
+  <%= f.file_field :data %>
+  <br/>
+  <%= submit_tag("Import") %>
+
+  <% end %>
+
+</div>

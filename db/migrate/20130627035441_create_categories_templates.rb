@@ -1,6 +1,6 @@
 class CreateCategoriesTemplates < ActiveRecord::Migration
   def change
-    create_table :categories_templates, id: false do |t|
+    create_table :categories_templates do |t|
       t.integer :category_id
       t.integer :template_id
     end
