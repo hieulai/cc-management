@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   
-  before_filter :confirm_logged_in, :except => [:login, :process_login, :register, :process_registration]
+  before_filter :confirm_logged_in, :except => [:login, :process_login, :logout, :register, :process_registration]
   
   def list
     @builder = Builder.find(session[:builder_id])
@@ -25,30 +25,6 @@ class UsersController < ApplicationController
     else
       #if save fails, redisplay form to user can fix problems
       render('new')
-    end
-  end
-  
-  
-  def register
-    @builder = Builder.new
-    @user =  User.new
-  end
-  
-  def process_registration
-    #Instantiate a new object using form parameters
-    @builder = Builder.new(params[:builder])
-    @user = User.new(params[:user])
-    @builder.save
-    @user.authority = "Owner"
-    @user.save
-    
-    #save subject
-    if @builder.users << @user
-      #if save succeeds, redirect to list action
-      redirect_to :action => 'process_login'
-    else
-      #if save fails, redisplay form to user can fix problems
-      render('register')
     end
   end
   
@@ -77,6 +53,31 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
+    
+    
+  def register
+    @builder = Builder.new
+    @user =  User.new
+  end
+  
+  def process_registration
+    #Instantiate a new object using form parameters
+    @builder = Builder.new(params[:builder])
+    @user = User.new(params[:user])
+    @builder.save
+    @user.authority = "Owner"
+    @user.save
+    
+    #save subject
+    if @builder.users << @user
+      #if save succeeds, redirect to list action
+      redirect_to :action => 'process_login'
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('register')
+    end
+  end
+  
   
   def login
   
@@ -97,7 +98,7 @@ class UsersController < ApplicationController
   def logout
     session[:user_id] = nil
     session[:builder_id] = nil
-    redirect_to(:action => 'login')
+    redirect_to(:controller => 'site', :action => 'index')
   end
-    
+  
 end

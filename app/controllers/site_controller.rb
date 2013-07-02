@@ -1,14 +1,4 @@
 class SiteController < ApplicationController
+  layout 'public'
   
-  def login
-  
-  end
-  
-  def process_login
-    
-  end
-  
-  def logout
-    
-  end
 end
