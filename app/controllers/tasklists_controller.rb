@@ -1,7 +1,7 @@
 class TasklistsController < ApplicationController
 
   def list
-    @tasklists = Tasklist.all
+    @tasklists = Tasklist.where("builder_id = ?", session[:builder_id])
   end
   
   def show
@@ -13,9 +13,11 @@ class TasklistsController < ApplicationController
   end
   
   def create
+    @builder = Builder.find(session[:builder_id])
     @tasklist = Tasklist.new(params[:tasklist])
     #saves creation of Estimate
     if @tasklist.save
+      @builder.tasklists << @tasklist
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else

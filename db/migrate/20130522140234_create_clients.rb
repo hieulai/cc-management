@@ -1,6 +1,7 @@
 class CreateClients < ActiveRecord::Migration
   def change
     create_table :clients do |t|
+      t.references :builder
       t.string "company"
       t.string "first_name"
       t.string "last_name"
@@ -16,5 +17,6 @@ class CreateClients < ActiveRecord::Migration
       t.text "notes"
       t.timestamps
     end
+    add_index :clients, :builder_id
   end
 end

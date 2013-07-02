@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   before_filter :confirm_logged_in
   
   def list
-    @accounts = Account.all
+    @accounts = Account.where("builder_id = ?", session[:builder_id])
   end
   
   def show
@@ -15,9 +15,11 @@ class AccountsController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
+    @builder = Builder.find(session[:builder_id])
     @account = Account.new(params[:account])
     #save subject
     if @account.save
+      @builder.accounts << @account
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else

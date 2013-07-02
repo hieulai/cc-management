@@ -1,6 +1,7 @@
 class CreateArchitects < ActiveRecord::Migration
   def change
     create_table :architects do |t|
+      t.references :builder
       t.string "company"
       t.string "first_name"
       t.string "last_name"
@@ -15,5 +16,6 @@ class CreateArchitects < ActiveRecord::Migration
       t.text "notes"
       t.timestamps
     end
+    add_index :architects, :builder_id
   end
 end

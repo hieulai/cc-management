@@ -3,7 +3,7 @@ class ArchitectsController < ApplicationController
   before_filter :confirm_logged_in
   
   def list
-    @architects = Architect.all
+    @architects = Architect.where("builder_id = ?", session[:builder_id])
   end
   
   def show
@@ -16,9 +16,11 @@ class ArchitectsController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
+    @builder = Builder.find(session[:builder_id])
     @architect = Architect.new(params[:architect])
     #save subject
     if @architect.save
+      @builder.architects << @architect
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else

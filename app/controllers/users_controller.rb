@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_filter :confirm_logged_in, :except => [:login, :process_login, :logout, :register, :process_registration]
   
   def list
-    @builder = Builder.find(session[:builder_id])
+    @user = User.where("builder_id = ?", session[:builder_id])
   end
   
   def show

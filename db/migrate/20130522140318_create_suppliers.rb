@@ -1,6 +1,7 @@
 class CreateSuppliers < ActiveRecord::Migration
   def change
     create_table :suppliers do |t|
+      t.references :builder
       t.string "company"
       t.string "primary_first_name"
       t.string "primary_last_name"
@@ -18,5 +19,6 @@ class CreateSuppliers < ActiveRecord::Migration
       t.text "notes"
       t.timestamps
     end
+    add_index :suppliers, :builder_id
   end
 end

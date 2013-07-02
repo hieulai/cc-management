@@ -3,7 +3,7 @@ class SubcontractorsController < ApplicationController
   before_filter :confirm_logged_in
   
   def list
-    @subcontractors = Subcontractor.all
+    @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id])
   end
   
   def show
@@ -16,9 +16,11 @@ class SubcontractorsController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
+    @builder = Builder.find(session[:builder_id])
     @subcontractor = Subcontractor.new(params[:subcontractor])
     #save subject
     if @subcontractor.save
+      @builder.subcontractors << @subcontractor
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else

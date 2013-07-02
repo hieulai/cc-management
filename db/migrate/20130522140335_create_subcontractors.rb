@@ -1,6 +1,7 @@
 class CreateSubcontractors < ActiveRecord::Migration
   def change
     create_table :subcontractors do |t|
+      t.references :builder
       t.string "company"
       t.string "trade"
       t.string "first_name"
@@ -16,5 +17,6 @@ class CreateSubcontractors < ActiveRecord::Migration
       t.text "notes"
       t.timestamps
     end
+    add_index :subcontractors, :builder_id
   end
 end

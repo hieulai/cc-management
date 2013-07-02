@@ -1,6 +1,7 @@
 class CreateEstimates < ActiveRecord::Migration
   def change
     create_table :estimates do |t|
+      t.references :builder
       t.references :project
       t.string "template"
       t.string "progress"
@@ -12,6 +13,7 @@ class CreateEstimates < ActiveRecord::Migration
       t.text "notes"
       t.timestamps
     end
+    add_index :estimates, :builder_id
     add_index :estimates, :project_id
   end
 end

@@ -3,7 +3,7 @@ class ClientsController < ApplicationController
   before_filter :confirm_logged_in
 
   def list
-    @clients = Client.all
+    @clients = Client.where("builder_id = ?", session[:builder_id])
   end
 
   def show
@@ -16,9 +16,11 @@ class ClientsController < ApplicationController
 
   def create
     #Instantiate a new object using form parameters
+    @builder = Builder.find(session[:builder_id])
     @client = Client.new(params[:client])
     #save subject
     if @client.save
+      @builder.clients << @client
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else

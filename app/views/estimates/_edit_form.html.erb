@@ -1,7 +1,7 @@
 	<table summary="Estimate form fields">
 		<tr>
 					<th>Project Name</th>
-					<td><%= f.select(:project_id, Project.where(:status => "Current Lead").collect{|s|[s.name, s.id]}) %>
+					<td><%= f.select(:project_id, Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Lead").collect{|s|[s.name, s.id]}) %>
 		</tr>
 		<tr>
 			<th>Template Type</th>

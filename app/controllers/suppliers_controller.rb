@@ -3,7 +3,7 @@ class SuppliersController < ApplicationController
   before_filter :confirm_logged_in
   
   def list
-    @suppliers = Supplier.all
+    @suppliers = Supplier.where("builder_id = ?", session[:builder_id])
   end
   
   def show
@@ -16,9 +16,11 @@ class SuppliersController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
+    @builder = Builder.find(session[:builder_id])
     @supplier = Supplier.new(params[:supplier])
     #save subject
     if @supplier.save
+      @builder.suppliers << @supplier
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else

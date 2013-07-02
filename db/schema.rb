@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
   add_index "accounts", ["builder_id"], :name => "index_accounts_on_builder_id"
 
   create_table "architects", :force => true do |t|
+    t.integer  "builder_id"
     t.string   "company"
     t.string   "first_name"
     t.string   "last_name"
@@ -43,6 +44,8 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  add_index "architects", ["builder_id"], :name => "index_architects_on_builder_id"
 
   create_table "builders", :force => true do |t|
     t.string   "company_name"
@@ -90,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
   add_index "categories_templates", ["template_id"], :name => "index_categories_templates_on_template_id"
 
   create_table "clients", :force => true do |t|
+    t.integer  "builder_id"
     t.string   "company"
     t.string   "first_name"
     t.string   "last_name"
@@ -107,7 +111,10 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
     t.datetime "updated_at",      :null => false
   end
 
+  add_index "clients", ["builder_id"], :name => "index_clients_on_builder_id"
+
   create_table "estimates", :force => true do |t|
+    t.integer  "builder_id"
     t.integer  "project_id"
     t.string   "template"
     t.string   "progress"
@@ -121,6 +128,7 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
     t.datetime "updated_at",                                 :null => false
   end
 
+  add_index "estimates", ["builder_id"], :name => "index_estimates_on_builder_id"
   add_index "estimates", ["project_id"], :name => "index_estimates_on_project_id"
 
   create_table "items", :force => true do |t|
@@ -194,6 +202,7 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"
 
   create_table "subcontractors", :force => true do |t|
+    t.integer  "builder_id"
     t.string   "company"
     t.string   "trade"
     t.string   "first_name"
@@ -211,7 +220,10 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
     t.datetime "updated_at",      :null => false
   end
 
+  add_index "subcontractors", ["builder_id"], :name => "index_subcontractors_on_builder_id"
+
   create_table "suppliers", :force => true do |t|
+    t.integer  "builder_id"
     t.string   "company"
     t.string   "primary_first_name"
     t.string   "primary_last_name"
@@ -231,7 +243,10 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
     t.datetime "updated_at",           :null => false
   end
 
+  add_index "suppliers", ["builder_id"], :name => "index_suppliers_on_builder_id"
+
   create_table "tasklists", :force => true do |t|
+    t.integer  "builder_id"
     t.string   "name"
     t.integer  "completed"
     t.integer  "total"
@@ -239,6 +254,8 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "tasklists", ["builder_id"], :name => "index_tasklists_on_builder_id"
 
   create_table "tasks", :force => true do |t|
     t.integer  "name"

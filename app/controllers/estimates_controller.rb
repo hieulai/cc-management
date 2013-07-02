@@ -4,20 +4,12 @@ class EstimatesController < ApplicationController
     
     def list_current
       #add condition to filter leads by lead_status
-      @estimates = Estimate.where(:status => "Current Estimate")
+      @estimates = Estimate.where("builder_id = ? AND status = ?", session[:builder_id], "Current Estimate")
     end
 
     def list_past
       #add condition to filter leads by lead_status
-      @estimates = Estimate.where(:status => "Past Estimate")
-    end
-
-    def list_templates
-      @templates = Template.all
-    end
-
-    def list_itesm
-      @items = Item.all
+      @estimates = Estimate.where("builder_id = ? AND status = ?", session[:builder_id], "Past Estimate")
     end
 
     def show
@@ -29,12 +21,14 @@ class EstimatesController < ApplicationController
     end
 
     def create
+      @builder = Builder.find(session[:builder_id])
       #Reads in the project ID selected by the User
       @project = Project.find(params[:project][:id])
       #Assigns the estimate to the correct Project
       @estimate = @project.estimates.new(params[:estimate])
       #saves creation of Estimate
       if @estimate.save
+        @builder.estimates << @estimate
         #Assigns all appropriate measurements to the Estimate
         @measurements = Measurement.all
         @measurements.each do |m|

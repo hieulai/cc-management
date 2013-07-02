@@ -3,7 +3,7 @@ class CategoriesController < ApplicationController
   before_filter :confirm_logged_in
   
   def list
-    @categories = Category.all
+    @categories = Category.where("builder_id = ?", session[:builder_id])
   end
 
   def new
@@ -11,9 +11,11 @@ class CategoriesController < ApplicationController
   end
 
   def create
+    @builder = Builder.find(session[:builder_id])
     @category = Category.new(params[:category])
 
     if @category.save
+      @builder.categories << @category
       redirect_to(:action => 'list')
     else
       #if save fails, redisplay form to user can fix problems

@@ -29,11 +29,13 @@ class ItemsController < ApplicationController
   end
 
   def create
+    @builder = Builder.find(session[:builder_id])
     @category = Category.find(params[:category][:id]) unless params[:category][:id].blank?
     @item = Item.new(params[:item])
 
     if @item.save && @category
       @item.categories << @category
+      @builder.items << @item
       redirect_to(action: 'list')
     else
       #if save fails, redisplay form to user can fix problems
