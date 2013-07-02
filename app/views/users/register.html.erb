@@ -1,14 +1,16 @@
 <div>
 	<h2>New Builder Registration</h2>
 	
-	<%= form_for @user, :url => {:action => 'create'} do |f| %>
+	<%= form_for @user, :url => {:action => 'create'} do |u| %>
+	<%= fields_for @builder do |b| %>
 	
-	<%= render(:partial => "new_form", :locals => {:f => f})%>
+	<%= render(:partial => "register_form", :locals => {:u => u, :b => b})%>
 	
 	<div class="form-buttons">
 		<%= submit_tag("Create") %>
 	</div>
 	
+	<% end %>
 	<% end %>
 	
 </div>

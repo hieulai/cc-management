@@ -10,19 +10,39 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
   
-  def register
-    @user =  User.new
+  def new
+    @user = User.new
   end
   
   def create
     #Instantiate a new object using form parameters
-    @user = User.new(params[:user])
+    @builder = Builder.find(session[:builder_id])
+    @user = @builder.users.new(params[:user])
     #save subject
     if @user.save
-      @builder = Builder.create
-      @builder.users << @user
       #if save succeeds, redirect to list action
-      redirect_to(:controller => 'projects', :action => 'list_current_leads')
+      redirect_to :controller => 'builders', :action => 'list_users'
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('new')
+    end
+  end
+  
+  
+  def register
+    @builder = Builder.new
+    @user =  User.new
+  end
+  
+  def process_regristration
+    #Instantiate a new object using form parameters
+    @builder = Builder.new(params[:builder])
+    @builder.save
+    @user = @builder.users.new(params[:user])
+    #save subject
+    if @user.save
+      #if save succeeds, redirect to list action
+      redirect_to :action => 'process_login', :email => @user.email, :password => @user.password
     else
       #if save fails, redisplay form to user can fix problems
       render('new')
