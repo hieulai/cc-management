@@ -1,0 +1,22 @@
+<table class="grid-view" summary="Project List">
+  <tr class="header">
+    <th>id</th>
+    <th>name</th>
+    <th>description</th>
+    <th>cost</th>
+    <th>margin</th>
+  <!-- Displays all items that are attached to a category -->
+  </tr>
+  <!-- Displays all items that are NOT attached to a category -->
+  <% @items.each do |item| %>
+
+  <tr>
+    <td><%= item.id %></td>
+    <td><%= item.name %></td>
+    <td><%= item.description %></td>
+    <td><%= item.cost %></td>
+    <td><%= item.margin %></td>
+  </tr>
+
+  <% end %>
+</table>

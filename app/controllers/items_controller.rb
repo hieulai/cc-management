@@ -7,12 +7,12 @@ class ItemsController < ApplicationController
     # @items = Item.where(category_id: nil)
     #passes in all items that have categories set
     # @categories = Category.all
-    @items = Item.select([:id, :name, :description, :cost, :unit, :margin, :notes])
-
+    @items = Item.where(builder_id: session[:builder_id])
     respond_to do |format|
       format.html
-      format.csv {send_data Item.to_csv(@items)}
-      format.xls {send_data Item.to_csv(@items)}
+      format.csv {send_data Item.to_csv(@builder)}
+      # format.xls {send_data Item.to_csv(@builder, col_sep: "\t")}
+      format.xls
     end
   end
 
@@ -81,9 +81,9 @@ class ItemsController < ApplicationController
   end
 
   def import
-    Item.import(params[:item])
+    Item.import(params[:item][:data], @builder)
 
-    redirect_to :back, notice: "Item imported."
+    redirect_to action: 'list', notice: "Item imported."
   end
 
 end

@@ -27,6 +27,7 @@ group :production do
 end
 
 gem 'roo'
+gem 'to_xls', '~> 1.0.0'
 gem 'carrierwave'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'

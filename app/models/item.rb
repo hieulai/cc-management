@@ -20,31 +20,41 @@ class Item < ActiveRecord::Base
     #end
   end
 
-  def self.to_csv(items)
-    CSV.generate do |csv|
-      csv << column_names
-      items.each do |item|
-        csv << item.attributes.values_at(*column_names)
+  def self.to_csv(builder, options = {})
+    CSV.generate(options = {}) do |csv|
+      csv << ["id", "name", "description", "cost", "margin"]
+      builder.items.each_with_index do |item|
+        csv << [item.id, item.name, item.description, item.cost, item.margin]
       end
     end
   end
 
-  def self.import(file)
-    spreadsheet = open_spreadsheet(file)
-    header = spreadsheet.row(1)
-    (2..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
-      product = find_by_id(row["id"]) || new
-      product.attributes = row.to_hash.slice(*accessible_attributes)
-      product.save!
+  def self.import(file, builder)
+    CSV.foreach(file.path, headers: true) do |row|
+      item = find_by_id(row["id"]) || new
+      item.attributes = row.to_hash.slice("name", "description", "cost", "margin")
+      item.builder_id = builder.id
+      item.save!
+    end
+  end
+
+  def self.excel_import(file, builder)
+    Spreadsheet.client_encoding = 'UTF-8'
+    book = Spreadsheet.open file.path
+    sheet1 = book.worksheet 0
+    sheet1.each do |row|
+      item = find_by_id(row["id"]) || new
+      item.attributes = row.to_hash.slice("name", "description", "cost", "margin")
+      item.builder_id = builder.id
+      item.save!
     end
   end
 
   def self.open_spreadsheet(file)
-    case File.extname(file[:data].original_filename)
-    when ".csv" then CSV.new(file[:data].tempfile)
-    when ".xls" then Excel.new(file.path, nil, :ignore)
-    when ".xlsx" then Excelx.new(file.path, nil, :ignore)
+    case File.extname(file.original_filename)
+    when ".csv" then CSV.new(file.path, nil)
+    when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
+    when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
     else raise "Unknown file type: #{file[:data].original_filename}"
     end
   end
