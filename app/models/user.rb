@@ -5,12 +5,13 @@ class User < ActiveRecord::Base
   belongs_to :builder
  
   #Variables
-  attr_accessible :first_name, :last_name, :email, :primary_phone
+  attr_accessible :first_name, :last_name, :email, :primary_phone, :authority
   attr_protected :hashed_password, :salt
   attr_accessor :password
   
   #Validations
-  validates :password, length: {in: 1..20} 
+  #validates :password, length: {in: 1..20} 
+  validates :email, presence: true, uniqueness: true 
   
   #Callbacks
   before_save :create_hashed_password
@@ -36,6 +37,10 @@ class User < ActiveRecord::Base
   
   def password_match?(password="")
     hashed_password == User.hash_with_salt(password,salt)
+  end
+  
+  def full_name
+     "#{first_name} #{last_name}"
   end
   
   private

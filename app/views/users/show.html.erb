@@ -1,30 +1,35 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
 	
-	<h2>Account Details For: <%= @account.name %> </h2>
-	<h2>Company Info:</h2>
+	<h2>Details For: <%= @user.first_name %> </h2>
 	<p>
-		<%= "Account Name:" %>
-		<%= @account.name %>
+		<%= "Authority:" %>
+		<%= @user.authority %>
 	</p>
 	<p>
-		<%= "Account Type:" %>
-		<%= @account.category %>
+		<%= "First Name:" %>
+		<%= @user.first_name %>
 	</p>
 	<p>
-		<%= "Account Sub Type:" %>
-		<%= @account.subcategory %>
+		<%= "Last Name:" %>
+		<%= @user.last_name %>
 	</p>
 	<p>
-		<%= "Account Prefix:" %>
-		<%= @account.prefix %>
+		<%= "Primary Phone:" %>
+		<%= @user.primary_phone %>
 	</p>
 	<p>
-		<%= "Balance: $" %>
-		<%= @account.balance %>
+		<%= "Email:" %>
+		<%= @user.email %>
+	</p>
+	<p>
+		<%= "Created:" %>
+		<%= @user.created_at %>
+	</p>
+	<p>
+		<%= "Last Updated:" %>
+		<%= @user.updated_at %>
 	</p>
 
-
-	
 	
 </div>

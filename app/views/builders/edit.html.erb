@@ -1,10 +1,11 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Edit Account Info</h2>
+	<h2>Edit Company Info</h2>
 	
-	<%= form_for @account, :url => {:action => 'update', :id => @account.id} do |f| %>
+	<%= form_for @builder, :url => {:action => 'update', :id => @builder.id} do |f| %>
 	
 	<%= render(:partial => "edit_form", :locals => {:f => f})%>
+	
 	
 	<div class="form-buttons">
 		<%= submit_tag("Update") %>

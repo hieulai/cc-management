@@ -1,10 +1,10 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h1>Users</h1>
+	<h1>Task Lists</h1>
 	<%= link_to("Instructions >>", {:action => 'show'}) %>
 	</br>
 	</br>
-	<%= link_to("Add New User >>", {:controller => 'users', :action => 'new'}) %>
+	<%= link_to("Create New Task List >>", { :action => 'new'}) %>
 	</br>
 	</br>
 	
@@ -13,11 +13,10 @@
 		<tr class="header">
 			<th>Actions</th>
 			<th>Name</th>
-			<th>Authority Level</th>
-					
+				
 					
 		</tr>
-		<% @builder.users.each do |x| %>
+		<% @tasklists.each do |x| %>
 		
 		<tr>
 			<td class="center">
@@ -25,9 +24,7 @@
 				<%= link_to("Edit", {:action => 'edit', :id => x.id}, :class => 'action edit') %>
 				<%= link_to("Delete", {:action => 'delete', :id => x.id}, :class => 'action delete') %>
 			</td>
-			<td><%= x.full_name%></td>
-			<td><%= x.authority %></td>
-		
+			<td><%= x.name%></td>
 			
 		</tr>
 		<% end %>

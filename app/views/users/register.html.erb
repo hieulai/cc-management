@@ -1,8 +1,21 @@
 <div>
 	<h2>New Builder Registration</h2>
 	
-	<%= form_for @user, :url => {:action => 'create'} do |u| %>
+	<%= form_for @user, :url => {:action => 'process_registration'} do |u| %>
 	<%= fields_for @builder do |b| %>
+	
+	<% if @user.errors.any? %>
+	  <div id="errorExplanation">
+	    <h2><%= pluralize(@user.errors.count, "Error") %> prohibited
+	      this post from being saved:</h2>
+	    <ul>
+	    <% @user.errors.full_messages.each do |msg| %>
+	      <li><%= msg %></li>
+	    <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+	
 	
 	<%= render(:partial => "register_form", :locals => {:u => u, :b => b})%>
 	

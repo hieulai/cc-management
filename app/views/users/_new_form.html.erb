@@ -1,5 +1,10 @@
 <h2>User Details</h2>
 	<p>
+		<%= u.label :authority, "Authority Level" %>
+		<%= u.select(:authority, ["Owner", "Admin", "Accountant", "Payroll Mgr", "Accounts Receivable Mgr", "Accounts Payable Mgr", 
+		"Project Mgr", "Estimator", "Salesman" ], {:include_blank => true}) %>
+	</p>
+	<p>
 		<%= u.label :first_name, "First Name" %>
 		<%= u.text_field(:first_name) %>
 	</p>

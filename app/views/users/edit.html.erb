@@ -1,10 +1,22 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Edit Account Info</h2>
+	<h2>Edit User Info</h2>
 	
-	<%= form_for @account, :url => {:action => 'update', :id => @account.id} do |f| %>
+	<%= form_for @user, :url => {:action => 'update', :id => @user.id} do |f| %>
 	
-	<%= render(:partial => "new_form", :locals => {:f => f})%>
+	<% if @user.errors.any? %>
+	  <div id="errorExplanation">
+	    <h2><%= pluralize(@user.errors.count, "Error") %> prohibited
+	      this post from being saved:</h2>
+	    <ul>
+	    <% @user.errors.full_messages.each do |msg| %>
+	      <li><%= msg %></li>
+	    <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+	
+	<%= render(:partial => "edit_form", :locals => {:f => f})%>
 	
 	<div class="form-buttons">
 		<%= submit_tag("Update") %>

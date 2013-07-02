@@ -4,8 +4,8 @@ class BuildersController < ApplicationController
   before_filter :confirm_logged_in
   
   #Admin actions
-  def list_users
-    @builder = Builder.find(session[:builder_id])
+  def list
+    
   end
   
   #User actions
@@ -21,11 +21,11 @@ class BuildersController < ApplicationController
   
   def update
     #Find object using form parameters
-    @account = Account.find(params[:id])
+    @builder = Builder.find(session[:builder_id])
     #Update subject
-    if @account.update_attributes(params[:account])
+    if @builder.update_attributes(params[:builder])
       #if save succeeds, redirect to list action
-      redirect_to(:action => 'list')
+      redirect_to(:action => 'show')
     else
       #if save fails, redisplay form to user can fix problems
       render('edit')

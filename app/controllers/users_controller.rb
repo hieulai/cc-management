@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
   
-  before_filter :confirm_logged_in, :except => [:login, :process_login, :register, :create]
+  before_filter :confirm_logged_in, :except => [:login, :process_login, :register, :process_registration]
   
   def list
-    @users = User.all
+    @builder = Builder.find(session[:builder_id])
   end
   
   def show
@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     #save subject
     if @user.save
       #if save succeeds, redirect to list action
-      redirect_to :controller => 'builders', :action => 'list_users'
+      redirect_to :controller => 'users', :action => 'list'
     else
       #if save fails, redisplay form to user can fix problems
       render('new')
@@ -34,18 +34,21 @@ class UsersController < ApplicationController
     @user =  User.new
   end
   
-  def process_regristration
+  def process_registration
     #Instantiate a new object using form parameters
     @builder = Builder.new(params[:builder])
+    @user = User.new(params[:user])
     @builder.save
-    @user = @builder.users.new(params[:user])
+    @user.authority = "Owner"
+    @user.save
+    
     #save subject
-    if @user.save
+    if @builder.users << @user
       #if save succeeds, redirect to list action
-      redirect_to :action => 'process_login', :email => @user.email, :password => @user.password
+      redirect_to :action => 'process_login'
     else
       #if save fails, redisplay form to user can fix problems
-      render('new')
+      render('register')
     end
   end
   

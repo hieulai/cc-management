@@ -2,6 +2,7 @@ class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
       t.references :builder
+      t.string "authority"
       t.string "first_name"
       t.string "last_name"
       t.string "email"

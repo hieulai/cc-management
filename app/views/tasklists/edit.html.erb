@@ -1,8 +1,8 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Edit Account Info</h2>
+	<h2>Edit Task List</h2>
 	
-	<%= form_for @account, :url => {:action => 'update', :id => @account.id} do |f| %>
+	<%= form_for @tasklist, :url => {:action => 'update', :id => @tasklist.id} do |f| %>
 	
 	<%= render(:partial => "edit_form", :locals => {:f => f})%>
 	

@@ -3,7 +3,23 @@
 	
 	<%= form_for @user, :url => {:action => 'create'} do |u| %>
 	
+	<% if @user.errors.any? %>
+	  <div id="errorExplanation">
+	    <h2><%= pluralize(@user.errors.count, "Error") %> prohibited
+	      this post from being saved:</h2>
+	    <ul>
+	    <% @user.errors.full_messages.each do |msg| %>
+	      <li><%= msg %></li>
+	    <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+	
 	<%= render(:partial => "new_form", :locals => {:u => u})%>
+	
+
+	
+	
 	
 	<div class="form-buttons">
 		<%= submit_tag("Create") %>
