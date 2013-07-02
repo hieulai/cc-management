@@ -3,7 +3,8 @@ class ArchitectsController < ApplicationController
   before_filter :confirm_logged_in
   
   def list
-    @architects = Architect.where("builder_id = ?", session[:builder_id])
+    @query = params[:query]
+    @architects = Architect.where("builder_id = ?", session[:builder_id]).search(@query)
   end
   
   def show

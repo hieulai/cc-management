@@ -3,7 +3,8 @@ class ClientsController < ApplicationController
   before_filter :confirm_logged_in
 
   def list
-    @clients = Client.where("builder_id = ?", session[:builder_id])
+    @query = params[:query]
+    @clients = Client.where("builder_id = ?", session[:builder_id]).search(@query)
   end
 
   def show

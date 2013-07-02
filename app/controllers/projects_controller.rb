@@ -4,22 +4,22 @@ class ProjectsController < ApplicationController
   
   def list_current_leads
     #Finds all projects for every Client that have a "Current Lead"" status
-    @clients = Client.joins(:projects).where(:projects => {:status => "Current Lead"})
+    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Current Lead"})
   end
   
   def list_current_projects
     #Finds all projects for every Client that have a "Current Project" status
-    @clients = Client.joins(:projects).where(:projects => {:status => "Current Project"})
+    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Current Project"})
   end
   
   def list_past_projects
     #Finds all projects for every Client that have a "Current Project" status
-    @clients = Client.joins(:projects).where(:projects => {:status => "Past Project"})
+    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Past Project"})
   end
   
   def list_past_leads
     #Finds all projects for every Client that have a "Past Lead" status
-    @clients = Client.joins(:projects).where(:projects => {:status => "Past Lead"})
+    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Past Lead"})
   end
   
   def new
@@ -30,11 +30,14 @@ class ProjectsController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
+    @builder = Builder.find(session[:builder_id])
     @client = Client.new(params[:client])
     #save subject
     if @client.save
-      #if save succeeds, attach project to client
+      #if save succeeds, attach Project to Client
       @project = @client.projects.create(params[:project])
+      #Attach Client to Builder
+      @builder.clients << @client
       redirect_to(:action => 'list_current_leads')
     else
       #if save fails, redisplay form to user can fix problems

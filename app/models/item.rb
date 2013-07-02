@@ -9,16 +9,9 @@ class Item < ActiveRecord::Base
   attr_accessible :name, :description, :qty, :unit, :cost, :margin, :price, :default, :notes, :file
 
   validates :name, presence: true
-
-  def price
-    #if cost ! nil & margin ! nil
-     # cost + margin
-    #else cost ! nil & margin = nil
-     # cost
-    #else
-     # 0
-    #end
-  end
+  
+  scope :search, lambda{|query| where("name LIKE ? OR description LIKE ? OR notes LIKE ?",
+     "%#{query}%", "%#{query}%", "%#{query}%")} 
 
   def self.to_csv(builder, options = {})
     CSV.generate(options = {}) do |csv|

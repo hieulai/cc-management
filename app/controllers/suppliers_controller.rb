@@ -3,7 +3,8 @@ class SuppliersController < ApplicationController
   before_filter :confirm_logged_in
   
   def list
-    @suppliers = Supplier.where("builder_id = ?", session[:builder_id])
+    @query = params[:query]
+    @suppliers = Supplier.where("builder_id = ?", session[:builder_id]).search(@query)
   end
   
   def show

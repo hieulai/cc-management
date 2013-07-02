@@ -3,7 +3,8 @@ class SubcontractorsController < ApplicationController
   before_filter :confirm_logged_in
   
   def list
-    @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id])
+    @query = params[:query]
+    @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id]).search(@query)
   end
   
   def show
