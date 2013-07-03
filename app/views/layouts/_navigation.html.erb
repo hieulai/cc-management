@@ -1,4 +1,4 @@
-<div id='username'><%= "Logged In As:" %></div>
+<div id='username'><%= "Logged in As: " + session[:username] %></div>
 </br>
 <div id='username'><%= link_to("Logout", {:controller => 'users', :action => 'logout'}) %></div>
 <div id='mainmenu'>

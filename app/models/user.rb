@@ -18,6 +18,10 @@ class User < ActiveRecord::Base
   after_save :clear_password
 
   #public methods
+  def full_name
+     "#{first_name} #{last_name}"
+  end
+  
   def self.make_salt(email="")
     Digest::SHA1.hexdigest("Use #{email} with #{Time.now} to make salt")
   end

@@ -87,6 +87,7 @@ class UsersController < ApplicationController
     authorized_user = User.authenticate(params[:email],params[:password])
     if authorized_user
       session[:user_id] = authorized_user.id
+      session[:username] = authorized_user.full_name
       session[:builder_id] = authorized_user.builder_id
       redirect_to(:controller => 'projects', :action => 'list_current_leads')
     else
