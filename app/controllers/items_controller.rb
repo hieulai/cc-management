@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
-  
+
   before_filter :confirm_logged_in
-  
+
   def list
     #passes in all items that do not have a category set
     # @items = Item.where(category_id: nil)
