@@ -258,13 +258,16 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
   add_index "tasklists", ["builder_id"], :name => "index_tasklists_on_builder_id"
 
   create_table "tasks", :force => true do |t|
-    t.integer  "name"
+    t.integer  "tasklist_id"
+    t.string   "name"
     t.boolean  "completed"
     t.integer  "time_to_complete"
     t.string   "department"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
   end
+
+  add_index "tasks", ["tasklist_id"], :name => "index_tasks_on_tasklist_id"
 
   create_table "templates", :force => true do |t|
     t.integer  "builder_id"

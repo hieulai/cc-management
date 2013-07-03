@@ -1,0 +1,15 @@
+<p>
+	<%= f.label :name, "Task List Name" %>
+	<%= f.text_field(:name) %>
+</p>
+<%= f.fields_for :tasks do |builder| %>
+	<%= render "task_fields", :f => builder %>
+<% end %>
+<p><%= link_to_add_fields "Add", f, :tasks %></p>
+
+
+
+
+
+
+

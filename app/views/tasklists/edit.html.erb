@@ -4,7 +4,7 @@
 	
 	<%= form_for @tasklist, :url => {:action => 'update', :id => @tasklist.id} do |f| %>
 	
-	<%= render(:partial => "edit_form", :locals => {:f => f})%>
+	<%= render(:partial => "form", :locals => {:f => f})%>
 	
 	<div class="form-buttons">
 		<%= submit_tag("Update") %>

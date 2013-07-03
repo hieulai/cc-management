@@ -1,4 +1,7 @@
 class Task < ActiveRecord::Base
-  # attr_accessible :title, :body
+  
   belongs_to :tasklist
+  
+  attr_accessible :name, :completed, :time_to_complete, :department
+  
 end

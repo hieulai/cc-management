@@ -6,6 +6,8 @@
 		<%= "Name:" %>
 		<%= @tasklist.name %>
 	</p>
-	
+	<% for task in @tasklist.tasks %>
+	<li><%= task.name %></li>
+	<% end %>
 	
 </div>
