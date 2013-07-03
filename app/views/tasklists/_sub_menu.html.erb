@@ -1,8 +1,14 @@
 <div id='submenu'>
 	<ul>
+<<<<<<< HEAD
 		<li><%= link_to("Current Projects", {:action => 'list_current_projects'})%>
 		<li><%= link_to("Past Projects", {:action => 'list_past_projects'})%>
 		<li><%= link_to("Task Lists", {:controller => 'tasklists', :action => 'list'}, class: active_page('tasklists', '', 'list'))%>
+=======
+		<li><%= link_to("Current Projects", {:controller => :projects, :action => 'list_current_projects'})%>
+		<li><%= link_to("Past Projects", {:controller => :projects, :action => 'list_past_projects'})%>
+		<li><%= link_to("Task Lists", {:controller => 'tasklists', :action => 'list'})%>
+>>>>>>> d05d3f042b79042ecd3a2c1ea4a604a47f8b16be
 		<li><%= link_to("Import/Export")%>
 	</ul>
 </div>

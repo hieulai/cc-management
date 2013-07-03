@@ -1,0 +1,19 @@
+<div>
+	<%= render(:partial => "project_sub_menu")%>
+	<h2>Select Task List</h2>
+	
+	<%= form_for @project, :url => {:action => 'assign_tasklist'} do |f| %>
+	
+	<table>
+		<tr>
+			<th>Choose a Task List for the Project:</th>
+			<td><%= select(:tasklist, :id, Tasklist.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
+		</tr>
+	</table>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Submit") %>
+	</div>
+	
+	<% end %>
+</div>

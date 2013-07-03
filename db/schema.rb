@@ -247,6 +247,7 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
 
   create_table "tasklists", :force => true do |t|
     t.integer  "builder_id"
+    t.integer  "project_id"
     t.string   "name"
     t.integer  "completed"
     t.integer  "total"
@@ -256,6 +257,7 @@ ActiveRecord::Schema.define(:version => 20130623165505) do
   end
 
   add_index "tasklists", ["builder_id"], :name => "index_tasklists_on_builder_id"
+  add_index "tasklists", ["project_id"], :name => "index_tasklists_on_project_id"
 
   create_table "tasks", :force => true do |t|
     t.integer  "tasklist_id"
