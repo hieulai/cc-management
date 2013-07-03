@@ -18,7 +18,7 @@ class TemplatesController < ApplicationController
   def create
     categories = params[:template][:categories_templates_attributes]
     params[:template].delete(:categories_templates_attributes)
-    @template = Template.new(params[:template])
+    @template = @builder.templates.new(params[:template])
 
     if @template.save!
       # @template.categories_templates.create(categories)

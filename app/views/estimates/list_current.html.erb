@@ -1,46 +1,45 @@
 <div>
-	<%= render(:partial => "sub_menu")%>
-	<%= controller_name %>
-	<h1>Current Estimates</h1>
-	<%= link_to("Instructions >>", {:action => 'show'}) %>
-	</br>
-	</br>
-	<%= link_to("Create New Estimate >>", {:action => 'new'}) %>
-	</br>
-	</br>
-	<table class="grid-view" summary="Project List">
-		<tr class="header">
-			<th>Actions</th>
-			<th>Project Name</th>
-			<th>Template Type</th>
-			<th>Status</th>
-			<th>Due Date</th>
-			<th>Revenue</th>
-			<th>Profit</th>
-			<th>Margin</th>
-			<th>Notes</th>
-		</tr>
-		<% @estimates.each do |estimate| %>
-		<tr>
-			<td class="center">
-				<%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :class => 'action measurements') %>
-				<%= link_to("Mat", {:action => 'edit_templates', :id => estimate.id}, :class => 'action measurements') %>
-				<%= link_to("View", {:action => 'show', :id => estimate.id}, :class => 'action vew') %>
-				<%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :class => 'action edit') %>
-				<%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :class => 'action convert') %>
-				<%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>
-			</td>
-			<td><%= estimate.project.name %></td>
-			<td><%= estimate.template %></td>
-			<td><%= estimate.progress %></td>
-			<td><%= estimate.deadline %></td>
-			<td><%= estimate.revenue %></td>
-			<td><%= estimate.profit %></td>
-			<td><%= estimate.margin %></td>
-			<td><%= estimate.notes %></td>
-			
-		</tr>
-		<% end %>
-	</table>
+  <%= render(partial: "sub_menu")%>
+  <h1>Current Estimates</h1>
+  <%= link_to("Instructions >>", {:action => 'show'}) %>
+  </br>
+  </br>
+  <%= link_to("Create New Estimate >>", {:action => 'new'}) %>
+  </br>
+  </br>
+  <table class="grid-view" summary="Project List">
+    <tr class="header">
+      <th>Actions</th>
+      <th>Project Name</th>
+      <th>Template Type</th>
+      <th>Status</th>
+      <th>Due Date</th>
+      <th>Revenue</th>
+      <th>Profit</th>
+      <th>Margin</th>
+      <th>Notes</th>
+    </tr>
+    <% @estimates.each do |estimate| %>
+    <tr>
+      <td class="center">
+        <%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :class => 'action measurements') %>
+        <%= link_to("Mat", {:action => 'edit_templates', :id => estimate.id}, :class => 'action measurements') %>
+        <%= link_to("View", {:action => 'show', :id => estimate.id}, :class => 'action vew') %>
+        <%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :class => 'action edit') %>
+        <%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :class => 'action convert') %>
+        <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>
+      </td>
+      <td><%= estimate.project.name %></td>
+      <td><%= estimate.template %></td>
+      <td><%= estimate.progress %></td>
+      <td><%= estimate.deadline %></td>
+      <td><%= estimate.revenue %></td>
+      <td><%= estimate.profit %></td>
+      <td><%= estimate.margin %></td>
+      <td><%= estimate.notes %></td>
+      
+    </tr>
+    <% end %>
+  </table>
 </div>
 
