@@ -1,4 +1,17 @@
 <div>
 	<%= render(:partial => "project_sub_menu")%>
-	<h2>Update Tasklist</h2>
+	<h2>Update Task List</h2>
+	<%= link_to("Customize Task List >>", {:action => 'customize_tasklist', :id => @tasklist.id}) %>
+	
+	<%= form_for @tasklist, :url => {:action => 'update_tasklist', :id => @tasklist.id} do |f| %>
+	
+		<%= f.fields_for :tasks do |builder| %>
+			<%= render "task_fields", :f => builder %>
+		<% end %>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update") %>
+	</div>
+	
+	<% end %>
 </div>

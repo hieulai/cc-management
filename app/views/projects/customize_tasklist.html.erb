@@ -1,0 +1,19 @@
+<div>
+	<%= render(:partial => "project_sub_menu")%>
+	<h2>Customize Task List</h2>
+	
+	<%= form_for @tasklist, :url => {:action => 'process_customize', :id => @tasklist.id} do |f| %>
+	
+		
+		<%= f.fields_for :tasks do |builder| %>
+			<%= render "custom_task_fields", :f => builder %>
+		<% end %>
+		<p><%= link_to_add_association "Add Task", f, :tasks, partial: 'custom_task_fields' %></p>
+		
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update") %>
+	</div>
+	
+	<% end %>
+</div>

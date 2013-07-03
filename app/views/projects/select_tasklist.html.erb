@@ -2,7 +2,7 @@
 	<%= render(:partial => "project_sub_menu")%>
 	<h2>Select Task List</h2>
 	
-	<%= form_for @project, :url => {:action => 'assign_tasklist'} do |f| %>
+	<%= form_for @project, :url => {:action => 'assign_tasklist', :id => @project.id} do |f| %>
 	
 	<table>
 		<tr>

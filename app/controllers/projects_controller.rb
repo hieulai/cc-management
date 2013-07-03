@@ -144,22 +144,64 @@ class ProjectsController < ApplicationController
     redirect_to(:action => 'list_current_leads')
   end
   
+  def edit_tasklist
+    @project = Project.find(params[:id])
+    @tasklist = @project.tasklist
+  end
+  
+  def update_tasklist
+    @tasklist = Tasklist.find(params[:id])
+    if @tasklist.update_attributes(params[:tasklist])
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'list_current_projects')
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('edit_tasklist')
+    end
+  end
+  
+  def customize_tasklist
+    @tasklist = Tasklist.find(params[:id])
+  end
+  
+  def process_customize
+    @tasklist = Tasklist.find(params[:id])
+    if @tasklist.update_attributes(params[:tasklist])
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'edit_tasklist', id: @tasklist.project_id)
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('edit_tasklist')
+    end
+  end
+  
   def tasklist
     @project = Project.find(params[:id])
     if @project.tasklist
-      render 'edit_tasklist'
+      redirect_to :action => 'edit_tasklist', id: @project.id
     else
-      redirect_to :action => 'select_tasklist', :id => @project.id
+      redirect_to :action => 'select_tasklist', id: @project.id
     end
+  end
+  
+  def select_tasklist
+    @project = Project.find(params[:id])
   end
 
   def assign_tasklist
     @project = Project.find(params[:id])
-    @tasklist = Tasklist.find(params[:tasklist][:id])
-    if @project.tasklist << @tasklist
-      redirect_to :action => 'edit_tasklist'
+    @original_list = Tasklist.find(params[:tasklist][:id])
+    @project_list = Tasklist.new
+    @original_list.tasks.each do |task|
+      @new_task = Task.new
+      @new_task.name = task.name
+      @project_list.tasks << @new_task
+    end
+    
+    if @project.tasklist = @project_list
+      redirect_to :action => 'edit_tasklist', id: @project.id
     else
-      render 'tasklist'
+      render 'select_tasklist'
     end
   end
     
