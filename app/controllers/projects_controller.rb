@@ -23,13 +23,13 @@ class ProjectsController < ApplicationController
   end
   
   def new
-    #creates new project, but is originally known as a "lead"
+    #creates new project, but is originally known as a "Lead"
     @project = Project.new
     @client =  Client.new
   end
   
   def create
-    #Instantiate a new object using form parameters
+    #creates new project, but is originally known as a "Lead"
     @builder = Builder.find(session[:builder_id])
     @client = Client.new(params[:client])
     #save subject
@@ -46,6 +46,12 @@ class ProjectsController < ApplicationController
   end
   
   def show_lead
+    #Passes in parent model of Client
+    @project = Project.find(params[:id])
+    @client = Client.find(@project.client_id)
+  end
+  
+  def show_project
     #Passes in parent model of Client
     @project = Project.find(params[:id])
     @client = Client.find(@project.client_id)
@@ -73,15 +79,17 @@ class ProjectsController < ApplicationController
   
   def edit_project
     @project = Project.find(params[:id])
+    @client = Client.find(@project.client_id)
   end
   
   def update_project
     #Find object using form parameters
     @project = Project.find(params[:id])
+    @client = Client.find(@project.client_id)
     #Update subject
-    if @project.update_attributes(params[:project])
+    if @client.update_attributes(params[:client]) & @project.update_attributes(params[:project])
       #if save succeeds, redirect to list action
-      redirect_to(:action => 'list_current')
+      redirect_to(:action => 'list_current_projects')
     else
       #if save fails, redisplay form to user can fix problems
       render('edit')
@@ -137,7 +145,22 @@ class ProjectsController < ApplicationController
   end
   
   def tasklist
-    
+    @project = Project.find(params[:id])
+    if @project.tasklist
+      render 'edit_tasklist'
+    else
+      redirect_to :action => 'select_tasklist', :id => @project.id
+    end
   end
 
+  def assign_tasklist
+    @project = Project.find(params[:id])
+    @tasklist = Tasklist.find(params[:tasklist][:id])
+    if @project.tasklist << @tasklist
+      redirect_to :action => 'edit_tasklist'
+    else
+      render 'tasklist'
+    end
+  end
+    
 end

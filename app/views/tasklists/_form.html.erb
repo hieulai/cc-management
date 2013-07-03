@@ -5,7 +5,7 @@
 <%= f.fields_for :tasks do |builder| %>
 	<%= render "task_fields", :f => builder %>
 <% end %>
-<p><%= link_to_add_association "Add", f, :tasks, partial: 'task_fields' %></p>
+<p><%= link_to_add_association "Add Task", f, :tasks, partial: 'task_fields' %></p>
 
 
 
