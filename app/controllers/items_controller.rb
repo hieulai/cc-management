@@ -30,29 +30,29 @@ class ItemsController < ApplicationController
 
   def create
     @builder = Builder.find(session[:builder_id])
-    @category = Category.find(params[:category][:id]) unless params[:category][:id].blank?
+    @category = Category.find(params[:category][:id]) unless params[:category].blank?
     @item = Item.new(params[:item])
 
-    if @item.save && @category
-      @item.categories << @category
+    if @item.save
+      @item.categories << @category if @category
       @builder.items << @item
       redirect_to(action: 'list')
     else
       #if save fails, redisplay form to user can fix problems
-      render('new')
+      render action: 'new', notice: "failed."
     end
   end
 
   def edit
     @item = Item.find(params[:id])
     @categories = Category.all
-    @category = @item.categories.first.id unless @item.categories.blank?
+    @category = @item.categories_templates.first.id unless @item.categories_templates.blank?
   end
 
   def update
     #Find object using form parameters
     @item = Item.find(params[:id])
-    @category = Category.find(params[:category][:id]) unless params[:category][:id].blank?
+    @category = Category.find(params[:category][:id]) unless params[:category].blank?
     #Update subject
     if @item.update_attributes(params[:item]) && @category
       @category.items << @item
