@@ -1,17 +1,11 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
 	<h2>New Task List</h2>
-	
+
 	<%= form_for @tasklist, :url => {:action => 'create'} do |f| %>
-		
+
 		<%= render(:partial => "form", :locals => {:f => f})%>
-		
+
 		<p><%= f.submit "Submit" %></p>
-	
-	
 	<% end %>
-	
-	
-	
-	
 </div>
