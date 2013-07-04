@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string "first_name"
       t.string "last_name"
       t.string "email"
-      t.integer "primary_phone"
+      t.string "primary_phone"
       t.string "hashed_password"
       t.string "salt"
       t.timestamps

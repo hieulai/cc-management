@@ -8,8 +8,8 @@ class CreateBuilders < ActiveRecord::Migration
       t.string "address"
       t.string "city"
       t.string "state"
-      t.integer "zipcode"
-      t.integer "tax_id"
+      t.string "zipcode"
+      t.string "tax_id"
       t.timestamps
     end
   end
