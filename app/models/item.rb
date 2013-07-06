@@ -18,7 +18,7 @@ class Item < ActiveRecord::Base
       cost + margin
     elsif cost && margin.nil?
       cost
-    elsif item.cost.nil? && item.margin
+    elsif cost.nil? && margin
       margin
     elsif cost.nil? && margin.nil?
       0
@@ -27,7 +27,7 @@ class Item < ActiveRecord::Base
 
   def self.to_csv(items, options = {})
     CSV.generate(options = {}) do |csv|
-      csv << ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]
+      csv << ["name", "description", "cost", "unit", "margin", "price", "notes"]
       items.each do |item|
         csv << [item.name, item.description, item.cost, item.unit, item.margin, item.price, item.notes]
       end
@@ -37,7 +37,7 @@ class Item < ActiveRecord::Base
   def self.import(file, builder)
     CSV.foreach(file.path, headers: true) do |row|
       item = find_by_id(row["id"]) || new
-      item.attributes = row.to_hash.slice("name", "description", "cost", "margin")
+      item.attributes = row.to_hash.slice("name", "description", "cost", "unit", "margin", "notes")
       item.builder_id = builder.id
       item.save!
     end
@@ -49,7 +49,7 @@ class Item < ActiveRecord::Base
     sheet1 = book.worksheet 0
     sheet1.each do |row|
       item = find_by_id(row["id"]) || new
-      item.attributes = row.to_hash.slice("name", "description", "cost", "margin")
+      item.attributes = row.to_hash.slice("name", "description", "cost", "unit", "margin", "notes")
       item.builder_id = builder.id
       item.save!
     end
