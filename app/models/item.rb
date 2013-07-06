@@ -11,13 +11,25 @@ class Item < ActiveRecord::Base
   validates :name, presence: true
   
   scope :search, lambda{|query| where("name LIKE ? OR description LIKE ? OR notes LIKE ?",
-     "%#{query}%", "%#{query}%", "%#{query}%")} 
+     "%#{query}%", "%#{query}%", "%#{query}%")}
 
-  def self.to_csv(builder, options = {})
+  def price
+    if cost && margin
+      cost + margin
+    elsif cost && margin.nil?
+      cost
+    elsif item.cost.nil? && item.margin
+      margin
+    elsif cost.nil? && margin.nil?
+      0
+    end
+  end
+
+  def self.to_csv(items, options = {})
     CSV.generate(options = {}) do |csv|
-      csv << ["id", "name", "description", "cost", "margin"]
-      builder.items.each_with_index do |item|
-        csv << [item.id, item.name, item.description, item.cost, item.margin]
+      csv << ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]
+      items.each do |item|
+        csv << [item.name, item.description, item.cost, item.unit, item.margin, item.price, item.notes]
       end
     end
   end

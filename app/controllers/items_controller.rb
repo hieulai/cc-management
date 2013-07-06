@@ -7,10 +7,10 @@ class ItemsController < ApplicationController
     # @items = Item.where(category_id: nil)
     #passes in all items that have categories set
     # @categories = Category.all
-    @items = Item.where(builder_id: session[:builder_id])
+    @items = Item.where(builder_id: session[:builder_id]).order(:name)
     respond_to do |format|
       format.html
-      format.csv {send_data Item.to_csv(@builder)}
+      format.csv {send_data Item.to_csv(@items)}
       # format.xls {send_data Item.to_csv(@builder, col_sep: "\t")}
       format.xls
     end
