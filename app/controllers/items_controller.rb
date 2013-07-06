@@ -50,17 +50,10 @@ class ItemsController < ApplicationController
   end
 
   def update
-    #Find object using form parameters
     @item = Item.find(params[:id])
-    @category = Category.find(params[:category][:id]) unless params[:category].blank?
-    #Update subject
-    if @item.update_attributes(params[:item]) && @category
-      @category.items << @item
-      #if save succeeds, redirect to list action
+    if @item.update_attributes(params[:item])
       redirect_to(:action => 'list')
     else
-      #if save fails, redisplay form to user can fix problems
-      @categories = Category.all
       render('edit')
     end
   end

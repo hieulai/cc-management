@@ -7,7 +7,6 @@ gem 'rails', '3.2.13'
 
 group :development do
   gem 'mysql2'
-  gem 'debugger'
   gem 'better_errors'
   gem 'binding_of_caller'
 end
