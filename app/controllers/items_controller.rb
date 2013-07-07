@@ -7,10 +7,10 @@ class ItemsController < ApplicationController
     # @items = Item.where(category_id: nil)
     #passes in all items that have categories set
     # @categories = Category.all
-    @items = Item.where(builder_id: session[:builder_id])
+    @items = Item.where(builder_id: session[:builder_id]).order(:name)
     respond_to do |format|
       format.html
-      format.csv {send_data Item.to_csv(@builder)}
+      format.csv {send_data Item.to_csv(@items)}
       # format.xls {send_data Item.to_csv(@builder, col_sep: "\t")}
       format.xls
     end
@@ -50,17 +50,10 @@ class ItemsController < ApplicationController
   end
 
   def update
-    #Find object using form parameters
     @item = Item.find(params[:id])
-    @category = Category.find(params[:category][:id]) unless params[:category].blank?
-    #Update subject
-    if @item.update_attributes(params[:item]) && @category
-      @category.items << @item
-      #if save succeeds, redirect to list action
+    if @item.update_attributes(params[:item])
       redirect_to(:action => 'list')
     else
-      #if save fails, redisplay form to user can fix problems
-      @categories = Category.all
       render('edit')
     end
   end
@@ -83,9 +76,12 @@ class ItemsController < ApplicationController
   end
 
   def import
-    Item.import(params[:item][:data], @builder)
-
-    redirect_to action: 'list', notice: "Item imported."
+    if params[:item].nil?
+      redirect_to action: 'import_export', notice: "No file to import."
+    else
+      Item.import(params[:item][:data], @builder)
+      redirect_to action: 'list', notice: "Item imported."
+    end
   end
 
 end

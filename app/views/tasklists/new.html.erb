@@ -2,7 +2,7 @@
 	<%= render(:partial => "sub_menu")%>
 	<h2>New Task List</h2>
 
-	<%= form_for @tasklist, :url => {:action => 'create'} do |f| %>
+    <%= form_for @tasklist, :url => {:action => 'create'}, :html => {:class => 'tasklist'} do |f| %>
 
 		<%= render(:partial => "form", :locals => {:f => f})%>
 

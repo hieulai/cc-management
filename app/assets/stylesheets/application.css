@@ -12,5 +12,16 @@
  *= require jquery.ui.all
  *= require_tree .
  */
+ul#tasksContainer{
+    list-style: none;
+    display: inline-block;
+}
 
+ul#tasksContainer li label{
+    padding: 5px;
+}
 
+ul#tasksContainer li label:hover{
+    cursor: pointer;
+    background: gainsboro;
+}

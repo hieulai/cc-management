@@ -37,6 +37,25 @@ var add_fields = function(link, association, content){
 	$(link).parent().before(content.replace(regexp, new_id));
 }
 
+$(document).ready(function() {
+    $(document).on('click', '.trigger_add', function(){
+        $("#" + $(this).data("target")).data("association-insertion-node", '#'+ $(this).closest(".task")[0].id);
+        $("#" + $(this).data("target")).click();
+    });
+    $('#tasksContainer').bind('cocoon:after-insert', function (e, task_to_be_added) {
+        task_to_be_added.attr('id', 'task_' + new Date().getMilliseconds());
+    });
+    $( "#tasksContainer" ).sortable({
+        revert: true
+    });
+    $( "#tasksContainer" ).disableSelection();
+    $('.tasklist').submit(function(){
+      $(".task").each(function(){
+          $(this).find(".position").val($(this).offset().top);
+      })
+    })
+})
+
 //var add_fields = function(link, association, content){
 //	var new_id = new Date().getTime();
 //	var regexp = new RegExp("new_" + association, "g")

@@ -11,13 +11,25 @@ class Item < ActiveRecord::Base
   validates :name, presence: true
   
   scope :search, lambda{|query| where("name LIKE ? OR description LIKE ? OR notes LIKE ?",
-     "%#{query}%", "%#{query}%", "%#{query}%")} 
+     "%#{query}%", "%#{query}%", "%#{query}%")}
 
-  def self.to_csv(builder, options = {})
+  def price
+    if cost && margin
+      cost + margin
+    elsif cost && margin.nil?
+      cost
+    elsif cost.nil? && margin
+      margin
+    elsif cost.nil? && margin.nil?
+      0
+    end
+  end
+
+  def self.to_csv(items, options = {})
     CSV.generate(options = {}) do |csv|
-      csv << ["id", "name", "description", "cost", "margin"]
-      builder.items.each_with_index do |item|
-        csv << [item.id, item.name, item.description, item.cost, item.margin]
+      csv << ["name", "description", "cost", "unit", "margin", "price", "notes"]
+      items.each do |item|
+        csv << [item.name, item.description, item.cost, item.unit, item.margin, item.price, item.notes]
       end
     end
   end
@@ -25,7 +37,7 @@ class Item < ActiveRecord::Base
   def self.import(file, builder)
     CSV.foreach(file.path, headers: true) do |row|
       item = find_by_id(row["id"]) || new
-      item.attributes = row.to_hash.slice("name", "description", "cost", "margin")
+      item.attributes = row.to_hash.slice("name", "description", "cost", "unit", "margin", "notes")
       item.builder_id = builder.id
       item.save!
     end
@@ -37,7 +49,7 @@ class Item < ActiveRecord::Base
     sheet1 = book.worksheet 0
     sheet1.each do |row|
       item = find_by_id(row["id"]) || new
-      item.attributes = row.to_hash.slice("name", "description", "cost", "margin")
+      item.attributes = row.to_hash.slice("name", "description", "cost", "unit", "margin", "notes")
       item.builder_id = builder.id
       item.save!
     end
