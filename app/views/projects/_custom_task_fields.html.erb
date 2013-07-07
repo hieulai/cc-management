@@ -1,11 +1,13 @@
-<div class="nested-fields">
-	<p class="fields">
-		<%= f.label :name, "Task" %>
-		<%= f.text_field :name %>
-		<%= f.hidden_field :_destroy %>
-		<%= link_to_remove_association "Delete",f %>
-	</p>
-</div>
+<li class="nested-fields task" id="task_<%= f.object_id %>">
+  <p class="fields">
+    <%= f.label :name, "Task" %>
+    <%= f.text_field :name %>
+    <%= f.hidden_field :position, :class => "position" %>
+    <%= link_to 'Add', '#', :class =>"trigger_add", :data => {:target => "add_tasks"}  %>
+    <%= link_to_remove_association("Delete",f) %>
+  </p>
+</li>
+
 
 
 

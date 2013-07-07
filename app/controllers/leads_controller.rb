@@ -2,39 +2,77 @@ class LeadsController < ApplicationController
   
   before_filter :confirm_logged_in
   
-  def show
-    @lead = Lead.find(params[:id])
+  def list_current_leads
+    #Finds all projects for every Client that have a "Current Lead"" status
+    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Current Lead"})
   end
   
-  def new
-    @lead = Lead.new
+  def list_past_leads
+    #Finds all projects for every Client that have a "Past Lead" status
+    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Past Lead"})
   end
   
-  def create
-    #Instantiate a new object using form parameters
-    @lead = Lead.new(params[:lead])
+  def new_client
+    #creates new project, but is originally known as a "Lead"
+    @project = Project.new
+    @client =  Client.new
+  end
+  
+  def existing_client
+    #creates new project, but is originally known as a "Lead"
+    @project = Project.new
+  end
+  
+  def create_from_new
+    #creates new project, but is originally known as a "Lead"
+    @builder = Builder.find(session[:builder_id])
+    @client = Client.new(params[:client])
     #save subject
-    if @lead.save
-      #if save succeeds, redirect to list action
-      redirect_to(:action => 'list_current')
+    if @client.save
+      #if save succeeds, attach Project to Client
+      @project = @client.projects.create(params[:project])
+      #Attach Client to Builder
+      @builder.clients << @client
+      redirect_to(:action => 'list_current_leads')
     else
       #if save fails, redisplay form to user can fix problems
       render('new')
     end
   end
   
+  def create_from_existing
+    #creates new project, but is originally known as a "Lead"
+    @client = Client.find(params[:client][:id])
+    @project = Project.create(params[:project])
+    #save subject
+    if @client.projects << @project     
+      redirect_to(:action => 'list_current_leads')
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('new')
+    end
+  end
+  
+  def show
+    #Passes in parent model of Client
+    @project = Project.find(params[:id])
+    @client = Client.find(@project.client_id)
+  end
+  
   def edit
-    @lead = Lead.find(params[:id])
+    @project = Project.find(params[:id])
+    @client = Client.find(@project.client_id)
   end
   
   def update
     #Find object using form parameters
-    @lead = Lead.find(params[:id])
+    
+    @project = Project.find(params[:id])
+    @client = Client.find(@project.client_id)
     #Update subject
-    if @lead.update_attributes(params[:lead])
+    if @client.update_attributes(params[:client]) & @project.update_attributes(params[:project])
       #if save succeeds, redirect to list action
-      flash[:notice] = "Lead Updated."
-      redirect_to(:action => 'list_current')
+      redirect_to(:action => 'list_current_leads')
     else
       #if save fails, redisplay form to user can fix problems
       render('edit')
@@ -42,24 +80,16 @@ class LeadsController < ApplicationController
   end
   
   def convert
-    @lead = Lead.find(params[:id])
+    @project = Project.find(params[:id])
   end
   
-  def conversion
+  def conversion_lead
     #Find object using form parameters
-    @lead = Lead.find(params[:id])
+    @project = Project.find(params[:id])
     #Update subject
-    if @lead.update_attributes(params[:lead])
-      if @lead.lead_status = "Current Project"
-        @project = Project.new
-        @project.project_status = @lead.lead_status
-        @project.project_name = @lead.project_name
-        @project.project_type = @lead.project_type
-        @project.expected_revenue = @lead.expected_revenue
-        @project.save
-      end  
+    if @project.update_attributes(params[:project])
       #if save succeeds, redirect to list action
-      redirect_to(:action => 'list_current')
+      redirect_to(:action => 'list_current_leads')
     else
       #if save fails, redisplay form to user can fix problems
       render('convert')
@@ -67,22 +97,17 @@ class LeadsController < ApplicationController
   end
   
   def delete
-    @lead = Lead.find(params[:id])
+    @project = Project.find(params[:id])
   end
   
   def destroy
-    Lead.find(params[:id]).destroy
-    flash[:notice] = "Lead Deleted."
-    redirect_to(:action => 'list_current')
+    @project = Project.find(params[:id])
+    @client = Client.find(@project.client_id)
+    @project.destroy
+    if @client.projects.empty?
+      @client.destroy
+    end
+    redirect_to(:action => 'list_current_leads')
   end
-  #setup index rendering
-  #setup past project rendering
-  #setup creation of new project
-  #setup editing of project
-  #setup converting a project
-  #setup destroying project
-  #setup project show
-  #setup print fucntionality
-  #setup import/export functionality
 
 end

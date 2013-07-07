@@ -1,0 +1,34 @@
+<table>
+	<tr>
+		<th>Date Last Contacted</th>
+		<td><%= c.date_select(:last_contacted, :order => [:month, :day, :year], :include_blank => true) %>
+	</tr>
+	<tr>
+		<th>First Name</th>
+		<td><%= c.text_field(:first_name) %>
+	</tr>
+	<tr>
+		<th>Last Name</th>
+		<td><%= c.text_field(:last_name) %>
+	</tr>
+	<tr>
+		<th>Primary Phone</th>
+		<td><%= c.text_field(:primary_phone) %>
+	</tr>
+	<tr>
+		<th>Secondary Phone</th>
+		<td><%= c.text_field(:secondary_phone) %>
+	</tr>
+	<tr>
+		<th>Email</th>
+		<td><%= c.text_field(:email) %>
+	</tr>
+	<tr>
+		<th>Lead Source</th>
+		<td><%= c.text_field(:lead_source) %>
+	</tr>
+	<tr>
+		<th>Notes</th>
+		<td><%= p.text_area(:lead_notes) %>
+	</tr>
+</table>

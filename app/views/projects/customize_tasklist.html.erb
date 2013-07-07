@@ -5,10 +5,12 @@
 	<%= form_for @tasklist, :url => {:action => 'process_customize', :id => @tasklist.id} do |f| %>
 	
 		
+		<ul id="tasksContainer">
 		<%= f.fields_for :tasks do |builder| %>
 			<%= render "custom_task_fields", :f => builder %>
 		<% end %>
-		<p><%= link_to_add_association "Add Task", f, :tasks, partial: 'custom_task_fields' %></p>
+		<%= link_to_add_association "Add", f, :tasks, partial: 'custom_task_fields', :"data-association-insertion-method" => "after", :id => "add_tasks", :style => "display: none" %>
+		</ul>
 		
 	
 	<div class="form-buttons">

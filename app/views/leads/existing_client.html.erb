@@ -1,0 +1,37 @@
+<div>
+	<%= render(:partial => "lead_sub_menu")%>
+	<h2>New Project Lead</h2>
+	<%= form_for(:project, :url => {:action => 'create_from_existing'}) do |p| %>
+	<h3>Project Info</h3>
+	<table summary="Lead form fields">
+		<tr>
+			<th>Project Name</th>
+			<td><%= p.text_field(:name) %>
+		</tr>
+		<tr>
+			<th>Lead Stage</th>
+			<td><%= p.select(:lead_stage, ["1. New", "2. Made Contact", "3. Made Appointment", "4. Estimating", "5. Sent Estimate", "6. Sent Contract"]) %>
+		</tr>
+		
+		<tr>
+			<th>Project Type</th>
+			<td><%= p.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build","Residential:  New Construction", "Residential:  Remodel"], {:include_blank => true}) %>
+		</tr>
+		<tr>
+			<th>Anticipated Revenue</th>
+			<td><%= p.text_field(:revenue) %>
+		</tr>
+	</table>
+	
+	<h3>Client Info</h3>
+
+		<%= select(:client, :id, Client.where("builder_id = ?", session[:builder_id]).collect{|s|[s.full_name, s.id]}, {:include_blank => true})%>
+	</br>
+	</br>
+	<div class="form-buttons">
+		<%= submit_tag("Create Lead") %>
+	</div>
+	
+	<% end %>
+	
+</div>
