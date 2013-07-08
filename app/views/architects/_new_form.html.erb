@@ -13,6 +13,12 @@
 <p>
 	<%= f.label :primary_phone, "Primary Phone" %>
 	<%= f.text_field(:primary_phone) %>
+	<%= f.select(:primary_phone_tag, ["Cell", "Home", "Office"])%>
+</p>
+<p>
+	<%= f.label :secondary_phone, "Secondary Phone" %>
+	<%= f.text_field(:secondary_phone) %>
+	<%= f.select(:secondary_phone_tag, ["Cell", "Home", "Office"])%>
 </p>
 <p>
 	<%= f.label :email, "Email" %>
@@ -38,4 +44,7 @@
 	<%= f.label :zipcode, "Zipcode" %>
 	<%= f.text_field(:zipcode) %>
 </p>
-
+<p>
+	<%= f.label :notes, "Notes" %>
+	<%= f.text_area(:notes) %>
+</p>
