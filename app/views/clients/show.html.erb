@@ -21,6 +21,10 @@
 			<td><%= number_to_phone(@client.primary_phone, area_code: true) %>
 		</tr>
 		<tr>
+			<th>Secondary Phone</th>
+			<td><%= number_to_phone(@client.secondary_phone, area_code: true) %>
+		</tr>
+		<tr>
 			<th>Email</th>
 			<td><%= @client.email %>
 		</tr>

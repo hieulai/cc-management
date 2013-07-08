@@ -39,7 +39,7 @@
 			<td><%= number_to_phone(client.primary_phone, area_code: true) %></td>
 			<td><%= client.email %></td>
 			<td><%= lead.project_type %></td>
-			<td><%= lead.revenue%></td>
+			<td>$<%= number_with_delimiter(lead.revenue)%></td>
 			<td><%= client.lead_source %></td>
 			<td><%= lead.lead_notes%></td>
 		</tr>

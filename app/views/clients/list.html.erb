@@ -21,7 +21,7 @@
 			<th>Client Name</th>
 			<th>Primary Phone</th>
 			<th>Email</th>
-			<th>Project Name</th>
+			<th>Associated Projects</th>
 			<th>Lead Source</th>
 			<th>Notes</th>
 			
@@ -42,6 +42,7 @@
 			<td>
 				<% client.projects.each do |project| %>
 					<%= project.name %>
+				</br>
 				<% end %>
 			</td>
 			<td><%= client.lead_source %></td>
