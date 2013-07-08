@@ -91,8 +91,14 @@ class LeadsController < ApplicationController
   def conversion_lead
     #Find object using form parameters
     @project = Project.find(params[:id])
+    @client = Client.find(@project.client_id)
     #Update subject
     if @project.update_attributes(params[:project])
+      #Allows client to display in the People section if the project is won.
+      if @project.status = "Current Project"
+        @client.status = "Active"
+        @client.save
+      end
       #if save succeeds, redirect to list action
       redirect_to(:action => 'list_current_leads')
     else

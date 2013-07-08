@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708010759) do
+ActiveRecord::Schema.define(:version => 20130708051300) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -115,8 +115,9 @@ ActiveRecord::Schema.define(:version => 20130708010759) do
     t.string   "lead_source"
     t.date     "last_contacted"
     t.text     "notes"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+    t.string   "status",          :default => "Lead"
   end
 
   add_index "clients", ["builder_id"], :name => "index_clients_on_builder_id"

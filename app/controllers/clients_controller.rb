@@ -4,7 +4,7 @@ class ClientsController < ApplicationController
 
   def list
     @query = params[:query]
-    @clients = Client.where("builder_id = ?", session[:builder_id]).search(@query)
+    @clients = Client.where("builder_id = ? AND status = ?", session[:builder_id], "Active").search(@query)
   end
 
   def show
