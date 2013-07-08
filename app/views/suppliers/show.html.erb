@@ -1,6 +1,5 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-<<<<<<< HEAD
 	<h2>Supplier Details For: <%= @supplier.company %> </h2>
 	<h2>Company Info:</h2>
 	<p>
@@ -39,7 +38,7 @@
 	</p>
 	<p>
 		<%= "Phone:" %>
-		<%= @supplier.primary_phone %>
+		<%= number_to_phone(@supplier.primary_phone, area_code: true) %>
 	</p>
 	<p>
 		<%= "Email:" %>
@@ -57,7 +56,7 @@
 	</p>
 	<p>
 		<%= "Phone:" %>
-		<%= @supplier.secondary_phone %>
+		<%= number_to_phone(@supplier.secondary_phone, area_code: true) %>
 	</p>
 	<p>
 		<%= "Email:" %>
@@ -76,39 +75,5 @@
 		<%= "Last Updated:" %>
 		<%= @supplier.updated_at %>
 	</p>
-=======
-	<h2>Supplier Details For: <%= @supplier.first_name %> </h2>
-	
-	<table summary="Estimate detail view">
-		
-		<tr>
-			<th>Company</th>
-			<td><%= @supplier.company %>
-		</tr>
-		<tr>
-			<th>First Name</th>
-			<td><%= @supplier.first_name %>
-		</tr>
-		<tr>
-			<th>Last Name</th>
-			<td><%= @supplier.last_name %>
-		</tr>
-		<tr>
-			<th>Primary Phone</th>
-			<td><%= @supplier.primary_phone %>
-		</tr>
-		<tr>
-			<th>Email</th>
-			<td><%= @supplier.email %>
-		</tr>
-		<tr>
-			<th>Created At</th>
-			<td><%= @supplier.created_at %>
-		</tr>
-		<tr>
-			<th>Last Updated</th>
-			<td><%= @supplier.updated_at %>
-		</tr>
->>>>>>> 199920213a3c32b35077fb920bab96f42ba82028
-	</table>
+
 </div>

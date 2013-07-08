@@ -4,12 +4,13 @@ class LeadsController < ApplicationController
   
   def list_current_leads
     #Finds all projects for every Client that have a "Current Lead"" status
-    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Current Lead"})
+    #@clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Current Lead"})
+    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Lead")
   end
   
   def list_past_leads
     #Finds all projects for every Client that have a "Past Lead" status
-    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Past Lead"})
+    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Past Lead")
   end
   
   def new_client
@@ -26,12 +27,13 @@ class LeadsController < ApplicationController
   def create_from_new
     #creates new project, but is originally known as a "Lead"
     @builder = Builder.find(session[:builder_id])
-    @client = Client.new(params[:client])
+    @client = Client.create(params[:client])
+    @project = Project.new(params[:project])
+    @project.builder_id = session[:builder_id]
     #save subject
-    if @client.save
-      #if save succeeds, attach Project to Client
-      @project = @client.projects.create(params[:project])
-      #Attach Client to Builder
+    if @project.save 
+      @client.projects << @project
+      #Attaches Client to Builder
       @builder.clients << @client
       redirect_to(:action => 'list_current_leads')
     else
@@ -42,8 +44,11 @@ class LeadsController < ApplicationController
   
   def create_from_existing
     #creates new project, but is originally known as a "Lead"
+    @builder = Builder.find(session[:builder_id])
     @client = Client.find(params[:client][:id])
     @project = Project.create(params[:project])
+    @project.builder_id = session[:builder_id]
+    @project.save
     #save subject
     if @client.projects << @project     
       redirect_to(:action => 'list_current_leads')

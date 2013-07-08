@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130706135627) do
+ActiveRecord::Schema.define(:version => 20130708010759) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -124,7 +124,6 @@ ActiveRecord::Schema.define(:version => 20130706135627) do
   create_table "estimates", :force => true do |t|
     t.integer  "builder_id"
     t.integer  "project_id"
-    t.string   "template"
     t.string   "progress"
     t.string   "status",     :default => "Current Estimate"
     t.date     "deadline"
@@ -206,8 +205,10 @@ ActiveRecord::Schema.define(:version => 20130706135627) do
     t.text     "project_notes"
     t.datetime "created_at",                                                                   :null => false
     t.datetime "updated_at",                                                                   :null => false
+    t.integer  "builder_id"
   end
 
+  add_index "projects", ["builder_id"], :name => "index_projects_on_builder_id"
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"
 
   create_table "subcontractors", :force => true do |t|

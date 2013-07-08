@@ -4,12 +4,12 @@ class ProjectsController < ApplicationController
   
   def list_current_projects
     #Finds all projects for every Client that have a "Current Project" status
-    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Current Project"})
+    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Project")
   end
   
   def list_past_projects
     #Finds all projects for every Client that have a "Current Project" status
-    @clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Past Project"})
+    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Past Project")
   end
   
   def show_project

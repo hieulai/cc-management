@@ -24,11 +24,15 @@ class EstimatesController < ApplicationController
       @builder = Builder.find(session[:builder_id])
       #Reads in the project ID selected by the User
       @project = Project.find(params[:project][:id])
+      #Reads in the project ID selected by the User
+      @template = Template.find(params[:template][:id])
       #Assigns the estimate to the correct Project
       @estimate = @project.estimates.new(params[:estimate])
+      @estimate.template << @template
       #saves creation of Estimate
       if @estimate.save
         @builder.estimates << @estimate
+        
         #Assigns all appropriate measurements to the Estimate
         @measurements = Measurement.all
         @measurements.each do |m|

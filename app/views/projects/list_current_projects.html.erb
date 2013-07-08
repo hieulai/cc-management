@@ -18,8 +18,7 @@
 			<th>Next 3 Tasks</th>
 			<th>Notes</th>
 		</tr>
-		<% @clients.each do |client| %>
-		<% client.projects.each do |project| %>
+		<% @projects.each do |project| %>
 		<tr>
 			<td class="center">
 				<%= link_to("Tasklist", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
@@ -37,7 +36,6 @@
 			<td><%= project.project_notes %></td>
 			
 		</tr>
-		<% end %>
 		<% end %>
 	</table>
 </div>

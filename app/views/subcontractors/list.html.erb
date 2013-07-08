@@ -35,10 +35,8 @@
 			<td><%= sub.trade %></td>
 			<td><%= sub.company %></td>
 			<td><%= sub.full_name %></td>
-			<td><%= sub.primary_phone %></td>
+			<td><%= number_to_phone(sub.primary_phone, area_code: true) %></td>
 			<td><%= sub.email %></td>	
-			<td><%= sub.primary_phone %></td>
-			<td><%= sub.email %></td>
 			<td><%= sub.notes %></td>	
 		</tr>
 		<% end %>

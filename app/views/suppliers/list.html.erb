@@ -35,7 +35,7 @@
 			</td>
 			<td><%= s.company %></td>
 			<td><%= s.full_name %></td>
-			<td><%= s.primary_phone %></td>
+			<td><%= number_to_phone(s.primary_phone, area_code: true) %></td>
 			<td><%= s.primary_email %></td>	
 			<td><%= s.website %></td>	
 			<td><%= s.notes %></td>	

@@ -33,7 +33,7 @@
 			</td>
 			<td><%= arch.company %></td>
 			<td><%= arch.full_name %></td>
-			<td><%= arch.primary_phone %></td>
+			<td><%= number_to_phone(arch.primary_phone, area_code: true) %></td>
 			<td><%= arch.email %></td>	
 			<td><%= arch.notes %></td>	
 			

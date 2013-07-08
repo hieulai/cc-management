@@ -18,7 +18,7 @@
 		</tr>
 		<tr>
 			<th>Primary Phone</th>
-			<td><%= @subcontractor.primary_phone %>
+			<td><%= number_to_phone(@subcontractor.primary_phone, area_code: true) %>
 		</tr>
 		<tr>
 			<th>Email</th>

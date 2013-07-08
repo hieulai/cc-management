@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   belongs_to :client
+  belongs_to :builder
   has_many :estimates
   has_one :tasklist
   

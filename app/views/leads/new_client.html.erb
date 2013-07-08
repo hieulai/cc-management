@@ -31,6 +31,10 @@
 				<td><%= c.date_select(:last_contacted, :order => [:month, :day, :year], :include_blank => true) %>
 			</tr>
 			<tr>
+				<th>Company</th>
+				<td><%= c.text_field(:company) %>
+			</tr>
+			<tr>
 				<th>First Name</th>
 				<td><%= c.text_field(:first_name) %>
 			</tr>
