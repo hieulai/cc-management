@@ -89,7 +89,7 @@ class UsersController < ApplicationController
       session[:user_id] = authorized_user.id
       session[:username] = authorized_user.full_name
       session[:builder_id] = authorized_user.builder_id
-      redirect_to(:controller => 'projects', :action => 'list_current_leads')
+      redirect_to(:controller => 'leads', :action => 'list_current_leads')
     else
       flash[:notice] = "Invalid email/password combination."
       redirect_to(:action => 'login')
