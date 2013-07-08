@@ -4,7 +4,7 @@
 	
 	<%= form_for @subcontractor, :url => {:action => 'create'} do |f| %>
 	
-	<%= render(:partial => "new_form", :locals => {:f => f})%>
+	<%= render(:partial => "form", :locals => {:f => f})%>
 	
 	<div class="form-buttons">
 		<%= submit_tag("Create") %>

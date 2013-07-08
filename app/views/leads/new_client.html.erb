@@ -3,66 +3,8 @@
 	<h2>New Project Lead</h2>
 	<%= form_for(:project, :url => {:action => 'create_from_new'}) do |p| %>
 	<%= fields_for @client do |c| %>
-	<h3>Project Info</h3>
-	<table summary="Lead form fields">
-		<tr>
-			<th>Project Name</th>
-			<td><%= p.text_field(:name) %>
-		</tr>
-		<tr>
-			<th>Lead Stage</th>
-			<td><%= p.select(:lead_stage, ["1. New", "2. Made Contact", "3. Made Appointment", "4. Estimating", "5. Sent Estimate", "6. Sent Contract"]) %>
-		</tr>
-		
-		<tr>
-			<th>Project Type</th>
-			<td><%= p.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build","Residential:  New Construction", "Residential:  Remodel"], {:include_blank => true}) %>
-		</tr>
-		<tr>
-			<th>Anticipated Revenue</th>
-			<td><%= p.text_field(:revenue) %>
-		</tr>
-	</table>
 	
-		<h3>Client Info</h3>
-		<table>
-			<tr>
-				<th>Date Last Contacted</th>
-				<td><%= c.date_select(:last_contacted, :order => [:month, :day, :year], :include_blank => true) %>
-			</tr>
-			<tr>
-				<th>Company</th>
-				<td><%= c.text_field(:company) %>
-			</tr>
-			<tr>
-				<th>First Name</th>
-				<td><%= c.text_field(:first_name) %>
-			</tr>
-			<tr>
-				<th>Last Name</th>
-				<td><%= c.text_field(:last_name) %>
-			</tr>
-			<tr>
-				<th>Primary Phone</th>
-				<td><%= c.text_field(:primary_phone) %>
-			</tr>
-			<tr>
-				<th>Secondary Phone</th>
-				<td><%= c.text_field(:secondary_phone) %>
-			</tr>
-			<tr>
-				<th>Email</th>
-				<td><%= c.text_field(:email) %>
-			</tr>
-			<tr>
-				<th>Lead Source</th>
-				<td><%= c.text_field(:lead_source) %>
-			</tr>
-			<tr>
-				<th>Lead Notes</th>
-				<td><%= p.text_area(:lead_notes) %>
-			</tr>
-		</table>
+	<%= render(:partial => "lead_form", :locals => {:c => c, :p => p })%>
 		
 	<div class="form-buttons">
 		<%= submit_tag("Create Lead") %>

@@ -1,60 +1,63 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Architect Details For: <%= @architect.first_name %> </h2>
-	
-	<table summary="Estimate detail view">
-		
-		<tr>
-			<th>Company</th>
-			<td><%= @architect.company %>
-		</tr>
-		<tr>
-			<th>First Name</th>
-			<td><%= @architect.first_name %>
-		</tr>
-		<tr>
-			<th>Last Name</th>
-			<td><%= @architect.last_name %>
-		</tr>
-		<tr>
-			<th>Primary Phone</th>
-			<td><%= number_to_phone(@architect.primary_phone, area_code: true) %>
-		</tr>
-		<tr>
-			<th>Email</th>
-			<td><%= @architect.email %>
-		</tr>
-		<tr>
-			<th>Website</th>
-			<td><%= @architect.website %>
-		</tr>
-		<tr>
-			<th>Address</th>
-			<td><%= @architect.address %>
-		</tr>
-		<tr>
-			<th>City</th>
-			<td><%= @architect.city %>
-		</tr>
-		<tr>
-			<th>State</th>
-			<td><%= @architect.state %>
-		</tr>
-		<tr>
-			<th>Zipcode</th>
-			<td><%= @architect.zipcode %>
-		</tr>
-		<tr>
-			<th>Notes</th>
-			<td><%= @architect.notes %>
-		</tr>
-		<tr>
-			<th>Created At</th>
-			<td><%= @architect.created_at %>
-		</tr>
-		<tr>
-			<th>Last Updated</th>
-			<td><%= @architect.updated_at %>
-		</tr>
-	</table>
+	<h2 class="center">Architect: <%= @architect.company || @architect.full_name %> </h2>
+	<p>
+			<b><%= "Company:" %></b>
+			<%= @architect.company %>
+	</p>
+	<p>
+		<b><%= "First Name:" %></b>
+		<%= @architect.first_name %>
+	</p>
+	<p>
+		<b><%= "Last Name:" %></b>
+		<%= @architect.last_name %>
+	</p>
+	<p>
+		<b><%= "Primary Phone:" %></b>
+		<%= number_to_phone(@architect.primary_phone, area_code: true) %>
+		<%= @architect.primary_phone_tag %>
+	</p>
+	<p>
+		<b><%= "Secondary Phone:" %></b>
+		<%= number_to_phone(@architect.secondary_phone, area_code: true) %>
+		<%= @architect.secondary_phone_tag %>
+	</p>
+	<p>
+		<b><%= "Email:" %></b>
+		<%= @architect.email %>
+	</p>
+	<p>
+		<b><%= "Website:" %></b>
+		<%= @architect.website %>
+	</p>
+	<p>
+		<b><%= "Address:" %></b>
+		<%= @architect.address %>
+	</p>
+	<p>
+		<b><%= "City:" %></b>
+		<%= @architect.city %>
+	</p>
+	<p>
+		<b><%= "State:" %></b>
+		<%= @architect.state %>
+	</p>
+	<p>
+		<b><%= "Zipcode:" %></b>
+		<%= @architect.zipcode %>
+	</p>
+	<p>
+		<b><%= "Notes:" %></b>
+		</br>
+		<%= @architect.notes %>
+	</p>
+	<p>
+		<b><%= "Created At:" %></b>
+		<%= @architect.created_at %>
+	</p>
+	<p>
+		<b><%= "Last Updated:" %></b>
+		<%= @architect.updated_at %>
+	</p>
 </div>

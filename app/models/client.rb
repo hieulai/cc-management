@@ -4,7 +4,7 @@ class Client < ActiveRecord::Base
   has_many :projects, dependent: :destroy
   
   attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone, 
-      :address, :city, :state, :zipcode, :notes, :last_contacted, :lead_source
+      :address, :city, :state, :zipcode, :notes, :last_contacted, :lead_source, :primary_phone_tag, :secondary_phone_tag
   
   scope :search, lambda{|query| where("company LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR notes LIKE ? OR lead_source LIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")} 

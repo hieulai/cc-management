@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708064504) do
+ActiveRecord::Schema.define(:version => 20130708213722) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -117,9 +117,11 @@ ActiveRecord::Schema.define(:version => 20130708064504) do
     t.string   "lead_source"
     t.date     "last_contacted"
     t.text     "notes"
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
-    t.string   "status",          :default => "Lead"
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
+    t.string   "status",              :default => "Lead"
+    t.string   "primary_phone_tag"
+    t.string   "secondary_phone_tag"
   end
 
   add_index "clients", ["builder_id"], :name => "index_clients_on_builder_id"
@@ -229,8 +231,10 @@ ActiveRecord::Schema.define(:version => 20130708064504) do
     t.string   "state"
     t.string   "zipcode"
     t.text     "notes"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.string   "primary_phone_tag"
+    t.string   "secondary_phone_tag"
   end
 
   add_index "subcontractors", ["builder_id"], :name => "index_subcontractors_on_builder_id"
@@ -254,6 +258,8 @@ ActiveRecord::Schema.define(:version => 20130708064504) do
     t.text     "notes"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+    t.string   "primary_phone_tag"
+    t.string   "secondary_phone_tag"
   end
 
   add_index "suppliers", ["builder_id"], :name => "index_suppliers_on_builder_id"

@@ -1,78 +1,80 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Supplier Details For: <%= @supplier.company %> </h2>
+	<h2 class="center">Supplier: <%= @supplier.company %> </h2>
 	<h2>Company Info:</h2>
 	<p>
-		<%= "Company Name:" %>
+		<b><%= "Company Name:" %></b>
 		<%= @supplier.company %>
 	</p>
 	<p>
-		<%= "Website:" %>
+		<b><%= "Website:" %></b>
 		<%= @supplier.website %>
 	</p>
 	<p>
-		<%= "Address:" %>
+		<b><%= "Address:" %></b>
 		<%= @supplier.address %>
 	</p>
 	<p>
-		<%= "City:" %>
+		<b><%= "City:" %></b>
 		<%= @supplier.city %>
 	</p>
 	<p>
-		<%= "State:" %>
+		<b><%= "State:" %></b>
 		<%= @supplier.state %>
 	</p>
 	<p>
-		<%= "Zipcode:" %>
+		<b><%= "Zipcode:" %></b>
 		<%= @supplier.zipcode %>
 	</p>
 
 	<h2>Primary Contact's Info:</h2>
 	<p>
-		<%= "First Name:" %>
+		<b><%= "First Name:" %></b>
 		<%= @supplier.primary_first_name %>
 	</p>
 	<p>
-		<%= "Last Name:" %>
+		<b><%= "Last Name:" %></b>
 		<%= @supplier.primary_last_name %>
 	</p>
 	<p>
-		<%= "Phone:" %>
+		<b><%= "Phone:" %></b>
 		<%= number_to_phone(@supplier.primary_phone, area_code: true) %>
+		<%= @supplier.primary_phone_tag %>
 	</p>
 	<p>
-		<%= "Email:" %>
+		<b><%= "Email:" %></b>
 		<%= @supplier.primary_email %>
 	</p>
 
 	<h2>Secondary Contact's Info:</h2>
 	<p>
-		<%= "First Name:" %>
+		<b><%= "First Name:" %></b>
 		<%= @supplier.secondary_first_name %>
 	</p>
 	<p>
-		<%= "Last Name:" %>
+		<b><%= "Last Name:" %></b>
 		<%= @supplier.secondary_last_name %>
 	</p>
 	<p>
-		<%= "Phone:" %>
+		<b><%= "Phone:" %></b>
 		<%= number_to_phone(@supplier.secondary_phone, area_code: true) %>
+		<%= @supplier.secondary_phone_tag %>
 	</p>
 	<p>
-		<%= "Email:" %>
+		<b><%= "Email:" %></b>
 		<%= @supplier.secondary_email %>
 	</p>
 
 	<p>
-		<%= "Notes:" %>
+		<b><%= "Notes:" %></b>
 		<%= @supplier.notes %>
 	</p>
 	<p>
-		<%= "Created At:" %>
+		<b><%= "Created At:" %></b>
 		<%= @supplier.created_at %>
 	</p>
 	<p>
-		<%= "Last Updated:" %>
+		<b><%= "Last Updated:" %></b>
 		<%= @supplier.updated_at %>
 	</p>
 
