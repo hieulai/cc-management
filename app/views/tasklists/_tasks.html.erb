@@ -1,0 +1,6 @@
+<ul id="tasksContainer">
+    <%= f.fields_for :tasks do |builder| %>
+      <%= render "tasklists/task_fields", :f => builder %>
+    <% end %>
+    <%= link_to_add_association "Add", f, :tasks, partial: 'tasklists/task_fields', :"data-association-insertion-method" => "after", :id => "add_tasks", :style => "display: none" %>
+</ul>

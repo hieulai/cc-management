@@ -2,9 +2,4 @@
 	<%= f.label :name, "Task List Name" %>
 	<%= f.text_field(:name) %>
 </p>
-<ul id="tasksContainer">
-  <%= f.fields_for :tasks do |builder| %>
-    <%= render "task_fields", :f => builder %>
-  <% end %>
-  <%= link_to_add_association "Add", f, :tasks, partial: 'task_fields', :"data-association-insertion-method" => "after", :id => "add_tasks", :style => "display: none" %>
-</ul>
+<%= render :partial => 'tasks', :locals => {f: f} %>

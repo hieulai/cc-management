@@ -2,20 +2,10 @@
 	<%= render(:partial => "project_sub_menu")%>
 	<h2>Customize Task List</h2>
 	
-	<%= form_for @tasklist, :url => {:action => 'process_customize', :id => @tasklist.id} do |f| %>
-	
-		
-		<ul id="tasksContainer">
-		<%= f.fields_for :tasks do |builder| %>
-			<%= render "custom_task_fields", :f => builder %>
-		<% end %>
-		<%= link_to_add_association "Add", f, :tasks, partial: 'custom_task_fields', :"data-association-insertion-method" => "after", :id => "add_tasks", :style => "display: none" %>
-		</ul>
-		
-	
+	<%= form_for @tasklist, :url => {:action => 'process_customize', :id => @tasklist.id}, :html => {:class => 'tasklist'}  do |f| %>
+	<%= render :partial => 'tasklists/tasks', :locals => { f: f} %>
 	<div class="form-buttons">
 		<%= submit_tag("Update") %>
 	</div>
-	
 	<% end %>
 </div>
