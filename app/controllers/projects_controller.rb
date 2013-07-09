@@ -105,6 +105,8 @@ class ProjectsController < ApplicationController
     @original_list.tasks.each do |task|
       @new_task = Task.new
       @new_task.name = task.name
+      @new_task.position = task.position
+      @new_task.time_to_complete = task.time_to_complete
       @project_list.tasks << @new_task
     end
     
