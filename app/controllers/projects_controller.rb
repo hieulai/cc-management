@@ -116,5 +116,16 @@ class ProjectsController < ApplicationController
       render 'select_tasklist'
     end
   end
+  
+  def change_tasklist
+    @tasklist = Tasklist.find(params[:id])
+  end
+  
+  def destroy_tasklist
+    @tasklist = Tasklist.find(params[:id])
+    @project_id = @tasklist.project_id
+    @tasklist.destroy
+    redirect_to(:action => 'select_tasklist', id: @project_id)
+  end
     
 end
