@@ -1,6 +1,6 @@
 <div>
 	<%= render(:partial => "sub_menu")%>
-	<h2>Client Details For: <%= @client.first_name %> </h2>
+	<h2 class = "center">Client: <%= @client.company || @client.full_name %> </h2>
 		
 		<p>
 			<b><%= "Company:" %></b>
