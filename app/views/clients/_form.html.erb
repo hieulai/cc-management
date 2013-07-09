@@ -1,0 +1,52 @@
+<p>
+	<%= f.label :company, "Company" %>
+	<%= f.text_field(:company) %>
+</p>
+<p>
+	<%= f.label :first_name, "First Name" %>
+	<%= f.text_field(:first_name) %>
+</p>
+<p>
+	<%= f.label :last_name, "Last Name" %>
+	<%= f.text_field(:last_name) %>
+</p>
+<p>
+	<%= f.label :primary_phone, "Primary Phone" %>
+	<%= f.text_field(:primary_phone) %>
+	<%= f.select(:primary_phone_tag, ["Cell", "Office", "Home"])%>
+</p>
+<p>
+	<%= f.label :secondary_phone, "Secondary Phone" %>
+	<%= f.text_field(:secondary_phone) %>
+	<%= f.select(:secondary_phone_tag, ["Cell", "Office", "Home"])%>
+</p>
+<p>
+	<%= f.label :email, "Email" %>
+	<%= f.text_field(:email) %>
+</p>
+<p>
+	<%= f.label :address, "Address" %>
+	<%= f.text_field(:address) %>
+</p>
+<p>
+	<%= f.label :city, "City" %>
+	<%= f.text_field(:city) %>
+</p>
+<p>
+	<%= f.label :state, "State" %>
+	<%= f.text_field(:state) %>
+</p>
+<p>
+	<%= f.label :zipcode, "Zipcode" %>
+	<%= f.text_field(:zipcode) %>
+</p>
+<p>
+	<%= f.label :lead_source, "Lead Source" %>
+	<%= f.text_field(:lead_source) %>
+</p>
+<p>
+	<%= f.label :notes, "Notes" %>
+	<%= f.text_area(:notes) %>
+</p>
+
+
