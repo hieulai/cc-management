@@ -1,6 +1,6 @@
-<ul id="tasksContainer">
+<ul id="tasksContainer" class="cocoon-container">
     <%= f.fields_for :tasks do |builder| %>
       <%= render "tasklists/task_fields", :f => builder %>
     <% end %>
-    <%= link_to_add_association "Add", f, :tasks, partial: 'tasklists/task_fields', :"data-association-insertion-method" => "after", :id => "add_tasks", :style => "display: none" %>
+    <%= link_to_add_association "Add Task", f, :tasks, partial: 'tasklists/task_fields', :id => "add_item", :style => "display: none" %>
 </ul>
