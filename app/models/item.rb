@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
   scope :search, lambda{|query| where("name LIKE ? OR description LIKE ? OR notes LIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%")}
 
-  HEADERS = ["name", "description", "cost", "unit", "margin", "price", "notes"]
+  HEADERS = ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]
 
   def price
     if cost && margin
@@ -38,7 +38,7 @@ class Item < ActiveRecord::Base
 
   def self.import(file, builder)
     spreadsheet = open_spreadsheet(file)
-    header = spreadsheet.row(1)
+    header = spreadsheet.row(1).map!{|c| c.downcase.strip}
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       item = find_by_id(row["id"]) || new
