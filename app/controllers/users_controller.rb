@@ -89,6 +89,8 @@ class UsersController < ApplicationController
       session[:user_id] = authorized_user.id
       session[:username] = authorized_user.full_name
       session[:builder_id] = authorized_user.builder_id
+      @builder = Builder.find(authorized_user.builder_id)
+      session[:builder_name] = @builder.company_name
       redirect_to(:controller => 'leads', :action => 'list_current_leads')
     else
       flash[:notice] = "Invalid email/password combination."
