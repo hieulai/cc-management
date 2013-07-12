@@ -10,7 +10,7 @@ class Item < ActiveRecord::Base
 
   validates :name, presence: true
   
-  scope :search, lambda{|query| where("name LIKE ? OR description LIKE ? OR notes LIKE ?",
+  scope :search, lambda{|query| where("name ILIKE ? OR description ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%")}
 
   HEADERS = ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]

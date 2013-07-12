@@ -3,24 +3,14 @@ class ItemsController < ApplicationController
   before_filter :confirm_logged_in
 
   def list
-    #passes in all items that do not have a category set
-    # @items = Item.where(category_id: nil)
-    #passes in all items that have categories set
-    # @categories = Category.all
-    @items = Item.where(builder_id: session[:builder_id]).order(:name)
+    @query = params[:query]
+    @items = Item.where(builder_id: session[:builder_id]).order(:name).search(@query)
     respond_to do |format|
       format.html
       format.csv {send_data Item.to_csv(@items)}
       # format.xls {send_data Item.to_csv(@builder, col_sep: "\t")}
       format.xls { send_data @items.to_xls(:headers => Item::HEADERS, :columns => [:name, :description, :cost, :unit, :margin, :price, :notes]), content_type: 'application/vnd.ms-excel', filename: 'items.xls' }
     end
-  end
-
-  def list_for_accounting
-    #passes in all items that do not have a category set
-    @items = Item.where(category_id: nil)
-    #passes in all items that have categories set
-    @categories = Category.all
   end
 
   def new
