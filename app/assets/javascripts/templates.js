@@ -4,20 +4,6 @@
 
 
 $(document).ready(function(){
-  $('#new_template').submit(function(){
-    var selected = $(".template_categories").children('option:selected');
-    if($('#template_name').val() == ''){
-      bounceEffectRight(selected);
-      $('#alertError').fadeIn().delay(5000).fadeOut();
-      return false;
-    }else if(selected.val() == ''){
-      bounceEffectRight($(".template_categories"));
-      selected.hide();
-      return false;
-    }else {
-      return true;
-    }
-  });
 })
 
 var add_item = function(el){
