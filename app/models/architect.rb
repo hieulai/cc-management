@@ -4,7 +4,7 @@ class Architect < ActiveRecord::Base
   attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone, :website, :address, :city, :state, :zipcode, :notes,
   :primary_phone_tag, :secondary_phone_tag
   
-  scope :search, lambda{|query| where("company LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR notes LIKE ?",
+  scope :search, lambda{|query| where("company ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")} 
   
   def full_name
