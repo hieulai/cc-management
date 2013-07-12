@@ -38,6 +38,9 @@ class Item < ActiveRecord::Base
 
   def self.import(file, builder)
     spreadsheet = open_spreadsheet(file)
+    if spreadsheet.first_row.nil?
+      raise "There is no data in file"
+    end
     header = spreadsheet.row(1).map!{|c| c.downcase.strip}
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]

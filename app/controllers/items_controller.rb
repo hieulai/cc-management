@@ -79,8 +79,12 @@ class ItemsController < ApplicationController
     if params[:item].nil?
       redirect_to action: 'import_export', notice: "No file to import."
     else
+      begin
       Item.import(params[:item][:data], @builder)
       redirect_to action: 'list', notice: "Item imported."
+      rescue StandardError => e
+        redirect_to action: 'import_export', notice: e
+      end
     end
   end
 
