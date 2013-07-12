@@ -41,14 +41,18 @@ class Item < ActiveRecord::Base
     if spreadsheet.first_row.nil?
       raise "There is no data in file"
     end
-    header = spreadsheet.row(1).map!{|c| c.downcase.strip}
+    header = spreadsheet.row(1).map! { |c| c.downcase.strip }
+    errors = []
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       item = find_by_id(row["id"]) || new
       item.attributes = row.to_hash.slice(*accessible_attributes)
       item.builder_id = builder.id
-      item.save!
+      unless item.save
+        errors << "Importing Error at line #{i}: #{item.errors.full_messages}"
+      end
     end
+    return errors
   end
 
   def self.open_spreadsheet(file)
