@@ -24,13 +24,15 @@ class TemplatesController < ApplicationController
       # @template.categories_templates.create(categories)
       unless categories.blank?
         categories.map do |key, val|
-          categories_template = @template.categories_templates.create(category_id: val[:category_id])
-          if val[:items_attributes]
-            item_ids = val[:items_attributes].map{ | k, v | v[:id]}
-            item_ids.reject! { |c| c.empty? }
-            unless item_ids.empty?
-              @items = Item.find(item_ids)
-              categories_template.items = @items
+          unless val[:category_id].blank?
+            categories_template = @template.categories_templates.create(category_id: val[:category_id])
+            if val[:items_attributes]
+              item_ids = val[:items_attributes].map { |k, v| v[:id] }
+              item_ids.reject! { |c| c.empty? }
+              unless item_ids.empty?
+                @items = Item.find(item_ids)
+                categories_template.items = @items
+              end
             end
           end
         end
@@ -77,7 +79,7 @@ class TemplatesController < ApplicationController
                 end
               end
             end
-          else
+          elsif val[:category_id].present?
             categories_template = @template.categories_templates.create(category_id: val[:category_id])
             if val[:items_attributes]
               item_ids = val[:items_attributes].map { |k, v| v[:id] }
