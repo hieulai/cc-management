@@ -67,12 +67,12 @@ ActiveRecord::Schema.define(:version => 20130708213722) do
     t.integer  "builder_id"
     t.integer  "template_id"
     t.string   "name"
-    t.decimal  "cost_total",   :precision => 10, :scale => 0
-    t.decimal  "margin_total", :precision => 10, :scale => 0
-    t.decimal  "price_total",  :precision => 10, :scale => 0
+    t.decimal  "cost_total"
+    t.decimal  "margin_total"
+    t.decimal  "price_total"
     t.boolean  "default"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "categories", ["builder_id"], :name => "index_categories_on_builder_id"
@@ -164,22 +164,11 @@ ActiveRecord::Schema.define(:version => 20130708213722) do
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
   add_index "items", ["template_id"], :name => "index_items_on_template_id"
 
-  create_table "leads", :force => true do |t|
-    t.date     "check_back"
-    t.date     "last_contacted"
-    t.string   "lead_source"
-    t.integer  "expected_revenue"
-    t.text     "lead_notes"
-    t.text     "project_notes"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-  end
-
   create_table "measurements", :force => true do |t|
     t.integer  "estimate_id"
     t.string   "name"
     t.string   "unit"
-    t.decimal  "amount",      :precision => 10, :scale => 0
+    t.decimal  "amount"
     t.integer  "stories"
     t.boolean  "CA"
     t.boolean  "CNC"
@@ -187,8 +176,8 @@ ActiveRecord::Schema.define(:version => 20130708213722) do
     t.boolean  "RA"
     t.boolean  "RNC"
     t.boolean  "RR"
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "measurements", ["estimate_id"], :name => "index_measurements_on_estimate_id"
@@ -197,9 +186,9 @@ ActiveRecord::Schema.define(:version => 20130708213722) do
     t.integer  "client_id"
     t.string   "name"
     t.string   "project_type"
-    t.string   "status",                                           :default => "Current Lead"
+    t.string   "status",            :default => "Current Lead"
     t.string   "lead_stage"
-    t.decimal  "progress",          :precision => 10, :scale => 0
+    t.decimal  "progress"
     t.integer  "revenue"
     t.date     "start_date"
     t.date     "completion_date"
@@ -208,8 +197,8 @@ ActiveRecord::Schema.define(:version => 20130708213722) do
     t.string   "next_tasks"
     t.text     "lead_notes"
     t.text     "project_notes"
-    t.datetime "created_at",                                                                   :null => false
-    t.datetime "updated_at",                                                                   :null => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
     t.integer  "builder_id"
   end
 
@@ -295,12 +284,12 @@ ActiveRecord::Schema.define(:version => 20130708213722) do
     t.integer  "builder_id"
     t.integer  "estimate_id"
     t.string   "name"
-    t.decimal  "cost_total",   :precision => 10, :scale => 0
-    t.decimal  "margin_total", :precision => 10, :scale => 0
-    t.decimal  "price_total",  :precision => 10, :scale => 0
+    t.decimal  "cost_total"
+    t.decimal  "margin_total"
+    t.decimal  "price_total"
     t.boolean  "default"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   add_index "templates", ["builder_id"], :name => "index_templates_on_builder_id"

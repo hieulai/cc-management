@@ -11,11 +11,7 @@ body
 	background: #EFEFEF;
 }
 
-h1
-{
-	text-align:center;
-	margin-top: 10px;
-}
+
 
 #page
 {
@@ -41,10 +37,22 @@ h1
 	text-align: left;
 }
 
+#content h1
+{
+	text-align:center;
+	margin-top: 10px;
+}
+
+#content
+{
+	text-align: left;
+}
+
 #username
 {
-	float: right;
+	text-align: right;
 	padding: 10px;
+	
 }
 
 #footer
@@ -58,7 +66,6 @@ h1
 
 #mainmenu
 {
-	clear: both;
 	background:#6399cd url(bg.gif) repeat-x left top;
 	width: 100%;
 	border: 1px solid rgb(48, 101, 151);
