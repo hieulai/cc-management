@@ -24,11 +24,16 @@ class TemplatesController < ApplicationController
       # @template.categories_templates.create(categories)
       unless categories.blank?
         categories.map do |key, val|
-          categories_template = @template.categories_templates.create(category_id: val[:category_id])
-          if val[:items_attributes]
-            item_ids = val[:items_attributes].map{ | k, v | v[:id]}
-            @items = Item.find(item_ids)
-            categories_template.items = @items
+          unless val[:category_id].blank?
+            categories_template = @template.categories_templates.create(category_id: val[:category_id])
+            if val[:items_attributes]
+              item_ids = val[:items_attributes].map { |k, v| v[:id] }
+              item_ids.reject! { |c| c.empty? }
+              unless item_ids.empty?
+                @items = Item.find(item_ids)
+                categories_template.items = @items
+              end
+            end
           end
         end
       end
@@ -68,18 +73,21 @@ class TemplatesController < ApplicationController
             if val[:items_attributes]
               categories_template.items.destroy_all
               val[:items_attributes].map do |item_key, item_val|
-                unless item_val["_destroy"].eql? "1"
+                unless (item_val["_destroy"].eql? "1")  || item_val[:id].blank?
                   @item = Item.find(item_val[:id])
                   categories_template.items << @item
                 end
               end
             end
-          else
+          elsif val[:category_id].present?
             categories_template = @template.categories_templates.create(category_id: val[:category_id])
             if val[:items_attributes]
-              item_ids = val[:items_attributes].map{ | k, v | v[:id]}
-              @items = Item.find(item_ids)
-              categories_template.items = @items
+              item_ids = val[:items_attributes].map { |k, v| v[:id] }
+              item_ids.reject! { |c| c.empty? }
+              unless item_ids.empty?
+                @items = Item.find(item_ids)
+                categories_template.items = @items
+              end
             end
           end
         end
