@@ -41,10 +41,14 @@ class ItemsController < ApplicationController
 
   def update
     @item = Item.find(params[:id])
-    if @item.update_attributes(params[:item])
-      redirect_to(:action => 'list')
-    else
-      render('edit')
+    respond_to do |format|
+      if @item.update_attributes(params[:item])
+        format.html {redirect_to(:action => 'list')}
+        format.json { render json:  @item.to_json(:methods => :price) }
+      else
+        format.html {render('edit')}
+        format.json { render json: resource.errors}
+      end
     end
   end
 

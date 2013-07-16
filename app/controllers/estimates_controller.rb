@@ -28,7 +28,7 @@ class EstimatesController < ApplicationController
       @template = Template.find(params[:template][:id])
       #Assigns the estimate to the correct Project
       @estimate = @project.estimates.new(params[:estimate])
-      @estimate.template << @template
+      @estimate.template = @template.clone_with_associations
       #saves creation of Estimate
       if @estimate.save
         @builder.estimates << @estimate
@@ -83,7 +83,6 @@ class EstimatesController < ApplicationController
 
     def edit_templates
       @estimate = Estimate.find(params[:id])
-      @measurements = @estimate.measurements
     end
 
     def update_templates
@@ -121,7 +120,11 @@ class EstimatesController < ApplicationController
     end
 
     def destroy
-      Estimate.find(params[:id]).destroy
+      @estimate = Estimate.find(params[:id])
+      unless @estimate.template.nil?
+        @estimate.template.destroy_with_associations
+      end
+      @estimate.destroy
       redirect_to(:action => 'list_current')
     end
 

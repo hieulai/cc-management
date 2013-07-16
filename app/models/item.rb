@@ -9,22 +9,17 @@ class Item < ActiveRecord::Base
   attr_accessible :name, :description, :qty, :unit, :cost, :margin, :default, :notes, :file
 
   validates :name, presence: true
-  
+
   scope :search, lambda{|query| where("name ILIKE ? OR description ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%")}
 
   HEADERS = ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]
 
   def price
-    if cost && margin
-      cost + margin
-    elsif cost && margin.nil?
-      cost
-    elsif cost.nil? && margin
-      margin
-    elsif cost.nil? && margin.nil?
-      0
-    end
+    self.qty ||= 1
+    self.margin ||= 0
+    self.cost ||= 0
+    self.cost * self.qty + self.margin
   end
 
   def self.to_csv(items, options = {})

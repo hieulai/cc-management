@@ -31,12 +31,14 @@ class CategoriesController < ApplicationController
     #Find object using form parameters
     @category = Category.find(params[:id])
     #Update subject
-    if @category.update_attributes(params[:category])
-      #if save succeeds, redirect to list action
-      redirect_to(:action => 'list')
-    else
-      #if save fails, redisplay form to user can fix problems
-      render('edit')
+    respond_to do |format|
+      if @category.update_attributes(params[:category])
+        format.html {redirect_to(:action => 'list')}
+        format.json { render json: @category }
+      else
+        format.html {render('edit')}
+        format.json { render json: resource.errors}
+      end
     end
   end
 
