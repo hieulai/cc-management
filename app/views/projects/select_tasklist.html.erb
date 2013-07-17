@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "project_sub_menu")%>
+	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h2>Select Task List</h2>
 	
 	<%= form_for @project, :url => {:action => 'assign_tasklist', :id => @project.id} do |f| %>

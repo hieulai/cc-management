@@ -5,6 +5,11 @@ class SubcontractorsController < ApplicationController
   def list
     @query = params[:query]
     @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id]).search(@query)
+    respond_to do |format|
+      format.html
+      format.csv {send_data Subcontractor.to_csv(@subcontractors)}
+      format.xls { send_data @subcontractors.to_xls(:headers => Subcontractor::HEADERS, :columns => [:trade, :company, :first_name, :primary_phone, :email, :notes]), content_type: 'application/vnd.ms-excel', filename: 'subcontractors.xls' }
+    end
   end
   
   def show
@@ -55,4 +60,27 @@ class SubcontractorsController < ApplicationController
     Subcontractor.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
+  
+  def import_export
+    @subcontractor = Subcontractor.new
+  end
+  
+  def import
+    if params[:subcontractor].nil?
+      redirect_to action: 'import_export', notice: "No file to import."
+    else
+      begin
+        errors = Subcontractor.import(params[:subcontractor][:data], @builder)
+        msg = "Item imported."
+        unless errors.empty?
+          msg = errors.join(",")
+        end
+        redirect_to action: 'list', notice: msg
+      rescue StandardError => e
+        redirect_to action: 'import_export', notice: e
+      end
+    end
+  end
+  
+  
 end

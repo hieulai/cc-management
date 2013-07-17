@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "sub_menu")%>
+	<%= render(:partial => "layouts/people_sub_menu")%>
 	<h2>Delete Client</h2>
 	
 	<%= form_for(:client, :url => {:action => 'destroy', :id => @client.id}) do |f| %>

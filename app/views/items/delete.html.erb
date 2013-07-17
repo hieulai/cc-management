@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "templates/sub_menu")%>
+	<%= render(:partial => "layouts/estimating_sub_menu")%>
 	<h2>Delete Item</h2>
 	
 	<%= form_for(:item, :url => {:action => 'destroy', :id => @item.id}) do |f| %>

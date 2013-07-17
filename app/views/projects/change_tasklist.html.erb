@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "project_sub_menu")%>
+	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h2>Change Task List</h2>
 	
 	<%= form_for(:tasklist, :url => {:action => 'destroy_tasklist', :id => @tasklist.id}) do |f| %>

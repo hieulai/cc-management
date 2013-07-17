@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "lead_sub_menu")%>
+	<%= render(:partial => "layouts/leads_sub_menu")%>
 	<h2>Delete Lead</h2>
 	<%= form_for @project, :url => {:action => 'destroy', :id => @project.id} do |f| %>
 	

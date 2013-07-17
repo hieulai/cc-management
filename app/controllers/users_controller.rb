@@ -2,6 +2,8 @@ class UsersController < ApplicationController
   
   before_filter :confirm_logged_in, :except => [:login, :process_login, :logout, :register, :process_registration]
   
+  layout 'application', except: [:login, :register]
+  
   def list
     @user = User.where("builder_id = ?", session[:builder_id])
   end
@@ -56,6 +58,7 @@ class UsersController < ApplicationController
     
     
   def register
+    layout 'public'
     @builder = Builder.new
     @user =  User.new
   end
@@ -80,7 +83,7 @@ class UsersController < ApplicationController
   
   
   def login
-  
+    render layout: 'public'
   end
   
   def process_login

@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "project_sub_menu")%>
+	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h2>Update Project</h2>
 	<%= form_for @project, :url => {:action => 'update_project', :id => @project.id} do |p| %>
 	<%= fields_for @client do |c| %>

@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "lead_sub_menu")%>
+	<%= render(:partial => "layouts/leads_sub_menu")%>
 	<h2>New Project Lead</h2>
 	<%= form_for(:project, :url => {:action => 'create_from_new'}) do |p| %>
 	<%= fields_for @client do |c| %>

@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "sub_menu")%>
+	<%= render(:partial => "layouts/company_sub_menu")%>
 	<h2>Edit Company Info</h2>
 	
 	<%= form_for @builder, :url => {:action => 'update', :id => @builder.id} do |f| %>

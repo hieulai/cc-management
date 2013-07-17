@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "lead_sub_menu")%>
+	<%= render(:partial => "layouts/leads_sub_menu")%>
 	<h2>Convert Lead</h2>
 	
 	<%= form_for @project, :url => {:action => 'conversion_lead', :id => @project.id} do |f| %>
