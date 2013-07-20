@@ -12,4 +12,10 @@ class Category < ActiveRecord::Base
   # accepts_nested_attributes_for :items, allow_destroy: true
 
   validates :name, presence: true
+
+  before_destroy do
+    categories_templates.each do |ct|
+      ct.destroy
+    end
+  end
 end

@@ -1,0 +1,26 @@
+<tr class="item item_category_<%= category_template.category.id %>" id="item_<%= item.id %>">
+    <td>
+        <%= link_to item.name, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'name', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+    </td>
+    <td>
+        <%= link_to item.description, "#", :class => 'editable', :data => {:type => 'textarea', :rows => 4, :resource => 'item', :name => 'description', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+    </td>
+    <td>
+        <%= link_to item.qty, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'qty', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+    </td>
+    <td><%= item.unit %></td>
+    <td>
+        $<%= link_to item.cost, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+    </td>
+    <td class="amount">
+        $<%= item.amount %>
+    </td>
+    <td>
+        $<%= link_to item.margin, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+    </td>
+    <td class="price">$<%= item.price %></td>
+    <td class="button-container">
+        <%= link_to "+", "#" , :class => 'trigger-add'%>
+        <%= link_to "-", {:controller => 'items', :action => 'destroy', :id => item.id}, :confirm => 'Are you sure you want to delete this item?', :remote => true, :class => 'remove-item' %>
+    </td>
+</tr>

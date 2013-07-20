@@ -2,52 +2,36 @@
     <%= render(:partial => "layouts/estimating_sub_menu")%>
     <h2>Template For: <%= @estimate.project.name %></h2>
     <h3>
-        <%= @estimate.template.name %>
+       Name: <%= @estimate.template.name %>
     </h3>
-    <ul class="estimate-template">
-        <%- @estimate.template.categories_templates.each do |category_template| %>
-          <li>
-              <h4>
-                  Category:
-                  <%= link_to category_template.category.name, "#", :class => 'editable', :data => {:type => 'text', :resource => 'category', :name => 'name', :pk => category_template.category.id, :url => url_for(:controller => 'categories', :action => 'update', :id => category_template.category.id), :id => "category_#{category_template.category.id}"} %>
-              </h4>
-              <table class="grid-view" summary="Items List">
-                  <tr class="header">
-                      <th>Item name</th>
-                      <th>Description</th>
-                      <th>Cost</th>
-                      <th>Unit</th>
-                      <th>Margin</th>
-                      <th>Quantity</th>
-                      <th>Price</th>
-                      <th>Notes</th>
-                  </tr>
-                  <% category_template.items.each do |item| %>
-
-                    <tr>
-                        <td>
-                            <%= link_to item.name, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'name', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
-                        </td>
-                        <td>
-                            <%= link_to item.description, "#", :class => 'editable', :data => {:type => 'textarea', :rows => 4, :resource => 'item', :name => 'description', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
-                        </td>
-                        <td>
-                            $<%= link_to item.cost, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
-                        </td>
-                        <td><%= item.unit %></td>
-                        <td>
-                            $<%= link_to item.margin, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
-                        </td>
-                        <td>
-                            <%= link_to item.qty, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'qty', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
-                        </td>
-                        <td class="price">$<%= item.price %></td>
-                        <td><%= item.notes %></td>
-                    </tr>
-
-                  <% end %>
-              </table>
-          </li>
-        <% end %>
-    </ul>
+    <table class="grid-view item-list" summary="Items List">
+        <thead>
+            <tr class="header">
+                <th>Item</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Rate</th>
+                <th>Amount</th>
+                <th>Margin</th>
+                <th>Total</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%- @estimate.template.categories_templates.each do |category_template| %>
+                <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
+            <% end %>
+            <tr class="add add-category">
+                <td colspan=9>
+                    <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @estimate.template.id}, :remote => true do |f| %>
+                      Category:
+                      <%= f.select :id, @categories.map { |c| [c.name, c.id] } %>
+                      <%= f.submit "Add" %>
+                      <%= link_to "Cancel", "#", :class => 'cancel-add' %>
+                    <% end %>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

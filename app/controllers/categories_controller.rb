@@ -47,8 +47,12 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
-    Category.find(params[:id]).destroy
-    redirect_to(:action => 'list')
+    @category = Category.find(params[:id])
+    @category.destroy
+    respond_to do |format|
+      format.html {redirect_to(:action => 'list')}
+      format.js { @id = params[:id] }
+    end
   end
 
   def items

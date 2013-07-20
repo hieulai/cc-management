@@ -83,6 +83,8 @@ class EstimatesController < ApplicationController
 
     def edit_templates
       @estimate = Estimate.find(params[:id])
+      @items = Item.where(builder_id: session[:builder_id]).order(:name)
+      @categories = Category.where(builder_id: session[:builder_id]).order(:name)
     end
 
     def update_templates
@@ -126,6 +128,28 @@ class EstimatesController < ApplicationController
       end
       @estimate.destroy
       redirect_to(:action => 'list_current')
+    end
+
+    def add_item
+      @category_template = CategoriesTemplate.find(params[:category_template_id])
+      @item = Item.find(params[:item][:id]).dup
+      @item.builder_id = nil
+      @category_template.items << @item
+      respond_to do |format|
+        format.js {}
+      end
+    end
+
+    def add_category
+      @template = Template.find(params[:template_id])
+      @category = Category.find(params[:category][:id]).dup
+      @category.builder_id = nil
+      @category.save
+      @category_template = @template.categories_templates.create(category_id: @category.id)
+      @items = Item.where(builder_id: session[:builder_id]).order(:name)
+      respond_to do |format|
+        format.js {}
+      end
     end
 
 end

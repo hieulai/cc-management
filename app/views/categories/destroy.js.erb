@@ -1,0 +1,6 @@
+var category = $("#category_<%=@id%>");
+var trItems = category.nextAll("tr.item_category_<%=@id%>");
+if (trItems.size() > 0) {
+  trItems.remove();
+}
+category.remove();

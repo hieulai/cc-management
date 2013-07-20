@@ -155,6 +155,10 @@ td .editable-container.editable-inline {
     width: 95%;
 }
 
+tr.category .editable-container.editable-inline {
+    width: auto;
+}
+
 .editable-container.ui-widget {
     font-size: inherit;  /* jqueryui widget font 1.1em too big, overwrite it */
 }

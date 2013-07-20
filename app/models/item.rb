@@ -16,10 +16,14 @@ class Item < ActiveRecord::Base
   HEADERS = ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]
 
   def price
-    self.qty ||= 1
     self.margin ||= 0
+    self.amount + self.margin
+  end
+
+  def amount
+    self.qty ||= 1
     self.cost ||= 0
-    self.cost * self.qty + self.margin
+    self.cost * self.qty
   end
 
   def self.to_csv(items, options = {})

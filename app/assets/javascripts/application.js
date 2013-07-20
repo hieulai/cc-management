@@ -14,6 +14,9 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require cocoon
+//= require jquery.poshytip
+//= require jquery-editable-poshytip
+//= require jquery-editable-rails
 //= require_tree .
 
 var bounceEffectRight = function(element){
@@ -71,7 +74,7 @@ $(document).ready(function() {
       $(".task").each(function(){
           $(this).find(".position").val($(this).offset().top);
       })
-    })
+    });
 })
 
 //var add_fields = function(link, association, content){

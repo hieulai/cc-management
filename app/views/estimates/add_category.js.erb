@@ -1,0 +1,2 @@
+var addCategory = $("tr.add-category").first();
+$('<%= escape_javascript(render :partial => 'tr_category', :locals => {:category_template => @category_template}) %>').insertBefore(addCategory);
