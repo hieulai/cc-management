@@ -11,8 +11,8 @@ class TemplatesController < ApplicationController
     @template = Template.new
     @template.categories.build
     # Category.all.each { |category| category.update_attribute(:template_id, nil) if category.template.nil? }
-    @categories = Category.where("template_id IS NULL")
-    @items = Item.all
+    @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
+    @items = Item.where("builder_id = ?", session[:builder_id])
   end
 
   def create
@@ -48,7 +48,8 @@ class TemplatesController < ApplicationController
   end
 
   def edit
-    @categories, @items = Category.all, Item.all
+    @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
+    @items = Item.where("builder_id = ?", session[:builder_id])
     @t_categories = @template.categories.pluck(:id)
     @t_items = Item.all
   end

@@ -39,7 +39,6 @@ class Template < ActiveRecord::Base
         i.destroy
       end
       ct.category.destroy
-      ct.destroy
     end
     destroy
   end

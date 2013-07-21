@@ -48,7 +48,11 @@ class CategoriesController < ApplicationController
 
   def destroy
     @category = Category.find(params[:id])
-    @category.destroy
+    unless params[:with_associations].nil?
+      @category.destroy_with_associations
+    else
+      @category.destroy
+    end
     respond_to do |format|
       format.html {redirect_to(:action => 'list')}
       format.js { @id = params[:id] }

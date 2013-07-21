@@ -6,8 +6,6 @@ class CategoriesTemplate < ActiveRecord::Base
   has_and_belongs_to_many :items
   accepts_nested_attributes_for :items, allow_destroy: true
   before_destroy do
-    items.each do |i|
-      i.destroy
-    end
+    items.destroy_all
   end
 end

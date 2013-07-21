@@ -1,6 +1,6 @@
 class Category < ActiveRecord::Base
   belongs_to :builder
-  has_many :categories_templates
+  has_many :categories_templates, :dependent => :destroy
   has_many :templates, through: :categories_templates
   has_many :items
   # has_and_belongs_to_many :items
@@ -13,9 +13,12 @@ class Category < ActiveRecord::Base
 
   validates :name, presence: true
 
-  before_destroy do
+  def destroy_with_associations
     categories_templates.each do |ct|
-      ct.destroy
+      ct.items.each do |i|
+        i.destroy
+      end
     end
+    destroy
   end
 end
