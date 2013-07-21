@@ -27,7 +27,8 @@ ul#tasksContainer li label:hover{
 }
 
 td.button-container{
-    width: 60px;
+    width: 100px;
+    text-align: center;
 }
 
 td.button-container form{

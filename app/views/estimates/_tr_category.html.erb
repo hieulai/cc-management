@@ -5,8 +5,8 @@
         </h3>
     </td>
     <td>
-        <%= link_to "Add Item", "#", :class => "trigger-add" %>
-        <%= link_to "Remove", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :confirm => 'Are you sure you want to delete this category?', :remote => true, :class => 'remove-category' %>
+        <%= link_to raw("<button>+ Item</button>"), "#", :class => "trigger-add" %>
+        <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :confirm => 'Are you sure you want to delete this category?', :remote => true, :class => 'remove-category' %>
     </td>
 </tr>
 <% category_template.items.each do |item| %>
