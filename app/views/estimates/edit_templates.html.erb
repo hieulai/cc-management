@@ -28,7 +28,6 @@
                       Category:
                       <%= f.select :id, @categories.map { |c| [c.name, c.id] } %>
                       <%= f.submit "Add" %>
-                      <%= link_to "Cancel", "#", :class => 'cancel-add' %>
                     <% end %>
                 </td>
             </tr>
