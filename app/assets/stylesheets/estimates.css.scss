@@ -6,3 +6,32 @@
     text-align: center;
     }
   }
+td{
+ div{
+    display: inline-block;
+   }
+ }
+th.amount, th.margin, th.price{
+  width: 100px;
+}
+tr.subtotal {
+  td:first-child {
+    font-weight: bold;
+  }
+}
+tr.total {
+  height: 50px;
+  font-weight: bold;
+  font-size: 18px;
+  td:first{
+    text-align: right;
+  }
+}
+td.button-container{
+    width: 100px;
+    text-align: center;
+    form{
+      float: left;
+    }
+  }
+

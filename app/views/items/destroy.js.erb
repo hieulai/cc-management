@@ -1,6 +1,8 @@
 var item = $("#item_<%=@id%>");
-var category = item.prev("tr.category");
+var category = item.prevAll("tr.category").first();
 item.remove();
+calculateSubTotals(category);
 if ((category.size() > 0) && (category.next().hasClass("add-item"))) {
   category.next().show();
 }
+calculateTotals();

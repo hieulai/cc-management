@@ -25,12 +25,3 @@ ul#tasksContainer li label:hover{
     cursor: pointer;
     background: gainsboro;
 }
-
-td.button-container{
-    width: 100px;
-    text-align: center;
-}
-
-td.button-container form{
-    float: left;
-}

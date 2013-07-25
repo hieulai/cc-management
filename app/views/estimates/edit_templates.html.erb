@@ -12,14 +12,17 @@
                 <th>Quantity</th>
                 <th>Unit</th>
                 <th>Rate</th>
-                <th>Amount</th>
-                <th>Margin</th>
-                <th>Total</th>
+                <th class="amount">Amount</th>
+                <th class="margin">Margin</th>
+                <th class="price">Total</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
+            <%- total = 0 %>
             <%- @estimate.template.categories_templates.each do |category_template| %>
+                <%- subtotal = category_template.items.map(&:price).sum %>
+                <%- total+= subtotal %>
                 <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
             <% end %>
             <tr class="add add-category">
@@ -30,6 +33,15 @@
                       <%= f.submit "Add" %>
                     <% end %>
                 </td>
+            </tr>
+            <tr class="total">
+                <td colspan=5>
+                        TOTAL
+                </td>
+                <td>$<div class="total-amount"></div></td>
+                <td>$<div class="total-margin"></div></td>
+                <td>$<div class="total-price"></div></td>
+                <td></td>
             </tr>
         </tbody>
     </table>

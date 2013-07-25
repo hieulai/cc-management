@@ -12,13 +12,15 @@
     <td>
         $<%= link_to item.cost, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
-    <td class="amount">
-        $<%= item.amount %>
+    <td>
+        $<div class="amount"><%= item.amount %></div>
     </td>
     <td>
-        $<%= link_to item.margin, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+        $<div class="margin"><%= link_to item.margin, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %></div>
     </td>
-    <td class="price">$<%= item.price %></td>
+    <td>
+        $<div class="price"><%= item.price %></div>
+    </td>
     <td class="button-container">
         <%= link_to raw("<button>+</button>"), "#" , :class => 'trigger-add'%>
         <%= link_to raw("<button>-</button>"), {:controller => 'items', :action => 'destroy', :id => item.id}, :remote => true, :class => 'remove-item' %>

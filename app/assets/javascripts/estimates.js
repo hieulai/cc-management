@@ -1,3 +1,37 @@
+function calculateSubTotals(trCategory) {
+    if (trCategory != null) {
+        var trSubtotal = trCategory.nextAll("tr.subtotal").first();
+        var amount = 0;
+        var margin = 0
+        var price = 0;
+        $("tr.item.item_" + trCategory.attr("id")).each(function () {
+            amount += parseFloat($(this).find(".amount").text());
+            margin += parseFloat($(this).find(".margin").text());
+            price += parseFloat($(this).find(".price").text());
+        });
+        trSubtotal.find(".subtotal-amount").text(amount);
+        trSubtotal.find(".subtotal-margin").text(margin);
+        trSubtotal.find(".subtotal-price").text(price);
+    }
+};
+
+function calculateTotals() {
+    var amount = 0;
+    var margin = 0
+    var price = 0;
+    var trTotal = $("tr.total");
+    if (trTotal.size() > 0) {
+        $("tr.item").each(function () {
+            amount += parseFloat($(this).find(".amount").text());
+            margin += parseFloat($(this).find(".margin").text());
+            price += parseFloat($(this).find(".price").text());
+        });
+        trTotal.find(".total-amount").text(amount);
+        trTotal.find(".total-margin").text(margin);
+        trTotal.find(".total-price").text(price);
+    }
+};
+
 $(document).ready(function () {
     $("body").editable({
         selector: '.editable',
@@ -6,11 +40,20 @@ $(document).ready(function () {
             type: 'PUT',
             dataType: 'json'
         },
-        success: function(response, newValue) {
-            if(!response.errors){
-                if ($(this).data("resource")=="item"){
-                    $(this).closest("tr").find("td.price").html("$" + response.price);
-                    $(this).closest("tr").find("td.amount").html("$" + response.amount);
+        success: function (response, newValue) {
+            if (!response.errors) {
+                if ($(this).data("resource") == "item") {
+                    var trItem = $(this).closest("tr");
+                    if (response.margin == null) {
+                        response.margin = 0;
+                    }
+                    trItem.find("td .price").html(response.price);
+                    trItem.find("td .margin a").text(response.margin);
+                    trItem.find("td .amount").html(response.amount);
+                    calculateSubTotals(trItem.prevAll("tr.category").first());
+                    calculateTotals();
+                } else if ($(this).data("resource") == "category") {
+                    $(this).closest("tr.category").nextAll("tr.subtotal").first().find(".category-name").text(newValue);
                 }
             }
         }
@@ -29,4 +72,6 @@ $(document).ready(function () {
         }
         return false;
     });
+
+    calculateTotals();
 })
