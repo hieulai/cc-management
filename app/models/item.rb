@@ -14,6 +14,7 @@ class Item < ActiveRecord::Base
      "%#{query}%", "%#{query}%", "%#{query}%")}
 
   HEADERS = ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]
+  after_initialize :default_values
 
   def price
     self.margin ||= 0
@@ -61,5 +62,12 @@ class Item < ActiveRecord::Base
     when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
     else raise "Unknown file type: #{file[:data].original_filename}"
     end
+  end
+
+  private
+  def default_values
+    self.qty ||= 1
+    self.cost ||= 0
+    self.margin ||= 0
   end
 end

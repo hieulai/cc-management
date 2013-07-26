@@ -6,17 +6,17 @@
         <%= link_to item.description, "#", :class => 'editable', :data => {:type => 'textarea', :rows => 4, :resource => 'item', :name => 'description', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
     <td>
-        <%= link_to item.qty || 1, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'qty', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+        <%= link_to item.qty, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'qty', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
     <td><%= item.unit %></td>
     <td>
-        $<%= link_to item.cost || 0, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+        $<%= link_to item.cost, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
     <td>
         $<div class="amount"><%= item.amount %></div>
     </td>
     <td>
-        $<div class="margin"><%= link_to item.margin || 0, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %></div>
+        $<div class="margin"><%= link_to item.margin, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %></div>
     </td>
     <td>
         $<div class="price"><%= item.price %></div>
