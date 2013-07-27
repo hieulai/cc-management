@@ -4,7 +4,7 @@ class TemplatesController < ApplicationController
   before_filter :find_template, only: [:edit, :update, :delete, :destroy]
 
   def list
-     @templates = Template.where("builder_id = ?", session[:builder_id])
+     @templates = Template.where("builder_id = ? AND estimate_id IS NULL", session[:builder_id])
   end
 
   def new

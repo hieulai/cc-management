@@ -1,12 +1,12 @@
 	<table summary="Estimate form fields">
 		<tr>
 					<th>Project Name</th>
-					
+
 					<td><%= select(:project, :id, Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Lead").collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
 		</tr>
 		<tr>
 			<th>Template</th>
-			<td><%= select(:template, :id, ::Template.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
+			<td><%= select(:template, :id, ::Template.where("builder_id = ? AND estimate_id is NULL", session[:builder_id]).collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
 		</tr>
 		<tr>
 			<th>Progress</th>
@@ -17,16 +17,8 @@
 			<td><%= f.date_select(:deadline, :order => [:month, :day, :year], :include_blank => true) %>
 		</tr>
 		<tr>
-			<th>Revenue</th>
-			<td><%= f.text_field(:revenue) %>
-		</tr>
-		<tr>
-			<th>Profit</th>
-			<td><%= f.text_field(:profit) %>
-		</tr>
-		<tr>
 			<th>Notes</th>
-			<td><%= f.text_area(:notes) %>
+      <td><%= f.text_area(:notes, :rows => 5) %>
 		</tr>
 	</table>
 	

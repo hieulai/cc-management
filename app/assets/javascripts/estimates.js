@@ -9,7 +9,7 @@ function calculateSubTotals(trCategory) {
             margin += parseFloat($(this).find(".margin").text());
             price += parseFloat($(this).find(".price").text());
         });
-        trSubtotal.find(".subtotal-amount").text(amount);
+        (".subtotal-amount").text(amount);
         trSubtotal.find(".subtotal-margin").text(margin);
         trSubtotal.find(".subtotal-price").text(price);
     }
@@ -19,17 +19,17 @@ function calculateTotals() {
     var amount = 0;
     var margin = 0
     var price = 0;
-    var trTotal = $("tr.total");
-    if (trTotal.size() > 0) {
-        $("tr.item").each(function () {
-            amount += parseFloat($(this).find(".amount").text());
-            margin += parseFloat($(this).find(".margin").text());
-            price += parseFloat($(this).find(".price").text());
-        });
-        trTotal.find(".total-amount").text(amount);
-        trTotal.find(".total-margin").text(margin);
-        trTotal.find(".total-price").text(price);
-    }
+    $("tr.item").each(function () {
+        amount += parseFloat($(this).find(".amount").text());
+        margin += parseFloat($(this).find(".margin").text());
+        price += parseFloat($(this).find(".price").text());
+    });
+    $("div.total-amount").text(amount);
+    $("div.total-margin").text(margin);
+    $("div.total-price").text(price);
+    $("input.total-amount").val(amount);
+    $("input.total-margin").val(margin);
+    $("input.total-price").val(price);
 };
 
 $(document).ready(function () {
@@ -72,6 +72,5 @@ $(document).ready(function () {
         }
         return false;
     });
-
     calculateTotals();
 })

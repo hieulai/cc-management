@@ -48,11 +48,16 @@ class EstimatesController < ApplicationController
 
     def edit
       @estimate = Estimate.find(params[:id])
+      @template = @estimate.template
+      @items = Item.where(builder_id: session[:builder_id]).order(:name)
+      @categories = Category.where(builder_id: session[:builder_id]).order(:name)
     end
 
     def update
       #Find object using form parameters
       @estimate = Estimate.find(params[:id])
+      @template = Template.find(params[:template][:id])
+      @estimate.template = @template
       #Update subject
       if @estimate.update_attributes(params[:estimate])
         #if save succeeds, redirect to list action
@@ -128,6 +133,15 @@ class EstimatesController < ApplicationController
       end
       @estimate.destroy
       redirect_to(:action => 'list_current')
+    end
+
+    def show_template
+      @template = Template.find(params[:template][:id])
+      @items = Item.where(builder_id: session[:builder_id]).order(:name)
+      @categories = Category.where(builder_id: session[:builder_id]).order(:name)
+      respond_to do |format|
+        format.js {}
+      end
     end
 
     def add_item

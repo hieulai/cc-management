@@ -1,48 +1,5 @@
 <div>
     <%= render(:partial => "layouts/estimating_sub_menu")%>
     <h2>Template For: <%= @estimate.project.name %></h2>
-    <h3>
-       Name: <%= @estimate.template.name %>
-    </h3>
-    <table class="grid-view item-list" summary="Items List">
-        <thead>
-            <tr class="header">
-                <th>Item</th>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Unit</th>
-                <th>Rate</th>
-                <th class="amount">Amount</th>
-                <th class="margin">Margin</th>
-                <th class="price">Total</th>
-                <th>&nbsp;</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%- total = 0 %>
-            <%- @estimate.template.categories_templates.each do |category_template| %>
-                <%- subtotal = category_template.items.map(&:price).sum %>
-                <%- total+= subtotal %>
-                <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
-            <% end %>
-            <tr class="add add-category">
-                <td colspan=9>
-                    <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @estimate.template.id}, :remote => true do |f| %>
-                      Category:
-                      <%= f.select :id, @categories.map { |c| [c.name, c.id] } %>
-                      <%= f.submit "Add" %>
-                    <% end %>
-                </td>
-            </tr>
-            <tr class="total">
-                <td colspan=5>
-                        TOTAL
-                </td>
-                <td>$<div class="total-amount"></div></td>
-                <td>$<div class="total-margin"></div></td>
-                <td>$<div class="total-price"></div></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
+    <%= render :partial =>  'estimates/template' %>
 </div>

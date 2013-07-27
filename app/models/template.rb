@@ -15,7 +15,6 @@ class Template < ActiveRecord::Base
 
   def clone_with_associations
     dup_template = self.dup
-    dup_template.builder = nil
     dup_template.categories_templates.destroy_all
     categories_templates.each do |ct|
       dup_ct = ct.dup

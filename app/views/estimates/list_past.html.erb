@@ -9,12 +9,11 @@
 		<tr class="header">
 			<th>Actions</th>
 			<th>Project Name</th>
-			<th>Template Type</th>
+			<th>Template</th>
 			<th>Status</th>
 			<th>Due Date</th>
 			<th>Revenue</th>
 			<th>Profit</th>
-			<th>Margin</th>
 			<th>Notes</th>
 		</tr>
 		<% @estimates.each do |estimate| %>
@@ -25,13 +24,12 @@
 				<%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :class => 'action convert') %>
 				<%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>
 			</td>
-			<td><%= estimate.template %></td>
-			<td><%= estimate.template %></td>
+      <td><%= estimate.project.name %></td>
+      <td><%= estimate.template.name %></td>
 			<td><%= estimate.progress %></td>
 			<td><%= estimate.deadline %></td>
-			<td><%= estimate.revenue %></td>
-			<td><%= estimate.profit %></td>
-			<td><%= estimate.margin %></td>
+			<td>$<%= estimate.revenue %></td>
+			<td>$<%= estimate.profit %></td>
 			<td><%= estimate.notes %></td>
 			
 		</tr>

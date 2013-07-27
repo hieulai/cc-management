@@ -151,10 +151,6 @@
     *display: inline;
 }
 
-td .editable-container.editable-inline {
-    width: 95%;
-}
-
 tr.category .editable-container.editable-inline {
     width: auto;
 }

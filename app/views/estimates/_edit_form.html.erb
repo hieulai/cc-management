@@ -4,8 +4,10 @@
 					<td><%= f.select(:project_id, Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Lead").collect{|s|[s.name, s.id]}) %>
 		</tr>
 		<tr>
-			<th>Template Type</th>
-			<td><%= f.select(:template, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build","Residential:  New Construction", "Residential:  Remodel"], {:include_blank => true}) %>
+			<th>Template</th>
+      <td>
+            <%= select(:template, :id, ::Template.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]},{},
+                         :data => { :remote => true, :url => url_for(:controller => "estimates", :action => "show_template") }) %>
 		</tr>
 		<tr>
 			<th>Progress</th>
@@ -17,15 +19,19 @@
 		</tr>
 		<tr>
 			<th>Revenue</th>
-			<td><%= f.text_field(:revenue) %>
+			<td>
+          $<div class="total-price"></div>
+          <%= f.hidden_field(:revenue, :class => "total-price") %>
 		</tr>
 		<tr>
 			<th>Profit</th>
-			<td><%= f.text_field(:profit) %>
+			<td>
+          $<div class="total-margin"></div>
+          <%= f.hidden_field(:profit, :class => "total-margin") %>
 		</tr>
 		<tr>
 			<th>Notes</th>
-			<td><%= f.text_area(:notes) %>
+			<td><%= f.text_area(:notes, :rows => 5) %>
 		</tr>
 	</table>
 	
