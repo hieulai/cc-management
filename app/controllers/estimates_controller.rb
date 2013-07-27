@@ -88,6 +88,7 @@ class EstimatesController < ApplicationController
 
     def edit_templates
       @estimate = Estimate.find(params[:id])
+      @template = @estimate.template
       @items = Item.where(builder_id: session[:builder_id]).order(:name)
       @categories = Category.where(builder_id: session[:builder_id]).order(:name)
     end
