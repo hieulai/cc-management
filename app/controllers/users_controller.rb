@@ -58,9 +58,9 @@ class UsersController < ApplicationController
     
     
   def register
-    layout 'public'
     @builder = Builder.new
     @user =  User.new
+    render layout: 'public'
   end
   
   def process_registration

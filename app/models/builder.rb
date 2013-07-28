@@ -13,5 +13,7 @@ class Builder < ActiveRecord::Base
   has_many :accounts
   has_many :tasklists
 
-  attr_accessible :company_name, :year_founded, :office_phone, :website, :address, :city, :state, :zipcode, :tax_id
+  attr_accessible :company_name, :year_founded, :office_phone, :website, :address, :city, :state, :zipcode, :tax_id, :logo, :slogan
+  mount_uploader :logo, BuilderLogoUploader
+
 end
