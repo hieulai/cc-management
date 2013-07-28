@@ -6,7 +6,7 @@
 		<tr>
 			<th>Template</th>
       <td>
-            <%= select(:template, :id, ::Template.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]},{},
+          <%= select(:template, :id, ::Template.where("builder_id = ? AND (estimate_id IS NULL OR estimate_id = ?)", session[:builder_id], @estimate.id).collect { |s| [s.name, s.id] }, {},
                          :data => { :remote => true, :url => url_for(:controller => "estimates", :action => "show_template") }) %>
 		</tr>
 		<tr>
