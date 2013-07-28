@@ -9,7 +9,7 @@ function calculateSubTotals(trCategory) {
             margin += parseFloat($(this).find(".margin").text());
             price += parseFloat($(this).find(".price").text());
         });
-        (".subtotal-amount").text(amount);
+        trSubtotal.find(".subtotal-amount").text(amount);
         trSubtotal.find(".subtotal-margin").text(margin);
         trSubtotal.find(".subtotal-price").text(price);
     }

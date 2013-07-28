@@ -57,7 +57,7 @@ class EstimatesController < ApplicationController
       #Find object using form parameters
       @estimate = Estimate.find(params[:id])
       @template = Template.find(params[:template][:id])
-      @estimate.template = @template
+      @estimate.template = @template.clone_with_associations
       #Update subject
       if @estimate.update_attributes(params[:estimate])
         #if save succeeds, redirect to list action
