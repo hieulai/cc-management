@@ -7,6 +7,14 @@ class ArchitectsController < ApplicationController
     @architects = Architect.where("builder_id = ?", session[:builder_id]).search(@query)
   end
   
+  def all
+    @query = params[:query]
+    @architects = Architect.where("builder_id = ?", session[:builder_id]).search(@query)
+    @clients = Client.where("builder_id = ?", session[:builder_id]).search(@query)
+    @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id]).search(@query)
+    @suppliers = Supplier.where("builder_id = ?", session[:builder_id]).search(@query)
+  end
+  
   def show
     @architect = Architect.find(params[:id])
   end

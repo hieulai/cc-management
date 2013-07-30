@@ -21,18 +21,18 @@
         <div class="arrow"></div>
     </li>
     <li class="<%= active_page(['clients'], 'nav') %>">
-      <%= link_to("People", {:controller => 'clients', :action => 'list'}, :class => 'menu item')%>
+      <%= link_to("People", {:controller => 'architects', :action => 'all'}, :class => 'menu item')%>
         <div class="arrow"></div>
     </li>
     <li class="<%= active_page(['accounting'], 'nav') %>">
       <%= link_to("Accounting", {:controller => 'accounting', :action => 'index'}, :class => 'action edit')%>
         <div class="arrow"></div>
     </li>
-    <li class="<%= active_page(['clients'], 'nav') %>">
-      <%= link_to("Preferences", '#', {:action => 'show'}, :class => 'action edit')%>
+    <li class="<%= active_page(['preferences'], 'nav') %>">
+      <%= link_to("Preferences", {:controller => 'users', :action => 'show'}, :class => 'action edit')%>
         <div class="arrow"></div>
     </li>
-    <li class="<%= active_page('clients', 'nav') %>">
+    <li class="<%= active_page('company', 'nav') %>">
       <%= link_to("Company", {:controller => 'builders', :action => 'show'}, :class => 'action edit')%>
         <div class="arrow"></div>
     </li>
