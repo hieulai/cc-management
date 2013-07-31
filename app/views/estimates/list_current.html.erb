@@ -14,16 +14,14 @@
       <th>Template</th>
       <th>Status</th>
       <th>Due Date</th>
-      <th>Revenue</th>
-      <th>Profit</th>
+      <th>Exp. Revenue</th>
+      <th>Exp. Profit</th>
       <th>Notes</th>
     </tr>
     <% @estimates.each do |estimate| %>
     <tr>
       <td class="center">
         <%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :class => 'action measurements') %>
-        <%= link_to("Mat", {:action => 'edit_templates', :id => estimate.id}, :class => 'action measurements') %>
-        <%= link_to("View", {:action => 'show', :id => estimate.id}, :class => 'action vew') %>
         <%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :class => 'action edit') %>
         <%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :class => 'action convert') %>
         <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>

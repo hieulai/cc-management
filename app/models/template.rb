@@ -28,6 +28,7 @@ class Template < ActiveRecord::Base
         dup_ct.items << dup_i
       end
       dup_template.categories_templates << dup_ct
+      dup_template.builder = nil
     end
     dup_template
   end

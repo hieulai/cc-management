@@ -5,9 +5,8 @@
 		</tr>
 		<tr>
 			<th>Template</th>
-      <td>
-          <%= select(:template, :id, ::Template.where("builder_id = ? AND (estimate_id IS NULL OR estimate_id = ?)", session[:builder_id], @estimate.id).collect { |s| [s.name, s.id] }, {},
-                         :data => { :remote => true, :url => url_for(:controller => "estimates", :action => "show_template") }) %>
+      	  	<td>
+          <%= @template.name %></td>
 		</tr>
 		<tr>
 			<th>Progress</th>
@@ -18,20 +17,16 @@
 			<td><%= f.date_select(:deadline, :order => [:month, :day, :year], :include_blank => true) %>
 		</tr>
 		<tr>
-			<th>Revenue</th>
+			<th>Expected Revenue</th>
 			<td>
           $<div class="total-price"></div>
           <%= f.hidden_field(:revenue, :class => "total-price") %>
 		</tr>
 		<tr>
-			<th>Profit</th>
+			<th>Expected Profit</th>
 			<td>
           $<div class="total-margin"></div>
           <%= f.hidden_field(:profit, :class => "total-margin") %>
-		</tr>
-		<tr>
-			<th>Notes</th>
-			<td><%= f.text_area(:notes, :rows => 5) %>
 		</tr>
 	</table>
 	
