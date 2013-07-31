@@ -1,6 +1,8 @@
 <tr class="item item_category_<%= category_template.category.id %>" id="item_<%= item.id %>">
     <td>
-        <%= link_to item.name, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'name', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+	</td>	
+	<td>
+        <%= item.name %>
     </td>
     <td>
         <%= link_to item.description, "#", :class => 'editable', :data => {:type => 'textarea', :rows => 4, :resource => 'item', :name => 'description', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>

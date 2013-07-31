@@ -1,7 +1,7 @@
 <tr class="category" id="category_<%= category_template.category.id %>">
-    <td colspan=8>
+    <td colspan=9>
         <h3>
-            Category: <%= link_to category_template.category.name, "#", :class => 'editable', :data => {:type => 'text', :resource => 'category', :name => 'name', :pk => category_template.category.id, :url => url_for(:controller => 'categories', :action => 'update', :id => category_template.category.id), :id => "category_#{category_template.category.id}"} %>
+            <%= category_template.category.name %>
         </h3>
     </td>
     <td>
@@ -13,7 +13,7 @@
   <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <tr style="display: none" class="add add-item item_category_<%= category_template.category.id %>">
-    <td colspan=9>
+	<td colspan=10>
         <%= form_for :item, :url => {:controller => 'estimates', :action => 'add_item', :category_template_id => category_template.id}, :remote => true do |f| %>
           Item:
           <%= f.select :id, @items.map { |i| [i.name, i.id] } %>
@@ -23,8 +23,8 @@
     </td>
 </tr>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
-    <td colspan=5>
-        <div class="category-name"><%= category_template.category.name %></div> Subtotal
+    <td colspan=6>
+        <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>
     <td>$<div class="subtotal-amount"><%= category_template.items.map(&:amount).sum %></div></td>
     <td>$<div class="subtotal-margin"><%= category_template.items.map(&:margin).sum %></div></td>
