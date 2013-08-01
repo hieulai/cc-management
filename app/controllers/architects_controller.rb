@@ -10,7 +10,7 @@ class ArchitectsController < ApplicationController
   def all
     @query = params[:query]
     @architects = Architect.where("builder_id = ?", session[:builder_id]).search(@query)
-    @clients = Client.where("builder_id = ?", session[:builder_id]).search(@query)
+    @clients = Client.where("builder_id = ? AND status = ?", session[:builder_id], "Active").search(@query)
     @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id]).search(@query)
     @suppliers = Supplier.where("builder_id = ?", session[:builder_id]).search(@query)
   end

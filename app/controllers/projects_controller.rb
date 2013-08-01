@@ -44,14 +44,26 @@ class ProjectsController < ApplicationController
   def conversion_project
     #Find object using form parameters
     @project = Project.find(params[:id])
-    #Update subject
-    if @project.update_attributes(params[:project])
-      #if save succeeds, redirect to list action
-      redirect_to(:action => 'list_current_projects')
-    else
-      #if save fails, redisplay form to user can fix problems
-      render('convert')
+    @client = Client.find(@project.client_id)
+    @project.update_attributes(params[:project])
+    if @project.status == 'Current Project'
+        @project.save
+        #Allows client to display in the People section if the project is won.
+        @client.status = "Active"
+        @client.save
+    elsif @project.status == "Past Project"
+        @project.save
+        #Prevents client from displaying in the People section if the project is not won yet.
+        @client.status = "Active"
+        @client.save
+    elsif @project.status == "Current Lead"
+        @project.save
+        #Prevents client from displaying in the People section if the project is not won yet.
+        @client.status = "Lead"
+        @client.save
     end
+    redirect_to(:action => 'list_current_projects')
+    
   end
   
   def edit_tasklist
