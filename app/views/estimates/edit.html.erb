@@ -5,15 +5,12 @@
 	<%= form_for(@estimate, :url => {:action => 'update', :id => @estimate.id}) do |f| %>
 	
 	<%= render(:partial => "edit_form", :locals => {:f => f})%>
-	
-    <div id="template-placeholder">
-        <%= render :partial =>  'estimates/template' %>
-    </div>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Update Estimate") %>
-	</div>
-	
 	<% end %>
+  <div id="template-placeholder">
+        <%= render :partial =>  'estimates/template' %>
+  </div>
+  <div class="form-buttons">
+      <%= submit_tag "Update Estimate", :data => {:form => ".edit_estimate"} %>
+  </div>
  
 </div>
