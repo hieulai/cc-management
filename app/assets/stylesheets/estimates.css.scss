@@ -9,7 +9,6 @@
 td{
  div{
     display: inline-block;
-    width: 80%;
    }
  }
 th.amount, th.margin, th.price{
@@ -35,4 +34,14 @@ td.button-container{
       float: left;
     }
   }
+#template-placeholder{
+  clear: both;
+}
+.edit_estimate{
+  display: inline-block;
+  float:left;
+}
+.estimate-actions{
+  float:right;
+}
 

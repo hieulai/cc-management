@@ -18,6 +18,7 @@
 //= require jquery-editable-poshytip
 //= require jquery-editable-rails
 //= require_tree .
+//= stub wkhtmltopdf_tableSplitHack
 
 var bounceEffectRight = function(element){
   element.effect("bounce", {

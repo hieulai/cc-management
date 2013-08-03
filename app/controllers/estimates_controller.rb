@@ -14,6 +14,25 @@ class EstimatesController < ApplicationController
 
     def show
       @estimate = Estimate.find(params[:id])
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render :pdf => "Estimate-#{@estimate.project.name}",
+                 :layout => 'pdf.html',
+                 #:show_as_html => true, // for debugging html & css
+          :footer => {:center => 'Page [page]'}
+        end
+      end
+    end
+
+    def show_email
+      @estimate = Estimate.find(params[:id])
+    end
+
+    def send_email
+      @estimate = Estimate.find(params[:id])
+      Mailer.delay.send_estimate(params[:to], params[:subject], params[:body], @estimate)
+      redirect_to :action => 'show_email', :id => @estimate.id, :notice => "Email was sent."
     end
 
     def new
