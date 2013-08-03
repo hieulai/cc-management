@@ -21,8 +21,6 @@
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-//= require jquery
-
 /**
  * PDF page settings.
  * Must have the correct values for the script to work.
