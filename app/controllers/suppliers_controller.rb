@@ -5,6 +5,13 @@ class SuppliersController < ApplicationController
   def list
     @query = params[:query]
     @suppliers = Supplier.where("builder_id = ?", session[:builder_id]).search(@query)
+    respond_to do |format|
+      format.html
+      format.csv {send_data Supplier.to_csv(@suppliers)}
+      format.xls { send_data @suppliers.to_xls(:headers => Supplier::HEADERS, :columns => [:company, :primary_first_name, :primary_last_name, :primary_email,
+        :primary_phone,:primary_phone_tag, :secondary_first_name, :secondary_last_name, :secondary_email, :secondary_phone, :secondary_phone_tag, :website, :address, :city, :state, :zipcode, 
+        :notes]), content_type: 'application/vnd.ms-excel', filename: 'suppliers.xls' }
+    end
   end
   
   def show

@@ -5,6 +5,13 @@ class ArchitectsController < ApplicationController
   def list
     @query = params[:query]
     @architects = Architect.where("builder_id = ?", session[:builder_id]).search(@query)
+    respond_to do |format|
+      format.html
+      format.csv {send_data Architect.to_csv(@architects)}
+      format.xls { send_data @architects.to_xls(:headers => Architect::HEADERS, :columns => [:company, :first_name, :last_name, :email,
+        :primary_phone,:primary_phone_tag, :secondary_phone, :secondary_phone_tag, :website, :address, :city, :state, :zipcode, 
+        :notes]), content_type: 'application/vnd.ms-excel', filename: 'architects.xls' }
+    end
   end
   
   def all
@@ -62,6 +69,10 @@ class ArchitectsController < ApplicationController
   def destroy
     Architect.find(params[:id]).destroy
     redirect_to(:action => 'list')
+  end
+  
+  def import_export
+  
   end
   
 end
