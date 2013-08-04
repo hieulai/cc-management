@@ -7,18 +7,19 @@ class Subcontractor < ActiveRecord::Base
   scope :search, lambda{|query| where("company ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ? OR notes ILIKE ? OR trade ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")} 
   
-  HEADERS = ["Trade", "Company", "First Name", "Primary Phone", "Email", "Notes"]
+  HEADERS = ["Trade", "Company", "First_Name", "Last_Name", "Email",
+        "Primary_Phone","Primary_Phone_Tag", "Secondary_Phone", "Secondary_Phone_Tag", "Website", "Address", "City", "State", "Zipcode", 
+        "Notes"]
   
   def full_name
      "#{first_name} #{last_name}"
   end
   
-  def self.to_csv(subcontractors, options = {})
-    CSV.generate(options = {}) do |csv|
+  def self.to_csv
+    CSV.generate do |csv|
       csv << HEADERS
-      subcontractors.each do |subcontractor|
-        csv << [subcontractor.trade, subcontractor.company, subcontractor.first_name, subcontractor.primary_phone, subcontractor.email, 
-          subcontractor.notes]
+      all.each do |subcontractor|
+        csv << subcontractor.attributes.values_at(*HEADERS)
       end
     end
   end

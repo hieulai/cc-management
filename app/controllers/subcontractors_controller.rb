@@ -8,7 +8,9 @@ class SubcontractorsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv {send_data Subcontractor.to_csv(@subcontractors)}
-      format.xls { send_data @subcontractors.to_xls(:headers => Subcontractor::HEADERS, :columns => [:trade, :company, :first_name, :primary_phone, :email, :notes]), content_type: 'application/vnd.ms-excel', filename: 'subcontractors.xls' }
+      format.xls { send_data @subcontractors.to_xls(:headers => Subcontractor::HEADERS, :columns => [:trade, :company, :first_name, :last_name, :email,
+        :primary_phone,:primary_phone_tag, :secondary_phone, :secondary_phone_tag, :website, :address, :city, :state, :zipcode, 
+        :notes]), content_type: 'application/vnd.ms-excel', filename: 'subcontractors.xls' }
     end
   end
   
@@ -63,6 +65,11 @@ class SubcontractorsController < ApplicationController
   
   def import_export
     @subcontractor = Subcontractor.new
+    @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id])
+    respond_to do |format|
+      format.html
+      format.csv {render text: @subcontractors.to_csv}
+    end
   end
   
   def import
