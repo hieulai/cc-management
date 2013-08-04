@@ -32,6 +32,9 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'cocoon'
 gem 'simple_form'
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'
+gem 'delayed_job_active_record'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

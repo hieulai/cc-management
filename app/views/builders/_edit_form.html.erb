@@ -34,5 +34,14 @@
 	<%= f.label :year_founded, "Year Company Started:"%>
 	<%= f.text_field(:year_founded) %>
 </p>
+<p>
+    <%= f.label :slogan, "Slogan:"%>
+    <%= f.text_field(:slogan) %>
+</p>
+<p>
+    <%= f.label :logo, "Logo:"%>
+    <%= image_tag(@builder.logo_url) if @builder.logo? %>
+    <%= f.file_field :logo %>
+</p>
 
 

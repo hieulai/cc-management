@@ -1,0 +1,97 @@
+table {
+  border-collapse: collapse;
+  border: solid 1px #000000;
+  width: 100%;
+  th{
+    border: solid 1px #000000;
+    padding: 5px;
+    font-weight: normal;
+  }
+  td{
+    padding: 5px;
+    vertical-align: top;
+  }
+  tr.tr-footer{
+     font-size: 20px;
+     font-weight: bold;
+  }
+}
+
+table.item-list {
+  td {
+    border-right: solid 1px #000000;
+    text-align: right;
+  }
+  td.description{
+    text-align: left;
+  }
+  td.center-bold {
+      text-align: center;
+      font-weight: bold;
+  }
+  td.right-bold{
+      text-align: right;
+      font-weight: bold;
+  }
+}
+
+.tr-category, .tr-footer{
+    border-top: solid 1px #000000 ;
+}
+
+#header{
+  margin-bottom: 20px;
+  display: inline-block;
+  width: 100%;
+  .left-header{
+    text-align: center;
+    width: 49%;
+    float: left;
+    .address{
+      margin-top: 5px;
+      font-size: 18px;
+    }
+    .website{
+      margin-top: 5px;
+      font-size: 13px;
+    }
+    .phone{
+      margin-top: 20px;
+      font-size: 13px;
+
+    }
+    .slogan{
+      margin-top: 20px;
+      font-size: 20px;
+      font-style: italic
+    }
+  }
+  .right-header{
+    width: 49%;
+    float: right;
+    table.top{
+      border: none;
+      width: 250px;
+      margin: 10px auto 0 auto;
+      tr:nth-child(even) {background: #CCC}
+      tr:nth-child(odd) {background: #FFF}
+      tr:first-child{
+        font-size: 30px;
+        font-weight: bold;
+      }
+      td{
+        border: none;
+        text-align:center;
+        }
+      }
+    table.bottom{
+      margin: 40px auto 0 auto;
+      td {
+        border: solid 1px #000000;
+      }
+      tr:last-child{
+        line-height: 60px;
+      }
+    }
+  }
+}

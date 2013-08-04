@@ -40,7 +40,14 @@
 		<%= "In Business Since:" %>
 		<%= @builder.year_founded %>
 	</p>
-
+  <p>
+      <%= "Slogan:" %>
+      <%= @builder.slogan %>
+  </p>
+  <p>
+      <%= "Logo:" %>
+      <%= image_tag(@builder.logo_url) if @builder.logo? %>
+  </p>
 	
 	
 </div>

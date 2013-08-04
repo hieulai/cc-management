@@ -55,6 +55,7 @@ module Cc
     config.active_record.whitelist_attributes = true
 
     # Enable the asset pipeline
+    config.assets.precompile += ['pdf.css', 'wkhtmltopdf_tableSplitHack.js']
     config.assets.initialize_on_precompile = false
     config.assets.enabled = true
 

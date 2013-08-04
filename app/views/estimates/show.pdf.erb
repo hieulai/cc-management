@@ -1,0 +1,121 @@
+<%- estimate ||= nil
+    @estimate = estimate if estimate.present?
+    @builder = @estimate.builder
+    def pdf_image_tag(image, options = {})
+      options[:src] = File.expand_path(Rails.root) + '/public' + image
+      tag(:img, options)
+    end
+%>
+<% content_for :head do %>
+  <div class="left-header">
+      <%= pdf_image_tag(@builder.logo_url, :width => "200") if @builder.logo? %>
+      <div class="address">
+          <%= @builder.address %>
+      </div>
+      <div class="phone">
+          <%= @builder.office_phone %>
+      </div>
+      <div class="website">
+          <%= @builder.website %>
+      </div>
+      <div class="slogan">
+      "<%= @builder.slogan %>"
+      </div>
+  </div>
+  <div class="right-header">
+      <table class="top">
+          <tr>
+              <td>Estimate</td>
+          </tr>
+          <tr>
+              <td>Date</td>
+          </tr>
+          <tr>
+              <td><%= @estimate.deadline.strftime("%m/%d/%Y") %></td>
+          </tr>
+          <tr>
+              <td><%= @estimate.project.name %></td>
+          </tr>
+      </table>
+      <table class="bottom">
+          <tr>
+              <td>Name / Address</td>
+          </tr>
+          <tr>
+              <td>&nbsp;</td>
+          </tr>
+      </table>
+  </div>
+<% end %>
+
+<table class="item-list splitForPrint">
+    <thead>
+        <tr class="header">
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Rate</th>
+            <th>Amount</th>
+            <th>Margin</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%- total = 0
+            amount = 0
+            margin = 0
+        %>
+        <%- @estimate.template.categories_templates.each do |category_template| %>
+            <%- subtotal = category_template.items.map(&:price).sum
+                subamount = category_template.items.map(&:amount).sum
+                submargin = category_template.items.map(&:margin).sum
+                total+= subtotal
+                amount+= subamount
+                margin+= submargin
+            %>
+            <tr class="tr-category">
+                <td class="td-category center-bold nobreak">
+                    <%= category_template.category.name %>
+                </td>
+                <td></td><td></td><td></td><td></td><td></td><td>0.00</td>
+            </tr>
+            <% category_template.items.each do |item| %>
+                <tr class="item item_category_<%= category_template.category.id %>" id="item_<%= item.id %>">
+                    <td class="description">
+                        <%= item.description %>
+                    </td>
+                    <td>
+                        <%= item.qty %>
+                    </td>
+                    <td><%= item.unit %></td>
+                    <td>
+                        <%= item.cost %>
+                    </td>
+                    <td>
+                        <%= item.amount %>
+                    </td>
+                    <td>
+                        <%= item.margin %>
+                    </td>
+                    <td>
+                        <%= item.price %>
+                    </td>
+                </tr>
+            <% end %>
+            <tr>
+                <td class="td-subtotal center-bold">
+                    <%= category_template.category.name %> Subtotal
+                </td>
+                <td></td><td></td><td></td><td><%= subamount %></td><td><%= submargin %></td><td><%= subtotal %></td>
+            </tr>
+        <% end %>
+            <tr class="tr-footer">
+                <td colspan="4" class="right-bold">
+                    Total
+                </td>
+                <td>$<%= amount %></td>
+                <td>$<%= margin %></td>
+                <td>$<%= total %></td>
+            </tr>
+    </tbody>
+</table>
