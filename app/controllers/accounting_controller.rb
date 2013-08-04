@@ -8,6 +8,51 @@ class AccountingController < ApplicationController
   def receivables
 
   end
+  
+  def new_payment
+    @payment =  Payment.new
+  end
+
+  def create_payment
+    #Instantiate a new object using form parameters
+    @account = Account.find(params[:account][:id])
+    @subcontractor = Subcontractor.find(params[:subcontractor][:id])
+    @payment = Payment.new(params[:payment])
+    #save subject
+    if @payment.save
+      @account.payments << @payment
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'payables')
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('new_payment')
+    end
+  end
+  
+  def payment_history
+    @payments = Payment.all
+  end
+  
+  def view_payment
+    
+  end
+  
+  def edit_payment
+    
+  end
+  
+  def delete_payment
+    
+  end
+  
+  def destroy_payment
+    
+  end
+  
+  def show
+    
+  end
+    
 
   def payables
 

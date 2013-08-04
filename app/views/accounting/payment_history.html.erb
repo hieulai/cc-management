@@ -1,0 +1,39 @@
+<div>
+	<%= render(:partial => "layouts/accounting_sub_menu")%>
+	<h1>Payment History</h1>
+	<%= link_to("Instructions >>", {:action => 'view_payment'}) %>
+	</br>
+	</br>
+	<%= form_tag('payment_history', method: 'get') do %>
+		<p>
+			<%= label_tag :query, "Search" %>
+			<%= text_field_tag(:query, @query) %>
+		</p>
+	<% end %>
+	<table class="grid-view" summary="Project List">
+		<tr class="header">
+			<th>Actions</th>
+			<th>Date</th>
+			<th>Payee</th>
+			<th>Amount</th>
+			<th>Memo</th>
+					
+		</tr>
+		<% @payments.each do |payment| %>
+		
+		<tr>
+			<td class="center">
+				<%= link_to("View", {:action => 'view_payment', :id => payment.id}, :class => 'action edit') %>
+				<%= link_to("Edit", {:action => 'edit_payment', :id => payment.id}, :class => 'action edit') %>
+				<%= link_to("Delete", {:action => 'delete_payment', :id => payment.id}, :class => 'action delete') %>
+			</td>
+			<td><%= payment.date %></td>
+			<td>Payee</td>
+			<td><%= payment.amount %></td>
+			<td><%= payment.memo %></td>	
+		</tr>
+		<% end %>
+		
+	</table>
+</div>
+

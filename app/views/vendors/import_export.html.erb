@@ -1,0 +1,22 @@
+<div>
+  <%= render(:partial => "layouts/people_sub_menu")%>
+  <h1 class="center">Import / Export</h1>
+  
+  <div>
+  	<h3> Import Vendors: </h3>
+  	<%= form_for @vendor, url: {action: 'import'}, multipart: true do |f| %>
+  	<%= f.file_field :data %>
+  	<br/>
+  	<%= submit_tag("Import") %>
+  	<% end %>
+  </div>
+  
+  <div>
+    <h3> Export Vendors: </h3>
+    <p>
+      <%= link_to "CSV", {controller: 'items', action: 'list', format: 'csv'} %> |
+      <%= link_to "Excel", {controller: 'items', action: 'list', format: 'xls'} %>
+    </p>
+  </div>
+
+</div>

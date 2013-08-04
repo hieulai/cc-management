@@ -1,0 +1,19 @@
+<div>
+	<%= render(:partial => "layouts/people_sub_menu")%>
+	<h2>Delete Vendor</h2>
+	
+	<%= form_for(:vendor, :url => {:action => 'destroy', :id => @vendor.id}) do |f| %>
+	
+	<p>Are you sure you want to delete this vendor?</p>
+	
+
+	<p class="reference-name"><%= @vendor.company %></p>
+
+	<p class="reference-name"><%= @vendor.full_name %></p>
+
+	<div class="form-buttons">
+		<%= submit_tag("Delete") %>
+	</div>
+	
+	<% end %>
+</div>

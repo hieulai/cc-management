@@ -200,6 +200,26 @@ body
 	text-decoration:none;
 }
 
+.trigger
+{
+	color: #0000EE;
+	text-decoration:underline;
+	
+}
+
+.trigger.visited
+{
+	
+	color: #551A8B;
+	text-decoration:underline; 
+}
+
+.instructions
+{
+	//background-color: gray; 
+}
+
+
 .center
 {
 	text-align:center;
@@ -208,6 +228,11 @@ body
 .right
 {
 	text-align:right;
+}
+
+.left
+{
+	text-align:left;
 }
 
 table.grid-view
@@ -269,7 +294,7 @@ table.grid-view th a
 	background: #F8F8F8;
 }
 
-.grid-view table.items tr.odd
+.grid-view tr:hover
 {
 	background: #E5F1F4;
 }

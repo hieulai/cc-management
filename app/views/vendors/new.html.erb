@@ -1,0 +1,15 @@
+<div>
+	<%= render(:partial => "layouts/people_sub_menu")%>
+	<h2>Create New Vendor</h2>
+	
+	<%= form_for @vendor, :url => {:action => 'create'} do |f| %>
+	
+	<%= render(:partial => "form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Create") %>
+	</div>
+	
+	<% end %>
+	
+</div>

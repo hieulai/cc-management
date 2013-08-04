@@ -1,0 +1,25 @@
+	<table>
+		<tr>
+			<th>Account</th>
+			<td><%= select(:account, :id, Account.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]}) %></td>
+		</tr>
+		<tr>
+			<th>Payee</th>
+      	  	<td><%= select(:subcontractor, :id, Subcontractor.where("builder_id = ?", session[:builder_id]).collect{|s|[s.full_name, s.id]}) %></td>
+		</tr>
+		<tr>
+			<th>Date</th>
+			<td><%= f.date_select(:date, :order => [:month, :day, :year], :include_blank => true) %></td>
+		</tr>
+		<tr>
+			<th>Amount</th>
+			<td><%= f.text_field(:amount) %>
+		</tr>
+		<tr>
+			<th>Memo</th>
+			<td><%= f.text_field(:memo) %></td>
+		</tr>
+	</table>
+	
+	
+	<p>Itemizations go here . . . </p>

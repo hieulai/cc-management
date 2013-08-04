@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708213722) do
+ActiveRecord::Schema.define(:version => 20130804003315) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -182,6 +182,17 @@ ActiveRecord::Schema.define(:version => 20130708213722) do
 
   add_index "measurements", ["estimate_id"], :name => "index_measurements_on_estimate_id"
 
+  create_table "payments", :force => true do |t|
+    t.integer  "account_id"
+    t.decimal  "amount",     :precision => 12, :scale => 2
+    t.date     "date"
+    t.string   "memo"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
+
   create_table "projects", :force => true do |t|
     t.integer  "client_id"
     t.string   "name"
@@ -309,5 +320,36 @@ ActiveRecord::Schema.define(:version => 20130708213722) do
   end
 
   add_index "users", ["builder_id"], :name => "index_users_on_builder_id"
+
+  create_table "vendors", :force => true do |t|
+    t.integer  "builder_id"
+    t.string   "company"
+    t.string   "vendor_type"
+    t.string   "trade"
+    t.string   "primary_first_name"
+    t.string   "primary_last_name"
+    t.string   "primary_email"
+    t.string   "primary_phone1"
+    t.string   "primary_phone2"
+    t.string   "primary_phone1_tag"
+    t.string   "primary_phone2_tag"
+    t.string   "secondary_first_name"
+    t.string   "secondary_last_name"
+    t.string   "secondary_email"
+    t.string   "secondary_phone1"
+    t.string   "secondary_phone2"
+    t.string   "secondary_phone1_tag"
+    t.string   "secondary_phone2_tag"
+    t.string   "website"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zipcode"
+    t.text     "notes"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "vendors", ["builder_id"], :name => "index_vendors_on_builder_id"
 
 end
