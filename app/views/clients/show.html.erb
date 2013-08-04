@@ -1,7 +1,17 @@
 <div>
 	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h2 class = "center">Client: <%= @client.company || @client.full_name %> </h2>
-		
+	<h1 class="center">
+		<% if @client.company == '' %>
+			<%= @client.full_name %>
+		<% else %>
+			<%= @client.company %>
+		<% end %>
+	</h1>
+	
+	<%= link_to("Edit >>", {:action => 'edit', :id => @client.id}) %>
+	</br>
+	</br>
+	<%= link_to("Delete >>", {:action => 'delete', :id => @client.id}) %>
 		<p>
 			<b><%= "Company:" %></b>
 			<%= @client.company %>

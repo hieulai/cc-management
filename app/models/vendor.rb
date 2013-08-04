@@ -7,22 +7,24 @@ class Vendor < ActiveRecord::Base
   scope :search, lambda{|query| where("company ILIKE ? OR vendor_type ILIKE ? OR trade ILIKE ? OR primary_first_name ILIKE ? OR primary_last_name ILIKE ? OR secondary_first_name ILIKE ? OR
      secondary_last_name ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")} 
-     
+  
+  HEADERS = ["Vendor_Type", "Trade", "Company", "Primary_First_Name", "Primary_Last_Name", "Primary_Email", "Primary_Phone1","Primary_Phone1_Tag", "Primary_Phone2","Primary_Phone2_Tag",
+       "Secondary_First_Name", "Secondary_Last_Name", "Secondary_Email","Secondary_Phone1", "Secondary_Phone1_Tag", "Secondary_Phone2", "Secondary_Phone2_Tag", 
+       "Website", "Address", "City", "State", "Zipcode", 
+                 "Notes"]
   def full_name
      "#{primary_first_name} #{primary_last_name}"
   end
   
-  def self.to_csv(vendors, options = {})
-    CSV.generate(options = {}) do |csv|
+  def self.to_csv
+    CSV.generate do |csv|
       csv << HEADERS
-      vendors.each do |vendor|
-        csv << [vendor.vendor_type, vendor.trade, vendor.company, vendor.primary_first_name, vendor.primary_last_name, vendor.primary_email,
-          vendor.primary_phone1, vendor.primary_phone1_tag, vendor.primary_phone2, vendor.primary_phone2_tag, vendor.secondary_first_name, vendor.secondary_last_name, vendor.secondary_email,
-          vendor.secondary_phone1, vendor.secondary_phone1_tag, vendor.secondary_phone2, vendor.secondary_phone2_tag, vendor.website, vendor.address, vendor.city, vendor.state, vendor.zipcode,
-          vendor.notes]
+      all.each do |vendor|
+        csv << vendor.attributes.values_at(*HEADERS)
       end
     end
   end
+  
   
   def self.import(file, builder)
     spreadsheet = open_spreadsheet(file)

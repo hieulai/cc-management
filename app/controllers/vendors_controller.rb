@@ -1,9 +1,23 @@
 class VendorsController < ApplicationController
     before_filter :confirm_logged_in
   
+    def all
+      @query = params[:query]
+      @clients = Client.where("builder_id = ? AND status = ?", session[:builder_id], "Active").search(@query)
+      @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search(@query)
+    end
+    
     def list
       @query = params[:query]
       @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search(@query)
+      respond_to do |format|
+        format.html
+        format.csv {send_data Vendor.to_csv(@vendors)}
+        format.xls { send_data @vendors.to_xls(:headers => Vendor::HEADERS, :columns => [:vendor_type, :trade, :company, :primary_first_name, :primary_last_name, :primary_email,
+          :primary_phone1,:primary_phone1_tag, :primary_phone2,:primary_phone2_tag,:secondary_first_name, :secondary_last_name, :secondary_email, :secondary_phone1, :secondary_phone1_tag, 
+          :secondary_phone2, :secondary_phone2_tag, :website, :address, :city, :state, :zipcode, 
+          :notes]), content_type: 'application/vnd.ms-excel', filename: 'vendors.xls' }
+      end
     end
   
     def show

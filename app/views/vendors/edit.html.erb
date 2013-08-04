@@ -1,7 +1,18 @@
 <div>
 	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h2>Edit Vendor Info</h2>
+	<h1 class="center">
+		Edit -
+		<% if @vendor.company == '' %>
+			<%= @vendor.full_name %>
+		<% else %>
+			<%= @vendor.company %>
+		<% end %>
+	</h1>
 	
+	<%= link_to("View >>", {:action => 'show', :id => @vendor.id}) %>
+	</br>
+	</br>
+	<%= link_to("Delete >>", {:action => 'delete', :id => @vendor.id}) %>
 	<%= form_for @vendor, :url => {:action => 'update', :id => @vendor.id} do |f| %>
 	
 	<%= render(:partial => "form", :locals => {:f => f})%>

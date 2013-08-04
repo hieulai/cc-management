@@ -1,12 +1,9 @@
 <div id='submenu'>
 	<ul>
-		<li><%= link_to("All", {:controller => 'architects', :action => 'all'})%></li>
-		<li><%= link_to("Architects", {:controller => 'architects', :action => 'list'})%></li>
+		<li><%= link_to("All", {:controller => 'vendors', :action => 'all'})%></li>
 		<li><%= link_to("Clients", {:controller => 'clients', :action => 'list'})%></li>
-		<li><%= link_to("Subcontractors", {:controller => 'subcontractors', :action => 'list'})%></li>
-		<li><%= link_to("Suppliers", {:controller => 'suppliers', :action => 'list'})%></li>
 		<li><%= link_to("Vendors", {:controller => 'vendors', :action => 'list'})%></li>
-		<li><%= link_to("Import/Export", {:controller => 'subcontractors', :action => 'import_export'})%></li>
+		<li><%= link_to("Import/Export", {:controller => 'vendors', :action => 'import_export'})%></li>
 	</ul>
 </div>
 
