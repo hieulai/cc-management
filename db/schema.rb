@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130804003315) do
+ActiveRecord::Schema.define(:version => 20130805021006) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -61,6 +61,8 @@ ActiveRecord::Schema.define(:version => 20130804003315) do
     t.string   "tax_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.string   "slogan"
+    t.string   "logo"
   end
 
   create_table "categories", :force => true do |t|
@@ -126,6 +128,22 @@ ActiveRecord::Schema.define(:version => 20130804003315) do
 
   add_index "clients", ["builder_id"], :name => "index_clients_on_builder_id"
 
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
   create_table "estimates", :force => true do |t|
     t.integer  "builder_id"
     t.integer  "project_id"
@@ -189,9 +207,11 @@ ActiveRecord::Schema.define(:version => 20130804003315) do
     t.string   "memo"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.integer  "vendor_id"
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
+  add_index "payments", ["vendor_id"], :name => "index_payments_on_vendor_id"
 
   create_table "projects", :force => true do |t|
     t.integer  "client_id"

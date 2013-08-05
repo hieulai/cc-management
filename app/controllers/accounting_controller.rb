@@ -1,5 +1,6 @@
 class AccountingController < ApplicationController
   before_filter :confirm_logged_in
+  autocomplete :vendor, :trade
   
   def index
     render('receivables')
@@ -16,7 +17,6 @@ class AccountingController < ApplicationController
   def create_payment
     #Instantiate a new object using form parameters
     @account = Account.find(params[:account][:id])
-    @subcontractor = Subcontractor.find(params[:subcontractor][:id])
     @payment = Payment.new(params[:payment])
     #save subject
     if @payment.save

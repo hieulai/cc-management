@@ -2,6 +2,7 @@
 	<%= render(:partial => "layouts/leads_sub_menu")%>
 	<h2>New Project Lead</h2>
 	<%= form_for(:project, :url => {:action => 'create_from_new'}) do |p| %>
+	
 	<%= fields_for @client do |c| %>
 	
 	<%= render(:partial => "lead_form", :locals => {:c => c, :p => p })%>

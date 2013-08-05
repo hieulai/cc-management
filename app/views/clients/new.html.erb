@@ -4,6 +4,18 @@
 	
 	<%= form_for @client, :url => {:action => 'create'} do |f| %>
 	
+	<% if @vendor.errors.any? %>
+	  <div id="errorExplanation">
+	    <h2><%= pluralize(@vendor.errors.count, "Error") %> prohibited
+	      this post from being saved:</h2>
+	    <ul>
+	    <% @vendor.errors.full_messages.each do |msg| %>
+	      <li><%= msg %></li>
+	    <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+	
 	<%= render(:partial => "form", :locals => {:f => f})%>
 	
 	<div class="form-buttons">

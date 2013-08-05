@@ -1,5 +1,6 @@
 class Vendor < ActiveRecord::Base
   belongs_to :builder
+  has_many :payments
   
   attr_accessible :company,:vendor_type,:trade,:primary_first_name,:primary_last_name,:primary_email,:primary_phone1,:primary_phone2,:secondary_first_name,:secondary_last_name,:secondary_email,
   :secondary_phone1,:secondary_phone2,:website,:address,:city,:state,:zipcode,:notes, :primary_phone1_tag,:primary_phone2_tag, :secondary_phone1_tag, :secondary_phone2_tag
@@ -7,6 +8,8 @@ class Vendor < ActiveRecord::Base
   scope :search, lambda{|query| where("company ILIKE ? OR vendor_type ILIKE ? OR trade ILIKE ? OR primary_first_name ILIKE ? OR primary_last_name ILIKE ? OR secondary_first_name ILIKE ? OR
      secondary_last_name ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")} 
+  
+  validates :vendor_type, presence: true
   
   HEADERS = ["Vendor_Type", "Trade", "Company", "Primary_First_Name", "Primary_Last_Name", "Primary_Email", "Primary_Phone1","Primary_Phone1_Tag", "Primary_Phone2","Primary_Phone2_Tag",
        "Secondary_First_Name", "Secondary_Last_Name", "Secondary_Email","Secondary_Phone1", "Secondary_Phone1_Tag", "Secondary_Phone2", "Secondary_Phone2_Tag", 

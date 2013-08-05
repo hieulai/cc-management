@@ -35,6 +35,7 @@ gem 'simple_form'
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
 gem 'delayed_job_active_record'
+gem 'rails3-jquery-autocomplete'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

@@ -28,7 +28,7 @@
 				<%= link_to("Delete", {:action => 'delete_payment', :id => payment.id}, :class => 'action delete') %>
 			</td>
 			<td><%= payment.date %></td>
-			<td>Payee</td>
+			<td><%= payment.vendor_name %></td>
 			<td><%= payment.amount %></td>
 			<td><%= payment.memo %></td>	
 		</tr>

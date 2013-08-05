@@ -13,10 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.ui.all
+//= require jquery-ui
 //= require cocoon
 //= require jquery.poshytip
 //= require jquery-editable-poshytip
 //= require jquery-editable-rails
+//= require autocomplete-rails
 //= require_tree .
 //= stub wkhtmltopdf_tableSplitHack
 

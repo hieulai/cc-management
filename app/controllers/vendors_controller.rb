@@ -1,6 +1,6 @@
 class VendorsController < ApplicationController
     before_filter :confirm_logged_in
-  
+    
     def all
       @query = params[:query]
       @clients = Client.where("builder_id = ? AND status = ?", session[:builder_id], "Active").search(@query)

@@ -3,7 +3,19 @@
 	<h2>Create Item</h2>
 
 	<%= form_for @item, :url => {:action => 'create'} do |f| %>
-
+	
+	<% if @item.errors.any? %>
+	  <div id="errorExplanation">
+	    <h2><%= pluralize(@item.errors.count, "Error") %> prohibited
+	      this post from being saved:</h2>
+	    <ul>
+	    <% @item.errors.full_messages.each do |msg| %>
+	      <li><%= msg %></li>
+	    <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+	
 	<%= render(:partial => "new_form", :locals => {:f => f})%>
 
 	<div class="form-buttons">
