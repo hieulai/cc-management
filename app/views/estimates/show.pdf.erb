@@ -48,7 +48,7 @@
                   <br/>
                   <%= @client.address %>
                   <br/>
-                  <%= "#{@client.city}, #{@client.state}, #{@client.zipcode}" %>
+                  <%= @client.city %> <%= ", #{@client.state}" if @client.state.present? %> <%=", #{@client.zipcode}" if @client.zipcode.present? %>
               </td>
           </tr>
       </table>
