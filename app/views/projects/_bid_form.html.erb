@@ -2,11 +2,11 @@
 
 <p>
 	<%= f.label :category, "Category" %>
-	<%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]}) %>
+	<%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).order(:name).collect{|s|[s.name, s.id]}) %>
 </p>
 <p>			
 	<%= f.label :vendor, "Vendor" %>
-	<%= select(:vendor, :id, Vendor.where("builder_id = ?", session[:builder_id]).collect{|s|[s.full_name, s.id]}) %>
+	<%= select(:vendor, :id, Vendor.where("builder_id = ?", session[:builder_id]).order(:primary_first_name).collect{|s|[s.full_name, s.id]}) %>
 </p>
 <p>
 	<%= f.label :amount, "Amount" %>

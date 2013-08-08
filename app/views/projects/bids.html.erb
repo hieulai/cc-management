@@ -13,14 +13,16 @@
 		<%= link_to("Add Bid >>", {:action => 'new_bid', :id => @project.id}, :class => 'action vew') %>
 	</br>
 	</br>
+		<%@total_costs = 0 %>
 		<table class="grid-view" summary="Project List">
 			<tr class="header">
 				<th>Actions</th>
 				<th>Category</th>
 				<th>Vendor</th>
-				<th>Amount</th>
-				<th>Chosen</th>
 				<th>Notes</th>
+				<th>Amount</th>
+				<th>Committed</th>
+				
 			</tr>
 			<% @bids.each do |bid| %>
 
@@ -31,13 +33,18 @@
 				</td>
 				<td><%= bid.category.name %></td>
 				<td><%= bid.vendor.full_name %></td>
-				<td><%= bid.amount %></td>
-				<td class="center"><%= bid.chosen %></td>
 				<td><%= bid.notes %></td>
-			
+				<td class="right"><%= number_to_currency(bid.amount) %></td>
+				<td class="center"><%= bid.chosen %></td>
+				
+				<% 
+					if bid.chosen == true
+						@total_costs = @total_costs + bid.amount 
+					end
+				%>
 			</tr>
 			<% end %>
 		</table>
-		
+		<h2 class="right">Total Committed Costs = <%= number_to_currency(@total_costs) %></h2>
 		
 </div>

@@ -162,7 +162,7 @@ class ProjectsController < ApplicationController
     if @bid.save
       @project.bids << @bid
       #if save succeeds, redirect to list action
-      redirect_to(:action => 'bids')
+      redirect_to(:action => 'bids', :id => @bid.project_id)
     else
       #if save fails, redisplay form to user can fix problems
       render('new_bid')
