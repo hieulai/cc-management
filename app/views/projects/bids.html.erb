@@ -1,0 +1,43 @@
+<div>
+	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+	<h1>Bids for: <%= @project.name%></h1>
+	</br>
+	<p class="trigger">Instructions >></p>
+	<div class="instructions">
+		<p>Default paragraph. </p>
+	</div>
+	
+	</br>
+	</br>
+
+		<%= link_to("Add Bid >>", {:action => 'new_bid', :id => @project.id}, :class => 'action vew') %>
+	</br>
+	</br>
+		<table class="grid-view" summary="Project List">
+			<tr class="header">
+				<th>Actions</th>
+				<th>Category</th>
+				<th>Vendor</th>
+				<th>Amount</th>
+				<th>Chosen</th>
+				<th>Notes</th>
+			</tr>
+			<% @bids.each do |bid| %>
+
+			<tr>
+				<td class="center">
+					<%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'action edit') %>
+					<%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'action edit') %>
+				</td>
+				<td><%= bid.category.name %></td>
+				<td><%= bid.vendor.full_name %></td>
+				<td><%= bid.amount %></td>
+				<td class="center"><%= bid.chosen %></td>
+				<td><%= bid.notes %></td>
+			
+			</tr>
+			<% end %>
+		</table>
+		
+		
+</div>

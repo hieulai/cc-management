@@ -139,5 +139,66 @@ class ProjectsController < ApplicationController
     @tasklist.destroy
     redirect_to(:action => 'select_tasklist', id: @project_id)
   end
+  
+  def bids
+    @project = Project.find(params[:id])
+    @bids = @project.bids
+  end
+  
+  def new_bid
+    @project = Project.find(params[:id])
+    @bid = Bid.new
+  end
+  
+  def create_bid
+    #Instantiate a new object using form parameters
+    @project = Project.find(params[:id])
+    @bid = Bid.new(params[:bid])
+    @category = Category.find(params[:category][:id])
+    @vendor = Vendor.find(params[:vendor][:id])
+    @bid.category = @category
+    @bid.vendor = @vendor
+    #save subject
+    if @bid.save
+      @project.bids << @bid
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'bids')
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('new_bid')
+    end
+  end
+  
+  def edit_bid
+    @bid = Bid.find(params[:id])
+    @category = @bid.category
+    @vendor = @bid.vendor
+  end
+  
+  def update_bid
+    #Instantiate a new object using form parameters
+    @bid = Bid.find(params[:id])
+    @category = Category.find(params[:category][:id])
+    @vendor = Vendor.find(params[:vendor][:id])
+    @bid.category = @category
+    @bid.vendor = @vendor
+    #save subject
+    if @bid.update_attributes(params[:bid])
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'bids', :id => @bid.project_id)
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('new_bid')
+    end
+  end  
+  
+  def delete_bid
+    @bid = Bid.find(params[:id])
+  end
+  
+  def destroy_bid
+    Bid.find(params[:id]).destroy
+    redirect_to(:action => 'bids')
+  end
     
 end

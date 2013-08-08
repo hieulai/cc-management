@@ -1,0 +1,14 @@
+<div>
+	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+	<h2>Delete Bid</h2>
+	
+	<%= form_for(:vendor, :url => {:action => 'destroy_bid', :id => @bid.id}) do |f| %>
+	
+	<p>Are you sure you want to delete this bid?</p>
+
+	<div class="form-buttons">
+		<%= submit_tag("Delete") %>
+	</div>
+	
+	<% end %>
+</div>

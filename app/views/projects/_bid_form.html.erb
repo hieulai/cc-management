@@ -1,0 +1,26 @@
+<h2>Bid Info:</h2>
+
+<p>
+	<%= f.label :category, "Category" %>
+	<%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]}) %>
+</p>
+<p>			
+	<%= f.label :vendor, "Vendor" %>
+	<%= select(:vendor, :id, Vendor.where("builder_id = ?", session[:builder_id]).collect{|s|[s.full_name, s.id]}) %>
+</p>
+<p>
+	<%= f.label :amount, "Amount" %>
+	<%= f.text_field(:amount) %>
+</p>
+<p>
+	<%= f.label :notes, "Notes" %>
+	<%= f.text_field(:notes) %>
+</p>
+<p>
+	<%= f.label :chosen, "Chosen" %>
+	<%= f.check_box(:chosen) %>
+</p>
+
+
+
+

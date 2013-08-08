@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130805021006) do
+ActiveRecord::Schema.define(:version => 20130807224739) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -49,6 +49,17 @@ ActiveRecord::Schema.define(:version => 20130805021006) do
 
   add_index "architects", ["builder_id"], :name => "index_architects_on_builder_id"
 
+  create_table "bids", :force => true do |t|
+    t.integer  "project_id"
+    t.decimal  "amount",     :precision => 10, :scale => 2
+    t.text     "notes"
+    t.boolean  "chosen"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "bids", ["project_id"], :name => "index_bids_on_project_id"
+
   create_table "builders", :force => true do |t|
     t.string   "company_name"
     t.integer  "year_founded"
@@ -75,8 +86,10 @@ ActiveRecord::Schema.define(:version => 20130805021006) do
     t.boolean  "default"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.integer  "bid_id"
   end
 
+  add_index "categories", ["bid_id"], :name => "index_categories_on_bid_id"
   add_index "categories", ["builder_id"], :name => "index_categories_on_builder_id"
   add_index "categories", ["template_id"], :name => "index_categories_on_template_id"
 
@@ -368,8 +381,10 @@ ActiveRecord::Schema.define(:version => 20130805021006) do
     t.text     "notes"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+    t.integer  "bid_id"
   end
 
+  add_index "vendors", ["bid_id"], :name => "index_vendors_on_bid_id"
   add_index "vendors", ["builder_id"], :name => "index_vendors_on_builder_id"
 
 end

@@ -2,7 +2,13 @@
 	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h1>Current Projects</h1>
 	</br>
-	<%= link_to("Instructions", {:action => 'show'})%>
+	<p class="trigger">Instructions >></p>
+	<div class="instructions">
+		<p>Single-click on the row of the vendor you want for a detailed view. </p>
+		<p>Double-click on the row of the vendor you want to 
+		edit their information.</p>
+	</div>
+	
 	</br>
 	</br>
 
@@ -22,11 +28,13 @@
 		<tr>
 			<td class="center">
 				<%= link_to("Tasklist", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
+				<%= link_to("Bids", {:action => 'bids', :id => project.id}, :class => 'action vew') %>
+				<%= link_to("Budget", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
 				<%= link_to("View", {:action => 'show_project', :id => project.id}, :class => 'action vew') %>
 				<%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :class => 'action edit') %>
 				<%= link_to("Convert", {:action => 'convert_project', :id => project.id}, :class => 'action edit') %>
 			</td>
-			<td><%= project.name %></td>
+			<td><a href='<%= project.id %>'></a><%= project.name %></td>
 			<td><%= project.project_type %></td>
 			<td><%= project.start_date %></td>
 			<td class="center"><%= project.progress %></td>
@@ -39,4 +47,24 @@
 		<% end %>
 	</table>
 </div>
+
+<script>
+	$(".instructions").hide();
+	$( ".trigger" ).click(function() {
+		if ($(".instructions").is(":hidden")) {
+			$(".instructions").slideDown("slow");
+		} 
+		else {
+			$(".instructions").hide();
+		}
+	});
+		
+	
+	$(".rows").click(function() {
+		window.location.href = '/projects/show_project/' + $(this).find("a").attr("href");	
+	});
+	$(".rows").dblclick(function() {
+		window.location.href = '/projects/edit_project/' + $(this).find("a").attr("href");
+	});
+</script>
 

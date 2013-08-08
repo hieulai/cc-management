@@ -1,5 +1,6 @@
 class Vendor < ActiveRecord::Base
   belongs_to :builder
+  belongs_to :bid
   has_many :payments
   
   attr_accessible :company,:vendor_type,:trade,:primary_first_name,:primary_last_name,:primary_email,:primary_phone1,:primary_phone2,:secondary_first_name,:secondary_last_name,:secondary_email,

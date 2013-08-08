@@ -1,5 +1,6 @@
 class Category < ActiveRecord::Base
   belongs_to :builder
+  belongs_to :bid
   has_many :categories_templates, :dependent => :destroy
   has_many :templates, through: :categories_templates
   has_many :items

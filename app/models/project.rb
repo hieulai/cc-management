@@ -2,6 +2,7 @@ class Project < ActiveRecord::Base
   belongs_to :client
   belongs_to :builder
   has_many :estimates
+  has_many :bids
   has_one :tasklist
   
   attr_accessible :name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
