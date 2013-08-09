@@ -41,12 +41,7 @@
 			<td><%= project.deadline %></td>
 			<td><%= project.schedule_variance %></td>
 			<td>
-				<% 
-					if project.next_tasks != nil
-						project.next_tasks.each do |task| %>
-							<li><%= task %></li>
-						<% end %>
-					<% end %>
+				
 			</td>
 			<td><%= project.project_notes %></td>
 			
