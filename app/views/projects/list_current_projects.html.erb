@@ -21,7 +21,7 @@
 			<th>Progress</th>
 			<th>Deadline</th>
 			<th>Schedule Variance</th>
-			<th>Next 3 Tasks</th>
+			<th>Next 5 Tasks</th>
 			<th>Notes</th>
 		</tr>
 		<% @projects.each do |project| %>
@@ -37,10 +37,17 @@
 			<td><a href='<%= project.id %>'></a><%= project.name %></td>
 			<td><%= project.project_type %></td>
 			<td><%= project.start_date %></td>
-			<td class="center"><%= project.progress %></td>
+			<td class="center"><%= number_to_percentage(project.progress, precision: 2) %></td>
 			<td><%= project.deadline %></td>
 			<td><%= project.schedule_variance %></td>
-			<td><%= project.next_tasks %></td>
+			<td>
+				<% 
+					if project.next_tasks != nil
+						project.next_tasks.each do |task| %>
+							<li><%= task %></li>
+						<% end %>
+					<% end %>
+			</td>
 			<td><%= project.project_notes %></td>
 			
 		</tr>

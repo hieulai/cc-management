@@ -56,5 +56,4 @@ Cc::Application.routes.draw do
    resources :accounting do
      get :autocomplete_vendor_trade, :on => :collection
    end
-   resources :vendors
 end
