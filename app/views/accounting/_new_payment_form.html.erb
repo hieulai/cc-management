@@ -1,13 +1,3 @@
-<script>
-  $(function() {
-	$('#payment_vendor_name').autocomplete({
-	source: $('#payment_vendor_name').data('autocomplete-source')
-	});
-  });
-</script>
-	
-	
-
 <table>
 	<tr>
 		<th>Account</th>
@@ -15,7 +5,7 @@
 	</tr>
 	<tr>
 		<th>Payee</th>
-  	  	<td><%= f.text_field :vendor_name, data: {autocomplete_source: Vendor.order(:primary_first_name).map(&:full_name)} %></td>
+  	  	<td><%= f.autocomplete_field :vendor_name, autocomplete_vendor_trade_accounting_index_path  %></td>
 	</tr>
 	<tr>
 		<th>Date</th>
