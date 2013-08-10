@@ -5,29 +5,39 @@ class User < ActiveRecord::Base
   belongs_to :builder
 
   #Variables
-  attr_accessible :first_name, :last_name, :email, :primary_phone, :authority
-  attr_protected :hashed_password, :salt
-  attr_accessor :password
+  attr_accessible :first_name, :last_name, :email, :primary_phone, :authority, :legacy_salt, :legacy_hashed_password, :password
 
   #Validations
   #validates :password, length: {in: 1..20}
   validates :email, presence: true, uniqueness: true
 
-  #Callbacks
-  before_save :create_hashed_password
-  after_save :clear_password
+  devise :database_authenticatable, :registerable
 
   #public methods
   def full_name
      "#{first_name} #{last_name}"
   end
-  
+
   def self.make_salt(email="")
     Digest::SHA1.hexdigest("Use #{email} with #{Time.now} to make salt")
   end
 
   def self.hash_with_salt(password="", salt="")
     Digest::SHA1.hexdigest("Put #{salt} on the #{password}")
+  end
+
+  def valid_password?(password)
+    if self.legacy_hashed_password.present?
+      if password_match? password
+        self.password = password
+        self.legacy_hashed_password = nil
+        self.save!
+        true
+      else
+        false
+      end
+    end
+    super(password)
   end
 
   def self.authenticate(email="",password="")
@@ -40,24 +50,11 @@ class User < ActiveRecord::Base
   end
 
   def password_match?(password="")
-    hashed_password == User.hash_with_salt(password,salt)
+    legacy_hashed_password == User.hash_with_salt(password,legacy_salt)
   end
 
   def full_name
      "#{first_name} #{last_name}"
-  end
-
-  private
-
-  def create_hashed_password
-    unless password.blank?
-      self.salt = User.make_salt(email) if salt.blank?
-      self.hashed_password = User.hash_with_salt(password, salt)
-    end
-  end
-
-  def clear_password
-    self.password = nil
   end
 
 end

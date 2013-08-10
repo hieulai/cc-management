@@ -2,11 +2,11 @@
 
 	<h1>Welcome to Construction Central</h1>
 	<h2>Current User Login Here:</h2>
-	<%= link_to("Login >>", {:controller => 'users', :action => 'login'}) %>
+	<%= link_to("Login >>", new_user_session_path) %>
 	</br>
 	</br>
 	<h2>Interested in trying it out? Register here:</h2>
-	<%= link_to("Register >>", {:controller => 'users', :action => 'register'}) %>
+	<%= link_to("Register >>", new_user_registration_path) %>
 	</br>
 	</br>
 	

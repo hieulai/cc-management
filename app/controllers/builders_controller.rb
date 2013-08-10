@@ -1,7 +1,5 @@
 class BuildersController < ApplicationController
-  
-  #Filters
-  before_filter :confirm_logged_in
+  before_filter :authenticate_user!
   
   #Admin actions
   def list

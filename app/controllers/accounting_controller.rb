@@ -1,5 +1,5 @@
 class AccountingController < ApplicationController
-  before_filter :confirm_logged_in
+  before_filter :authenticate_user!
   autocomplete :vendor, :trade
   
   def index
