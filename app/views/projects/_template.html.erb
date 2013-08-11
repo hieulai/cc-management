@@ -1,0 +1,37 @@
+<table class="grid-view item-list" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th>Category</th>
+		    <th>Item</th>
+        <th>Description</th>
+        <th class="amount">Estimated Costs</th>
+        <th class="amount">Committed Costs</th>
+        <th class="amount">Actual Costs</th>
+        <th class="margin">Estimated Profit</th>
+        <th class="price">Committed Profit</th>
+        <th>Actual Profit</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%- amount = 0
+        margin = 0
+    %>
+    <%- template.categories_templates.each do |category_template| %>
+      <%- subamount = category_template.items.map(&:amount).sum
+          submargin = category_template.items.map(&:margin).sum
+          amount+= subamount
+          margin+= submargin
+      %>
+      <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
+    <% end %>
+    <tr class="total">
+        <td colspan=3>
+            GRAND TOTAL
+        </td>
+        <td>$<div class="total-amount"><%= amount %></div></td>
+        <td></td><td></td>
+        <td>$<div class="total-margin"><%= margin %></div></td>
+        <td></td><td></td>
+    </tr>
+    </tbody>
+</table>

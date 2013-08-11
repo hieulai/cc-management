@@ -200,5 +200,9 @@ class ProjectsController < ApplicationController
     Bid.find(params[:id]).destroy
     redirect_to(:action => 'bids')
   end
+
+  def budget
+    @project = Project.find(params[:id])
+  end
     
 end

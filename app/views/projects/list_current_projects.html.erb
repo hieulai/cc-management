@@ -29,7 +29,7 @@
 			<td class="center">
 				<%= link_to("Tasklist", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
 				<%= link_to("Bids", {:action => 'bids', :id => project.id}, :class => 'action vew') %>
-				<%= link_to("Budget", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
+				<%= link_to("Budget", {:action => 'budget', :id => project.id}, :class => 'action vew') %>
 				<%= link_to("View", {:action => 'show_project', :id => project.id}, :class => 'action vew') %>
 				<%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :class => 'action edit') %>
 				<%= link_to("Convert", {:action => 'convert_project', :id => project.id}, :class => 'action edit') %>

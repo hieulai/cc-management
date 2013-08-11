@@ -1,0 +1,21 @@
+<tr class="category" id="category_<%= category_template.category.id %>">
+    <td colspan=9>
+        <h3>
+            <%= category_template.category.name %>
+        </h3>
+    </td>
+</tr>
+<% category_template.items.each do |item| %>
+  <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
+<% end %>
+<tr class="subtotal item_category_<%= category_template.category.id %>">
+    <td colspan=3>
+        <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
+    </td>
+    <td>$<div class="subtotal-amount"><%= category_template.items.map(&:amount).sum %></div></td>
+    <td></td>
+    <td></td>
+    <td>$<div class="subtotal-margin"><%= category_template.items.map(&:margin).sum %></div></td>
+    <td></td>
+    <td></td>
+</tr>
