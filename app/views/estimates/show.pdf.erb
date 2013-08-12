@@ -81,7 +81,7 @@
                 <td class="td-category left-bold">
                     <%= category_template.category.name %>
                 </td>
-                <td></td><td></td><td>0.00</td>
+                <td></td><td></td><td></td>
             </tr>
             <% category_template.items.each do |item| %>
                 <tr class="item item_category_<%= category_template.category.id %>" id="item_<%= item.id %>">
@@ -93,7 +93,7 @@
                     </td>
                     <td class="unit"><%= item.unit %></td>
                     <td>
-                        <%= item.price %>
+                        $<%= number_with_precision(item.price, precision: 2) %>
                     </td>
                 </tr>
             <% end %>
@@ -101,14 +101,14 @@
                 <td class="td-subtotal left-bold">
                     <%= category_template.category.name %> Subtotal
                 </td>
-                <td></td><td></td><td><%= subtotal %></td>
+                <td></td><td></td><td class="right-bold">$<%= number_with_precision(subtotal, precision: 2) %></td>
             </tr>
         <% end %>
             <tr class="tr-footer">
                 <td colspan="3" class="right-bold">
                     TOTAL
                 </td>
-                <td>$<%= total %></td>
+                <td>$<%= number_with_precision(total, precision: 2) %></td>
             </tr>
     </tbody>
 </table>
