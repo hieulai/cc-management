@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
+
+  before_filter :authenticate_user!
   
-  before_filter :confirm_logged_in, :except => [:login, :process_login, :logout, :register, :process_registration]
-  
-  layout 'application', except: [:login, :register]
+  layout 'application'
   
   def list
     @user = User.where("builder_id = ?", session[:builder_id])
@@ -54,57 +54,6 @@ class UsersController < ApplicationController
   def destroy
     User.find(params[:id]).destroy
     redirect_to(:action => 'list')
-  end
-    
-    
-  def register
-    @builder = Builder.new
-    @user =  User.new
-    render layout: 'public'
-  end
-  
-  def process_registration
-    #Instantiate a new object using form parameters
-    @builder = Builder.new(params[:builder])
-    @user = User.new(params[:user])
-    @builder.save
-    @user.authority = "Owner"
-    @user.save
-    
-    #save subject
-    if @builder.users << @user
-      #if save succeeds, redirect to list action
-      redirect_to :action => 'process_login'
-    else
-      #if save fails, redisplay form to user can fix problems
-      render('register')
-    end
-  end
-  
-  
-  def login
-    render layout: 'public'
-  end
-  
-  def process_login
-    authorized_user = User.authenticate(params[:email],params[:password])
-    if authorized_user
-      session[:user_id] = authorized_user.id
-      session[:username] = authorized_user.full_name
-      session[:builder_id] = authorized_user.builder_id
-      @builder = Builder.find(authorized_user.builder_id)
-      session[:builder_name] = @builder.company_name
-      redirect_to(:controller => 'leads', :action => 'list_current_leads')
-    else
-      flash[:notice] = "Invalid email/password combination."
-      redirect_to(:action => 'login')
-    end
-  end
-  
-  def logout
-    session[:user_id] = nil
-    session[:builder_id] = nil
-    redirect_to(:controller => 'site', :action => 'index')
   end
   
 end

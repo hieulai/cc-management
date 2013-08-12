@@ -1,5 +1,5 @@
 class VendorsController < ApplicationController
-    before_filter :confirm_logged_in
+    before_filter :authenticate_user!
     
     def all
       @query = params[:query]

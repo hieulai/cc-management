@@ -1,0 +1,77 @@
+<h2>New Builder Registration</h2>
+
+<%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:multipart => true}) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+      <h2>User Details</h2>
+      <%= f.input :first_name %>
+      <%= f.input :last_name %>
+      <%= f.input :email, :required => false %>
+      <%= f.input :primary_phone %>
+      <%= f.input :password %>
+  </div>
+
+  <div class="form-inputs">
+      <h2>Company Details</h2>
+      <p>
+          <%= label_tag 'builder[company_name]', "Company Name" %>
+          <%= text_field_tag 'builder[company_name]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[tax_id]', "Tax ID" %>
+          <%= text_field_tag 'builder[tax_id]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[office_phone]', "Office Phone:" %>
+          <%= text_field_tag 'builder[office_phone]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[website]', "Website:" %>
+          <%= text_field_tag 'builder[website]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[address]', "Address:" %>
+          <%= text_field_tag 'builder[address]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[city]', "City:" %>
+          <%= text_field_tag 'builder[city]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[state]', "State:" %>
+          <%= text_field_tag 'builder[state]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[zipcode]', "Zipcode:" %>
+          <%= text_field_tag 'builder[zipcode]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[year_founded]', "Year Founded:" %>
+          <%= text_field_tag 'builder[year_founded]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[slogan]', "Slogan:" %>
+          <%= text_field_tag 'builder[slogan]' %>
+      </p>
+
+      <p>
+          <%= label_tag 'builder[logo]', "Logo:" %>
+          <%= file_field_tag 'builder[logo]' %>
+      </p>
+  </div>
+
+  <div class="form-actions">
+      <%= f.button :submit, "Create" %>
+  </div>
+
+<% end %>

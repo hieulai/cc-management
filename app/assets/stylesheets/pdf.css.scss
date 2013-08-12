@@ -1,3 +1,8 @@
+@mixin bold($align){
+  text-align: $align;
+  font-weight: bold;
+}
+
 table {
   border-collapse: collapse;
   border: solid 1px #000000;
@@ -24,14 +29,19 @@ table.item-list {
   }
   td.description{
     text-align: left;
+    text-indent: 20px;
+  }
+  td.unit, td.quantity{
+    text-align: center;
+  }
+  td.left-bold {
+     @include bold(left);
   }
   td.center-bold {
-      text-align: center;
-      font-weight: bold;
+    @include bold(center);
   }
   td.right-bold{
-      text-align: right;
-      font-weight: bold;
+    @include bold(right);
   }
 }
 
@@ -88,9 +98,6 @@ table.item-list {
       margin: 40px auto 0 auto;
       td {
         border: solid 1px #000000;
-      }
-      tr:last-child{
-        line-height: 60px;
       }
     }
   }

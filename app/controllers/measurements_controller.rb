@@ -1,6 +1,6 @@
 class MeasurementsController < ApplicationController
 
-  before_filter :confirm_logged_in
+  before_filter :authenticate_user!
   
   def list
     @measurements = Measurement.all

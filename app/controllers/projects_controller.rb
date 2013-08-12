@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
-  
-  before_filter :confirm_logged_in
+
+  before_filter :authenticate_user!
   
   def list_current_projects
     #Finds all projects for every Client that have a "Current Project" status
@@ -218,6 +218,10 @@ class ProjectsController < ApplicationController
   def destroy_bid
     Bid.find(params[:id]).destroy
     redirect_to(:action => 'bids')
+  end
+
+  def budget
+    @project = Project.find(params[:id])
   end
     
 end

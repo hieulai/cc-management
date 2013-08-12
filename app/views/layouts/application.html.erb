@@ -15,7 +15,7 @@
 			</br>
 				<%= (session[:username]) if session[:username] %>
 			</br>
-				<%= link_to("Logout", {:controller => 'users', :action => 'logout'}) %>
+				<%= link_to("Logout", destroy_user_session_url, :method => :delete) %>
 			<div id='username'>
 		</div>
 			<%= render partial: 'layouts/navigation' %>

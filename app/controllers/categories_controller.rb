@@ -1,6 +1,5 @@
 class CategoriesController < ApplicationController
-  
-  before_filter :confirm_logged_in
+  before_filter :authenticate_user!
   
   def list
     @categories = Category.where("builder_id = ?", session[:builder_id])

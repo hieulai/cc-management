@@ -1,0 +1,7 @@
+<div>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+    <h2>Budget for <%= @project.name  %> </h2>
+    <%- @project.estimates.each do |e| %>
+      <%= render :partial => 'template', :locals => {:template => e.template}  %>
+    <% end %>
+</div>
