@@ -346,10 +346,11 @@ ActiveRecord::Schema.define(:version => 20130807224739) do
     t.string   "last_name"
     t.string   "email"
     t.string   "primary_phone"
-    t.string   "hashed_password"
-    t.string   "salt"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.string   "legacy_hashed_password"
+    t.string   "legacy_salt"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.string   "encrypted_password",     :default => "", :null => false
   end
 
   add_index "users", ["builder_id"], :name => "index_users_on_builder_id"

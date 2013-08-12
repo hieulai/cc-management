@@ -2,7 +2,7 @@
 		<tr>
 					<th>Project Name</th>
 
-					<td><%= select(:project, :id, Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Lead").collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
+					<td><%= select(:project, :id, Project.where("builder_id = ? AND status = ? OR status = ?", session[:builder_id], "Current Lead", "Current Project").collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
 		</tr>
 		<tr>
 			<th>Template</th>
