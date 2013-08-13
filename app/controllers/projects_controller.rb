@@ -76,18 +76,6 @@ class ProjectsController < ApplicationController
     @tasklist = Tasklist.find(params[:id])
     @project = Project.find(@tasklist.project_id)
     if @tasklist.update_attributes(params[:tasklist])
-      @count = 0.00
-      @completed = 0.00
-      @next_tasks = Array.new
-      @string = ''
-      @tasklist.tasks.each do |task|
-        @count+=1
-        if task.completed == true
-          @completed+=1
-        end
-      end
-      @project.progress = @completed/@count*100.00
-      @project.save
       #if save succeeds, redirect to list action
       redirect_to :action => 'list_current_projects'
     else
