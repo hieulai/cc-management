@@ -85,12 +85,7 @@ class ProjectsController < ApplicationController
         if task.completed == true
           @completed+=1
         end
-        if @next_tasks.length < 5 && task.completed == false
-          @string = task.name
-          @next_tasks.push @string
-        end
       end
-      @project.next_tasks = @next_tasks
       @project.progress = @completed/@count*100.00
       @project.save
       #if save succeeds, redirect to list action
