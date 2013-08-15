@@ -6,7 +6,7 @@ class Item < ActiveRecord::Base
   has_many :templates, through: :categories_templates_items
   has_and_belongs_to_many :categories_templates
 
-  attr_accessible :name, :description, :qty, :unit, :cost, :margin, :default, :notes, :file
+  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file
 
   validates :name, presence: true
 
@@ -17,21 +17,26 @@ class Item < ActiveRecord::Base
   after_initialize :default_values
 
   def price
-    self.margin ||= 0
     self.amount + self.margin
   end
 
   def amount
-    self.qty ||= 1
-    self.cost ||= 0
-    self.cost * self.qty
+    self.estimated_cost * self.qty
+  end
+
+  def committed_profit
+    (self.amount - self.committed_cost) + self.margin
+  end
+
+  def actual_profit
+    (self.amount - self.actual_cost) + self.margin
   end
 
   def self.to_csv(items, options = {})
     CSV.generate(options = {}) do |csv|
       csv << HEADERS
       items.each do |item|
-        csv << [item.name, item.description, item.cost, item.unit, item.margin, item.price, item.notes]
+        csv << [item.name, item.description, item.estimated_cost, item.unit, item.margin, item.price, item.notes]
       end
     end
   end
@@ -67,7 +72,9 @@ class Item < ActiveRecord::Base
   private
   def default_values
     self.qty ||= 1
-    self.cost ||= 0
+    self.estimated_cost ||= 0
+    self.committed_cost ||= 0
+    self.actual_cost ||= 0
     self.margin ||= 0
   end
 end

@@ -8,17 +8,21 @@
         <%= item.description %>
     </td>
     <td>
-        $<div class="amount"><%= item.amount %></div>
+        $<div class="amount"><%= number_to_price(item.amount) %></div>
     </td>
     <td>
+        $<div class="amount"><%= number_to_price(item.committed_cost) %></div>
     </td>
     <td>
+        $<div class="amount"><%= number_to_price(item.actual_cost) %></div>
     </td>
     <td>
-        $<div class="margin"><%= item.margin %></div>
+        $<div class="margin"><%= number_to_price(item.margin) %></div>
     </td>
     <td>
+        $<div class="margin"><%= number_to_price(item.committed_profit) %></div>
     </td>
     <td>
+        $<div class="margin"><%= number_to_price(item.actual_profit) %></div>
     </td>
 </tr>

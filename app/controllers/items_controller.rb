@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv {send_data Item.to_csv(@items)}
-      format.xls { send_data @items.to_xls(:headers => Item::HEADERS, :columns => [:name, :description, :cost, :unit, :margin, :price, :notes]), content_type: 'application/vnd.ms-excel', filename: 'items.xls' }
+      format.xls { send_data @items.to_xls(:headers => Item::HEADERS, :columns => [:name, :description, :estimated_cost, :unit, :margin, :price, :notes]), content_type: 'application/vnd.ms-excel', filename: 'items.xls' }
     end
   end
 

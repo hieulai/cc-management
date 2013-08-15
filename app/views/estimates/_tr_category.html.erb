@@ -26,8 +26,8 @@
     <td colspan=6>
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>
-    <td>$<div class="subtotal-amount"><%= category_template.items.map(&:amount).sum %></div></td>
-    <td>$<div class="subtotal-margin"><%= category_template.items.map(&:margin).sum %></div></td>
-    <td>$<div class="subtotal-price"><%= category_template.items.map(&:price).sum %></div></td>
+    <td>$<div class="subtotal-amount"><%= number_to_price(category_template.items.map(&:amount).sum) %></div></td>
+    <td>$<div class="subtotal-margin"><%= number_to_price(category_template.items.map(&:margin).sum) %></div></td>
+    <td>$<div class="subtotal-price"><%= number_to_price(category_template.items.map(&:price).sum) %></div></td>
     <td></td>
 </tr>

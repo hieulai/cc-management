@@ -41,9 +41,9 @@
         <td colspan=6>
             GRAND TOTAL
         </td>
-        <td>$<div class="total-amount"><%= amount %></div></td>
-        <td>$<div class="total-margin"><%= margin %></div></td>
-        <td>$<div class="total-price"><%= total %></div></td>
+        <td>$<div class="total-amount"><%= number_to_price(amount) %></div></td>
+        <td>$<div class="total-margin"><%= number_to_price(margin) %></div></td>
+        <td>$<div class="total-price"><%= number_to_price(total) %></div></td>
         <td></td>
     </tr>
     </tbody>

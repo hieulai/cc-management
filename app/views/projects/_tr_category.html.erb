@@ -12,10 +12,10 @@
     <td colspan=3>
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>
-    <td>$<div class="subtotal-amount"><%= category_template.items.map(&:amount).sum %></div></td>
-    <td></td>
-    <td></td>
-    <td>$<div class="subtotal-margin"><%= category_template.items.map(&:margin).sum %></div></td>
-    <td></td>
-    <td></td>
+    <td>$<div class="subtotal-amount"><%= number_to_price(category_template.items.map(&:amount).sum) %></div></td>
+    <td>$<div><%= number_to_price(category_template.items.map(&:committed_cost).sum) %></div></td>
+    <td>$<div><%= number_to_price(category_template.items.map(&:actual_cost).sum) %></div></td>
+    <td>$<div class="subtotal-margin"><%= number_to_price(category_template.items.map(&:margin).sum) %></div></td>
+    <td>$<div><%= number_to_price(category_template.items.map(&:committed_profit).sum) %></div></td>
+    <td>$<div><%= number_to_price(category_template.items.map(&:actual_profit).sum) %></div></td>
 </tr>

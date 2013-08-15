@@ -22,4 +22,9 @@ module ApplicationHelper
     end
   end
 
+  def number_to_price n
+    n = n.nil? ? 0 : n
+    number_with_precision(n, precision: 2)
+  end
+
 end

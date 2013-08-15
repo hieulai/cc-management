@@ -15,12 +15,19 @@
     <tbody>
     <%- amount = 0
         margin = 0
+        committed_cost = 0
+        actual_cost = 0
+        committed_profit = 0
+        actual_profit = 0
     %>
     <%- template.categories_templates.each do |category_template| %>
-      <%- subamount = category_template.items.map(&:amount).sum
-          submargin = category_template.items.map(&:margin).sum
-          amount+= subamount
-          margin+= submargin
+      <%- amount+= category_template.items.map(&:amount).sum
+          margin+= category_template.items.map(&:margin).sum
+          committed_cost+= category_template.items.map(&:committed_cost).sum
+          actual_cost+= category_template.items.map(&:actual_cost).sum
+          committed_profit+= category_template.items.map(&:committed_profit).sum
+          actual_profit+= category_template.items.map(&:actual_profit).sum
+
       %>
       <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
     <% end %>
@@ -28,10 +35,12 @@
         <td colspan=3>
             GRAND TOTAL
         </td>
-        <td>$<div class="total-amount"><%= amount %></div></td>
-        <td></td><td></td>
-        <td>$<div class="total-margin"><%= margin %></div></td>
-        <td></td><td></td>
+        <td>$<div class="total-amount"><%= number_to_price(amount) %></div></td>
+        <td>$<div><%= number_to_price(committed_cost) %></div></td>
+        <td>$<div><%= number_to_price(actual_cost) %></div></td>
+        <td>$<div class="total-margin"><%= number_to_price(margin) %></div></td>
+        <td>$<div><%= number_to_price(committed_profit) %></div></td>
+        <td>$<div><%= number_to_price(actual_profit) %></div></td>
     </tr>
     </tbody>
 </table>
