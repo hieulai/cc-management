@@ -16,7 +16,7 @@ class Project < ActiveRecord::Base
     if tasklist.present? && tasklist.tasks.any?
      (1 - incompleted_tasks.count.to_f/tasklist.tasks.count.to_f)*100.00
     else
-      100.00
+      0.00
     end
   end
 

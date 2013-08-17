@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   
   def list_current_projects
     #Finds all projects for every Client that have a "Current Project" status
-    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Project").order(:progress)
+    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Project").sort_by {|p| p.current_progress}
     @next_tasks = params[:next_tasks]
   end
   
