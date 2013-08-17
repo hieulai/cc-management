@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   #validates :password, length: {in: 1..20}
   validates :email, presence: true, uniqueness: true
 
-  devise :database_authenticatable, :registerable
+  devise :database_authenticatable, :registerable, :recoverable
 
   #public methods
   def full_name

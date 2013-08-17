@@ -12,10 +12,11 @@ class RegistrationsController < Devise::RegistrationsController
     #save subject
     if @builder.users << @user
       #if save succeeds, redirect to list action
-      redirect_to new_user_session_path
+      sign_up(resource_name, resource)
+      respond_with resource, :location => after_sign_up_path_for(resource)
     else
       #if save fails, redisplay form to user can fix problems
-      render :create
+      render :new
     end
   end
 end

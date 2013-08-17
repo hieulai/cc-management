@@ -1,5 +1,5 @@
 Cc::Application.routes.draw do
-  devise_for :users, :controllers => { :sessions => "sessions", :registrations => "registrations" }
+  devise_for :users, :controllers => { :sessions => "sessions", :registrations => "registrations", :passwords => "passwords" }
 
   root to: 'site#index'
   # The priority is based upon order of creation:
