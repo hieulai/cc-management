@@ -29,7 +29,7 @@
       <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
     <% end %>
     <tr class="add add-category">
-        <td colspan=9>
+        <td colspan=10>
             <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @template.id}, :remote => true do |f| %>
               Category:
               <%= f.select :id, @categories.map { |c| [c.name, c.id] } %>
