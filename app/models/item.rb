@@ -6,7 +6,7 @@ class Item < ActiveRecord::Base
   has_many :templates, through: :categories_templates_items
   has_and_belongs_to_many :categories_templates
 
-  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file
+  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed
 
   validates :name, presence: true
 

@@ -9,7 +9,7 @@
         <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :confirm => 'Are you sure you want to delete this category and all its associated items?', :remote => true, :class => 'remove-category' %>
     </td>
 </tr>
-<% category_template.items.each do |item| %>
+<% category_template.items.order(:change_order).each do |item| %>
   <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <tr style="display: none" class="add add-item item_category_<%= category_template.category.id %>">

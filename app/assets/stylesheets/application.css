@@ -27,6 +27,10 @@ ul#tasksContainer li label:hover{
     background: gainsboro;
 }
 
+.change_order{
+    background-color: lightgoldenrodyellow;
+}
+
 ul.ui-autocomplete {
   position: absolute;
   list-style: none;

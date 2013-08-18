@@ -98,6 +98,26 @@ class ProjectsController < ApplicationController
       render('edit_tasklist')
     end
   end
+
+  def change_orders
+    @project = Project.find(params[:id])
+  end
+
+  def submit_change_orders
+    @project = Project.find(params[:id])
+    @category_template = CategoriesTemplate.find(params[:category_template])
+    @item = Item.find(params[:item][:id])
+    @co_item = @item.dup
+    @co_item.builder_id = nil
+    @co_item.assign_attributes(params[:item])
+    @co_item.change_order = true
+    if @co_item.save
+      @category_template.items << @co_item
+      redirect_to :action => 'list_current_projects'
+    else
+      render :change_orders
+    end
+  end
   
   def tasklist
     @project = Project.find(params[:id])
@@ -205,6 +225,13 @@ class ProjectsController < ApplicationController
 
   def budget
     @project = Project.find(params[:id])
+  end
+
+  def show_item
+    @item = Item.find(params[:item][:id])
+    respond_to do |format|
+      format.js {}
+    end
   end
     
 end

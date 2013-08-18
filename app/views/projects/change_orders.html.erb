@@ -1,0 +1,39 @@
+<div>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+    <h2>Change Orders for Project <%= @project.name %></h2>
+    <%= form_tag url_for(:action => 'submit_change_orders', :id => @project.id) do%>
+      <table summary="CO form fields">
+          <tr>
+              <th>Category</th>
+              <td><%= select_tag(:category_template, options_from_collection_for_select(@project.estimates.first.template.categories_templates, "id", "category_name"), :include_blank => true) %>
+          </tr>
+
+          <tr>
+              <th>Item</th>
+              <td><%= select_tag('item[id]', options_from_collection_for_select(Item.where("builder_id = ?", session[:builder_id]), "id", "name"), :include_blank => true,
+                                 :data => { :remote => true, :url => url_for(:action => "show_item") }) %>
+          </tr>
+          <tr>
+              <th>Description</th>
+              <td><%= text_field_tag('item[description]', nil , :size => 100) %>
+          </tr>
+          <tr>
+              <th>Quantity</th>
+              <td><%= text_field_tag('item[qty]') %>
+          </tr>
+          <tr>
+              <th>Amount</th>
+              <td><%= text_field_tag('item[estimated_cost]') %>
+          </tr>
+          <tr>
+              <th>Unit</th>
+              <td><%= text_field_tag('item[unit]') %>
+          </tr>
+          <tr>
+              <th>Margin</th>
+              <td><%= text_field_tag('item[margin]') %>
+          </tr>
+      </table>
+      <%= submit_tag "Save" %>
+<% end %>
+</div>

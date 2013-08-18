@@ -5,7 +5,7 @@
         </h3>
     </td>
 </tr>
-<% category_template.items.each do |item| %>
+<% category_template.items.order(:change_order).each do |item| %>
   <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
