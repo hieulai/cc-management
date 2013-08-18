@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130807224739) do
+ActiveRecord::Schema.define(:version => 20130818015438) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -180,15 +180,19 @@ ActiveRecord::Schema.define(:version => 20130807224739) do
     t.integer  "category_id"
     t.string   "name"
     t.string   "description"
-    t.decimal  "qty",         :precision => 10, :scale => 2
+    t.decimal  "qty",            :precision => 10, :scale => 2
     t.string   "unit"
-    t.decimal  "cost",        :precision => 10, :scale => 2
-    t.decimal  "margin",      :precision => 10, :scale => 2
+    t.decimal  "estimated_cost", :precision => 10, :scale => 2
+    t.decimal  "margin",         :precision => 10, :scale => 2
     t.boolean  "default"
     t.text     "notes"
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
     t.string   "file"
+    t.decimal  "committed_cost", :precision => 10, :scale => 2
+    t.decimal  "actual_cost",    :precision => 10, :scale => 2
+    t.boolean  "change_order",                                  :default => false, :null => false
+    t.boolean  "client_billed",                                 :default => false, :null => false
   end
 
   add_index "items", ["builder_id"], :name => "index_items_on_builder_id"
@@ -351,6 +355,8 @@ ActiveRecord::Schema.define(:version => 20130807224739) do
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
   end
 
   add_index "users", ["builder_id"], :name => "index_users_on_builder_id"

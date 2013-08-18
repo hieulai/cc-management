@@ -70,14 +70,14 @@ class EstimatesController < ApplicationController
       @template = @estimate.template
       @items = Item.where(builder_id: session[:builder_id]).order(:name)
       @categories = Category.where(builder_id: session[:builder_id]).order(:name)
+      @project = @estimate.project
     end
 
     def update
       #Find object using form parameters
       @estimate = Estimate.find(params[:id])
-      #@template = Template.find(params[:template][:id])
-      #@estimate.template = @template.clone_with_associations
-      #Update subject
+      @project = Project.find(params[:project][:id])
+      @estimate.project = @project
       if @estimate.update_attributes(params[:estimate])
         #if save succeeds, redirect to list action
         redirect_to(:action => 'list_current')
