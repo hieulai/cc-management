@@ -1,0 +1,26 @@
+<div>
+	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+	<h2>Add New Specification</h2>
+	
+	<%= form_for @specification, :url => {:action => 'create_specification', :id => @project.id} do |f| %>
+	
+	<% if @specification.errors.any? %>
+	  <div id="errorExplanation">
+	    <h2><%= pluralize(@specification.errors.count, "Error") %> prohibited
+	      this post from being saved:</h2>
+	    <ul>
+	    <% @specification.errors.full_messages.each do |msg| %>
+	      <li><%= msg %></li>
+	    <% end %>
+	    </ul>
+	  </div>
+	  <% end %>
+	<%= render(:partial => "spec_form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Create") %>
+	</div>
+	
+	<% end %>
+	
+</div>

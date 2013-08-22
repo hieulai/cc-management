@@ -27,10 +27,11 @@
 		<% @projects.each do |project| %>
 		<tr>
 			<td class="center">
-				<%= link_to("Tasklist", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
+				<%= link_to("Tasks", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
 				<%= link_to("Bids", {:action => 'bids', :id => project.id}, :class => 'action vew') %>
 				<%= link_to("Budget", {:action => 'budget', :id => project.id}, :class => 'action vew') %>
-        <%= link_to("CO", {:action => 'change_orders', :id => project.id}, :class => 'action edit') %>
+        		<%= link_to("COs", {:action => 'change_orders', :id => project.id}, :class => 'action edit') %>
+				<%= link_to("Specs", {:action => 'specifications', :id => project.id}, :class => 'action edit') %>
 				<%= link_to("View", {:action => 'show_project', :id => project.id}, :class => 'action vew') %>
 				<%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :class => 'action edit') %>
 				<%= link_to("Convert", {:action => 'convert_project', :id => project.id}, :class => 'action edit') %>

@@ -1,0 +1,37 @@
+<div>
+	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+	<h1>Specifications for: <%= @project.name%></h1>
+	</br>
+	<p class="trigger">Instructions >></p>
+	<div class="instructions">
+		<p>Default paragraph. </p>
+	</div>
+	
+	</br>
+	</br>
+
+		<%= link_to("Add Specification >>", {:action => 'new_specification', :id => @project.id}, :class => 'action vew') %>
+	</br>
+	</br>
+		<table class="grid-view" summary="Project List">
+			<tr class="header">
+				<th>Actions</th>
+				<th>Category</th>
+				<th>Name</th>
+				<th>Notes</th>
+			</tr>
+			<% @specifications.each do |spec| %>
+
+			<tr>
+				<td class="center">
+					<%= link_to("Edit", {:action => 'edit_specification', :id => spec.id}, :class => 'action edit') %>
+					<%= link_to("Delete", {:action => 'delete_specification', :id => spec.id}, :class => 'action edit') %>
+				</td>
+				<td><%= spec.category.name %></td>
+				<td><%= spec.name %></td>
+				<td><%= spec.description %></td>
+		
+			</tr>
+			<% end %>
+		</table>
+</div>

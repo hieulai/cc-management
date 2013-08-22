@@ -1,0 +1,19 @@
+<h2>Specification Info:</h2>
+
+<p>
+	<%= f.label :category, "Category" %>
+	<%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).order(:name).collect{|s|[s.name, s.id]}) %>
+</p>
+<p>
+	<%= f.label :name, "Name" %>
+	<%= f.text_field(:name) %>
+</p>
+<p>
+	<%= f.label :description, "Notes" %>
+	<%= f.text_area(:description) %>
+</p>
+
+
+
+
+

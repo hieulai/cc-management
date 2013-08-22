@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130818015438) do
+ActiveRecord::Schema.define(:version => 20130822001455) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -84,13 +84,15 @@ ActiveRecord::Schema.define(:version => 20130818015438) do
     t.decimal  "margin_total"
     t.decimal  "price_total"
     t.boolean  "default"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.integer  "bid_id"
+    t.integer  "specification_id"
   end
 
   add_index "categories", ["bid_id"], :name => "index_categories_on_bid_id"
   add_index "categories", ["builder_id"], :name => "index_categories_on_builder_id"
+  add_index "categories", ["specification_id"], :name => "index_categories_on_specification_id"
   add_index "categories", ["template_id"], :name => "index_categories_on_template_id"
 
   create_table "categories_items", :id => false, :force => true do |t|
@@ -252,6 +254,17 @@ ActiveRecord::Schema.define(:version => 20130818015438) do
 
   add_index "projects", ["builder_id"], :name => "index_projects_on_builder_id"
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"
+
+  create_table "specifications", :force => true do |t|
+    t.integer  "project_id"
+    t.string   "name"
+    t.string   "description"
+    t.boolean  "completed"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "specifications", ["project_id"], :name => "index_specifications_on_project_id"
 
   create_table "subcontractors", :force => true do |t|
     t.integer  "builder_id"

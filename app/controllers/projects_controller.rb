@@ -99,6 +99,66 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def specifications
+    @project = Project.find(params[:id])
+    @specifications = @project.specifications
+  end
+  
+  def new_specification
+    @project = Project.find(params[:id])
+    @specification = Specification.new
+  end
+  
+  def create_specification
+    #Instantiate a new object using form parameters
+    @project = Project.find(params[:id])
+    @specification = Specification.new(params[:specification])
+    @category = Category.find(params[:category][:id])
+    @specification.category = @category
+    #save subject
+    if @specification.save 
+      @project.specifications << @specification
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'specifications', :id => @specification.project_id)
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('new_specification')
+    end
+  end
+  
+  def edit_specification
+    @specification = Specification.find(params[:id])
+    @category = @specification.category
+  end
+  
+  def update_specification
+    #Instantiate a new object using form parameters
+    @specification = Specification.find(params[:id])
+    @category = Category.find(params[:category][:id])
+    @specification.category = @category
+    #save subject
+    if @specification.update_attributes(params[:specification])
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'specifications', :id => @specification.project_id)
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('new_specification')
+    end
+  end  
+  
+  def delete_specification
+    @specification = Specification.find(params[:id])
+  end
+  
+  def destroy_specification
+    @specification = Specification.find(params[:id])
+    @id = @specification.project_id
+    @specification.destroy
+    redirect_to(:action => 'specifications', :id => @id)
+    
+  end
+  
+  
   def change_orders
     @project = Project.find(params[:id])
   end
@@ -219,8 +279,10 @@ class ProjectsController < ApplicationController
   end
   
   def destroy_bid
-    Bid.find(params[:id]).destroy
-    redirect_to(:action => 'bids')
+    @bid = Bid.find(params[:id])
+    @id = @bid.project_id
+    @bid.destroy
+    redirect_to(:action => 'bids', :id => @id)
   end
 
   def budget
