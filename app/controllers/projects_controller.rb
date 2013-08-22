@@ -113,11 +113,13 @@ class ProjectsController < ApplicationController
     #Instantiate a new object using form parameters
     @project = Project.find(params[:id])
     @specification = Specification.new(params[:specification])
-    @category = Category.find(params[:category][:id])
-    @specification.category = @category
+    
     #save subject
     if @specification.save 
+      @category = Category.find(params[:category][:id])
+      @specification.category = @category
       @project.specifications << @specification
+      @specification.save
       #if save succeeds, redirect to list action
       redirect_to(:action => 'specifications', :id => @specification.project_id)
     else

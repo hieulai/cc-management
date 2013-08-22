@@ -3,4 +3,6 @@ class Specification < ActiveRecord::Base
   has_one :category  
   
   attr_accessible :name, :description, :completed
+  
+  validates :category, presence: true
 end
