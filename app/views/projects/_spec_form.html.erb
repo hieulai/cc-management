@@ -2,7 +2,7 @@
 
 <p>
 	<%= f.label :category, "Category" %>
-	<%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).order(:name).collect{|s|[s.name, s.id]}, :include_blank => true) %>
+	<%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).order(:name).collect{|s|[s.name, s.id]}) %>
 </p>
 <p>
 	<%= f.label :name, "Name" %>
