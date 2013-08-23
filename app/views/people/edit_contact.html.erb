@@ -1,0 +1,21 @@
+<div>
+	<%= render(:partial => "layouts/people_sub_menu")%>
+	<h1 class="center">
+		Edit - <%= @contact.full_name %>
+	</h1>
+	
+	<%= link_to("View >>", {:action => 'show_contact', :id => @contact.id}) %>
+	</br>
+	</br>
+	<%= link_to("Delete >>", {:action => 'delete_contact', :id => @contact.id}) %>
+	<%= form_for @contact, :url => {:action => 'update_contact', :id => @contact.id} do |f| %>
+	
+	<%= render(:partial => "contact_form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update") %>
+	</div>
+	
+	<% end %>
+	
+</div>

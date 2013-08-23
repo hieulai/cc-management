@@ -1,0 +1,26 @@
+<div>
+	<%= render(:partial => "layouts/people_sub_menu")%>
+	<h2>Create New Contact</h2>
+	
+	<%= form_for @contact, :url => {:action => 'create_contact'} do |f| %>
+	
+	<% if @contact.errors.any? %>
+	  <div id="errorExplanation">
+	    <h2><%= pluralize(@contact.errors.count, "Error") %> prohibited
+	      this post from being saved:</h2>
+	    <ul>
+	    <% @contact.errors.full_messages.each do |msg| %>
+	      <li><%= msg %></li>
+	    <% end %>
+	    </ul>
+	  </div>
+	  <% end %>
+	<%= render(:partial => "contact_form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Create") %>
+	</div>
+	
+	<% end %>
+	
+</div>

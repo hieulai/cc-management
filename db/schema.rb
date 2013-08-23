@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130822151005) do
+ActiveRecord::Schema.define(:version => 20130823013013) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -142,6 +142,27 @@ ActiveRecord::Schema.define(:version => 20130822151005) do
   end
 
   add_index "clients", ["builder_id"], :name => "index_clients_on_builder_id"
+
+  create_table "contacts", :force => true do |t|
+    t.integer  "builder_id"
+    t.string   "primary_first_name"
+    t.string   "primary_last_name"
+    t.string   "primary_email"
+    t.string   "primary_phone1"
+    t.string   "primary_phone2"
+    t.string   "primary_phone1_tag"
+    t.string   "primary_phone2_tag"
+    t.string   "website"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zipcode"
+    t.text     "notes"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "contacts", ["builder_id"], :name => "index_contacts_on_builder_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0

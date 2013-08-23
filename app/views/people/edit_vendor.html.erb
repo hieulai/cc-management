@@ -1,0 +1,26 @@
+<div>
+	<%= render(:partial => "layouts/people_sub_menu")%>
+	<h1 class="center">
+		Edit -
+		<% if @vendor.company == '' %>
+			<%= @vendor.full_name %>
+		<% else %>
+			<%= @vendor.company %>
+		<% end %>
+	</h1>
+	
+	<%= link_to("View >>", {:action => 'show_vendor', :id => @vendor.id}) %>
+	</br>
+	</br>
+	<%= link_to("Delete >>", {:action => 'delete_vendor', :id => @vendor.id}) %>
+	<%= form_for @vendor, :url => {:action => 'update_vendor', :id => @vendor.id} do |f| %>
+	
+	<%= render(:partial => "vendor_form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update") %>
+	</div>
+	
+	<% end %>
+	
+</div>
