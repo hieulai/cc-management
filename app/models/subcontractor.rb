@@ -4,6 +4,7 @@ class Subcontractor < ActiveRecord::Base
   attr_accessible :company,:first_name,:last_name,:email,:primary_phone,:secondary_phone,:website,:address,:city,:state,:zipcode,:notes, 
   :trade, :primary_phone_tag, :secondary_phone_tag, :file
   
+  
   scope :search, lambda{|query| where("company ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ? OR notes ILIKE ? OR trade ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")} 
   

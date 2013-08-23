@@ -11,6 +11,16 @@ class Vendor < ActiveRecord::Base
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")} 
   
   validates :vendor_type, presence: true
+  validates :trade, presence: { message: "cannot be blank for Subcontractors. Consider entering something such as: Framer, Plumber, Electrician, etc."}, if: :vendor_is_subcontractor?
+  validates :company, presence: { message: "and Primary First Name cannot both be blank."}, if: :name_is_blank?
+  
+  def vendor_is_subcontractor?
+      vendor_type == "Subcontractor"
+  end
+  
+  def name_is_blank?
+      primary_first_name == ""
+  end
   
   HEADERS = ["Vendor_Type", "Trade", "Company", "Primary_First_Name", "Primary_Last_Name", "Primary_Email", "Primary_Phone1","Primary_Phone1_Tag", "Primary_Phone2","Primary_Phone2_Tag",
        "Secondary_First_Name", "Secondary_Last_Name", "Secondary_Email","Secondary_Phone1", "Secondary_Phone1_Tag", "Secondary_Phone2", "Secondary_Phone2_Tag", 
