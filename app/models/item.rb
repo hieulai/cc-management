@@ -17,7 +17,7 @@ class Item < ActiveRecord::Base
   after_initialize :default_values
 
   def price
-    self.amount + self.margin
+    self.amount +  self.margin * self.qty
   end
 
   def amount
