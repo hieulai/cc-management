@@ -1,7 +1,7 @@
 <div id='mainmenu'>
   <ul>
-    <li class="<%= active_page('undifiend', 'nav') %>">
-        <%= link_to("Prospecting", '#', {:action => 'show'}, :class => 'action edit')%>
+    <li class="<%= active_page('list', 'nav') %>">
+        <%= link_to("Prospecting", {:controller => 'prospecting', :action => 'list'}, :class => 'menu item')%>
         <div class="arrow"></div>
     </li>
     <li class="<%= active_page('list_current_leads, new, list_past_leads', 'nav') %>">

@@ -1,0 +1,26 @@
+<div>
+	<%= render(:partial => "layouts/prospecting_sub_menu")%>
+	<h1 class="center">
+		Edit -
+		<% if @prospect.company == '' %>
+			<%= @prospect.full_name %>
+		<% else %>
+			<%= @prospect.company %>
+		<% end %>
+	</h1>
+	
+	<%= link_to("View >>", {:action => 'show', :id => @prospect.id}) %>
+	</br>
+	</br>
+	<%= link_to("Delete >>", {:action => 'delete', :id => @prospect.id}) %>
+	<%= form_for @prospect, :url => {:action => 'update', :id => @prospect.id} do |f| %>
+	
+	<%= render(:partial => "form", :locals => {:f => f})%>
+	
+	<div class="form-buttons">
+		<%= submit_tag("Update") %>
+	</div>
+	
+	<% end %>
+	
+</div>
