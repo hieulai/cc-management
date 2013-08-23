@@ -53,6 +53,20 @@
 		</tr>
 		<% end %>
 		
+		<% @contacts.each do |x| %>
+		
+		<tr class="vendor-rows">
+			<td><a href='<%= x.id %>'></a>Other</td>
+			<td></td>
+			<td><%= x.full_name %></td>
+			<td><%= number_to_phone(x.primary_phone1, area_code: true) %></td>
+			<td><%= x.primary_email %></td>	
+			<td></td>	
+			<td><%= x.notes %></td>	
+			
+		</tr>
+		<% end %>
+		
 		
 	</table>
 </div>
@@ -80,6 +94,12 @@
 	});
 	$(".vendor-rows").dblclick(function() {
 		window.location.href = '/people/edit_vendor/' + $(this).find("a").attr("href");
+	});
+	$(".vendor-rows").click(function() {
+		window.location.href = '/people/show_contact/' + $(this).find("a").attr("href");	
+	});
+	$(".vendor-rows").dblclick(function() {
+		window.location.href = '/people/edit_contact/' + $(this).find("a").attr("href");
 	});
 </script>
 

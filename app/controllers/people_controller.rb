@@ -5,6 +5,7 @@ class PeopleController < ApplicationController
       @query = params[:query]
       @clients = Client.where("builder_id = ? AND status = ?", session[:builder_id], "Active").search(@query)
       @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search(@query)
+      @contacts = Contact.where("builder_id = ?", session[:builder_id]).search(@query)
     end
     
     def list_vendors
