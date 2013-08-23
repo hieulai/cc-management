@@ -2,8 +2,7 @@
 
 <p>
 	<%= f.label :categories_template, "Category" %>
-  <%= f.select(:categories_template_id, @project.estimates.first.template.categories_templates.sort_by {|c| c.category.name}.map { |c| [c.category.name, c.id] },
-    {:include_blank => true} , :data => {:remote => true, :url => url_for(:action => "show_categories_template_items")}) %>
+  <%= f.select(:categories_template_id, @project.estimates.any? ? @project.estimates.first.template.categories_templates.sort_by { |c| c.category.name }.map { |c| [c.category.name, c.id] } : Array.new, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_categories_template_items")}) %>
 </p>
 <p>
 	<%= f.label :vendor, "Vendor" %>
