@@ -239,10 +239,7 @@ class ProjectsController < ApplicationController
     #Instantiate a new object using form parameters
     @project = Project.find(params[:id])
     @bid = Bid.new(params[:bid])
-    @category = Category.find(params[:category][:id])
-    @vendor = Vendor.find(params[:vendor][:id])
-    @bid.category = @category
-    @bid.vendor = @vendor
+    @bid.amount = params[:item]
     #save subject
     if @bid.save
       @project.bids << @bid
@@ -256,17 +253,13 @@ class ProjectsController < ApplicationController
   
   def edit_bid
     @bid = Bid.find(params[:id])
-    @category = @bid.category
-    @vendor = @bid.vendor
+    @project = @bid.project
   end
   
   def update_bid
     #Instantiate a new object using form parameters
     @bid = Bid.find(params[:id])
-    @category = Category.find(params[:category][:id])
-    @vendor = Vendor.find(params[:vendor][:id])
-    @bid.category = @category
-    @bid.vendor = @vendor
+    @bid.amount = params[:item]
     #save subject
     if @bid.update_attributes(params[:bid])
       #if save succeeds, redirect to list action
@@ -294,6 +287,13 @@ class ProjectsController < ApplicationController
 
   def show_item
     @item = Item.find(params[:item][:id])
+    respond_to do |format|
+      format.js {}
+    end
+  end
+
+  def show_categories_template_items
+    @categories_template = CategoriesTemplate.find(params[:bid][:categories_template_id])
     respond_to do |format|
       format.js {}
     end

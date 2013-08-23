@@ -77,6 +77,9 @@ $(document).ready(function() {
           $(this).find(".position").val($(this).offset().top);
       })
     });
+    $(document).on('click', 'input[type="submit"]', function(){
+        $($(this).data("form")).submit();
+    })
 })
 
 //var add_fields = function(link, association, content){

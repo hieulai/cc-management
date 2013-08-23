@@ -1,16 +1,17 @@
 <h2>Bid Info:</h2>
 
 <p>
-	<%= f.label :category, "Category" %>
-	<%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).order(:name).collect{|s|[s.name, s.id]}) %>
-</p>
-<p>			
-	<%= f.label :vendor, "Vendor" %>
-	<%= select(:vendor, :id, Vendor.where("builder_id = ?", session[:builder_id]).order(:primary_first_name).collect{|s|[s.full_name, s.id]}) %>
+	<%= f.label :categories_template, "Category" %>
+  <%= f.select(:categories_template_id, @project.estimates.first.template.categories_templates.sort_by {|c| c.category.name}.map { |c| [c.category.name, c.id] },
+    {:include_blank => true} , :data => {:remote => true, :url => url_for(:action => "show_categories_template_items")}) %>
 </p>
 <p>
-	<%= f.label :amount, "Amount" %>
-	<%= f.text_field(:amount) %>
+	<%= f.label :vendor, "Vendor" %>
+	<%= f.select(:vendor_id, Vendor.where("builder_id = ?", session[:builder_id]).order(:primary_first_name).collect{|s|[s.full_name, s.id]}, {:include_blank => true}) %>
+</p>
+<p>
+	Amount
+	<span id="bid-amount" class="inline"></span>
 </p>
 <p>
 	<%= f.label :notes, "Notes" %>

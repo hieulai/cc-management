@@ -73,7 +73,4 @@ $(document).ready(function () {
         return false;
     });
     calculateTotals();
-    $(document).on('click', 'input[type="submit"]', function(){
-        $($(this).data("form")).submit();
-    })
 })

@@ -16,11 +16,11 @@
 	  </div>
 	  <% end %>
 	<%= render(:partial => "bid_form", :locals => {:f => f})%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Update") %>
-	</div>
-	
+  <%= render(:partial => "bid_item", :locals => {:bid => @bid, :categories_template => @bid.categories_template})%>
 	<% end %>
+
+  <div class="form-buttons">
+        <%= submit_tag("Update", :data => {:form => ".edit_bid"}) %>
+  </div>
 	
 </div>

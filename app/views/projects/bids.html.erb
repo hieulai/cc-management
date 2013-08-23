@@ -31,15 +31,15 @@
 					<%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'action edit') %>
 					<%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'action edit') %>
 				</td>
-				<td><%= bid.category.name %></td>
-				<td><%= bid.vendor.full_name %></td>
+				<td><%= bid.categories_template.category.name %></td>
+				<td><%= bid.vendor.full_name if bid.vendor.present? %></td>
 				<td><%= bid.notes %></td>
-				<td class="right"><%= number_to_currency(bid.amount) %></td>
+				<td class="right"><%= number_to_currency(bid.total_amount) %></td>
 				<td class="center"><%= bid.chosen %></td>
 				
 				<% 
 					if bid.chosen == true
-						@total_costs = @total_costs + bid.amount 
+						@total_costs = @total_costs + bid.total_amount
 					end
 				%>
 			</tr>
