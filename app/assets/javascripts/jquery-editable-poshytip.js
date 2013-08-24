@@ -107,7 +107,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                     this.error(false);
                     this.input.$input.removeAttr('disabled');
                     this.$form.find('.editable-submit').removeAttr('disabled');
-                    this.value = $(this.options.scope).hasClass("price") ? currency_to_number(this.value) : this.value
+                    this.value = $(this.options.scope).hasClass("currency") ? currency_to_number(this.value) : this.value
                     this.input.value2input(this.value);
                     //attach submit handler
                     this.$form.submit($.proxy(this.submit, this));
@@ -2269,7 +2269,7 @@ To create your own input you can inherit from this class.
         @param {DOMElement} element
        **/
        value2html: function(value, element) {
-           value = $(element).hasClass("price") ? number_to_currency(value, 2, '.', ',') : value;
+           value = $(element).hasClass("currency") ? number_to_currency(value, 2, '.', ',') : value;
            $(element).text($.trim(value));
        },
 

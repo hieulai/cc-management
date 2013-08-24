@@ -13,9 +13,9 @@
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>
     <td><%= price_tag(category_template.items.map(&:amount).compact.sum, "subtotal-amount") %></td>
-    <td><%= price_tag(category_template.items.map(&:committed_cost).compact.sum) %></td>
-    <td><%= price_tag(category_template.items.map(&:actual_cost).compact.sum) %></td>
+    <td><%= price_tag(category_template.items.map(&:committed_cost).compact.sum) if category_template.items.map(&:committed_cost).compact.any? %></td>
+    <td><%= price_tag(category_template.items.map(&:actual_cost).compact.sum) if category_template.items.map(&:actual_cost).compact.any? %></td>
     <td><%= price_tag(category_template.items.compact.map(&:margin).sum, "subtotal-margin") %></td>
-    <td><%= price_tag(category_template.items.map(&:committed_profit).compact.sum) %></td>
-    <td><%= price_tag(category_template.items.map(&:actual_profit).compact.sum) %></td>
+    <td><%= price_tag(category_template.items.map(&:committed_profit).compact.sum) if category_template.items.map(&:committed_profit).compact.any? %></td>
+    <td><%= price_tag(category_template.items.map(&:actual_profit).compact.sum) if category_template.items.map(&:actual_profit).compact.any? %></td>
 </tr>

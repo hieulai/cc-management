@@ -36,11 +36,11 @@
             GRAND TOTAL
         </td>
         <td><%= price_tag(amount, "total-amount") %></td>
-        <td><%= price_tag(committed_cost) %></td>
-        <td><%= price_tag(actual_cost) %></td>
+        <td><%= price_tag(committed_cost) unless committed_cost == 0 %></td>
+        <td><%= price_tag(actual_cost) unless actual_cost == 0 %></td>
         <td><%= price_tag(margin, "total-margin") %></td>
-        <td><%= price_tag(committed_profit) %></td>
-        <td><%= price_tag(actual_profit) %></td>
+        <td><%= price_tag(committed_profit) unless committed_profit == 0 %></td>
+        <td><%= price_tag(actual_profit) unless actual_profit == 0 %></td>
     </tr>
     </tbody>
 </table>
