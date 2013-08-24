@@ -12,16 +12,16 @@
     </td>
     <td><%= item.unit %></td>
     <td>
-        $<%= link_to number_to_price(item.estimated_cost), "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'estimated_cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+        $<%= link_to price(item.estimated_cost), "#", :class => 'editable price', :data => {:type => 'text', :resource => 'item', :name => 'estimated_cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
     <td>
-        $<div class="amount"><%= number_to_price(item.amount) %></div>
+        <%= price_tag(item.amount, "amount") %>
     </td>
     <td>
-        $<div class="margin"><%= link_to number_to_price(item.margin), "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %></div>
+        $<div class="margin"><%= link_to price(item.margin), "#", :class => 'editable price', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %></div>
     </td>
     <td>
-        $<div class="price"><%= number_to_price(item.price) %></div>
+        <%= price_tag(item.price, "price") %>
     </td>
     <td class="button-container">
         <%= link_to raw("<button>+</button>"), "#" , :class => 'trigger-add'%>

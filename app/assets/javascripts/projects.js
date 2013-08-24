@@ -6,7 +6,7 @@ function calculateBidAmount() {
             bidAmount += parseFloat($(this).val());
         }
     });
-    $('#bid-amount').text("$" + bidAmount.toFixed(2));
+    $('#bid-amount').text("$" + number_to_currency(bidAmount, 2, '.', ','));
 }
 $(document).ready(function () {
     $(document).on('change', 'input[name="item[][uncommitted_cost]"]', function () {

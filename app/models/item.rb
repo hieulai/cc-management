@@ -25,11 +25,11 @@ class Item < ActiveRecord::Base
   end
 
   def committed_profit
-    (self.amount - self.committed_cost) + self.margin
+    self.committed_cost.present? ? (self.amount - self.committed_cost) + self.margin : nil
   end
 
   def actual_profit
-    (self.amount - self.actual_cost) + self.margin
+    self.actual_cost.present? ? (self.amount - self.actual_cost) + self.margin : nil
   end
 
   def self.to_csv(items, options = {})
@@ -73,8 +73,6 @@ class Item < ActiveRecord::Base
   def default_values
     self.qty ||= 1
     self.estimated_cost ||= 0
-    self.committed_cost ||= 0
-    self.actual_cost ||= 0
     self.margin ||= 0
   end
 end

@@ -14,7 +14,7 @@
 }
 
 .editableform input[type=text] {
-    width: 40px;
+    width: 60px;
 }
 
 .editable-buttons {
@@ -121,7 +121,7 @@
 
 /* IOS-style clear button for text inputs */
 .editable-clear-x {
-    background: url('../img/clear.png') center center no-repeat;
+    /* background: url('../img/clear.png') center center no-repeat;
     display: block;
     width: 13px;
     height: 13px;
@@ -132,7 +132,8 @@
     top: 50%;
     right: 6px;
     margin-top: -6px;
-
+    */
+    display: none;
 }
 
 .editable-clear-x:hover {
