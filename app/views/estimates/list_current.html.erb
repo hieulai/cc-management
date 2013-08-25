@@ -30,8 +30,8 @@
       <td><%= estimate.template.name %></td>
       <td><%= estimate.progress %></td>
       <td><%= estimate.deadline %></td>
-      <td>$<%= estimate.revenue %></td>
-      <td>$<%= estimate.profit %></td>
+      <td><%= price_tag(estimate.revenue) %></td>
+      <td><%= price_tag(estimate.profit) %></td>
       <td><%= estimate.notes %></td>
       
     </tr>

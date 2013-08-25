@@ -14,7 +14,7 @@
         <tr>
             <td><%= item.name %></td>
             <td><%= item.description %></td>
-            <td>$<%= item.estimated_cost %></td>
+            <td>$<%= item.amount %></td>
             <td>$<%= item.margin %></div></td>
             <td>
                 $<%= text_field_tag 'item[][uncommitted_cost]', (bid.item_amount(item.id) if (defined? bid) && bid.present?) %>

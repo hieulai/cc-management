@@ -9,7 +9,9 @@ class Bid < ActiveRecord::Base
 
   serialize :amount
 
-  before_save :set_committed_cost
+  before_save :set_committed_costs, :unset_chosen_other_bids
+
+  before_destroy :unset_committed_costs
 
   def total_amount
     t=0
@@ -27,10 +29,29 @@ class Bid < ActiveRecord::Base
     end
   end
 
-  def set_committed_cost
+  def set_committed_costs (p = true)
     self.amount.each do |i|
-      cost = self.chosen ? i[:uncommitted_cost] : nil
-      Item.find(i[:id]).update_attribute(:committed_cost, cost )
+      if self.chosen
+        cost = p ? i[:uncommitted_cost] : nil
+        item = Item.find(i[:id])
+        if item.present?
+          item.update_attribute(:committed_cost, cost )
+        end
+      end
     end
+  end
+
+  def unset_chosen_other_bids
+    if self.chosen
+      self.categories_template.bids.each do |bid|
+        if bid.id != self.id
+          bid.update_attribute(:chosen, false)
+        end
+      end
+    end
+  end
+
+  def unset_committed_costs
+    set_committed_costs false
   end
 end
