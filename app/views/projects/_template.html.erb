@@ -19,18 +19,35 @@
         actual_cost = 0
         committed_profit = 0
         actual_profit = 0
+
+        cos_committed_cost= 0
+        cos_committed_profit = 0
     %>
     <%- template.categories_templates.each do |category_template| %>
       <%- amount+= category_template.items.map(&:amount).compact.sum
           margin+= category_template.items.map(&:margin).compact.sum
-          committed_cost+= category_template.items.map(&:committed_cost).compact.sum
+          committed_cost+= category_template.items.map(&:committed_cost).compact.sum + category_template.change_orders.map(&:committed_cost).compact.sum
           actual_cost+= category_template.items.map(&:actual_cost).compact.sum
-          committed_profit+= category_template.items.map(&:committed_profit).compact.sum
+          committed_profit+= category_template.items.map(&:committed_profit).compact.sum + category_template.change_orders.map(&:committed_profit).compact.sum
           actual_profit+= category_template.items.map(&:actual_profit).compact.sum
+
+          cos_committed_cost+= category_template.change_orders.map(&:committed_cost).compact.sum
+          cos_committed_profit+= category_template.change_orders.map(&:committed_profit).compact.sum
 
       %>
       <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
     <% end %>
+    <tr class="total-change-order change_order">
+        <td colspan=3>
+            CHANGE ORDERS
+        </td>
+        <td></td>
+        <td><%= price_tag(cos_committed_cost) unless cos_committed_cost == 0 %></td>
+        <td></td>
+        <td></td>
+        <td><%= price_tag(cos_committed_profit) unless cos_committed_profit == 0 %></td>
+        <td></td>
+    </tr>
     <tr class="total">
         <td colspan=3>
             GRAND TOTAL

@@ -164,22 +164,48 @@ class ProjectsController < ApplicationController
   
   def change_orders
     @project = Project.find(params[:id])
+    @change_orders = @project.change_orders
   end
 
-  def submit_change_orders
+  def new_change_order
     @project = Project.find(params[:id])
-    @category_template = CategoriesTemplate.find(params[:category_template])
-    @item = Item.find(params[:item][:id])
-    @co_item = @item.dup
-    @co_item.builder_id = nil
-    @co_item.assign_attributes(params[:item])
-    @co_item.change_order = true
-    if @co_item.save
-      @category_template.items << @co_item
-      redirect_to :action => 'list_current_projects'
+    @change_order = ChangeOrder.new
+  end
+
+  def create_change_order
+    @project = Project.find(params[:id])
+    @co = ChangeOrder.new(params[:change_order])
+    @co.project_id = @project.id
+    if @co.save
+      redirect_to :action => 'change_orders', :id => @project.id
     else
-      render :change_orders
+      render :new_change_order
     end
+  end
+
+  def edit_change_order
+    @change_order = ChangeOrder.find(params[:id])
+    @project = @change_order.project
+  end
+
+  def update_change_order
+    @change_order = ChangeOrder.find(params[:id])
+    if @change_order.update_attributes(params[:change_order])
+      redirect_to(:action => 'change_orders', :id => @change_order.project_id)
+    else
+      render :edit_change_order
+    end
+  end
+
+  def delete_change_order
+    @change_order = ChangeOrder.find(params[:id])
+  end
+
+  def destroy_change_order
+    @change_order = ChangeOrder.find(params[:id])
+    @id = @change_order.project_id
+    @change_order.destroy
+    redirect_to(:action => 'change_orders', :id => @id)
   end
   
   def tasklist

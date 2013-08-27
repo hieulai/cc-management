@@ -1,0 +1,19 @@
+<div>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+    <h2>Edit Change Order</h2>
+    <%= form_for @change_order, :url => {:action => 'update_change_order', :id => @change_order.id} do |f| %>
+      <% if @change_order.errors.any? %>
+        <div id="errorExplanation">
+            <h2><%= pluralize(@change_order.errors.count, "Error") %> prohibited
+                this post from being saved:</h2>
+            <ul>
+                <% @change_order.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+      <% end %>
+      <%= render(:partial => "change_order_form", :locals => {:f => f})%>
+      <%= submit_tag "Save" %>
+    <% end %>
+</div>

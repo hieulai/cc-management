@@ -3,6 +3,7 @@ class Project < ActiveRecord::Base
   belongs_to :builder
   has_many :estimates
   has_many :bids
+  has_many :change_orders
   has_many :specifications
   has_one :tasklist
   

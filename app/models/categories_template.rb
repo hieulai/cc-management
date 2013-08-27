@@ -4,6 +4,7 @@ class CategoriesTemplate < ActiveRecord::Base
   belongs_to :template
   belongs_to :category
   has_many :bids, :dependent => :delete_all
+  has_many :change_orders, :dependent => :delete_all
   has_and_belongs_to_many :items
   accepts_nested_attributes_for :items, allow_destroy: true
 
