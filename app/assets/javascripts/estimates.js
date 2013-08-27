@@ -47,6 +47,9 @@ $(document).ready(function () {
                     if (response.margin == null) {
                         response.margin = 0;
                     }
+                    if (response.markup == null) {
+                        trItem.find("td .markup").parent().text("");
+                    }
                     trItem.find("td .price").html(number_to_currency(response.price, 2, '.', ','));
                     trItem.find("td .margin a").text(number_to_currency(response.margin, 2, '.', ','));
                     trItem.find("td .amount").html(number_to_currency(response.amount, 2, '.', ','));

@@ -6,9 +6,11 @@ class Item < ActiveRecord::Base
   has_many :templates, through: :categories_templates_items
   has_and_belongs_to_many :categories_templates
 
-  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed
+  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup
 
   validates :name, presence: true
+
+  before_save :reset_markup
 
   scope :search, lambda{|query| where("name ILIKE ? OR description ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%")}
@@ -16,8 +18,16 @@ class Item < ActiveRecord::Base
   HEADERS = ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]
   after_initialize :default_values
 
+  def margin
+    if read_attribute(:margin).present?
+      read_attribute(:margin).presence
+    else
+      self.markup.present? ? self.markup * self.qty : 0
+    end
+  end
+
   def price
-    self.amount +  self.margin * self.qty
+    self.amount +  self.margin
   end
 
   def amount
@@ -36,7 +46,7 @@ class Item < ActiveRecord::Base
     CSV.generate(options = {}) do |csv|
       csv << HEADERS
       items.each do |item|
-        csv << [item.name, item.description, item.estimated_cost, item.unit, item.margin, item.price, item.notes]
+        csv << [item.name, item.description, item.estimated_cost, item.unit, item.markup, item.price, item.notes]
       end
     end
   end
@@ -69,10 +79,15 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def reset_markup
+     if read_attribute(:margin).presence
+        self.markup = nil
+     end
+  end
+
   private
   def default_values
     self.qty ||= 1
     self.estimated_cost ||= 0
-    self.margin ||= 0
   end
 end

@@ -1,5 +1,5 @@
 <tr class="category" id="category_<%= category_template.category.id %>">
-    <td colspan=9>
+    <td colspan=10>
         <h3>
             <%= category_template.category.name %>
         </h3>
@@ -13,7 +13,7 @@
   <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <tr style="display: none" class="add add-item item_category_<%= category_template.category.id %>">
-	<td colspan=10>
+	<td colspan=11>
         <%= form_for :item, :url => {:controller => 'estimates', :action => 'add_item', :category_template_id => category_template.id}, :remote => true do |f| %>
           Item:
           <%= f.select :id, @items.map { |i| [i.name, i.id] } %>
@@ -23,7 +23,7 @@
     </td>
 </tr>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
-    <td colspan=6>
+    <td colspan=7>
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>
     <td><%= price_tag(category_template.items.map(&:amount).sum, "subtotal-amount") %></td>

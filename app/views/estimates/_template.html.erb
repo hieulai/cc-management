@@ -7,6 +7,7 @@
         <th>Qty</th>
         <th>Unit</th>
         <th>Rate</th>
+        <th class="markup">Markup</th>
         <th class="amount">Amount</th>
         <th class="margin">Margin</th>
         <th class="price">Total</th>
@@ -29,7 +30,7 @@
       <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
     <% end %>
     <tr class="add add-category">
-        <td colspan=10>
+        <td colspan=11>
             <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @template.id}, :remote => true do |f| %>
               Category:
               <%= f.select :id, @categories.map { |c| [c.name, c.id] } %>
@@ -38,7 +39,7 @@
         </td>
     </tr>
     <tr class="total">
-        <td colspan=6>
+        <td colspan=7>
             GRAND TOTAL
         </td>
         <td><%= price_tag(amount, "total-amount") %></td>

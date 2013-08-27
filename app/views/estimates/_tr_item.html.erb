@@ -14,6 +14,7 @@
     <td>
         $<%= link_to price(item.estimated_cost), "#", :class => 'editable currency', :data => {:type => 'text', :resource => 'item', :name => 'estimated_cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
+    <td><%= price_tag(item.markup, "markup") %></td>
     <td>
         <%= price_tag(item.amount, "amount") %>
     </td>

@@ -21,7 +21,7 @@
       <th>Default Quantity</th>
       <th>Cost</th>
       <th>Unit</th>
-      <th>Margin</th>
+      <th>Preset Margin</th>
       <th>Price</th>
       <th>Notes</th>
     <!-- Displays all items that are attached to a category -->
@@ -37,10 +37,10 @@
       <td><%= item.name %></td>
       <td><%= item.description %></td>
       <td><%= item.qty %></td>
-      <td>$<%= item.estimated_cost %></td>
+      <td><%= price_tag(item.estimated_cost) %></td>
       <td><%= item.unit %></td>
-      <td>$<%= item.margin %></td>
-      <td>$<%= item.price %></td>
+      <td><%= price_tag(item.markup) %></td>
+      <td><%= price_tag(item.price) %></td>
       <td><%= item.notes %></td>
     </tr>
 
