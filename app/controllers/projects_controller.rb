@@ -174,9 +174,9 @@ class ProjectsController < ApplicationController
 
   def create_change_order
     @project = Project.find(params[:id])
-    @co = ChangeOrder.new(params[:change_order])
-    @co.project_id = @project.id
-    if @co.save
+    @change_order = ChangeOrder.new(params[:change_order])
+    @change_order.project_id = @project.id
+    if @change_order.save
       redirect_to :action => 'change_orders', :id => @project.id
     else
       render :new_change_order

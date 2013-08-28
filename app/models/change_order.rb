@@ -4,6 +4,7 @@ class ChangeOrder < ActiveRecord::Base
   belongs_to :categories_template
 
   validates :name, presence: true
+  validates_presence_of :categories_template
 
   after_initialize :default_values
 
