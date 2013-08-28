@@ -7,21 +7,21 @@
     <td>
         <%= link_to item.description, "#", :class => 'editable', :data => {:type => 'textarea', :rows => 4, :resource => 'item', :name => 'description', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
-    <td>
+    <td class="right">
         <%= link_to item.qty, "#", :class => 'editable', :data => {:type => 'text', :resource => 'item', :name => 'qty', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
-    <td><%= item.unit %></td>
-    <td>
+    <td class="center"><%= item.unit %></td>
+    <td class="right">
         $<%= link_to price(item.estimated_cost), "#", :class => 'editable currency', :data => {:type => 'text', :resource => 'item', :name => 'estimated_cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
     </td>
-    <td><%= price_tag(item.markup, "markup") %></td>
-    <td>
+    <td class="right">
         <%= price_tag(item.amount, "amount") %>
     </td>
-    <td>
+    <td class="right"><%= price_tag(item.markup, "markup") %></td>
+    <td class="right">
         $<div class="margin"><%= link_to price(item.margin), "#", :class => 'editable currency', :data => {:type => 'text', :resource => 'item', :name => 'margin', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %></div>
     </td>
-    <td>
+    <td class="right">
         <%= price_tag(item.price, "price") %>
     </td>
     <td class="button-container">

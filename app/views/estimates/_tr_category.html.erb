@@ -23,11 +23,11 @@
     </td>
 </tr>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
-    <td colspan=7>
+    <td colspan=5>
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>
-    <td><%= price_tag(category_template.items.map(&:amount).sum, "subtotal-amount") %></td>
-    <td><%= price_tag(category_template.items.map(&:margin).sum, "subtotal-margin") %></td>
-    <td><%= price_tag(category_template.items.map(&:price).sum, "subtotal-price") %></div></td>
+    <td class="right" colspan="2"><%= price_tag(category_template.items.map(&:amount).sum, "subtotal-amount") %></td>
+    <td class="right" colspan="2"><%= price_tag(category_template.items.map(&:margin).sum, "subtotal-margin") %></td>
+    <td class="right"><%= price_tag(category_template.items.map(&:price).sum, "subtotal-price") %></div></td>
     <td></td>
 </tr>

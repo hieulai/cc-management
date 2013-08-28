@@ -6,9 +6,9 @@
         <th>Description</th>
         <th>Qty</th>
         <th>Unit</th>
-        <th>Rate</th>
-        <th class="markup">Markup</th>
+        <th>Cost</th>
         <th class="amount">Amount</th>
+        <th class="markup">Markup/Unit</th>
         <th class="margin">Margin</th>
         <th class="price">Total</th>
         <th>&nbsp;</th>
@@ -39,12 +39,12 @@
         </td>
     </tr>
     <tr class="total">
-        <td colspan=7>
+        <td colspan=5>
             GRAND TOTAL
         </td>
-        <td><%= price_tag(amount, "total-amount") %></td>
-        <td><%= price_tag(margin, "total-margin") %></td>
-        <td><%= price_tag(total, "total-price") %></td>
+        <td class="right" colspan="2"><%= price_tag(amount, "total-amount") %></td>
+        <td class="right" colspan="2"><%= price_tag(margin, "total-margin") %></td>
+        <td class="right"><%= price_tag(total, "total-price") %></td>
         <td></td>
     </tr>
     </tbody>

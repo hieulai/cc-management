@@ -7,22 +7,22 @@
     <td>
         <%= item.description %>
     </td>
-    <td>
+    <td class="right">
         <%= price_tag(item.amount, "amount") %>
     </td>
-    <td>
+    <td class="right">
         <%= price_tag(item.committed_cost) %>
     </td>
-    <td>
+    <td class="right">
         <%= price_tag(item.actual_cost) %>
     </td>
-    <td>
+    <td class="right">
         <%= price_tag(item.margin, "margin") %>
     </td>
-    <td>
+    <td class="right">
         <%= price_tag(item.committed_profit) %>
     </td>
-    <td>
+    <td class="right">
         <%= price_tag(item.actual_profit) %>
     </td>
 </tr>
