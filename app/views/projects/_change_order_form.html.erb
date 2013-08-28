@@ -5,26 +5,13 @@
         <th>Category</th>
         <td><%= f.select(:categories_template_id, @project.estimates.any? ? @project.estimates.first.template.categories_templates.sort_by { |c| c.category.name }.map { |c| [c.category.name, c.id] } : Array.new, {:include_blank => true}) %></td>
     </tr>
-
-    <tr>
-        <th>Name</th>
-        <td><%= f.text_field :name %></td>
-    </tr>
     <tr>
         <th>Description</th>
         <td><%= f.text_field :description , :size => 100 %></td>
     </tr>
     <tr>
-        <th>Quantity</th>
-        <td><%= f.text_field :qty %></td>
-    </tr>
-    <tr>
         <th>Cost</th>
         <td><%= f.text_field :cost %></td>
-    </tr>
-    <tr>
-        <th>Unit</th>
-        <td><%= f.text_field :unit %></td>
     </tr>
     <tr>
         <th>Margin</th>

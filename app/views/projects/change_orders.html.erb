@@ -18,9 +18,7 @@
         <tr class="header">
             <th>Actions</th>
             <th>Category</th>
-            <th>Name</th>
             <th>Description</th>
-            <th>Unit</th>
             <th>Committed Cost</th>
             <th>Committed Profit</th>
             <th>Notes</th>
@@ -33,9 +31,7 @@
                   <%= link_to("Delete", {:action => 'delete_change_order', :id => co.id}, :class => 'action edit') %>
               </td>
               <td><%= co.categories_template.category.name %></td>
-              <td><%= co.name %></td>
               <td><%= co.description %></td>
-              <td><%= co.unit %></td>
               <td class="right"><%= price_tag(co.committed_cost) %></td>
               <td class="right"><%= price_tag(co.committed_profit) %></td>
               <td><%= co.notes %></td>
