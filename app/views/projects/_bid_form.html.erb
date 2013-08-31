@@ -13,6 +13,10 @@
 	<span id="bid-amount" class="inline"></span>
 </p>
 <p>
+<p>
+    <%= f.label :vendor, "Vendor" %>
+    <%= f.select(:vendor_id, Vendor.where("builder_id = ?", session[:builder_id]).order(:primary_first_name).collect{|s|[s.full_name, s.id]}, {:include_blank => true}) %>
+</p>
 	<%= f.label :notes, "Notes" %>
 	<%= f.text_area(:notes) %>
 </p>

@@ -1,0 +1,28 @@
+<table class="grid-view purchase-orders-list" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th>Item Name</th>
+        <th>Description</th>
+        <th class="amount">Estimated Costs</th>
+        <th class="margin">Margin</th>
+        <th>Purchase Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if defined?(categories_template) && categories_template.present? %>
+      <% categories_template.items.each do |item| %>
+        <tr>
+            <td><%= item.name %></td>
+            <td><%= item.description %></td>
+            <td>$<%= item.amount %></td>
+            <td>$<%= item.margin %></div></td>
+            <td>
+                $<%= text_field_tag 'item[][actual_cost]', (purchase_order.item_amount(item.id) if (defined? purchase_order) && purchase_order.present?) %>
+                <%= hidden_field_tag 'item[][id]', item.id %>
+            </td>
+        </tr>
+
+      <% end %>
+    <% end %>
+    </tbody>
+</table>

@@ -1,0 +1,2 @@
+$('#add-purchase-order').attr('href', '<%= url_for(:action =>'new_purchase_order', :id => @project.id) %>');
+$('#purchase-orders-placeholder').html('<%= escape_javascript(render(:partial => "purchase_orders", :locals => {:purchase_orders => @project.purchase_orders })) %>');

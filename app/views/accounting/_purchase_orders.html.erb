@@ -1,0 +1,33 @@
+<%@total_costs = 0 %>
+<table class="grid-view" summary="Purchase Order List">
+    <tr class="header">
+        <th>Actions</th>
+        <th>Category</th>
+        <th>Vendor</th>
+        <th>Notes</th>
+        <th>Amount</th>
+        <th>Purchased</th>
+
+    </tr>
+    <% purchase_orders.each do |po| %>
+
+      <tr>
+          <td class="center">
+              <%= link_to("Edit", {:action => 'edit_purchase_order', :id => po.id}, :class => 'action edit') %>
+              <%= link_to("Delete", {:action => 'delete_purchase_order', :id => po.id}, :class => 'action edit') %>
+          </td>
+          <td><%= po.categories_template.category.name %></td>
+          <td><%= po.vendor.try(:full_name)%></td>
+          <td><%= po.notes %></td>
+          <td class="right"><%= number_to_currency(po.total_amount) %></td>
+          <td class="center"><%= po.chosen %></td>
+
+          <%
+             if po.chosen == true
+               @total_costs = @total_costs + po.total_amount
+             end
+          %>
+      </tr>
+    <% end %>
+</table>
+<h2 class="right">Total Actual Costs = <%= number_to_currency(@total_costs) %></h2>

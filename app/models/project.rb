@@ -5,6 +5,7 @@ class Project < ActiveRecord::Base
   has_many :bids
   has_many :change_orders
   has_many :specifications
+  has_many :purchase_orders
   has_one :tasklist
   
 

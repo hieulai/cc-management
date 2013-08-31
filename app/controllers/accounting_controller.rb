@@ -32,6 +32,55 @@ class AccountingController < ApplicationController
   def payment_history
     @payments = Payment.all
   end
+
+  def purchase_orders
+    @projects = Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id])
+    @project = params[:id].present? ? Project.find(params[:id]) : @projects.first
+  end
+
+  def new_purchase_order
+    @project = Project.find(params[:id])
+    @purchase_order = PurchaseOrder.new
+  end
+
+  def create_purchase_order
+    @project = Project.find(params[:id])
+    @purchase_order = PurchaseOrder.new(params[:purchase_order])
+    @purchase_order.amount = params[:item]
+    if @purchase_order.save
+      @project.purchase_orders << @purchase_order
+      redirect_to(:action => 'purchase_orders', :id => @project.id)
+    else
+      render('new_purchase_order')
+    end
+  end
+
+  def edit_purchase_order
+    @purchase_order = PurchaseOrder.find(params[:id])
+    @project = @purchase_order.project
+  end
+
+  def update_purchase_order
+    @purchase_order = PurchaseOrder.find(params[:id])
+    @project = @purchase_order.project
+    @purchase_order.amount = params[:item]
+    if @purchase_order.update_attributes(params[:purchase_order])
+      redirect_to(:action => 'purchase_orders', :id => @purchase_order.project_id)
+    else
+      render('edit_purchase_order')
+    end
+  end
+
+  def delete_purchase_order
+    @purchase_order = PurchaseOrder.find(params[:id])
+  end
+
+  def destroy_purchase_order
+    @purchase_order = PurchaseOrder.find(params[:id])
+    @id = @purchase_order.project_id
+    @purchase_order.destroy
+    redirect_to(:action => 'purchase_orders', :id => @id)
+  end
   
   def view_payment
     
@@ -73,6 +122,18 @@ class AccountingController < ApplicationController
   def import_export
 
   end
-  
-  
+
+  def show_project_purchase_orders
+    @project = Project.find(params[:project][:id])
+    respond_to do |format|
+      format.js {}
+    end
+  end
+
+  def show_categories_template_items
+    @categories_template = CategoriesTemplate.find(params[:purchase_order][:categories_template_id])
+    respond_to do |format|
+      format.js {}
+    end
+  end
 end

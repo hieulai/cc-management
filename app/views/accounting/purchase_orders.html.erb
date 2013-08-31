@@ -1,0 +1,22 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu")%>
+    <h1>Purchase Orders</h1>
+    <%= link_to("Instructions >>", {:action => 'show'}) %>
+    <br/>
+    <br/>
+    <div class="instructions">
+        <p>Default paragraph. </p>
+    </div>
+
+    </br>
+    Project
+    <%= select(:project, :id, @projects.collect { |s| [s.name, s.id] }, {:include_blank => false}, :data => {:remote => true, :url => url_for(:action => "show_project_purchase_orders")}) %>
+    <br/>
+    <% if @project.present? %>
+      <%= link_to("Add Purchase Order  >>", {:action => 'new_purchase_order',:id => @project.id }, :id =>'add-purchase-order', :class => 'action vew') %>
+      <br/><br/>
+      <div id="purchase-orders-placeholder">
+          <%= render(:partial => "purchase_orders", :locals => {:purchase_orders => @project.purchase_orders}) %>
+      </div>
+    <% end %>
+</div>
