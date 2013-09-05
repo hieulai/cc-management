@@ -1,20 +1,31 @@
 <table>
     <h2>Purchase Order Info:</h2>
-
     <tr>
-        <th><%= f.label :vendor, "Vendor" %></th>
+        <th><%= f.label :vendor_id, "Vendor" %></th>
         <td><%= f.select(:vendor_id, Vendor.where("builder_id = ?", session[:builder_id]).order(:primary_first_name).collect{|s|[s.full_name, s.id]}, {:include_blank => true}) %></td>
     </tr>
     <tr>
+        <th><%= f.label :project_id, "Project" %></th>
+        <td><%= f.select(:project_id, Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => @purchase_order.id)}) %></td>
+    </tr>
+    <tr>
         <th><%= f.label :categories_template_id, "Category" %></th>
-        <td><%= f.select(:categories_template_id, project.estimates.any? ? project.estimates.first.template.categories_templates.sort_by { |c| c.category.name }.map { |c| [c.category.name, c.id] } : Array.new, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_categories_template_items")}) %></td>
+        <td>
+            <div id="categories_template-placeholder">
+                <%= f.select(:categories_template_id, @purchase_order.project.try(:estimates).try(:any?) ? @purchase_order.project.estimates.first.template.categories_templates.sort_by { |c| c.category.name }.map { |c| [c.category.name, c.id] } : Array.new, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_categories_template_items", :id => @purchase_order.id)}) %>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <th><%= f.label :number, "PO #" %></th>
+        <td><%= f.number_field :number %></td>
+    </tr>
+    <tr>
+        <th><%= f.label :date, "Date" %></th>
+        <td><%= f.date_select :date %></td>
     </tr>
     <tr>
         <th><%= f.label :notes, "Notes" %></th>
         <td><%= f.text_area(:notes) %></td>
-    </tr>
-    <tr>
-        <th><%= f.label :chosen, "Chosen" %></th>
-        <td><%= f.check_box(:chosen) %></td>
     </tr>
 </table>

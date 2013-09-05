@@ -1,28 +1,68 @@
 <table class="grid-view purchase-orders-list" summary="Items List">
     <thead>
     <tr class="header">
+        <th></th>
         <th>Item Name</th>
         <th>Description</th>
-        <th class="amount">Estimated Costs</th>
-        <th class="margin">Margin</th>
+        <th>Qty</th>
+        <th>Rate</th>
         <th>Purchase Amount</th>
+        <th class="amount">Estimated Costs</th>
     </tr>
     </thead>
     <tbody>
-    <% if defined?(categories_template) && categories_template.present? %>
+    <% if defined?(categories_template) && categories_template.present? && categories_template.items.any? %>
       <% categories_template.items.each do |item| %>
+        <% text_field_display = purchase_order.item_chosen(item.id) ? "" : "none"
+           value_display = purchase_order.item_chosen(item.id) ? "none" : ""
+        %>
         <tr>
+            <td><%= check_box_tag 'item-chosen', item.id, purchase_order.item_chosen(item.id) %></td>
             <td><%= item.name %></td>
             <td><%= item.description %></td>
-            <td>$<%= item.amount %></td>
-            <td>$<%= item.margin %></div></td>
-            <td>
-                $<%= text_field_tag 'item[][actual_cost]', (purchase_order.item_amount(item.id) if (defined? purchase_order) && purchase_order.present?) %>
+            <td class="right">
+                <%= text_field_tag 'item[][qty]', purchase_order.item_qty(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+                <div class="item-qty value-field" style="display: <%= value_display %>">
+                    <%= item.qty %>
+                </div>
+            </td>
+            <td class="right">
+                $<%= text_field_tag 'item[][estimated_cost]', purchase_order.item_estimated_cost(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+                <div class="item-estimated_cost value-field" style="display: <%= value_display %>">
+                    <%= price(item.estimated_cost) %>
+                </div>
+            </td>
+            <td class="right light-blue">
+                <div class="actual-amount-placeholder">
+                    <%= price_tag purchase_order.item_amount(item.id), 'actual-amount' %>
+                </div>
+                <%= hidden_field_tag 'item[][actual_cost]', purchase_order.item_amount(item.id) %>
                 <%= hidden_field_tag 'item[][id]', item.id %>
             </td>
+            <td class="right"><%= price_tag(item.amount) %></td>
         </tr>
 
       <% end %>
+      <tr>
+          <td colspan="5">Subtotal</td>
+          <td id="subtotal" class="right light-blue"></td>
+          <td class="right"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
+      </tr>
+      <tr>
+          <td colspan="5">Sales Tax</td>
+          <td class="right light-blue">$<%= text_field(:purchase_order, :sales_tax, :size => 10) %></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td colspan="5">Shipping</td>
+          <td class="right light-blue">$<%= text_field(:purchase_order, :shipping, :size => 10) %></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td colspan="5" class="strong">TOTAL</td>
+          <td id="total" class="right light-blue strong"></td>
+          <td class="right strong"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
+      </tr>
     <% end %>
     </tbody>
 </table>

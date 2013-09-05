@@ -9,14 +9,7 @@
     </div>
 
     </br>
-    Project
-    <%= select(:project, :id, @projects.collect { |s| [s.name, s.id] }, {:include_blank => false}, :data => {:remote => true, :url => url_for(:action => "show_project_purchase_orders")}) %>
-    <br/>
-    <% if @project.present? %>
-      <%= link_to("Add Purchase Order  >>", {:action => 'new_purchase_order',:id => @project.id }, :id =>'add-purchase-order', :class => 'action vew') %>
-      <br/><br/>
-      <div id="purchase-orders-placeholder">
-          <%= render(:partial => "purchase_orders", :locals => {:purchase_orders => @project.purchase_orders}) %>
-      </div>
-    <% end %>
+    <%= link_to("Add Purchase Order  >>", {:action => 'new_purchase_order'}, :id => 'add-purchase-order', :class => 'action vew') %>
+    <br/><br/>
+    <%= render(:partial => "purchase_orders", :locals => {:purchase_orders => @purchase_orders}) %>
 </div>
