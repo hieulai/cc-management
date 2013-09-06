@@ -33,9 +33,8 @@ class Bid < ActiveRecord::Base
     self.amount.each do |i|
       if self.chosen
         cost = p ? i[:uncommitted_cost] : nil
-        item = Item.find(i[:id])
-        if item.present?
-          item.update_attribute(:committed_cost, cost )
+        if Item.exists?(i[:id])
+          Item.find(i[:id]).update_attribute(:committed_cost, cost )
         end
       end
     end

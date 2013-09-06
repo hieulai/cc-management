@@ -36,8 +36,7 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def item_chosen(item_id)
-    item = Item.find(item_id)
-    if item.present?
+    if Item.exists?(item_id)
       self.amount.try(:each) do |i|
         if item_id.to_s == i[:id]
           return true
@@ -48,26 +47,24 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def item_qty(item_id)
-    item = Item.find(item_id)
-    if item.present?
+    if Item.exists?(item_id)
       self.amount.try(:each) do |i|
         if item_id.to_s == i[:id]
           return i[:qty]
         end
       end
-      return item.qty
+      return Item.find(item_id).qty
     end
   end
 
   def item_estimated_cost(item_id)
-    item = Item.find(item_id)
-    if item.present?
+    if Item.exists?(item_id)
       self.amount.try(:each) do |i|
         if item_id.to_s == i[:id]
           return i[:estimated_cost]
         end
       end
-     return item.estimated_cost
+     return Item.find(item_id).estimated_cost
     end
   end
 
@@ -75,9 +72,8 @@ class PurchaseOrder < ActiveRecord::Base
     self.amount.try(:each) do |i|
       if self.chosen
         cost = p ? i[:actual_cost] : nil
-        item = Item.find(i[:id])
-        if item.present?
-          item.update_attribute(:actual_cost, cost )
+        if Item.exists?(i[:id])
+          Item.find(i[:id]).update_attribute(:actual_cost, cost )
         end
       end
     end

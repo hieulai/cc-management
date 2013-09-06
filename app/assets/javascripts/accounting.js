@@ -16,7 +16,7 @@ var calculatePurchaseAmount = function (obj, f){
 var calculateSubTotalAndTotal = function () {
     if ($("#total").size() > 0) {
         var subtotal = 0;
-        $('input[name="item[][actual_cost]"').each(function () {
+        $('input[name="item[][actual_cost]"]').each(function () {
             subtotal += currency_to_number($(this).val());
         });
         $('#subtotal').html(subtotal == 0 ? "" : "$" + number_to_currency(subtotal, 2, '.', ','));
