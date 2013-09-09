@@ -12,7 +12,7 @@ class PurchaseOrder < ActiveRecord::Base
 
   serialize :amount
 
-  before_save :set_actual_costs, :unset_chosen_other_pos
+  before_save :unset_actual_costs, :set_actual_costs, :unset_chosen_other_pos
 
   before_destroy :unset_actual_costs
 
@@ -70,12 +70,11 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
 
-  def set_actual_costs (p = true)
+  def set_actual_costs
     self.amount.try(:each) do |i|
       if self.chosen
-        cost = p ? i[:actual_cost] : nil
         if Item.exists?(i[:id])
-          Item.find(i[:id]).update_attribute(:actual_cost, cost )
+          Item.find(i[:id]).update_attribute(:actual_cost, i[:actual_cost] )
         end
       end
     end
@@ -92,7 +91,13 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def unset_actual_costs
-    set_actual_costs false
+    self.amount_was.try(:each) do |i|
+      if self.chosen
+        if Item.exists?(i[:id])
+          Item.find(i[:id]).update_attribute(:actual_cost, nil )
+        end
+      end
+    end
   end
 
   private
