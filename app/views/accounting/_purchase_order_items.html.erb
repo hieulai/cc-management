@@ -17,17 +17,23 @@
            value_display = purchase_order.item_chosen(item.id) ? "none" : ""
         %>
         <tr>
-            <td><%= check_box_tag 'item-chosen', item.id, purchase_order.item_chosen(item.id) %></td>
-            <td><%= item.name %></td>
-            <td><%= item.description %></td>
+            <td class="center"><%= check_box_tag 'item-chosen', item.id, purchase_order.item_chosen(item.id) %></td>
+            <td>
+                <%= item.name %>
+                <%= hidden_field_tag 'items[][name]', item.name %>
+            </td>
+            <td>
+                <%= item.description %>
+                <%= hidden_field_tag 'items[][description]', item.description %>
+            </td>
             <td class="right">
-                <%= text_field_tag 'item[][qty]', purchase_order.item_qty(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+                <%= text_field_tag 'items[][qty]', purchase_order.item_qty(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
                 <div class="item-qty value-field" style="display: <%= value_display %>">
                     <%= item.qty %>
                 </div>
             </td>
             <td class="right">
-                $<%= text_field_tag 'item[][estimated_cost]', purchase_order.item_estimated_cost(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+                $<%= text_field_tag 'items[][estimated_cost]', purchase_order.item_estimated_cost(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
                 <div class="item-estimated_cost value-field" style="display: <%= value_display %>">
                     <%= price(item.estimated_cost) %>
                 </div>
@@ -36,13 +42,24 @@
                 <div class="actual-amount-placeholder">
                     <%= price_tag purchase_order.item_amount(item.id), 'actual-amount' %>
                 </div>
-                <%= hidden_field_tag 'item[][actual_cost]', purchase_order.item_amount(item.id) %>
-                <%= hidden_field_tag 'item[][id]', item.id %>
+                <%= hidden_field_tag 'items[][actual_cost]', purchase_order.item_amount(item.id) %>
+                <%= hidden_field_tag 'items[][id]', item.id %>
             </td>
             <td class="right"><%= price_tag(item.amount) %></td>
         </tr>
 
       <% end %>
+      <% purchase_order.items.try(:each) do |i| %>
+        <%= render 'purchased_item', :item => i %>
+      <% end %>
+
+      <tr class="add add-item" id="add-item">
+          <td colspan=11>
+            <% @items = Item.where(builder_id: session[:builder_id]).order(:name)  %>
+            <%= select :purchased_item, :id, @items.map { |i| [i.name, i.id] } %>
+            <%= link_to raw("<button>+ Item</button>"), {:action => 'add_item_to_purchase_order', :item_id => @items.first.id}, :remote => true, :id => "add-purchased-item" %>
+          </td>
+      </tr>
       <tr>
           <td colspan="5">Subtotal</td>
           <td id="subtotal" class="right light-blue"></td>

@@ -34,7 +34,7 @@ class AccountingController < ApplicationController
   end
 
   def purchase_orders
-    @purchase_orders = PurchaseOrder.where("builder_id = ?", session[:builder_id]).order(:number)
+    @purchase_orders = PurchaseOrder.where("builder_id = ?", session[:builder_id]).order(:id)
   end
 
   def new_purchase_order
@@ -43,9 +43,13 @@ class AccountingController < ApplicationController
 
   def create_purchase_order
     @purchase_order = PurchaseOrder.new(params[:purchase_order])
-    @purchase_order.amount = params[:item].select {|i| i[:actual_cost].present?}
+    purchased_items = params[:items].select { |i| i[:id].nil? }
+    amount_items = params[:items].select { |i| i[:actual_cost].present? && i[:id].present? }
+    @purchase_order.amount = amount_items
     @purchase_order.builder_id = session[:builder_id]
     if @purchase_order.save
+      Item.where(:purchase_order_id => @purchase_order.id).destroy_all
+      @purchase_order.items = Item.create(purchased_items)
       redirect_to(:action => 'purchase_orders')
     else
       render('new_purchase_order')
@@ -58,8 +62,12 @@ class AccountingController < ApplicationController
 
   def update_purchase_order
     @purchase_order = PurchaseOrder.find(params[:id])
-    @purchase_order.amount = params[:item].select {|i| i[:actual_cost].present?}
+    purchased_items = params[:items].select { |i| i[:id].nil? }
+    amount_items = params[:items].select { |i| i[:actual_cost].present? && i[:id].present? }
+    @purchase_order.amount = amount_items
     if @purchase_order.update_attributes(params[:purchase_order])
+      Item.where(:purchase_order_id => @purchase_order.id).destroy_all
+      @purchase_order.items = Item.create(purchased_items)
       redirect_to(:action => 'purchase_orders')
     else
       render('edit_purchase_order')
@@ -74,6 +82,13 @@ class AccountingController < ApplicationController
     @purchase_order = PurchaseOrder.find(params[:id])
     @purchase_order.destroy
     redirect_to(:action => 'purchase_orders')
+  end
+
+  def add_item_to_purchase_order
+    @item = Item.find(params[:item_id])
+    respond_to do |format|
+      format.js {}
+    end
   end
   
   def view_payment

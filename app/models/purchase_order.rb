@@ -4,9 +4,11 @@ class PurchaseOrder < ActiveRecord::Base
   belongs_to :categories_template
   belongs_to :builder
 
+  has_many :items, :dependent => :destroy
+
   validates_presence_of :categories_template, :project
 
-  attr_accessible :amount, :notes, :chosen, :builder_id,  :project_id, :categories_template_id, :vendor_id, :sales_tax, :shipping, :number, :date
+  attr_accessible :amount, :notes, :chosen, :builder_id,  :project_id, :categories_template_id, :vendor_id, :sales_tax, :shipping, :date
 
   serialize :amount
 
@@ -23,7 +25,7 @@ class PurchaseOrder < ActiveRecord::Base
     amount.each do |i|
       t+= i[:actual_cost].to_f
     end
-    t+= self.sales_tax + self.shipping
+    t+= self.sales_tax + self.shipping + items.map(&:actual_cost).sum
   end
 
   def item_amount(item_id)

@@ -16,10 +16,12 @@
             </div>
         </td>
     </tr>
-    <tr>
-        <th><%= f.label :number, "PO #" %></th>
-        <td><%= f.number_field :number %></td>
-    </tr>
+    <% unless @purchase_order.new_record? %>
+        <tr>
+            <th>PO #</th>
+            <td><%= @purchase_order.id %></td>
+        </tr>
+    <% end  %>
     <tr>
         <th><%= f.label :date, "Date" %></th>
         <td><%= f.date_select :date %></td>

@@ -18,7 +18,7 @@
               <%= link_to("Edit", {:action => 'edit_purchase_order', :id => po.id}, :class => 'action edit') %>
               <%= link_to("Delete", {:action => 'delete_purchase_order', :id => po.id}, :class => 'action edit') %>
           </td>
-          <td class="center"><%= po.number %></td>
+          <td class="center"><%= po.id %></td>
           <td class="center"><%= po.date.try(:strftime, "%m/%d/%Y") %></td>
           <td><%= po.project.name %></td>
           <td><%= po.categories_template.category.name %></td>

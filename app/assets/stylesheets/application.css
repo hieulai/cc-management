@@ -31,6 +31,10 @@ ul#tasksContainer li label:hover{
     background-color: lightgoldenrodyellow;
 }
 
+.purchased{
+    background-color: #FFE4E1;
+}
+
 ul.ui-autocomplete {
   position: absolute;
   list-style: none;

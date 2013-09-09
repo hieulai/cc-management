@@ -1,4 +1,5 @@
-<tr class="item item_category_<%= category_template.category.id %> id="item_<%= item.id %>">
+<% purchased = item.purchase_order_id.present? ? "purchased" : "" %>
+<tr class="item item_category_<%= category_template.category.id %> <%= purchased %>" id="item_<%= item.id %> ">
   <td>
 	</td>
 	<td>

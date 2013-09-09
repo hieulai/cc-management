@@ -1,10 +1,10 @@
 var calculatePurchaseAmount = function (obj, f){
-    var estimateCost = $(obj).closest("tr").find('input[name="item[][estimated_cost]"]');
-    var qty = $(obj).closest("tr").find('input[name="item[][qty]"]');
+    var estimateCost = $(obj).closest("tr").find('input[name="items[][estimated_cost]"]');
+    var qty = $(obj).closest("tr").find('input[name="items[][qty]"]');
     var eValue = currency_to_number($(estimateCost).val());
     var qValue = currency_to_number(qty.val());
     var pValue = eValue * qValue;
-    $(obj).closest("tr").find('input[name="item[][actual_cost]"]').val(pValue);
+    $(obj).closest("tr").find('input[name="items[][actual_cost]"]').val(pValue);
     var placeHolder = $(obj).closest("tr").find(".actual-amount-placeholder");
     if (placeHolder.find(".actual-amount").size() > 0) {
         placeHolder.find(".actual-amount").text(number_to_currency(pValue, 2, '.', ','));
@@ -16,7 +16,7 @@ var calculatePurchaseAmount = function (obj, f){
 var calculateSubTotalAndTotal = function () {
     if ($("#total").size() > 0) {
         var subtotal = 0;
-        $('input[name="item[][actual_cost]"]').each(function () {
+        $('input[name="items[][actual_cost]"]').each(function () {
             subtotal += currency_to_number($(this).val());
         });
         $('#subtotal').html(subtotal == 0 ? "" : "$" + number_to_currency(subtotal, 2, '.', ','));
@@ -34,12 +34,9 @@ var toggleItemInputs = function (checbox, s) {
 
 $(document).ready(function() {
     calculateSubTotalAndTotal();
-    $(document).on('change', 'input[name="item[][qty]"], input[name="item[][estimated_cost]"]', function () {
-        var chosen =  $(this).closest("tr").find('input[name="item-chosen"]');
-        if ($(chosen).is(":checked")) {
-            calculatePurchaseAmount(this);
-            calculateSubTotalAndTotal();
-        }
+    $(document).on('change', 'input[name="items[][qty]"], input[name="items[][estimated_cost]"]', function () {
+        calculatePurchaseAmount(this);
+        calculateSubTotalAndTotal();
     });
     $(document).on('change', 'input[name="item-chosen"]', function () {
         if ($(this).is(":checked")) {
@@ -48,9 +45,19 @@ $(document).ready(function() {
         } else {
             toggleItemInputs(this, false);
             $(this).closest("tr").find(".actual-amount-placeholder").text("");
-            $(this).closest("tr").find('input[name="item[][actual_cost]"]').val("");
+            $(this).closest("tr").find('input[name="items[][actual_cost]"]').val("");
         }
         calculateSubTotalAndTotal();
+    });
+    $(document).on('change', "select#purchased_item_id", function () {
+        var link = $("a#add-purchased-item").attr("href");
+        $("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", $(this).val()));
+    });
+    $(document).on('click', 'a.remove-item', function (e) {
+        e.preventDefault();
+        $(this).closest("tr").remove();
+        calculateSubTotalAndTotal();
+        return false;
     });
     $(document).on('change', 'input[name="purchase_order[sales_tax]"], input[name="purchase_order[shipping]"] ', function () {
         calculateSubTotalAndTotal();

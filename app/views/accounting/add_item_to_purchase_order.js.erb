@@ -1,0 +1,2 @@
+$('tr#add-item').before('<%= escape_javascript(render :partial =>  'purchased_item', :locals => {:item => @item}) %>')
+calculateSubTotalAndTotal();
