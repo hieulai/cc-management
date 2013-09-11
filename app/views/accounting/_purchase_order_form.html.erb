@@ -3,8 +3,8 @@
     <tr>
         <th><%= f.label :vendor_id, "Vendor" %></th>
         <td>
-            <%= autocomplete_field :vendor, :name, autocomplete_vendor_name_accounting_index_path, :id_element => "#purchase_order_vendor_id", :update_elements => {} %>
-            <%= f.hidden_field :vendor_id %>
+            <%= autocomplete_field :vendor, :name,  autocomplete_vendor_name_accounting_index_path, :value => @purchase_order.vendor.try(:display_name) , :id_element => "#purchase_order_vendor_id", :update_elements => {} %>
+            <%= f.hidden_field :vendor_id, :value => @purchase_order.vendor.try(:id)  %>
         </td>
     </tr>
     <tr>
