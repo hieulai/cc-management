@@ -2,7 +2,10 @@
     <h2>Purchase Order Info:</h2>
     <tr>
         <th><%= f.label :vendor_id, "Vendor" %></th>
-        <td><%= f.select(:vendor_id, Vendor.where("builder_id = ?", session[:builder_id]).order(:primary_first_name).collect{|s|[s.full_name, s.id]}, {:include_blank => true}) %></td>
+        <td>
+            <%= autocomplete_field :vendor, :name, autocomplete_vendor_name_accounting_index_path, :id_element => "#purchase_order_vendor_id", :update_elements => {} %>
+            <%= f.hidden_field :vendor_id %>
+        </td>
     </tr>
     <tr>
         <th><%= f.label :project_id, "Project" %></th>

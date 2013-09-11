@@ -35,6 +35,11 @@ ul#tasksContainer li label:hover{
     background-color: #FFE4E1;
 }
 
+.autocomplete-sublabel{
+    font-style: italic;
+    font-size: 10px;
+}
+
 ul.ui-autocomplete {
   position: absolute;
   list-style: none;

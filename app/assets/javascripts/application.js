@@ -18,6 +18,7 @@
 //= require jquery-editable-poshytip
 //= require jquery-editable-rails
 //= require autocomplete-rails
+//= require jquery-autocomplete-patch
 //= require_tree .
 //= stub wkhtmltopdf_tableSplitHack
 

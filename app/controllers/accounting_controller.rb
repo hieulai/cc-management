@@ -1,6 +1,5 @@
 class AccountingController < ApplicationController
   before_filter :authenticate_user!
-  autocomplete :vendor, :trade
   
   def index
     render('receivables')
@@ -146,5 +145,13 @@ class AccountingController < ApplicationController
     respond_to do |format|
       format.js {}
     end
+  end
+
+  def autocomplete_vendor_name
+    @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search_by_name(params[:term]).order(:primary_first_name)
+    render :json => @vendors.map { |v|
+      label = v.trade.present? ? "#{v.trade} <br/> <span class=\"autocomplete-sublabel\">#{v.full_name}</span>" : v.full_name
+      {:id => v.id, :label => label, :value => v.display_name}
+    }.to_json
   end
 end

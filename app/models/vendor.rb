@@ -8,8 +8,12 @@ class Vendor < ActiveRecord::Base
 
   scope :search, lambda{|query| where("company ILIKE ? OR vendor_type ILIKE ? OR trade ILIKE ? OR primary_first_name ILIKE ? OR primary_last_name ILIKE ? OR secondary_first_name ILIKE ? OR
      secondary_last_name ILIKE ? OR notes ILIKE ?",
-     "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")} 
-  
+     "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")}
+
+  scope :search_by_name, lambda { |q|
+    (q ? where(["trade ILIKE ? or primary_first_name ILIKE ? or primary_last_name ILIKE ? or concat(primary_first_name, ' ', primary_last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%','%'+ q + '%' ,'%'+ q + '%' ])  : {})
+  }
+
   validates :vendor_type, presence: true
   validates :trade, presence: { message: "cannot be blank for Subcontractors. Consider entering something such as: Framer, Plumber, Electrician, etc."}, if: :vendor_is_subcontractor?
   validates :company, presence: { message: "and Primary First Name cannot both be blank."}, if: :name_is_blank?
@@ -26,6 +30,11 @@ class Vendor < ActiveRecord::Base
        "Secondary_First_Name", "Secondary_Last_Name", "Secondary_Email","Secondary_Phone1", "Secondary_Phone1_Tag", "Secondary_Phone2", "Secondary_Phone2_Tag", 
        "Website", "Address", "City", "State", "Zipcode", 
                  "Notes"]
+
+  def display_name
+    trade.presence || full_name
+  end
+
   def full_name
      "#{primary_first_name} #{primary_last_name}"
   end
