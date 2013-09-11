@@ -6,7 +6,8 @@
 </p>
 <p>
 	<%= f.label :vendor, "Vendor" %>
-	<%= f.select(:vendor_id, Vendor.where("builder_id = ?", session[:builder_id]).order(:primary_first_name).collect{|s|[s.full_name, s.id]}, {:include_blank => true}) %>
+  <%= autocomplete_field :vendor, :name,  autocomplete_vendor_name_accounting_index_path, :value => @bid.vendor.try(:display_name) , :id_element => "#bid_vendor_id", :update_elements => {} %>
+  <%= f.hidden_field :vendor_id, :value => @bid.vendor.try(:id)  %>
 </p>
 <p>
 	Amount

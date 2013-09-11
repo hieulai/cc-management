@@ -32,7 +32,7 @@
 					<%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'action edit') %>
 				</td>
 				<td><%= bid.categories_template.category.name %></td>
-				<td><%= bid.vendor.full_name if bid.vendor.present? %></td>
+				<td><%= bid.vendor.try(:display_name) %></td>
 				<td class="right"><%= number_to_currency(bid.total_amount) %></td>
 				<td class="center"><%= bid.chosen %></td>
         <td><%= bid.notes %></td>

@@ -58,4 +58,8 @@ Cc::Application.routes.draw do
    resources :accounting do
      get :autocomplete_vendor_name, :on => :collection
    end
+
+  resources :projects do
+    get :autocomplete_vendor_name, :on => :collection
+  end
 end
