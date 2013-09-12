@@ -326,9 +326,9 @@ class ProjectsController < ApplicationController
   end
 
   def autocomplete_vendor_name
-    @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search_by_name(params[:term]).order(:primary_first_name)
+    @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search_by_name(params[:term]).order(:company)
     render :json => @vendors.map { |v|
-      label = v.trade.present? ? "#{v.trade} <br/> <span class=\"autocomplete-sublabel\">#{v.full_name}</span>" : v.full_name
+      label = v.company.present? ? "#{v.company} <br/> <span class=\"autocomplete-sublabel\">#{v.full_name}</span>" : v.full_name
       {:id => v.id, :label => label, :value => v.display_name}
     }.to_json
   end

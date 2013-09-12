@@ -11,7 +11,7 @@ class Vendor < ActiveRecord::Base
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")}
 
   scope :search_by_name, lambda { |q|
-    (q ? where(["trade ILIKE ? or primary_first_name ILIKE ? or primary_last_name ILIKE ? or concat(primary_first_name, ' ', primary_last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%','%'+ q + '%' ,'%'+ q + '%' ])  : {})
+    (q ? where(["company ILIKE ? or primary_first_name ILIKE ? or primary_last_name ILIKE ? or concat(primary_first_name, ' ', primary_last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%','%'+ q + '%' ,'%'+ q + '%' ])  : {})
   }
 
   validates :vendor_type, presence: true
@@ -32,7 +32,7 @@ class Vendor < ActiveRecord::Base
                  "Notes"]
 
   def display_name
-    trade.presence || full_name
+    company.presence || full_name
   end
 
   def full_name
