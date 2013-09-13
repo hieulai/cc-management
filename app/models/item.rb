@@ -2,6 +2,7 @@ class Item < ActiveRecord::Base
   # belongs_to :template
   belongs_to :builder
   belongs_to :category
+  belongs_to :purchase_order
   has_many :categories_templates, through: :categories_templates_items
   has_many :templates, through: :categories_templates_items
   has_and_belongs_to_many :categories_templates
@@ -26,12 +27,20 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def estimated_cost(a = false)
+    unless purchase_order.present?
+      read_attribute(:estimated_cost)
+    else
+      a ? read_attribute(:estimated_cost) : 0
+    end
+  end
+
   def price
     self.amount +  self.margin
   end
 
-  def amount
-    self.estimated_cost * self.qty
+  def amount(a = false)
+    self.estimated_cost(a) * self.qty
   end
 
   def committed_profit

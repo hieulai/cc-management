@@ -7,9 +7,9 @@ var calculatePurchaseAmount = function (obj, f){
     $(obj).closest("tr").find('input[name="items[][actual_cost]"]').val(pValue);
     var placeHolder = $(obj).closest("tr").find(".actual-amount-placeholder");
     if (placeHolder.find(".actual-amount").size() > 0) {
-        placeHolder.find(".actual-amount").text(number_to_currency(pValue, 2, '.', ','));
+        placeHolder.find(".actual-amount").text(number_to_currency_with_unit(pValue, 2, '.', ','));
     } else {
-        placeHolder.prepend('$<div class="actual-amount">' + number_to_currency(pValue, 2, '.', ',') + '</div>');
+        placeHolder.prepend('$<div class="actual-amount">' + number_to_currency_with_unit(pValue, 2, '.', ',') + '</div>');
     }
 };
 
@@ -53,7 +53,7 @@ $(document).ready(function() {
         var link = $("a#add-purchased-item").attr("href");
         $("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", $(this).val()));
     });
-    $(document).on('click', 'a.remove-item', function (e) {
+    $(document).on('click', '.purchase-orders-list a.remove-item', function (e) {
         e.preventDefault();
         $(this).closest("tr").remove();
         calculateSubTotalAndTotal();

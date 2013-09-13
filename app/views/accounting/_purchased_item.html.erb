@@ -1,5 +1,5 @@
 <tr class="purchased">
-    <td class="center"><%= link_to raw("<button>-</button>"), "#", :class => 'remove-item' %></td>
+    <td class="center"><%= link_to raw("<button type=\"button\">-</button>"), "#", :class => 'remove-item' %></td>
     <td>
         <%= item.name %>
         <%= hidden_field_tag 'items[][name]', item.name %>
@@ -12,15 +12,15 @@
         <%= text_field_tag 'items[][qty]', item.qty, :class => "text-field", :size => 10 %>
     </td>
     <td class="right">
-        $<%= text_field_tag 'items[][estimated_cost]', item.estimated_cost, :class => "text-field", :size => 10 %>
+        $<%= text_field_tag 'items[][estimated_cost]', item.estimated_cost(true), :class => "text-field", :size => 10 %>
     </td>
     <td class="right light-blue">
         <div class="actual-amount-placeholder">
-            <%= price_tag item.amount, 'actual-amount' %>
+            <%= price_tag item.amount(true), 'actual-amount' %>
         </div>
-        <%= hidden_field_tag 'items[][actual_cost]', item.amount %>
+        <%= hidden_field_tag 'items[][actual_cost]', item.amount(true) %>
     </td>
     <td class="right">
-        $0
+        <%= price_tag 0 %>
     </td>
 </tr>

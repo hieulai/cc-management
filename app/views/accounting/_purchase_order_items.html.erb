@@ -57,7 +57,7 @@
           <td colspan=11>
             <% @items = Item.where(builder_id: session[:builder_id]).order(:name)  %>
             <%= select :purchased_item, :id, @items.map { |i| [i.name, i.id] } %>
-            <%= link_to raw("<button>+ Item</button>"), {:action => 'add_item_to_purchase_order', :item_id => @items.first.id}, :remote => true, :id => "add-purchased-item" %>
+            <%= link_to raw("<button type=\"button\">+ Item</button>"), {:action => 'add_item_to_purchase_order', :item_id => @items.first.id}, :remote => true, :id => "add-purchased-item" %>
           </td>
       </tr>
       <tr>

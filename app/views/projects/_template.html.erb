@@ -13,28 +13,7 @@
     </tr>
     </thead>
     <tbody>
-    <%- amount = 0
-        margin = 0
-        committed_cost = 0
-        actual_cost = 0
-        committed_profit = 0
-        actual_profit = 0
-
-        cos_committed_cost= 0
-        cos_committed_profit = 0
-    %>
     <%- template.categories_templates.each do |category_template| %>
-      <%- amount+= category_template.items.map(&:amount).compact.sum
-          margin+= category_template.items.map(&:margin).compact.sum
-          committed_cost+= category_template.items.map(&:committed_cost).compact.sum + category_template.change_orders.map(&:committed_cost).compact.sum
-          actual_cost+= category_template.items.map(&:actual_cost).compact.sum
-          committed_profit+= category_template.items.map(&:committed_profit).compact.sum + category_template.change_orders.map(&:committed_profit).compact.sum
-          actual_profit+= category_template.items.map(&:actual_profit).compact.sum
-
-          cos_committed_cost+= category_template.change_orders.map(&:committed_cost).compact.sum
-          cos_committed_profit+= category_template.change_orders.map(&:committed_profit).compact.sum
-
-      %>
       <%= render :partial => 'tr_category', :locals => {:category_template => category_template}  %>
     <% end %>
     <tr class="total-change-order change_order">
@@ -42,22 +21,22 @@
             CHANGE ORDERS
         </td>
         <td></td>
-        <td class="right"><%= price_tag(cos_committed_cost) unless cos_committed_cost == 0 %></td>
+        <td class="right"><%= price_tag(template.categories_templates.map{|c| c.co(:committed_cost)}.compact.sum) %></td>
         <td></td>
         <td></td>
-        <td class="right"><%= price_tag(cos_committed_profit) unless cos_committed_profit == 0 %></td>
+        <td class="right"><%= price_tag(template.categories_templates.map{|c| c.co(:committed_profit)}.compact.sum)%></td>
         <td></td>
     </tr>
     <tr class="total">
         <td colspan=3>
             GRAND TOTAL
         </td>
-        <td class="right"><%= price_tag(amount, "total-amount") %></td>
-        <td class="right"><%= price_tag(committed_cost) unless committed_cost == 0 %></td>
-        <td class="right"><%= price_tag(actual_cost) unless actual_cost == 0 %></td>
-        <td class="right"><%= price_tag(margin, "total-margin") %></td>
-        <td class="right"><%= price_tag(committed_profit) unless committed_profit == 0 %></td>
-        <td class="right"><%= price_tag(actual_profit) unless actual_profit == 0 %></td>
+        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:amount) }.compact.sum, "total-amount") %></td>
+        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:committed_cost) }.compact.sum) %></td>
+        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:actual_cost) }.compact.sum) %></td>
+        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:margin) }.compact.sum, "total-margin") %></td>
+        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:committed_profit) }.compact.sum) %></td>
+        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:actual_profit) }.compact.sum) %></td>
     </tr>
     </tbody>
 </table>

@@ -62,8 +62,13 @@ var number_to_currency = function (n,c,d,t) {
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 }
 
+var number_to_currency_with_unit = function (n,c,d,t) {
+    var currency = number_to_currency(n, c, d, t);
+    return currency.indexOf("-") == 0 ? "-$" : "$" + currency
+}
+
 var currency_to_number = function (c) {
-    return Number(c.replace(/[^0-9\.]+/g, ""));
+    return Number(c.replace(/[^-0-9\.]+/g, ""));
 };
 
 var updateQueryStringParameter = function (uri, key, value) {

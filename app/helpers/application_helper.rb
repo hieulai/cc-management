@@ -27,7 +27,7 @@ module ApplicationHelper
   end
 
   def price_tag n, inner_class = ""
-    n.nil? ? n : raw('$' + content_tag(:div, number_to_currency(number_with_precision(n, precision: 2), :unit =>"" ), :class => inner_class))
+    n.nil? ? n : raw(content_tag(:div, number_to_currency(number_with_precision(n, precision: 2)), :class => inner_class))
   end
 
 end

@@ -25,7 +25,7 @@
         <%= price_tag(item.price, "price") %>
     </td>
     <td class="button-container">
-        <%= link_to raw("<button>+</button>"), "#" , :class => 'trigger-add'%>
-        <%= link_to raw("<button>-</button>"), {:controller => 'items', :action => 'destroy', :id => item.id}, :remote => true, :class => 'remove-item' %>
+        <%= link_to raw("<button type=\"button\">+</button>"), "#" , :class => 'trigger-add'%>
+        <%= link_to raw("<button type=\"button\">-</button>"), {:controller => 'items', :action => 'destroy', :id => item.id}, :remote => true, :class => 'remove-item' %>
     </td>
 </tr>

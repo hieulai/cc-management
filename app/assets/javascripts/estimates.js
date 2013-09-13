@@ -9,9 +9,9 @@ function calculateSubTotals(trCategory) {
             margin += currency_to_number($(this).find(".margin").text());
             price += currency_to_number($(this).find(".price").text());
         });
-        trSubtotal.find(".subtotal-amount").text(number_to_currency(amount, 2, '.', ','));
-        trSubtotal.find(".subtotal-margin").text(number_to_currency(margin, 2, '.', ','));
-        trSubtotal.find(".subtotal-price").text(number_to_currency(price, 2, '.', ','));
+        trSubtotal.find(".subtotal-amount").text(number_to_currency_with_unit(amount, 2, '.', ','));
+        trSubtotal.find(".subtotal-margin").text(number_to_currency_with_unit(margin, 2, '.', ','));
+        trSubtotal.find(".subtotal-price").text(number_to_currency_with_unit(price, 2, '.', ','));
     }
 };
 
@@ -24,9 +24,9 @@ function calculateTotals() {
         margin += currency_to_number($(this).find(".margin").text());
         price += currency_to_number($(this).find(".price").text());
     });
-    $("div.total-amount").text(number_to_currency(amount, 2, '.', ','));
-    $("div.total-margin").text(number_to_currency(margin, 2, '.', ','));
-    $("div.total-price").text(number_to_currency(price, 2, '.', ','));
+    $("div.total-amount").text(number_to_currency_with_unit(amount, 2, '.', ','));
+    $("div.total-margin").text(number_to_currency_with_unit(margin, 2, '.', ','));
+    $("div.total-price").text(number_to_currency_with_unit(price, 2, '.', ','));
     $("input.total-amount").val(amount.toFixed(2));
     $("input.total-margin").val(margin.toFixed(2));
     $("input.total-price").val(price.toFixed(2));
@@ -52,7 +52,7 @@ $(document).ready(function () {
                     }
                     trItem.find("td .price").html(number_to_currency(response.price, 2, '.', ','));
                     trItem.find("td .margin a").text(number_to_currency(response.margin, 2, '.', ','));
-                    trItem.find("td .amount").html(number_to_currency(response.amount, 2, '.', ','));
+                    trItem.find("td .amount").html(number_to_currency_with_unit(response.amount, 2, '.', ','));
                     calculateSubTotals(trItem.prevAll("tr.category").first());
                     calculateTotals();
                 } else if ($(this).data("resource") == "category") {
