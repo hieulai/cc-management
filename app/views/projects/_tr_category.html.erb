@@ -11,8 +11,11 @@
 <% category_template.change_orders.each do |co| %>
   <%= render :partial => 'tr_change_order', :locals => {:co => co, :category_template => category_template} %>
 <% end %>
-<% category_template.purchase_orders.where(:chosen => true).first.try(:items).try(:each) do |item| %>
+<% category_template.po.try(:items).try(:each) do |item| %>
   <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
+<% end %>
+<% if category_template.po.try(:shipping).present? %>
+  <%= render :partial => 'tr_shipping', :locals => {:shipping => category_template.po.shipping} %>
 <% end %>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
     <td colspan=3>

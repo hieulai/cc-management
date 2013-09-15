@@ -1,2 +1,3 @@
 $('tr#add-item').before('<%= escape_javascript(render :partial =>  'purchased_item', :locals => {:item => @item}) %>')
+calculatePostTaxAmount($('tr#add-item').prev().find('.actual-amount'));
 calculateSubTotalAndTotal();

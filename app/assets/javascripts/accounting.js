@@ -1,31 +1,44 @@
 var calculatePurchaseAmount = function (obj, f){
     var estimateCost = $(obj).closest("tr").find('input[name="items[][estimated_cost]"]');
     var qty = $(obj).closest("tr").find('input[name="items[][qty]"]');
-    var eValue = currency_to_number($(estimateCost).val());
-    var qValue = currency_to_number(qty.val());
+    var eValue = text_to_number($(estimateCost).val());
+    var qValue = text_to_number(qty.val());
     var pValue = eValue * qValue;
-    $(obj).closest("tr").find('input[name="items[][actual_cost]"]').val(pValue);
     var placeHolder = $(obj).closest("tr").find(".actual-amount-placeholder");
     if (placeHolder.find(".actual-amount").size() > 0) {
         placeHolder.find(".actual-amount").text(number_to_currency_with_unit(pValue, 2, '.', ','));
     } else {
-        placeHolder.prepend('$<div class="actual-amount">' + number_to_currency_with_unit(pValue, 2, '.', ',') + '</div>');
+        placeHolder.prepend('<div class="actual-amount">' + number_to_currency_with_unit(pValue, 2, '.', ',') + '</div>');
     }
+    calculatePostTaxAmount($(placeHolder).find(".actual-amount"));
 };
 
 var calculateSubTotalAndTotal = function () {
     if ($("#total").size() > 0) {
         var subtotal = 0;
-        $('input[name="items[][actual_cost]"]').each(function () {
-            subtotal += currency_to_number($(this).val());
+        $('.actual-amount').each(function () {
+            subtotal += text_to_number($(this).text());
         });
         $('#subtotal').html(subtotal == 0 ? "" : "$" + number_to_currency(subtotal, 2, '.', ','));
-        var salesTax = currency_to_number($('input[name="purchase_order[sales_tax]"]').val());
-        var shipping = currency_to_number($('input[name="purchase_order[shipping]"]').val());
+        var salesTax = subtotal * text_to_number($('input[name="purchase_order[sales_tax_rate]"]').val()) / 100;
+        $('#sales_tax').html(salesTax == 0 ? "" : "$" + number_to_currency(salesTax, 2, '.', ','));
+        var shipping = text_to_number($('input[name="purchase_order[shipping]"]').val());
         var total = subtotal + salesTax + shipping;
         $('#total').html(total == 0 ? "" : "$" + number_to_currency(total, 2, '.', ','));
     }
 };
+
+var calculatePostTaxAmount = function(i) {
+    var postTaxActualAmount = text_to_number($(i).text()) * (1 + text_to_number($('input[name="purchase_order[sales_tax_rate]"]').val()) / 100);
+    $(i).closest("tr").find(".post-tax-actual-amount").text(number_to_currency_with_unit(postTaxActualAmount, 2, '.', ','))
+    $(i).closest("tr").find('input[name="items[][actual_cost]"]').val(postTaxActualAmount);
+}
+
+var calculatePostTaxAmounts = function () {
+    $('.actual-amount').each(function () {
+        calculatePostTaxAmount(this);
+    });
+}
 
 var toggleItemInputs = function (checbox, s) {
     $(checbox).closest("tr").find('.text-field').toggle(s);
@@ -33,7 +46,9 @@ var toggleItemInputs = function (checbox, s) {
 };
 
 $(document).ready(function() {
+    calculatePostTaxAmounts();
     calculateSubTotalAndTotal();
+
     $(document).on('change', 'input[name="items[][qty]"], input[name="items[][estimated_cost]"]', function () {
         calculatePurchaseAmount(this);
         calculateSubTotalAndTotal();
@@ -59,7 +74,11 @@ $(document).ready(function() {
         calculateSubTotalAndTotal();
         return false;
     });
-    $(document).on('change', 'input[name="purchase_order[sales_tax]"], input[name="purchase_order[shipping]"] ', function () {
+    $(document).on('change', 'input[name="purchase_order[shipping]"] ', function () {
+        calculateSubTotalAndTotal();
+    });
+    $(document).on('change', 'input[name="purchase_order[sales_tax_rate]"]', function () {
+        calculatePostTaxAmounts();
         calculateSubTotalAndTotal();
     });
 })

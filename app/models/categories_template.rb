@@ -15,7 +15,7 @@ class CategoriesTemplate < ActiveRecord::Base
 
   def total(attr)
     items_empty = items.map(&attr).compact.blank?
-    pos_empty = purchase_orders.where(:chosen => true).first.try(:items).try(:map, &attr).try(:compact).blank?
+    pos_empty = po.try(:items).try(:map, &attr).try(:compact).blank? && po.try(:shipping).blank?
     cos_empty = true
     if [:committed_cost, :committed_profit].include? attr
       cos_empty = change_orders.map(&attr).compact.blank?
@@ -23,11 +23,21 @@ class CategoriesTemplate < ActiveRecord::Base
     return nil if  items_empty && cos_empty && pos_empty
     total= items.map(&attr).compact.sum
     total+= co(attr) if [:committed_cost, :committed_profit].include? attr
-    total+= purchase_orders.where(:chosen => true).first.try(:items).try(:map, &attr).try(:compact).try(:sum).to_f
+    total+= po.try(:items).try(:map, &attr).try(:compact).try(:sum).to_f
+
+    if :actual_cost == attr
+      total+= po.shipping.to_f
+    elsif :actual_profit == attr
+      total-= po.shipping.to_f
+    end
   end
 
   def co(attr)
     change_orders.map(&attr).compact.sum
+  end
+
+  def po
+    purchase_orders.where(:chosen => true).first
   end
 
   before_destroy do

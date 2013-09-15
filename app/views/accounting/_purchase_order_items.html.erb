@@ -6,7 +6,8 @@
         <th>Description</th>
         <th class="cell-price">Qty</th>
         <th class="cell-price">Rate</th>
-        <th class="cell-price">Purchase Amount</th>
+        <th class="cell-price">Pre-Tax Amount</th>
+        <th class="cell-price">Post-Tax Amount</th>
         <th class="cell-price amount">Estimated Costs</th>
     </tr>
     </thead>
@@ -42,19 +43,24 @@
                 <div class="actual-amount-placeholder">
                     <%= price_tag purchase_order.item_amount(item.id), 'actual-amount' %>
                 </div>
-                <%= hidden_field_tag 'items[][actual_cost]', purchase_order.item_amount(item.id) %>
                 <%= hidden_field_tag 'items[][id]', item.id %>
+            </td>
+            <td class="right">
+                <div class="text-field" style="display: <%= text_field_display %>">
+                    <div class="post-tax-actual-amount"></div>
+                    <%= hidden_field_tag 'items[][actual_cost]', item.actual_cost %>
+                </div>
             </td>
             <td class="right"><%= price_tag(item.amount) %></td>
         </tr>
 
       <% end %>
       <% purchase_order.items.try(:each) do |i| %>
-        <%= render 'purchased_item', :item => i %>
+        <%= render :partial =>  'purchased_item', :locals => {:item => i} %>
       <% end %>
 
       <tr class="add add-item" id="add-item">
-          <td colspan=11>
+          <td colspan=12>
             <% @items = Item.where(builder_id: session[:builder_id]).order(:name)  %>
             <%= select :purchased_item, :id, @items.map { |i| [i.name, i.id] } %>
             <%= link_to raw("<button type=\"button\">+ Item</button>"), {:action => 'add_item_to_purchase_order', :item_id => @items.first.id}, :remote => true, :id => "add-purchased-item" %>
@@ -63,21 +69,25 @@
       <tr>
           <td colspan="5">Subtotal</td>
           <td id="subtotal" class="right light-blue"></td>
+          <td id="" class="right"></td>
           <td class="right"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
       </tr>
       <tr>
           <td colspan="5">Sales Tax</td>
-          <td class="right light-blue">$<%= text_field(:purchase_order, :sales_tax, :size => 10) %></td>
+          <td id="sales_tax" class="right light-blue"></td>
+          <td id="" class="right"></td>
           <td></td>
       </tr>
       <tr>
           <td colspan="5">Shipping</td>
           <td class="right light-blue">$<%= text_field(:purchase_order, :shipping, :size => 10) %></td>
+          <td id="" class="right"></td>
           <td></td>
       </tr>
       <tr>
           <td colspan="5" class="strong">TOTAL</td>
           <td id="total" class="right light-blue strong"></td>
+          <td id="" class="right"></td>
           <td class="right strong"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
       </tr>
     <% end %>

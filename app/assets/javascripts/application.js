@@ -67,7 +67,7 @@ var number_to_currency_with_unit = function (n,c,d,t) {
     return currency.indexOf("-") == 0 ? "-$" : "$" + currency
 }
 
-var currency_to_number = function (c) {
+var text_to_number = function (c) {
     return Number(c.replace(/[^-0-9\.]+/g, ""));
 };
 

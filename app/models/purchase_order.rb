@@ -8,7 +8,7 @@ class PurchaseOrder < ActiveRecord::Base
 
   validates_presence_of :categories_template, :project
 
-  attr_accessible :amount, :notes, :chosen, :builder_id,  :project_id, :categories_template_id, :vendor_id, :sales_tax, :shipping, :date
+  attr_accessible :amount, :notes, :chosen, :builder_id,  :project_id, :categories_template_id, :vendor_id, :sales_tax_rate, :shipping, :date
 
   serialize :amount
 
@@ -20,18 +20,17 @@ class PurchaseOrder < ActiveRecord::Base
 
   def total_amount
     t=0
-    self.sales_tax||=0
     self.shipping||=0
     amount.each do |i|
       t+= i[:actual_cost].to_f
     end
-    t+= self.sales_tax + self.shipping + items.map(&:actual_cost).sum
+    t + items.map(&:actual_cost).sum + self.shipping;
   end
 
   def item_amount(item_id)
     self.amount.try(:each) do |i|
       if item_id.to_s == i[:id]
-        return i[:actual_cost]
+        return i[:estimated_cost].to_f * i[:qty].to_f
       end
     end
     return nil
@@ -103,5 +102,6 @@ class PurchaseOrder < ActiveRecord::Base
   private
   def default_values
     self.chosen ||= true
+    self.sales_tax_rate||=1.0825
   end
 end

@@ -30,6 +30,10 @@
         <td><%= f.date_select :date %></td>
     </tr>
     <tr>
+        <th><%= f.label :date, "Sales Tax Rate" %></th>
+        <td><%= f.text_field :sales_tax_rate %>(%)</td>
+    </tr>
+    <tr>
         <th><%= f.label :notes, "Notes" %></th>
         <td><%= f.text_area(:notes) %></td>
     </tr>

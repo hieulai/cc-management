@@ -18,7 +18,10 @@
         <div class="actual-amount-placeholder">
             <%= price_tag item.amount(true), 'actual-amount' %>
         </div>
-        <%= hidden_field_tag 'items[][actual_cost]', item.amount(true) %>
+    </td>
+    <td class="right">
+        <div class="post-tax-actual-amount"></div>
+        <%= hidden_field_tag 'items[][actual_cost]', item.actual_cost %>
     </td>
     <td class="right">
         <%= price_tag 0 %>

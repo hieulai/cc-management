@@ -5,9 +5,9 @@ function calculateSubTotals(trCategory) {
         var margin = 0
         var price = 0;
         $("tr.item.item_" + trCategory.attr("id")).each(function () {
-            amount += currency_to_number($(this).find(".amount").text());
-            margin += currency_to_number($(this).find(".margin").text());
-            price += currency_to_number($(this).find(".price").text());
+            amount += text_to_number($(this).find(".amount").text());
+            margin += text_to_number($(this).find(".margin").text());
+            price += text_to_number($(this).find(".price").text());
         });
         trSubtotal.find(".subtotal-amount").text(number_to_currency_with_unit(amount, 2, '.', ','));
         trSubtotal.find(".subtotal-margin").text(number_to_currency_with_unit(margin, 2, '.', ','));
@@ -20,9 +20,9 @@ function calculateTotals() {
     var margin = 0
     var price = 0;
     $("tr.item").each(function () {
-        amount += currency_to_number($(this).find(".amount").text());
-        margin += currency_to_number($(this).find(".margin").text());
-        price += currency_to_number($(this).find(".price").text());
+        amount += text_to_number($(this).find(".amount").text());
+        margin += text_to_number($(this).find(".margin").text());
+        price += text_to_number($(this).find(".price").text());
     });
     $("div.total-amount").text(number_to_currency_with_unit(amount, 2, '.', ','));
     $("div.total-margin").text(number_to_currency_with_unit(margin, 2, '.', ','));
