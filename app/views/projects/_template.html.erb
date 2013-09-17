@@ -1,4 +1,4 @@
-<table class="grid-view item-list" summary="Items List">
+<table class="grid-view item-list" id="budget-form" summary="Items List">
     <thead>
     <tr class="header">
         <th>Category</th>
@@ -31,12 +31,12 @@
         <td colspan=3>
             GRAND TOTAL
         </td>
-        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:amount) }.compact.sum, "total-amount") %></td>
-        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:committed_cost) }.compact.sum) %></td>
-        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:actual_cost) }.compact.sum) %></td>
-        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:margin) }.compact.sum, "total-margin") %></td>
-        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:committed_profit) }.compact.sum) %></td>
-        <td class="right"><%= price_tag(template.categories_templates.map { |c| c.total(:actual_profit) }.compact.sum) %></td>
+        <td class="right"><div class="total-budget-estimated-cost"></div></td>
+        <td class="right"><div class="total-budget-committed-cost"></div></td>
+        <td class="right"><div class="total-budget-actual-cost"></div></td>
+        <td class="right"><div class="total-budget-estimated-profit"></div></td>
+        <td class="right"><div class="total-budget-committed-profit"></div></td>
+        <td class="right"><div class="total-budget-actual-profit"></div></td>
     </tr>
     </tbody>
 </table>

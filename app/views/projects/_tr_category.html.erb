@@ -11,20 +11,22 @@
 <% category_template.change_orders.each do |co| %>
   <%= render :partial => 'tr_change_order', :locals => {:co => co, :category_template => category_template} %>
 <% end %>
-<% category_template.po.try(:items).try(:each) do |item| %>
-  <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
+<% category_template.pos.try(:each) do |po| %>
+  <% po.try(:items).try(:each) do |item| %>
+    <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => po.categories_template} %>
+  <% end %>
 <% end %>
-<% if category_template.po.try(:shipping).present? %>
-  <%= render :partial => 'tr_shipping', :locals => {:shipping => category_template.po.shipping} %>
+<% unless category_template.pos.try(:map, &:shipping).try(:compact).blank? %>
+  <%= render :partial => 'tr_shipping', :locals => {:shipping => category_template.pos.try(:map, &:shipping).try(:compact).sum} %>
 <% end %>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
     <td colspan=3>
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>
-    <td class="right"><%= price_tag(category_template.total(:amount), "subtotal-amount") %></td>
-    <td class="right"><%= price_tag(category_template.total(:committed_cost)) %></td>
-    <td class="right"><%= price_tag(category_template.total(:actual_cost)) %></td>
-    <td class="right"><%= price_tag(category_template.total(:margin), "subtotal-margin") %></td>
-    <td class="right"><%= price_tag(category_template.total(:committed_profit)) %></td>
-    <td class="right"><%= price_tag(category_template.total(:actual_profit)) %></td>
+    <td class="right"><div class="subtotal-budget-estimated-cost"></div></td>
+    <td class="right"><div class="subtotal-budget-committed-cost"></div></td>
+    <td class="right"><div class="subtotal-budget-actual-cost"></div></td>
+    <td class="right"><div class="subtotal-budget-estimated-profit"></div></td>
+    <td class="right"><div class="subtotal-budget-committed-profit"></div></td>
+    <td class="right"><div class="subtotal-budget-actual-profit"></div></td>
 </tr>

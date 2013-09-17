@@ -51,7 +51,7 @@ var load_add_link = function(){
     }
 }
 
-var number_to_currency = function (n,c,d,t) {
+var number_to_currency = function (n,c,d,t,u) {
     var n = Number(n) ,
         c = isNaN(c = Math.abs(c)) ? 2 : c,
         d = d == undefined ? "." : d,
@@ -59,12 +59,14 @@ var number_to_currency = function (n,c,d,t) {
         s = n < 0 ? "-" : "",
         i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
         j = (j = i.length) > 3 ? j % 3 : 0;
+    if (t) {
+        s += "$";
+    }
     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 }
 
 var number_to_currency_with_unit = function (n,c,d,t) {
-    var currency = number_to_currency(n, c, d, t);
-    return currency.indexOf("-") == 0 ? "-$" : "$" + currency
+    return number_to_currency(n, c, d, t, true);
 }
 
 var text_to_number = function (c) {

@@ -19,12 +19,12 @@ var calculateSubTotalAndTotal = function () {
         $('.actual-amount').each(function () {
             subtotal += text_to_number($(this).text());
         });
-        $('#subtotal').html(subtotal == 0 ? "" : "$" + number_to_currency(subtotal, 2, '.', ','));
+        $('#subtotal').html(subtotal == 0 ? "" : number_to_currency_with_unit(subtotal, 2, '.', ','));
         var salesTax = subtotal * text_to_number($('input[name="purchase_order[sales_tax_rate]"]').val()) / 100;
-        $('#sales_tax').html(salesTax == 0 ? "" : "$" + number_to_currency(salesTax, 2, '.', ','));
+        $('#sales_tax').html(salesTax == 0 ? "" : number_to_currency_with_unit(salesTax, 2, '.', ','));
         var shipping = text_to_number($('input[name="purchase_order[shipping]"]').val());
         var total = subtotal + salesTax + shipping;
-        $('#total').html(total == 0 ? "" : "$" + number_to_currency(total, 2, '.', ','));
+        $('#total').html(total == 0 ? "" : number_to_currency_with_unitg(total, 2, '.', ','));
     }
 };
 
