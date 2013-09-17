@@ -74,7 +74,7 @@ class PurchaseOrder < ActiveRecord::Base
       if self.chosen
         item = Item.find(i[:id])
         if item.present?
-          item.update_attribute(:actual_cost, item.actual_cost + i[:actual_cost].to_f)
+          item.update_attribute(:actual_cost, item.actual_cost.to_f + i[:actual_cost].to_f)
         end
       end
     end
@@ -85,7 +85,7 @@ class PurchaseOrder < ActiveRecord::Base
       if self.chosen
         item = Item.find(i[:id])
         if item.present?
-          item.update_attribute(:actual_cost, item.actual_cost - i[:actual_cost].to_f)
+          item.update_attribute(:actual_cost, item.actual_cost.to_f - i[:actual_cost].to_f)
         end
       end
     end
