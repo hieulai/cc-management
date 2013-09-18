@@ -24,7 +24,7 @@ var calculateSubTotalAndTotal = function () {
         $('#sales_tax').html(salesTax == 0 ? "" : number_to_currency_with_unit(salesTax, 2, '.', ','));
         var shipping = text_to_number($('input[name="purchase_order[shipping]"]').val());
         var total = subtotal + salesTax + shipping;
-        $('#total').html(total == 0 ? "" : number_to_currency_with_unitg(total, 2, '.', ','));
+        $('#total').html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
     }
 };
 
