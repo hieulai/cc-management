@@ -21,6 +21,18 @@ class CategoriesTemplate < ActiveRecord::Base
     purchase_orders.where(:chosen => true)
   end
 
+  def merged_po_items
+    po_ids = purchase_orders.pluck(:id)
+    r = Array.new
+    Item.where(:purchase_order_id => po_ids).group_by(&:name).each do |name, list|
+      estimated_cost = list.map(&:amount).compact.sum
+      actual_cost = list.map(&:actual_cost).compact.sum
+      margin = list.map(&:margin).compact.sum
+      r << Item.new(:name => name, :description => list.first.description, :estimated_cost => estimated_cost, :margin => margin, :actual_cost => actual_cost, :purchase_order_id => list.first.purchase_order_id)
+    end
+    return r
+  end
+
   before_destroy do
     items.destroy_all
   end

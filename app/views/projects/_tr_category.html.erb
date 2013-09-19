@@ -11,10 +11,8 @@
 <% category_template.change_orders.each do |co| %>
   <%= render :partial => 'tr_change_order', :locals => {:co => co, :category_template => category_template} %>
 <% end %>
-<% category_template.pos.try(:each) do |po| %>
-  <% po.try(:items).try(:each) do |item| %>
-    <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => po.categories_template} %>
-  <% end %>
+<% category_template.merged_po_items.each do |item| %>
+  <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <% unless category_template.pos.try(:map, &:shipping).try(:compact).blank? %>
   <%= render :partial => 'tr_shipping', :locals => {:shipping => category_template.pos.try(:map, &:shipping).try(:compact).sum} %>
