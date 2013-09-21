@@ -94,6 +94,6 @@ class PurchaseOrder < ActiveRecord::Base
   private
   def default_values
     self.chosen ||= true
-    self.sales_tax_rate||=1.0825
+    self.sales_tax_rate||=8.25
   end
 end
