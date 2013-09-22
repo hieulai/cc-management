@@ -52,7 +52,7 @@ $(document).ready(function () {
                     }
                     trItem.find("td .price").html(number_to_currency(response.price, 2, '.', ','));
                     trItem.find("td .margin a").text(number_to_currency(response.margin, 2, '.', ','));
-                    trItem.find("td .amount").html(number_to_currency_with_unit(response.amount, 2, '.', ','));
+                    trItem.find("td .amount").html(number_to_currency(response.amount, 2, '.', ','));
                     calculateSubTotals(trItem.prevAll("tr.category").first());
                     calculateTotals();
                 } else if ($(this).data("resource") == "category") {

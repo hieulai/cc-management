@@ -11,8 +11,9 @@ function calculateBidAmount() {
 
 function calculateBudgetSubtotalAndTotal(s) {
     var total = 0;
-    var empty = true;
+    var allEmpty = true;
     $(".subtotal-budget-" + s).each(function () {
+        var empty = true;
         var subtotal = 0;
         $(this).closest("tr").prevUntil("tr.category").each(function () {
             if (empty && $(this).find(".budget-" + s).text() != "") {
@@ -21,12 +22,13 @@ function calculateBudgetSubtotalAndTotal(s) {
             subtotal += text_to_number($(this).find(".budget-" + s).text());
         })
         if (!empty) {
-            $(this).text(number_to_currency(subtotal, 2, '.', ','))
+            $(this).text(number_to_currency_with_unit(subtotal, 2, '.', ','));
+            allEmpty = false;
+            total += subtotal;
         }
-        total += subtotal;
     })
-    if (!empty) {
-        $(".total-budget-" + s).text(number_to_currency(total, 2, '.', ','));
+    if (!allEmpty) {
+        $(".total-budget-" + s).text(number_to_currency_with_unit(total, 2, '.', ','));
     }
 }
 
