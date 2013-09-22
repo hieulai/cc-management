@@ -16,7 +16,7 @@ class Item < ActiveRecord::Base
   scope :search, lambda{|query| where("name ILIKE ? OR description ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%")}
 
-  HEADERS = ["Name", "Description", "Cost", "Unit", "Margin", "Price", "Notes"]
+  HEADERS = ["Name", "Description", "Estimated_cost", "Unit", "Margin", "Price", "Notes"]
   after_initialize :default_values
 
   def margin
