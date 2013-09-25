@@ -40,6 +40,10 @@ ul#tasksContainer li label:hover{
     font-size: 10px;
 }
 
+.inline-table-input{
+    width: 70%;
+}
+
 ul.ui-autocomplete {
   position: absolute;
   list-style: none;

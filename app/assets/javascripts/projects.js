@@ -9,9 +9,20 @@ function calculateBidAmount() {
     $('#bid-amount').text(number_to_currency_with_unit(bidAmount, 2, '.', ','));
 }
 
-function calculateBudgetSubtotalAndTotal(s) {
+function calculateBudgetSubtotalAndCOAndTotal(s) {
+    var coTotal = 0;
     var total = 0;
+    var coEmpty = true;
     var allEmpty = true;
+    $("tr.change_order .budget-" + s).each(function() {
+        if (coEmpty && $(this).text() != "") {
+            coEmpty = false;
+        }
+        coTotal+= text_to_number($(this).text());
+    })
+    if (!coEmpty) {
+        $(".co-budget-" + s).text(number_to_currency_with_unit(coTotal, 2, '.', ','));
+    }
     $(".subtotal-budget-" + s).each(function () {
         var empty = true;
         var subtotal = 0;
@@ -33,13 +44,13 @@ function calculateBudgetSubtotalAndTotal(s) {
 }
 
 function calculateBudgetSubtotalsAndTotals(){
-    if ("#budget-form") {
-        calculateBudgetSubtotalAndTotal("estimated-cost");
-        calculateBudgetSubtotalAndTotal("committed-cost");
-        calculateBudgetSubtotalAndTotal("actual-cost");
-        calculateBudgetSubtotalAndTotal("estimated-profit");
-        calculateBudgetSubtotalAndTotal("committed-profit");
-        calculateBudgetSubtotalAndTotal("actual-profit");
+    if ($("#budget-form").size() > 0) {
+        calculateBudgetSubtotalAndCOAndTotal("estimated-cost");
+        calculateBudgetSubtotalAndCOAndTotal("committed-cost");
+        calculateBudgetSubtotalAndCOAndTotal("actual-cost");
+        calculateBudgetSubtotalAndCOAndTotal("estimated-profit");
+        calculateBudgetSubtotalAndCOAndTotal("committed-profit");
+        calculateBudgetSubtotalAndCOAndTotal("actual-profit");
     }
 }
 $(document).ready(function () {
@@ -50,4 +61,22 @@ $(document).ready(function () {
     if ($('input[name="item[][uncommitted_cost]"]').size() >0) {
         calculateBidAmount();
     }
+
+    $("#item-lines").on("cocoon:before-remove", function(e, i) {
+        if ($(i).hasClass("co-category")) {
+            $(i).nextUntil(".co-category").remove();
+        }
+    })
+
+    $(document).on('change', ".change-order-items", function () {
+        var me = this;
+        $.get($(this).attr("data-select-url") + "/a.json", {"item[id]": $(this).val()})
+            .done(function (data) {
+                $(me).closest("tr").find("input.name").val(data.name);
+                $(me).closest("tr").find("input.description").val(data.description);
+                $(me).closest("tr").find("input.qty").val(data.qty);
+                $(me).closest("tr").find("input.estimated_cost").val(data.estimated_cost);
+                $(me).closest("tr").find("input.margin").val(data.margin);
+            });
+    });
 })

@@ -1,26 +1,11 @@
 class ChangeOrder < ActiveRecord::Base
   belongs_to :builder
   belongs_to :project
-  belongs_to :categories_template
+
+  has_many :change_orders_categories, :dependent => :delete_all
 
   validates :name, presence: true
-  validates_presence_of :categories_template
 
-  after_initialize :default_values
-
-  attr_accessible :cost, :description, :margin, :name, :notes, :qty, :unit, :categories_template_id
-
-  def committed_cost
-    self.cost * self.qty
-  end
-
-  def committed_profit
-    self.margin * self.qty
-  end
-
-  private
-  def default_values
-    self.name||= "Change Order"
-    self.qty||= 1
-  end
+  attr_accessible :name, :notes, :approved, :builder_id, :project_id
+  accepts_nested_attributes_for :change_orders_categories, reject_if: :all_blank, allow_destroy: true
 end

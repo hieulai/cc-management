@@ -1,24 +1,40 @@
 <table>
-    <h2>Change Order info:</h2>
-
     <tr>
-        <th>Category</th>
-        <td><%= f.select(:categories_template_id, @project.estimates.any? ? @project.estimates.first.template.categories_templates.sort_by { |c| c.category.name }.map { |c| [c.category.name, c.id] } : Array.new, {:include_blank => true}) %></td>
+        <th>Name</th>
+        <td><%= f.text_field :name %></td>
     </tr>
     <tr>
-        <th>Description</th>
-        <td><%= f.text_field :description , :size => 100 %></td>
-    </tr>
-    <tr>
-        <th>Cost</th>
-        <td><%= f.text_field :cost %></td>
-    </tr>
-    <tr>
-        <th>Margin</th>
-        <td><%= f.text_field :margin %></td>
+        <th>Approved</th>
+        <td><%= f.check_box :approved %></td>
     </tr>
     <tr>
         <th>Notes</th>
         <td><%= f.text_area :notes %></td>
-</tr>
+    </tr>
 </table>
+<br/>
+
+<table class="grid-view item-list" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th>Category</th>
+        <th>Item</th>
+        <th>Qty</th>
+        <th>Rate</th>
+        <th>Margin</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody id="item-lines">
+    <%= f.fields_for :change_orders_categories do |ct| %>
+      <%= render('change_order_categories', f: ct) %>
+    <% end %>
+      <tr id="tr-change_order-category-add"  class="co-category">
+          <td colspan="6">
+              <%= link_to_add_association 'Add Category', f, :change_orders_categories, partial: 'change_order_categories', "data-association-insertion-node" => "tr#tr-change_order-category-add", :"data-association-insertion-method" => "before"%>
+          </td>
+      </tr>
+    </tbody>
+</table>
+
+

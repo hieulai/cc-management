@@ -1,0 +1,21 @@
+<tr class="category change_order">
+    <td colspan=9>
+        <h3>
+            <%= co_category.category.name %>
+        </h3>
+    </td>
+</tr>
+<% co_category.items.each do |item| %>
+  <%= render :partial => 'tr_item', :locals => {:item => item} %>
+<% end %>
+<tr class="subtotal change_order">
+    <td colspan=3>
+        <div class="category-name"><%= co_category.category.name + ' '%>Subtotal</div>
+    </td>
+    <td class="right"><div class="subtotal-budget-estimated-cost"></div></td>
+    <td class="right"><div class="subtotal-budget-committed-cost"></div></td>
+    <td class="right"><div class="subtotal-budget-actual-cost"></div></td>
+    <td class="right"><div class="subtotal-budget-estimated-profit"></div></td>
+    <td class="right"><div class="subtotal-budget-committed-profit"></div></td>
+    <td class="right"><div class="subtotal-budget-actual-profit"></div></td>
+</tr>

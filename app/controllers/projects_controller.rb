@@ -170,29 +170,86 @@ class ProjectsController < ApplicationController
   def new_change_order
     @project = Project.find(params[:id])
     @change_order = ChangeOrder.new
+    @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
+    @items = Item.where("builder_id = ?", session[:builder_id])
   end
 
   def create_change_order
     @project = Project.find(params[:id])
-    @change_order = ChangeOrder.new(params[:change_order])
-    @change_order.project_id = @project.id
+    categories = params[:change_order][:change_orders_categories_attributes]
+    params[:change_order].delete(:change_orders_categories_attributes)
+    @change_order = ChangeOrder.new(params[:change_order].merge(:project_id => @project.id, :builder_id => session[:builder_id]))
+
     if @change_order.save
-      redirect_to :action => 'change_orders', :id => @project.id
+      unless categories.blank?
+        categories.map do |key, val|
+          unless val[:category_id].blank?
+            change_orders_category = @change_order.change_orders_categories.create(category_id: val[:category_id])
+            if val[:items_attributes] && val[:items_attributes].delete_if { |k, v| v[:id].blank? }
+              items = val[:items_attributes].map { |k, v| v.slice!(:id, :_destroy) }
+              unless items.empty?
+                @items = Item.create(items)
+                change_orders_category.items = @items
+              end
+            end
+          end
+        end
+      end
+      redirect_to action: 'change_orders', :id => @project.id
     else
-      render :new_change_order
+      @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
+      @items = Item.where("builder_id = ?", session[:builder_id])
+      flash.now[:alert] = "please enter the data correctly."
+      render :action => :new_change_order
     end
   end
 
   def edit_change_order
     @change_order = ChangeOrder.find(params[:id])
     @project = @change_order.project
+    @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
+    @items = Item.where("builder_id = ?", session[:builder_id])
   end
 
   def update_change_order
     @change_order = ChangeOrder.find(params[:id])
+    categories = params[:change_order][:change_orders_categories_attributes]
+    params[:change_order].delete(:change_orders_categories_attributes)
     if @change_order.update_attributes(params[:change_order])
+      unless categories.blank?
+        categories.map do |key, val|
+          cat_temp_ids = @change_order.change_orders_categories.pluck(:id)
+          if val["_destroy"].eql? "1"
+            @change_order.change_orders_categories.find(val[:id]).delete
+          elsif cat_temp_ids.include? val[:id].to_i
+            change_orders_category = @change_order.change_orders_categories.find(val[:id])
+            change_orders_category.update_attribute(:category_id, val[:category_id])
+            if val[:items_attributes]
+              change_orders_category.items.destroy_all
+              val[:items_attributes].map do |item_key, item_val|
+                unless (item_val["_destroy"].eql? "1") || item_val[:id].blank?
+                  item = item_val.except(:id, :_destroy)
+                  @item = Item.create(item)
+                  change_orders_category.items << @item
+                end
+              end
+            end
+          elsif val[:category_id].present?
+            change_orders_category = @change_order.change_orders_categories.create(category_id: val[:category_id])
+            if val[:items_attributes] && val[:items_attributes].delete_if { |k, v| v[:id].blank? }
+              items = val[:items_attributes].map { |k, v| v.slice!(:id, :_destroy) }
+              unless items.empty?
+                @items = Item.create(items)
+                change_orders_category.items = @items
+              end
+            end
+          end
+        end
+      end
+
       redirect_to(:action => 'change_orders', :id => @change_order.project_id)
     else
+      #if save fails, redisplay form to user can fix problems
       render :edit_change_order
     end
   end
@@ -315,13 +372,9 @@ class ProjectsController < ApplicationController
     @item = Item.find(params[:item][:id])
     respond_to do |format|
       format.js {}
-    end
-  end
-
-  def show_categories_template_items
-    @categories_template = CategoriesTemplate.find(params[:bid][:categories_template_id])
-    respond_to do |format|
-      format.js {}
+      format.json {
+        render :json => @item.to_json
+      }
     end
   end
 

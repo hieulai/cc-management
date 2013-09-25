@@ -3,6 +3,7 @@ class Item < ActiveRecord::Base
   belongs_to :builder
   belongs_to :category
   belongs_to :purchase_order
+  belongs_to :change_orders_category
   has_many :categories_templates, through: :categories_templates_items
   has_many :templates, through: :categories_templates_items
   has_and_belongs_to_many :categories_templates

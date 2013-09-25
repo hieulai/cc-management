@@ -13,7 +13,7 @@ class Project < ActiveRecord::Base
   :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes
 
   def next_tasks n
-    incompleted_tasks[0..n]
+    incompleted_tasks[0..n-1]
   end
 
   def current_progress
@@ -30,6 +30,18 @@ class Project < ActiveRecord::Base
     else
       Array.new
     end
+  end
+
+  def co_items(category)
+    co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.pluck(:id))
+    co_categories.reject! { |co_category| co_category.category.name != category.name }
+    co_categories.map(&:items).flatten
+  end
+
+  def co_categories(template)
+    categories = Category.where(:id => template.categories_templates.pluck(:category_id))
+    co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.pluck(:id))
+    co_categories.reject! { |co_category| categories.pluck(:name).include? co_category.category.name }
   end
   
 end
