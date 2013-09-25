@@ -1,0 +1,26 @@
+<div>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+    <h2 class="center">Send Change Order <%= @change_order.name %></h2>
+    <%= form_tag({:controller => 'projects', :action => 'send_change_order_email', :id => @change_order.id}) do |f| %>
+      <table>
+          <tr>
+              <th>To</th>
+              <td><%= text_field_tag :to, @change_order.project.client.email  %></td>
+          </tr>
+          <tr>
+              <th>Subject</th>
+              <td><%= text_field_tag :subject  %></td>
+          </tr>
+          <tr>
+              <th>Attachment</th>
+              <td><%= link_to "ChangeOrder-#{@change_order.name}.pdf", {:controller => 'projects', :action => 'show_change_order', :id => @change_order.id, :format => :pdf}, :target => "_blank" %></td>
+          </tr>
+          <tr>
+              <th>Body</th>
+              <td><%= text_area_tag :body, nil, :rows => 5, :cols => 30 %></td>
+          </tr>
+      </table>
+      <%= submit_tag "Send"  %>
+      <%= link_to "Cancel", {:controller => 'projects', :action => 'edit_change_order', :id => @change_order.id}  %>
+  <% end %>
+</div>

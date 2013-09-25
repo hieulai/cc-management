@@ -167,6 +167,28 @@ class ProjectsController < ApplicationController
     @change_orders = @project.change_orders
   end
 
+  def show_change_order
+    @change_order = ChangeOrder.find(params[:id])
+    respond_to do |format|
+      format.pdf do
+        render :pdf => "ChangeOrder-#{@change_order.name}",
+               :layout => 'pdf.html',
+               #:show_as_html => true, // for debugging html & css
+               :footer => {:center => 'Page [page]'}
+      end
+    end
+  end
+
+  def show_change_order_email
+    @change_order = ChangeOrder.find(params[:id])
+  end
+
+  def send_change_order_email
+    @change_order = ChangeOrder.find(params[:id])
+    Mailer.delay.send_co(params[:to], params[:subject], params[:body], @change_order)
+    redirect_to :action => 'show_change_order_email', :id => @change_order.id, :notice => "Email was sent."
+  end
+
   def new_change_order
     @project = Project.find(params[:id])
     @change_order = ChangeOrder.new
