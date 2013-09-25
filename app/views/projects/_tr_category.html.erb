@@ -11,11 +11,11 @@
 <% category_template.merged_po_items.each do |item| %>
   <%= render :partial => 'tr_item', :locals => {:item => item} %>
 <% end %>
-<% category_template.template.estimate.project.co_items(category_template.category).try(:each) do |item| %>
-  <%= render :partial => 'tr_item', :locals => {:item => item} %>
-<% end %>
 <% unless category_template.pos.try(:map, &:shipping).try(:compact).blank? %>
   <%= render :partial => 'tr_shipping', :locals => {:shipping => category_template.pos.try(:map, &:shipping).try(:compact).sum} %>
+<% end %>
+<% category_template.template.estimate.project.co_items(category_template.category).try(:each) do |item| %>
+  <%= render :partial => 'tr_item', :locals => {:item => item} %>
 <% end %>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
     <td colspan=3>
