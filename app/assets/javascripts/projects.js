@@ -74,6 +74,7 @@ $(document).ready(function () {
             .done(function (data) {
                 $(me).closest("tr").find("input.name").val(data.name);
                 $(me).closest("tr").find("input.description").val(data.description);
+                $(me).closest("tr").find("input.unit").val(data.unit);
                 $(me).closest("tr").find("input.qty").val(data.qty);
                 $(me).closest("tr").find("input.estimated_cost").val(data.estimated_cost);
                 $(me).closest("tr").find("input.margin").val(data.margin);
