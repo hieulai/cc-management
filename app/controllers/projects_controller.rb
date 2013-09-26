@@ -247,12 +247,19 @@ class ProjectsController < ApplicationController
             change_orders_category = @change_order.change_orders_categories.find(val[:id])
             change_orders_category.update_attribute(:category_id, val[:category_id])
             if val[:items_attributes]
-              change_orders_category.items.destroy_all
               val[:items_attributes].map do |item_key, item_val|
-                unless (item_val["_destroy"].eql? "1") || item_val[:id].blank?
-                  item = item_val.except(:id, :_destroy)
-                  @item = Item.create(item)
-                  change_orders_category.items << @item
+                unless (item_val["_destroy"].eql? "1")
+                  item = Item.find(item_val[:id])
+                  next if item.nil?
+                  item_attributes = item_val.except(:id, :_destroy)
+                  if item.change_orders_category.present?
+                    item.update_attributes(item_attributes)
+                  else
+                    @item = Item.create(item_attributes)
+                    change_orders_category.items << @item
+                  end
+                else
+                  Item.find(item_val[:id]).destroy
                 end
               end
             end

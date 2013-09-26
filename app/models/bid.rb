@@ -27,6 +27,7 @@ class Bid < ActiveRecord::Base
         return i[:uncommitted_cost]
       end
     end
+    return nil
   end
 
   def set_committed_costs (p = true)
