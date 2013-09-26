@@ -19,7 +19,7 @@
     <%- template.estimate.project.co_categories(template).try(:each) do |co_category| %>
       <%= render :partial => 'tr_co_category', :locals => {:co_category => co_category} %>
     <% end %>
-    <% if template.estimate.project.change_orders.any? %>
+    <% if template.estimate.project.change_orders.approved.any? %>
         <tr class="total-change-order change_order">
             <td colspan=3>
                 CHANGE ORDERS

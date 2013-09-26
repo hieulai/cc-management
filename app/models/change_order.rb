@@ -4,6 +4,8 @@ class ChangeOrder < ActiveRecord::Base
 
   has_many :change_orders_categories, :dependent => :delete_all
 
+  scope :approved, -> { where approved: true }
+
   validates :name, presence: true
 
   attr_accessible :name, :notes, :approved, :builder_id, :project_id

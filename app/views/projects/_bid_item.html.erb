@@ -24,5 +24,20 @@
 
       <% end %>
     <% end %>
+    <% if defined?(co_items) && co_items.present? %>
+      <% co_items.each do |item| %>
+        <tr class="change_order">
+            <td><%= item.name %></td>
+            <td><%= item.description %></td>
+            <td>$<%= item.amount %></td>
+            <td>$<%= item.margin %></div></td>
+            <td>
+                $<%= text_field_tag 'item[][uncommitted_cost]', (bid.item_amount(item.id) if (defined? bid) && bid.present?) %>
+                <%= hidden_field_tag 'item[][id]', item.id %>
+            </td>
+        </tr>
+
+      <% end %>
+    <% end %>
     </tbody>
 </table>

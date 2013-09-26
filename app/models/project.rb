@@ -33,14 +33,14 @@ class Project < ActiveRecord::Base
   end
 
   def co_items(category)
-    co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.pluck(:id))
+    co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.approved.pluck(:id))
     co_categories.reject! { |co_category| co_category.category.name != category.name }
     co_categories.map(&:items).flatten
   end
 
   def co_categories(template)
     categories = Category.where(:id => template.categories_templates.pluck(:category_id))
-    co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.pluck(:id))
+    co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.approved.pluck(:id))
     co_categories.reject! { |co_category| categories.pluck(:name).include? co_category.category.name }
   end
   

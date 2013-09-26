@@ -400,6 +400,14 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def show_categories_template_items
+    @categories_template = CategoriesTemplate.find(params[:bid][:categories_template_id])
+    @co_items = @categories_template.template.estimate.project.co_items(@categories_template.category)
+    respond_to do |format|
+      format.js {}
+    end
+  end
+
   def autocomplete_vendor_name
     @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search_by_name(params[:term]).order(:company)
     render :json => @vendors.map { |v|

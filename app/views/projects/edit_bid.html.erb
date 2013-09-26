@@ -16,7 +16,7 @@
 	  </div>
 	  <% end %>
 	<%= render(:partial => "bid_form", :locals => {:f => f})%>
-  <%= render(:partial => "bid_item", :locals => {:bid => @bid, :categories_template => @bid.categories_template})%>
+      <%= render(:partial => "bid_item", :locals => {:bid => @bid, :categories_template => @bid.categories_template, :co_items => @bid.categories_template.template.estimate.project.co_items(@bid.categories_template.category)}) %>
 	<% end %>
 
   <div class="form-buttons">

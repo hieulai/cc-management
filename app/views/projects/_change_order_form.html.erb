@@ -18,7 +18,8 @@
     <thead>
     <tr class="header">
         <th>Category</th>
-        <th>Item</th>
+        <th>Item Name</th>
+        <th>Description</th>
         <th>Qty</th>
         <th>Rate</th>
         <th>Margin</th>
@@ -30,7 +31,7 @@
       <%= render('change_order_categories', f: ct) %>
     <% end %>
       <tr id="tr-change_order-category-add"  class="co-category">
-          <td colspan="6">
+          <td colspan="7">
               <%= link_to_add_association 'Add Category', f, :change_orders_categories, partial: 'change_order_categories', "data-association-insertion-node" => "tr#tr-change_order-category-add", :"data-association-insertion-method" => "before"%>
           </td>
       </tr>

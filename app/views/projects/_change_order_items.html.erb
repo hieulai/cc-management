@@ -4,8 +4,10 @@
         <% item_id = @items.select { |i| i.name == f.object.name }.first.try(:id) %>
         <%= f.select :id, @items.map { |item| [item.name, item.id] }, {prompt: "Select Item", :selected => item_id}, {:class => 'change-order-items', "data-select-url" => url_for(:controller => 'projects', :action => 'show_item')} %>
         <%= f.hidden_field :name, :class => 'name' %>
-        <%= f.hidden_field :description, :class => 'description' %>
         <%= f.hidden_field :unit, :class => 'unit' %>
+    </td>
+    <td>
+        <%= f.text_field :description, :class => 'description' %>
     </td>
     <td>
         <%= f.text_field :qty, :class => 'inline-table-input qty' %>
