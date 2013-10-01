@@ -73,7 +73,8 @@ class PurchaseOrder < ActiveRecord::Base
     self.amount.try(:each) do |i|
       if self.chosen && Item.exists?(i[:id])
         item = Item.find(i[:id])
-        item.update_attribute(:actual_cost, item.actual_cost.to_f + i[:actual_cost].to_f)
+        updated_cost = item.actual_cost.to_f + i[:actual_cost].to_f
+        item.update_attribute(:actual_cost, updated_cost == 0 ? nil : updated_cost)
       end
     end
   end
@@ -82,7 +83,8 @@ class PurchaseOrder < ActiveRecord::Base
     self.amount_was.try(:each) do |i|
       if self.chosen && Item.exists?(i[:id])
         item = Item.find(i[:id])
-        item.update_attribute(:actual_cost, item.actual_cost.to_f - i[:actual_cost].to_f)
+        updated_cost = item.actual_cost.to_f - i[:actual_cost].to_f
+        item.update_attribute(:actual_cost, updated_cost == 0 ? nil : updated_cost)
       end
     end
   end
