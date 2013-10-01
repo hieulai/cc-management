@@ -31,7 +31,7 @@ var calculateSubTotalAndTotal = function () {
 var calculatePostTaxAmount = function(i) {
     var postTaxActualAmount = text_to_number($(i).text()) * (1 + text_to_number($('input[name="purchase_order[sales_tax_rate]"]').val()) / 100);
     $(i).closest("tr").find(".post-tax-actual-amount").text(number_to_currency_with_unit(postTaxActualAmount, 2, '.', ','))
-    $(i).closest("tr").find('input[name="items[][actual_cost]"]').val(postTaxActualAmount);
+    $(i).closest("tr").find('input[name="items[][actual_cost]"]').val(postTaxActualAmount.toFixed(2));
 }
 
 var calculatePostTaxAmounts = function () {
