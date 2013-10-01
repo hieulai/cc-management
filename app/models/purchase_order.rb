@@ -24,7 +24,7 @@ class PurchaseOrder < ActiveRecord::Base
     amount.each do |i|
       t+= i[:actual_cost].to_f
     end
-    t + items.map(&:actual_cost).sum + self.shipping;
+    t + items.map(&:actual_cost).compact.sum + self.shipping;
   end
 
   def item_amount(item_id)
@@ -71,22 +71,18 @@ class PurchaseOrder < ActiveRecord::Base
 
   def set_actual_costs
     self.amount.try(:each) do |i|
-      if self.chosen
+      if self.chosen && Item.exists?(i[:id])
         item = Item.find(i[:id])
-        if item.present?
-          item.update_attribute(:actual_cost, item.actual_cost.to_f + i[:actual_cost].to_f)
-        end
+        item.update_attribute(:actual_cost, item.actual_cost.to_f + i[:actual_cost].to_f)
       end
     end
   end
 
   def unset_actual_costs
     self.amount_was.try(:each) do |i|
-      if self.chosen
+      if self.chosen && Item.exists?(i[:id])
         item = Item.find(i[:id])
-        if item.present?
-          item.update_attribute(:actual_cost, item.actual_cost.to_f - i[:actual_cost].to_f)
-        end
+        item.update_attribute(:actual_cost, item.actual_cost.to_f - i[:actual_cost].to_f)
       end
     end
   end
