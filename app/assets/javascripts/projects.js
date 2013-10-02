@@ -9,6 +9,32 @@ function calculateBidAmount() {
     $('#bid-amount').text(number_to_currency_with_unit(bidAmount, 2, '.', ','));
 }
 
+function calculateCOAmount(coFactor){
+    var trItem = $(coFactor).closest("tr");
+    var tdQty = $(trItem).find("input.qty");
+    var tdEstimatedCost = $(trItem).find("input.estimated_cost");
+    var tdMargin = $(trItem).find("input.margin");
+    var total = text_to_number($(tdQty).val()) * text_to_number($(tdEstimatedCost).val()) + text_to_number($(tdMargin).val());
+    $(trItem).find("td.item-total").text(number_to_currency_with_unit(total, 2, '.', ','))
+}
+
+function calculateCOAmounts() {
+    $('input.co-factor').each(function () {
+        calculateCOAmount(this);
+    });
+    calculateCOTotals();
+};
+
+function calculateCOTotals(){
+    var total = 0;
+    $("td.item-total").each(function () {
+        total += text_to_number($(this).text());
+    });
+    if  ($("td.item-total").size() > 0){
+        $("td#item-totals").text(number_to_currency_with_unit(total, 2, '.', ','));
+    }
+};
+
 function calculateBudgetSubtotalAndCOAndTotal(s) {
     var coTotal = 0;
     var total = 0;
@@ -55,6 +81,8 @@ function calculateBudgetSubtotalsAndTotals(){
 }
 $(document).ready(function () {
     calculateBudgetSubtotalsAndTotals();
+    calculateCOAmounts();
+
     $(document).on('change', 'input[name="item[][uncommitted_cost]"]', function () {
         calculateBidAmount();
     });
@@ -79,5 +107,10 @@ $(document).ready(function () {
                 $(me).closest("tr").find("input.estimated_cost").val(data.estimated_cost);
                 $(me).closest("tr").find("input.margin").val(data.margin);
             });
+    });
+
+    $("#co-item-list").on('change', 'input.co-factor', function () {
+        calculateCOAmount(this);
+        calculateCOTotals();
     });
 })
