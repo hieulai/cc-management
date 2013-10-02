@@ -27,10 +27,10 @@ function calculateCOAmounts() {
 
 function calculateCOTotals(){
     var total = 0;
-    $("td.item-total").each(function () {
-        total += text_to_number($(this).text());
+    $("tr.co-item:visible").each(function () {
+        total += text_to_number($(this).find("td.item-total").text());
     });
-    if  ($("td.item-total").size() > 0){
+    if  ($("tr.co-item:visible").size() > 0){
         $("td#item-totals").text(number_to_currency_with_unit(total, 2, '.', ','));
     }
 };
@@ -90,10 +90,11 @@ $(document).ready(function () {
         calculateBidAmount();
     }
 
-    $("#item-lines").on("cocoon:before-remove", function(e, i) {
+    $("#item-lines").on("cocoon:after-remove", function(e, i) {
         if ($(i).hasClass("co-category")) {
             $(i).nextUntil(".co-category").remove();
         }
+        calculateCOTotals();
     })
 
     $(document).on('change', ".change-order-items", function () {
@@ -106,6 +107,8 @@ $(document).ready(function () {
                 $(me).closest("tr").find("input.qty").val(data.qty);
                 $(me).closest("tr").find("input.estimated_cost").val(data.estimated_cost);
                 $(me).closest("tr").find("input.margin").val(data.margin);
+                calculateCOAmount(me);
+                calculateCOTotals();
             });
     });
 
