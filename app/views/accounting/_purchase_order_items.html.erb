@@ -48,7 +48,7 @@
             <td class="right">
                 <div class="text-field" style="display: <%= text_field_display %>">
                     <div class="post-tax-actual-amount"></div>
-                    <%= hidden_field_tag 'items[][actual_cost]', item.actual_cost %>
+                    <%= hidden_field_tag 'items[][actual_cost]'%>
                 </div>
             </td>
             <td class="right"><%= price_tag(item.amount) %></td>
