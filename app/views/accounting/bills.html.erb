@@ -1,0 +1,15 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu")%>
+    <h1>Bills</h1>
+    <%= link_to("Instructions >>", {:action => 'show'}) %>
+    <br/>
+    <br/>
+    <div class="instructions">
+        <p>Default paragraph. </p>
+    </div>
+
+    </br>
+    <%= link_to("Add Bill  >>", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew') %>
+    <br/><br/>
+    <%= render(:partial => "bills", :locals => {:bills => @bills}) %>
+</div>

@@ -1,0 +1,30 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu")%>
+    <h2>Add Bill</h2>
+
+    <%= form_for @bill, :url => {:action => 'create_bill'} do |f| %>
+
+      <% if @bill.errors.any? %>
+        <div id="errorExplanation">
+            <h2><%= pluralize(@bill.errors.count, "Error") %> prohibited
+                this post from being saved:</h2>
+            <ul>
+                <% @bill.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+      <% end %>
+      <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @bill}) %>
+      <div id="item-placeholder">
+          <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @bill, :categories_template => @bill.categories_template}) %>
+      </div>
+
+    <% end %>
+
+    <div class="form-buttons">
+        <%= submit_tag("Create", :data => {:form => ".new_bill"}) %>
+        <%= link_to("Cancel", :action => 'bills') %>
+    </div>
+
+</div>

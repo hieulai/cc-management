@@ -3,7 +3,8 @@
     <tr class="header">
         <th>Actions</th>
         <th>PO #</th>
-        <th>Date</th>
+        <th>Order Date</th>
+        <th>Due Date</th>
         <th>Project</th>
         <th>Category</th>
         <th>Vendor</th>
@@ -15,11 +16,14 @@
 
       <tr>
           <td class="center">
-              <%= link_to("Edit", {:action => 'edit_purchase_order', :id => po.id}, :class => 'action edit') %>
-              <%= link_to("Delete", {:action => 'delete_purchase_order', :id => po.id}, :class => 'action edit') %>
+              <% unless po.readonly? %>
+                  <%= link_to("Edit", {:action => 'edit_purchase_order', :id => po.id}, :class => 'action edit') %>
+                  <%= link_to("Delete", {:action => 'delete_purchase_order', :id => po.id}, :class => 'action edit') %>
+              <% end %>
           </td>
           <td class="center"><%= po.id %></td>
-          <td class="center"><%= po.date.try(:strftime, "%m/%d/%Y") %></td>
+          <td class="center"><%= po.date %></td>
+          <td class="center"><%= po.due_date %></td>
           <td><%= po.project.name %></td>
           <td><%= po.categories_template.category.name %></td>
           <td><%= po.vendor.try(:display_name)%></td>

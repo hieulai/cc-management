@@ -15,9 +15,9 @@
             </ul>
         </div>
       <% end %>
-      <%= render(:partial => "purchase_order_form", :locals => {:f => f})%>
+      <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @purchase_order}) %>
       <div id="item-placeholder">
-          <%= render(:partial => "purchase_order_items", :locals => {:f => f, :purchase_order => @purchase_order, :categories_template => @purchase_order.categories_template}) %>
+          <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @purchase_order, :categories_template => @purchase_order.categories_template}) %>
       </div>
 
     <% end %>

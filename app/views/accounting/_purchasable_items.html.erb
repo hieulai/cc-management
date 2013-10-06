@@ -1,4 +1,4 @@
-<table class="grid-view purchase-orders-list" summary="Items List">
+<table class="grid-view purchasable-list" summary="Items List">
     <thead>
     <tr class="header">
         <th></th>
@@ -14,11 +14,11 @@
     <tbody>
     <% if defined?(categories_template) && categories_template.present? && categories_template.items.any? %>
       <% categories_template.items.each do |item| %>
-        <% text_field_display = purchase_order.item_chosen(item.id) ? "" : "none"
-           value_display = purchase_order.item_chosen(item.id) ? "none" : ""
+        <% text_field_display = purchasable.item_chosen(item.id) ? "" : "none"
+           value_display = purchasable.item_chosen(item.id) ? "none" : ""
         %>
         <tr>
-            <td class="center"><%= check_box_tag 'item-chosen', item.id, purchase_order.item_chosen(item.id) %></td>
+            <td class="center"><%= check_box_tag 'item-chosen', item.id, purchasable.item_chosen(item.id) %></td>
             <td>
                 <%= item.name %>
                 <%= hidden_field_tag 'items[][name]', item.name %>
@@ -28,20 +28,20 @@
                 <%= hidden_field_tag 'items[][description]', item.description %>
             </td>
             <td class="right">
-                <%= text_field_tag 'items[][qty]', purchase_order.item_qty(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+                <%= text_field_tag 'items[][qty]', purchasable.item_qty(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
                 <div class="item-qty value-field" style="display: <%= value_display %>">
                     <%= item.qty %>
                 </div>
             </td>
             <td class="right">
-                $<%= text_field_tag 'items[][estimated_cost]', purchase_order.item_estimated_cost(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+                $<%= text_field_tag 'items[][estimated_cost]', purchasable.item_estimated_cost(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
                 <div class="item-estimated_cost value-field" style="display: <%= value_display %>">
                     <%= price(item.estimated_cost) %>
                 </div>
             </td>
             <td class="right light-blue">
                 <div class="actual-amount-placeholder">
-                    <%= price_tag purchase_order.item_amount(item.id), 'actual-amount' %>
+                    <%= price_tag purchasable.item_amount(item.id), 'actual-amount' %>
                 </div>
                 <%= hidden_field_tag 'items[][id]', item.id %>
             </td>
@@ -55,7 +55,7 @@
         </tr>
 
       <% end %>
-      <% purchase_order.items.try(:each) do |i| %>
+      <% purchasable.items.try(:each) do |i| %>
         <%= render :partial =>  'purchased_item', :locals => {:item => i} %>
       <% end %>
 
@@ -63,31 +63,31 @@
           <td colspan=12>
             <% @items = Item.where(builder_id: session[:builder_id]).order(:name)  %>
             <%= select :purchased_item, :id, @items.map { |i| [i.name, i.id] } %>
-            <%= link_to raw("<button type=\"button\">+ Item</button>"), {:action => 'add_item_to_purchase_order', :item_id => @items.first.id}, :remote => true, :id => "add-purchased-item" %>
+            <%= link_to raw("<button type=\"button\">+ Item</button>"), {:action => 'add_item_to_purchasable', :item_id => @items.first.id}, :remote => true, :id => "add-purchased-item" %>
           </td>
       </tr>
       <tr>
           <td colspan="5">Subtotal</td>
           <td id="subtotal" class="right light-blue"></td>
-          <td id="" class="right"></td>
+          <td></td>
           <td class="right"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
       </tr>
       <tr>
           <td colspan="5">Sales Tax</td>
           <td id="sales_tax" class="right light-blue"></td>
-          <td id="" class="right"></td>
+          <td></td>
           <td></td>
       </tr>
       <tr>
           <td colspan="5">Shipping</td>
-          <td class="right light-blue">$<%= text_field(:purchase_order, :shipping, :size => 10) %></td>
-          <td id="" class="right"></td>
+          <td class="right light-blue">$<%= text_field(purchasable.class.name.underscore.to_sym, :shipping, :size => 10) %></td>
+          <td></td>
           <td></td>
       </tr>
       <tr>
           <td colspan="5" class="strong">TOTAL</td>
           <td id="total" class="right light-blue strong"></td>
-          <td id="" class="right"></td>
+          <td></td>
           <td class="right strong"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
       </tr>
     <% end %>

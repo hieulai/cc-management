@@ -1,0 +1,43 @@
+<table>
+    <tr>
+        <th><%= f.label :vendor_id, "Vendor" %></th>
+        <td>
+            <%= autocomplete_field :vendor, :name,  autocomplete_vendor_name_accounting_index_path, :value => purchasable.vendor.try(:display_name) , :id_element => "##{purchasable.class.name.underscore}_vendor_id", :update_elements => {} %>
+            <%= f.hidden_field :vendor_id, :value => purchasable.vendor.try(:id)  %>
+        </td>
+    </tr>
+    <tr>
+        <th><%= f.label :project_id, "Project" %></th>
+        <td><%= f.select(:project_id, Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => purchasable.id, :type => purchasable.class.name)}) %></td>
+    </tr>
+    <tr>
+        <th><%= f.label :categories_template_id, "Category" %></th>
+        <td>
+            <div id="categories_template-placeholder">
+                <%= f.select(:categories_template_id, purchasable.project.try(:estimates).try(:any?) ? purchasable.project.estimates.first.template.categories_templates.sort_by { |c| c.category.name }.map { |c| [c.category.name, c.id] } : Array.new, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_categories_template_items", :id => purchasable.id, :type => purchasable.class.name)}) %>
+            </div>
+        </td>
+    </tr>
+    <% unless purchasable.new_record? %>
+        <tr>
+            <th><%= purchasable.class.name.underscore.humanize %> #</th>
+            <td><%= purchasable.id %></td>
+        </tr>
+    <% end  %>
+    <tr>
+        <th><%= f.label :date, "Order Date" %></th>
+        <td><%= f.date_select :date %></td>
+    </tr>
+    <tr>
+        <th><%= f.label :date, "Due Date" %></th>
+        <td><%= f.date_select :due_date %></td>
+    </tr>
+    <tr>
+        <th><%= f.label :date, "Sales Tax Rate" %></th>
+        <td><%= f.text_field :sales_tax_rate %>(%)</td>
+    </tr>
+    <tr>
+        <th><%= f.label :notes, "Notes" %></th>
+        <td><%= f.text_area(:notes) %></td>
+    </tr>
+</table>
