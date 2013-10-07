@@ -68,7 +68,7 @@ $(document).ready(function() {
         var link = $("a#add-purchased-item").attr("href");
         $("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", $(this).val()));
     });
-    $(document).on('click', '.purchase-orders-list a.remove-item', function (e) {
+    $(document).on('click', '.purchasable-list a.remove-item', function (e) {
         e.preventDefault();
         $(this).closest("tr").remove();
         calculateSubTotalAndTotal();
