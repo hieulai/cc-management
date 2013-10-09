@@ -17,12 +17,14 @@
     <td class="right light-blue">
         <div class="actual-amount-placeholder">
             <%= price_tag item.amount(true), 'actual-amount' %>
+            <%= hidden_field_tag 'items[][actual_cost]', item.actual_cost %>
         </div>
     </td>
-    <td class="right">
-        <div class="post-tax-actual-amount"></div>
-        <%= hidden_field_tag 'items[][actual_cost]', item.actual_cost %>
-    </td>
+    <% if type == PurchaseOrder.name %>
+      <td class="right">
+          <div class="post-tax-actual-amount"></div>
+      </td>
+    <% end %>
     <td class="right">
         <%= price_tag 0 %>
     </td>

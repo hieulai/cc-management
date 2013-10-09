@@ -20,18 +20,27 @@ var calculateSubTotalAndTotal = function () {
             subtotal += text_to_number($(this).text());
         });
         $('#subtotal').html(subtotal == 0 ? "" : number_to_currency_with_unit(subtotal, 2, '.', ','));
-        var salesTax = subtotal * text_to_number($('input[name$="[sales_tax_rate]"]').val()) / 100;
-        $('#sales_tax').html(salesTax == 0 ? "" : number_to_currency_with_unit(salesTax, 2, '.', ','));
-        var shipping = text_to_number($('input[name$="[shipping]"]').val());
-        var total = subtotal + salesTax + shipping;
+        var total = subtotal;
+        if ($('input[name$="[sales_tax_rate]"]').size() > 0) {
+            var salesTax = subtotal * text_to_number($('input[name$="[sales_tax_rate]"]').val()) / 100;
+            $('#sales_tax').html(salesTax == 0 ? "" : number_to_currency_with_unit(salesTax, 2, '.', ','));
+            total += salesTax;
+        }
+        if ($('input[name$="[shipping]"]').size() > 0) {
+            var shipping = text_to_number($('input[name$="[shipping]"]').val());
+            total += shipping;
+        }
         $('#total').html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
     }
 };
 
-var calculatePostTaxAmount = function(i) {
-    var postTaxActualAmount = text_to_number($(i).text()) * (1 + text_to_number($('input[name$="[sales_tax_rate]"]').val()) / 100);
-    $(i).closest("tr").find(".post-tax-actual-amount").text(number_to_currency_with_unit(postTaxActualAmount, 2, '.', ','))
-    $(i).closest("tr").find('input[name="items[][actual_cost]"]').val(postTaxActualAmount.toFixed(2));
+var calculatePostTaxAmount = function (i) {
+    var actualAmount = text_to_number($(i).text());
+    if ($('input[name$="[sales_tax_rate]"]').size() > 0) {
+        actualAmount *= (1 + text_to_number($('input[name$="[sales_tax_rate]"]').val()) / 100);
+        $(i).closest("tr").find(".post-tax-actual-amount").text(number_to_currency_with_unit(actualAmount, 2, '.', ','))
+    }
+    $(i).closest("tr").find('input[name="items[][actual_cost]"]').val(actualAmount.toFixed(2));
 }
 
 var calculatePostTaxAmounts = function () {

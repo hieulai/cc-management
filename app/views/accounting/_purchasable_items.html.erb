@@ -6,8 +6,12 @@
         <th>Description</th>
         <th class="cell-price">Qty</th>
         <th class="cell-price">Rate</th>
-        <th class="cell-price">Pre-Tax Amount</th>
-        <th class="cell-price">Post-Tax Amount</th>
+        <% if purchasable.class == PurchaseOrder %>
+          <th class="cell-price">Pre-Tax Amount</th>
+          <th class="cell-price">Post-Tax Amount</th>
+        <% elsif purchasable.class == Bill %>
+          <th class="cell-price">Amount</th>
+        <% end %>
         <th class="cell-price amount">Estimated Costs</th>
     </tr>
     </thead>
@@ -39,55 +43,70 @@
                     <%= price(item.estimated_cost) %>
                 </div>
             </td>
+
             <td class="right light-blue">
                 <div class="actual-amount-placeholder">
                     <%= price_tag purchasable.item_amount(item.id), 'actual-amount' %>
                 </div>
                 <%= hidden_field_tag 'items[][id]', item.id %>
+                <%= hidden_field_tag 'items[][actual_cost]' %>
             </td>
-            <td class="right">
-                <div class="text-field" style="display: <%= text_field_display %>">
-                    <div class="post-tax-actual-amount"></div>
-                    <%= hidden_field_tag 'items[][actual_cost]'%>
-                </div>
-            </td>
+
+            <% if purchasable.class == PurchaseOrder %>
+              <td class="right">
+                  <div class="text-field" style="display: <%= text_field_display %>">
+                      <div class="post-tax-actual-amount"></div>
+                  </div>
+              </td>
+            <% end %>
             <td class="right"><%= price_tag(item.amount) %></td>
         </tr>
 
       <% end %>
       <% purchasable.items.try(:each) do |i| %>
-        <%= render :partial =>  'purchased_item', :locals => {:item => i} %>
+        <%= render :partial => 'purchased_item', :locals => {:item => i, :type => purchasable.class.name} %>
       <% end %>
 
       <tr class="add add-item" id="add-item">
           <td colspan=12>
-            <% @items = Item.where(builder_id: session[:builder_id]).order(:name)  %>
-            <%= select :purchased_item, :id, @items.map { |i| [i.name, i.id] } %>
-            <%= link_to raw("<button type=\"button\">+ Item</button>"), {:action => 'add_item_to_purchasable', :item_id => @items.first.id}, :remote => true, :id => "add-purchased-item" %>
+              <% @items = Item.where(builder_id: session[:builder_id]).order(:name) %>
+              <%= select :purchased_item, :id, @items.map { |i| [i.name, i.id] } %>
+              <%= link_to raw("<button type=\"button\">+ Item</button>"), {:action => 'add_item_to_purchasable', :item_id => @items.first.id, :type => purchasable.class.name }, :remote => true, :id => "add-purchased-item" %>
           </td>
       </tr>
       <tr>
           <td colspan="5">Subtotal</td>
           <td id="subtotal" class="right light-blue"></td>
-          <td></td>
+          <% if purchasable.class == PurchaseOrder %>
+              <td></td>
+          <% end %>
           <td class="right"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
       </tr>
-      <tr>
-          <td colspan="5">Sales Tax</td>
-          <td id="sales_tax" class="right light-blue"></td>
-          <td></td>
-          <td></td>
-      </tr>
-      <tr>
-          <td colspan="5">Shipping</td>
-          <td class="right light-blue">$<%= text_field(purchasable.class.name.underscore.to_sym, :shipping, :size => 10) %></td>
-          <td></td>
-          <td></td>
-      </tr>
+      <% if purchasable.class == PurchaseOrder %>
+        <tr>
+            <td colspan="5">Sales Tax</td>
+            <td id="sales_tax" class="right light-blue"></td>
+            <% if purchasable.class == PurchaseOrder %>
+                <td></td>
+            <% end %>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td colspan="5">Shipping</td>
+            <td class="right light-blue">$<%= text_field(purchasable.class.name.underscore.to_sym, :shipping, :size => 10) %></td>
+            <% if purchasable.class == PurchaseOrder %>
+                <td></td>
+            <% end %>
+            <td></td>
+        </tr>
+      <% end %>
       <tr>
           <td colspan="5" class="strong">TOTAL</td>
           <td id="total" class="right light-blue strong"></td>
-          <td></td>
+          <% if purchasable.class == PurchaseOrder %>
+              <td></td>
+          <% end %>
           <td class="right strong"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
       </tr>
     <% end %>

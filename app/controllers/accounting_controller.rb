@@ -63,6 +63,7 @@ class AccountingController < ApplicationController
   end
 
   def add_item_to_purchasable
+    @type = params[:type]
     @item = Item.find(params[:item_id])
     respond_to do |format|
       format.js {}

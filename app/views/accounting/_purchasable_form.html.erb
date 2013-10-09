@@ -32,10 +32,12 @@
         <th><%= f.label :date, "Due Date" %></th>
         <td><%= f.date_select :due_date %></td>
     </tr>
-    <tr>
-        <th><%= f.label :date, "Sales Tax Rate" %></th>
-        <td><%= f.text_field :sales_tax_rate %>(%)</td>
-    </tr>
+    <% if purchasable.class == PurchaseOrder  %>
+      <tr>
+          <th><%= f.label :sales_tax_rate, "Sales Tax Rate" %></th>
+          <td><%= f.text_field :sales_tax_rate %>(%)</td>
+      </tr>
+    <% end %>
     <tr>
         <th><%= f.label :notes, "Notes" %></th>
         <td><%= f.text_area(:notes) %></td>

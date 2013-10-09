@@ -8,7 +8,7 @@
 <% category_template.items.each do |item| %>
   <%= render :partial => 'tr_item', :locals => {:item => item} %>
 <% end %>
-<% category_template.merged_po_items.each do |item| %>
+<% category_template.merged_purchasable_items.each do |item| %>
   <%= render :partial => 'tr_item', :locals => {:item => item} %>
 <% end %>
 <% unless category_template.pos.try(:map, &:shipping).try(:compact).blank? %>

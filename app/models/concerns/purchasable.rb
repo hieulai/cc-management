@@ -9,20 +9,15 @@ module Purchasable
 
     has_many :items, :dependent => :destroy
 
-    attr_accessible :amount, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :sales_tax_rate, :shipping, :date, :due_date
+    attr_accessible :amount, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :date, :due_date
 
     serialize :amount
 
     after_initialize :default_init
 
-    def total_amount
-      t=0
-      self.shipping||=0
-      amount.each do |i|
-        t+= i[:actual_cost].to_f
-      end
-      t + items.map(&:actual_cost).compact.sum + self.shipping;
-    end
+    before_save :unset_actual_costs, :set_actual_costs
+
+    before_destroy :unset_actual_costs
 
     def item_amount(item_id)
       self.amount.try(:each) do |i|
@@ -69,6 +64,26 @@ module Purchasable
     private
     def default_init
       self.due_date||=  1.month.from_now
+    end
+
+    def set_actual_costs
+      self.amount.try(:each) do |i|
+        if Item.exists?(i[:id])
+          item = Item.find(i[:id])
+          updated_cost = item.actual_cost.to_f + i[:actual_cost].to_f
+          item.update_attribute(:actual_cost, updated_cost == 0 ? nil : updated_cost)
+        end
+      end
+    end
+
+    def unset_actual_costs
+      self.amount_was.try(:each) do |i|
+        if Item.exists?(i[:id])
+          item = Item.find(i[:id])
+          updated_cost = item.actual_cost.to_f - i[:actual_cost].to_f
+          item.update_attribute(:actual_cost, updated_cost == 0 ? nil : updated_cost)
+        end
+      end
     end
 
   end

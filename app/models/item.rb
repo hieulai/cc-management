@@ -3,12 +3,13 @@ class Item < ActiveRecord::Base
   belongs_to :builder
   belongs_to :category
   belongs_to :purchase_order
+  belongs_to :bill
   belongs_to :change_orders_category
   has_many :categories_templates, through: :categories_templates_items
   has_many :templates, through: :categories_templates_items
   has_and_belongs_to_many :categories_templates
 
-  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :purchase_order_id
+  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :purchase_order_id, :bill_id
 
   validates :name, presence: true
 
@@ -29,7 +30,7 @@ class Item < ActiveRecord::Base
   end
 
   def estimated_cost(a = false)
-    unless purchase_order.present?
+    unless purchase_order.present? || bill.present?
       read_attribute(:estimated_cost)
     else
       a ? read_attribute(:estimated_cost) : 0
