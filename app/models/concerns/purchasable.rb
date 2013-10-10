@@ -9,7 +9,7 @@ module Purchasable
 
     has_many :items, :dependent => :destroy
 
-    attr_accessible :amount, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :date, :due_date
+    attr_accessible :amount, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date
 
     serialize :amount
 

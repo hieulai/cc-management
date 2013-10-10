@@ -24,10 +24,12 @@
             <td><%= purchasable.id %></td>
         </tr>
     <% end  %>
-    <tr>
-        <th><%= f.label :date, "Order Date" %></th>
-        <td><%= f.date_select :date %></td>
-    </tr>
+    <% if purchasable.class == PurchaseOrder %>
+      <tr>
+          <th><%= f.label :date, "Order Date" %></th>
+          <td><%= f.date_select :date %></td>
+      </tr>
+    <% end %>
     <tr>
         <th><%= f.label :date, "Due Date" %></th>
         <td><%= f.date_select :due_date %></td>

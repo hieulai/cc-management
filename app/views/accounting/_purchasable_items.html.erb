@@ -17,52 +17,14 @@
     </thead>
     <tbody>
     <% if defined?(categories_template) && categories_template.present? && categories_template.items.any? %>
-      <% categories_template.items.each do |item| %>
-        <% text_field_display = purchasable.item_chosen(item.id) ? "" : "none"
-           value_display = purchasable.item_chosen(item.id) ? "none" : ""
-        %>
-        <tr>
-            <td class="center"><%= check_box_tag 'item-chosen', item.id, purchasable.item_chosen(item.id) %></td>
-            <td>
-                <%= item.name %>
-                <%= hidden_field_tag 'items[][name]', item.name %>
-            </td>
-            <td>
-                <%= item.description %>
-                <%= hidden_field_tag 'items[][description]', item.description %>
-            </td>
-            <td class="right">
-                <%= text_field_tag 'items[][qty]', purchasable.item_qty(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
-                <div class="item-qty value-field" style="display: <%= value_display %>">
-                    <%= item.qty %>
-                </div>
-            </td>
-            <td class="right">
-                $<%= text_field_tag 'items[][estimated_cost]', purchasable.item_estimated_cost(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
-                <div class="item-estimated_cost value-field" style="display: <%= value_display %>">
-                    <%= price(item.estimated_cost) %>
-                </div>
-            </td>
-
-            <td class="right light-blue">
-                <div class="actual-amount-placeholder">
-                    <%= price_tag purchasable.item_amount(item.id), 'actual-amount' %>
-                </div>
-                <%= hidden_field_tag 'items[][id]', item.id %>
-                <%= hidden_field_tag 'items[][actual_cost]' %>
-            </td>
-
-            <% if purchasable.class == PurchaseOrder %>
-              <td class="right">
-                  <div class="text-field" style="display: <%= text_field_display %>">
-                      <div class="post-tax-actual-amount"></div>
-                  </div>
-              </td>
-            <% end %>
-            <td class="right"><%= price_tag(item.amount) %></td>
-        </tr>
+      <% categories_template.items.each do |i| %>
+        <%= render :partial => 'purchasable_item', :locals => {:item => i, :purchasable => purchasable} %>
 
       <% end %>
+      <% categories_template.template.estimate.project.co_items(categories_template.category).try(:each) do |i| %>
+        <%= render :partial => 'purchasable_item', :locals => {:item => i, :purchasable => purchasable} %>
+      <% end %>
+
       <% purchasable.items.try(:each) do |i| %>
         <%= render :partial => 'purchased_item', :locals => {:item => i, :type => purchasable.class.name} %>
       <% end %>
