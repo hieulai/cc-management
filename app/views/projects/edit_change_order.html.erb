@@ -5,7 +5,7 @@
       <% if @change_order.errors.any? %>
         <div id="errorExplanation">
             <h2><%= pluralize(@change_order.errors.count, "Error") %> prohibited
-                this post from being saved:</h2>
+                this change order from being saved:</h2>
             <ul>
                 <% @change_order.errors.full_messages.each do |msg| %>
                   <li><%= msg %></li>

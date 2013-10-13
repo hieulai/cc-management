@@ -7,7 +7,7 @@
 	<% if @contact.errors.any? %>
 	  <div id="errorExplanation">
 	    <h2><%= pluralize(@contact.errors.count, "Error") %> prohibited
-	      this post from being saved:</h2>
+	      this contact from being saved:</h2>
 	    <ul>
 	    <% @contact.errors.full_messages.each do |msg| %>
 	      <li><%= msg %></li>

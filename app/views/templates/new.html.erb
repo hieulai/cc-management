@@ -8,7 +8,7 @@
 	<% if @template.errors.any? %>
 	  <div id="errorExplanation">
 	    <h2><%= pluralize(@template.errors.count, "Error") %> prohibited
-	      this post from being saved:</h2>
+	      this template from being saved:</h2>
 	    <ul>
 	    <% @template.errors.full_messages.each do |msg| %>
 	      <li><%= msg %></li>

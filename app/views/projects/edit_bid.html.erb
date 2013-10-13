@@ -7,7 +7,7 @@
 	<% if @bid.errors.any? %>
 	  <div id="errorExplanation">
 	    <h2><%= pluralize(@bid.errors.count, "Error") %> prohibited
-	      this post from being saved:</h2>
+	      this bid from being saved:</h2>
 	    <ul>
 	    <% @bid.errors.full_messages.each do |msg| %>
 	      <li><%= msg %></li>

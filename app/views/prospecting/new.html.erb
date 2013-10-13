@@ -7,7 +7,7 @@
 	<% if @prospect.errors.any? %>
 	  <div id="errorExplanation">
 	    <h2><%= pluralize(@prospect.errors.count, "Error") %> prohibited
-	      this post from being saved:</h2>
+	      this prospecting from being saved:</h2>
 	    <ul>
 	    <% @prospect.errors.full_messages.each do |msg| %>
 	      <li><%= msg %></li>

@@ -7,7 +7,7 @@
       <% if @purchase_order.errors.any? %>
         <div id="errorExplanation">
             <h2><%= pluralize(@purchase_order.errors.count, "Error") %> prohibited
-                this post from being saved:</h2>
+                this purchase order from being saved:</h2>
             <ul>
                 <% @purchase_order.errors.full_messages.each do |msg| %>
                   <li><%= msg %></li>

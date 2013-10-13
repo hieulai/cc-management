@@ -7,7 +7,7 @@
 	<% if @tasklist.errors.any? %>
 	  <div id="errorExplanation">
 	    <h2><%= pluralize(@tasklist.errors.count, "Error") %> prohibited
-	      this post from being saved:</h2>
+	      this tasklist from being saved:</h2>
 	    <ul>
 	    <% @tasklist.errors.full_messages.each do |msg| %>
 	      <li><%= msg %></li>
