@@ -1,24 +1,30 @@
 <table>
-	<tr>
-		<th>Account</th>
-		<td><%= select(:account, :id, Account.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]}) %></td>
-	</tr>
-	<tr>
-		<th>Payee</th>
-  	  	<td><%= f.autocomplete_field :vendor_name, autocomplete_vendor_trade_accounting_index_path  %></td>
-	</tr>
-	<tr>
-		<th>Date</th>
-		<td><%= f.date_select(:date, :order => [:month, :day, :year], :include_blank => true) %></td>
-	</tr>
-	<tr>
-		<th>Amount</th>
-		<td><%= f.text_field(:amount) %>
-	</tr>
-	<tr>
-		<th>Memo</th>
-		<td><%= f.text_field(:memo) %></td>
-	</tr>
+    <tr>
+        <th><%= f.label :vendor_id, "Vendor" %></th>
+        <td><%= f.select(:vendor_id, Vendor.joins(:bills).uniq.all.collect { |s| [s.display_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_vendor_bills", :payment_id => @payment.id)}) %></td>
+    </tr>
+    <tr>
+        <th><%= f.label :account_id, "Account" %></th>
+        <td><%= f.select(:account_id, Account.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %></td>
+    </tr>
+    <tr>
+        <th><%= f.label :method, "Type" %></th>
+        <td><%= f.select(:method, Payment::METHODS, {:include_blank => true}) %></td>
+    </tr>
+    <tr>
+        <th><%= f.label :reference, "Reference #" %></th>
+        <td><%= f.text_field(:reference) %></td>
+    </tr>
+    <tr>
+        <th><%= f.label :date, "Date" %></th>
+        <td><%= f.date_select(:date) %></td>
+    </tr>
+    <tr>
+        <th>Memo</th>
+        <td><%= f.text_field(:memo) %></td>
+    </tr>
 </table>
-	
-	<p>Itemizations go here . . . </p>
+
+<div id="bill-placeholder">
+    <%= render(:partial => "payment_bills", :locals => {:f => f, :bills => @bills}) %>
+</div>

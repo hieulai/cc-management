@@ -34,6 +34,16 @@ var calculateSubTotalAndTotal = function () {
     }
 };
 
+var calculatePayment = function(){
+    if ($("#payment-amount").size() > 0) {
+        var total = 0;
+        $('input[name="bill-chosen"]:checked').each(function () {
+            total += text_to_number($(this).closest("tr").find(".bill-amount").text());
+        });
+        $('#payment-amount').html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
+    }
+}
+
 var calculatePostTaxAmount = function (i) {
     var actualAmount = text_to_number($(i).text());
     if ($('input[name$="[sales_tax_rate]"]').size() > 0) {
@@ -57,6 +67,7 @@ var toggleItemInputs = function (checbox, s) {
 $(document).ready(function() {
     calculatePostTaxAmounts();
     calculateSubTotalAndTotal();
+    calculatePayment();
 
     $(document).on('change', 'input[name="items[][qty]"], input[name="items[][estimated_cost]"]', function () {
         calculatePurchaseAmount(this);
@@ -89,5 +100,13 @@ $(document).ready(function() {
     $(document).on('change', 'input[name$="[sales_tax_rate]"]', function () {
         calculatePostTaxAmounts();
         calculateSubTotalAndTotal();
+    });
+    $(document).on('change', 'input[name="bill-chosen"]', function () {
+        if ($(this).is(":checked")) {
+            $(this).closest("tr").find('input[name="bills[][checked]"]').val("true");
+        } else {
+            $(this).closest("tr").find('input[name="bills[][checked]"]').val("false");
+        }
+        calculatePayment();
     });
 })

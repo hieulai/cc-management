@@ -1,0 +1,14 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu")%>
+    <h2>Delete Payment</h2>
+
+    <%= form_for(:vendor, :url => {:action => 'destroy_payment', :id => @payment.id}) do |f| %>
+
+      <p>Are you sure you want to delete this payment?</p>
+
+      <div class="form-buttons">
+          <%= submit_tag("Delete") %>
+      </div>
+
+    <% end %>
+</div>

@@ -3,11 +3,9 @@
 one:
   name: MyString
   due_date: 2013-10-03
-  paid: false
   notes: MyText
 
 two:
   name: MyString
   due_date: 2013-10-03
-  paid: false
   notes: MyText

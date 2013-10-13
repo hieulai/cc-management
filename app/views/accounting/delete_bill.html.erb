@@ -3,6 +3,17 @@
     <h2>Delete Bill</h2>
 
     <%= form_for(:vendor, :url => {:action => 'destroy_bill', :id => @bill.id}) do |f| %>
+      <% if @bill.errors.any? %>
+        <div id="errorExplanation">
+            <h2><%= pluralize(@bill.errors.count, "Error") %> prohibited
+                this bill from being deleted:</h2>
+            <ul>
+                <% @bill.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+      <% end %>
 
       <p>Are you sure you want to delete this bill?</p>
 

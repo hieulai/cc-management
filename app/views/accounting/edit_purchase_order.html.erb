@@ -2,22 +2,22 @@
     <%= render(:partial => "layouts/accounting_sub_menu")%>
     <h2>Edit Purchase Order</h2>
 
-    <%= form_for @purchase_order, :url => {:action => 'update_purchase_order', :id => @purchase_order.id} do |f| %>
+    <%= form_for @purchasable, :url => {:action => 'update_purchase_order', :id => @purchasable.id} do |f| %>
 
-      <% if @purchase_order.errors.any? %>
+      <% if @purchasable.errors.any? %>
         <div id="errorExplanation">
-            <h2><%= pluralize(@purchase_order.errors.count, "Error") %> prohibited
-                this post from being saved:</h2>
+            <h2><%= pluralize(@purchasable.errors.count, "Error") %> prohibited
+                this purchase order from being saved:</h2>
             <ul>
-                <% @purchase_order.errors.full_messages.each do |msg| %>
+                <% @purchasable.errors.full_messages.each do |msg| %>
                   <li><%= msg %></li>
                 <% end %>
             </ul>
         </div>
       <% end %>
-      <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @purchase_order}) %>
+      <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @purchasable}) %>
       <div id="item-placeholder">
-          <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @purchase_order, :categories_template => @purchase_order.categories_template}) %>
+          <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @purchasable, :categories_template => @purchasable.categories_template}) %>
       </div>
 
     <% end %>

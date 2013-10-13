@@ -2,22 +2,22 @@
     <%= render(:partial => "layouts/accounting_sub_menu")%>
     <h2>Edit Bill</h2>
 
-    <%= form_for @bill, :url => {:action => 'update_bill', :id => @bill.id} do |f| %>
-
-      <% if @bill.errors.any? %>
+    <%= form_for @purchasable, :url => {:action => 'update_bill', :id => @purchasable.id} do |f| %>
+                      
+      <% if @purchasable.errors.any? %>
         <div id="errorExplanation">
-            <h2><%= pluralize(@bill.errors.count, "Error") %> prohibited
-                this post from being saved:</h2>
+            <h2><%= pluralize(@purchasable.errors.count, "Error") %> prohibited
+                this bill from being saved:</h2>
             <ul>
-                <% @bill.errors.full_messages.each do |msg| %>
+                <% @purchasable.errors.full_messages.each do |msg| %>
                   <li><%= msg %></li>
                 <% end %>
             </ul>
         </div>
       <% end %>
-      <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @bill}) %>
+      <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @purchasable}) %>
       <div id="item-placeholder">
-          <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @bill, :categories_template => @bill.categories_template}) %>
+          <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @purchasable, :categories_template => @purchasable.categories_template}) %>
       </div>
 
     <% end %>

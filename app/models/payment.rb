@@ -1,14 +1,27 @@
 class Payment < ActiveRecord::Base
+
+  belongs_to :builder
   belongs_to :account
   belongs_to :vendor
+  has_many :bills, :dependent => :nullify, :before_add => :charge_account, :after_remove => :refund_account
   
-  attr_accessible :amount, :date, :memo, :vendor_name
-  
-  def vendor_name
-    vendor.try(:trade)
+  attr_accessible :date, :memo, :method, :reference , :builder_id, :account_id, :vendor_id
+
+  validates_presence_of :vendor, :account, :builder, :method, :date
+
+  METHODS = ["Check", "Debit Card", "Wire", "EFT"]
+
+  def amount
+    bills.map(&:total_amount).compact.sum if bills.any?
   end
-  
-  def vendor_name=(trade)
-    self.vendor = Vendor.find_by_trade(trade) if trade.present?  
+
+  private
+  def charge_account(bill)
+    self.account.update_attribute(:balance, self.account.balance - bill.total_amount)
   end
+
+  def refund_account(bill)
+    self.account.update_attribute(:balance, self.account.balance + bill.total_amount)
+  end
+
 end

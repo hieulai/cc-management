@@ -1,0 +1,33 @@
+<table class="grid-view" summary="Bill List">
+    <tr class="header">
+        <th></th>
+        <th>Bill #</th>
+        <th>Due Date</th>
+        <th>Project</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Notes</th>
+
+    </tr>
+    <% bills.each do |b| %>
+
+      <tr>
+          <td class="center">
+              <%= check_box_tag 'bill-chosen', b.id, b.paid %>
+              <%= hidden_field_tag 'bills[][id]', b.id %>
+              <%= hidden_field_tag 'bills[][checked]', b.paid %>
+          </td>
+          <td class="center"><%= b.id %></td>
+          <td class="center"><%= b.source(:due_date) %></td>
+          <td><%= b.source(:project).name %></td>
+          <td><%= b.source(:categories_template).category.name %></td>
+          <td class="right bill-amount"><%= number_to_currency(b.source(:total_amount)) %></td>
+          <td><%= b.source(:notes) %></td>
+      </tr>
+    <% end %>
+    <tr>
+        <td class="strong" colspan="5">Total</td>
+        <td class="right" id="payment-amount"></td>
+        <td></td>
+    </tr>
+</table>

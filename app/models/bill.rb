@@ -1,11 +1,19 @@
 class Bill < ActiveRecord::Base
   include Purchasable
 
+  belongs_to :builder
   belongs_to :purchase_order
+  belongs_to :payment
 
-  attr_accessible :paid, :purchase_order_id
+  attr_accessible :purchase_order_id, :payment_id
 
-  after_initialize :default_values
+  scope :unpaid, -> { where 'payment_id is NULL' }
+
+  before_destroy :raise_readonly
+
+  def readonly?
+    paid
+  end
 
   def source(attr)
     if self.purchase_order.present?
@@ -15,7 +23,12 @@ class Bill < ActiveRecord::Base
     end
   end
 
+  def paid
+    payment_id_was.present?
+  end
+
   def total_amount
+    return purchase_order.total_amount if purchase_order.present?
     t=0
     amount.each do |i|
       t+= i[:estimated_cost].to_f
@@ -24,8 +37,9 @@ class Bill < ActiveRecord::Base
   end
 
   private
-  def default_values
-    self.paid||=false
+
+  def raise_readonly
+    raise ActiveRecord::ReadOnlyRecord if self.readonly?
   end
 
 end

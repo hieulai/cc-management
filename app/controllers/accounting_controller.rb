@@ -8,22 +8,16 @@ class AccountingController < ApplicationController
   def receivables
 
   end
-  
-  def new_payment
-    @payment =  Payment.new
-  end
 
   def create_payment
-    #Instantiate a new object using form parameters
-    @account = Account.find(params[:account][:id])
     @payment = Payment.new(params[:payment])
-    #save subject
+    bill_ids = params[:bills].select { |b| b[:checked] == true.to_s }.map { |b| b[:id] }
+    @payment.builder_id = session[:builder_id]
     if @payment.save
-      @account.payments << @payment
-      #if save succeeds, redirect to list action
-      redirect_to(:action => 'payables')
+      @payment.bills = Bill.find(bill_ids)
+      redirect_to(:action => 'payments')
     else
-      #if save fails, redisplay form to user can fix problems
+      @bills = Array.new
       render('new_payment')
     end
   end
@@ -45,7 +39,7 @@ class AccountingController < ApplicationController
   end
 
   def edit_purchase_order
-    @purchase_order = PurchaseOrder.find(params[:id])
+    @purchasable = PurchaseOrder.find(params[:id])
   end
 
   def update_purchase_order
@@ -58,8 +52,13 @@ class AccountingController < ApplicationController
 
   def destroy_purchase_order
     @purchase_order = PurchaseOrder.find(params[:id])
-    @purchase_order.destroy
-    redirect_to(:action => 'purchase_orders')
+    begin
+      @purchase_order.destroy
+      redirect_to(:action => 'purchase_orders')
+    rescue ActiveRecord::ReadOnlyRecord
+      @purchase_order.errors[:base] = "This record is Readonly"
+      render :delete_purchase_order
+    end
   end
 
   def add_item_to_purchasable
@@ -83,7 +82,7 @@ class AccountingController < ApplicationController
   end
 
   def edit_bill
-    @bill = Bill.find(params[:id])
+    @purchasable = Bill.find(params[:id])
   end
 
   def update_bill
@@ -96,26 +95,50 @@ class AccountingController < ApplicationController
 
   def destroy_bill
     @bill = Bill.find(params[:id])
-    @bill.destroy
-    redirect_to(:action => 'bills')
+    begin
+      @bill.destroy
+      redirect_to(:action => 'bills')
+    rescue ActiveRecord::ReadOnlyRecord
+      @bill.errors[:base] = "This record is Readonly"
+      render :delete_bill
+    end
+  end
+
+  def payments
+    @payments = Payment.where("builder_id = ?", session[:builder_id]).order(:id)
   end
 
 
-  
-  def view_payment
-    
+  def new_payment
+    @payment =  Payment.new
+    @bills = Array.new
   end
   
   def edit_payment
-    
+    @payment = Payment.find(params[:id])
+    @bills = @payment.vendor.bills
+  end
+
+  def update_payment
+    @payment = Payment.find(params[:id])
+    bill_ids = params[:bills].select { |b| b[:checked] == true.to_s }.map { |b| b[:id] }
+    if @payment.update_attributes(params[:payment])
+      @payment.bills= Bill.find(bill_ids)
+      redirect_to(:action => 'payments')
+    else
+      @bills = @payment.vendor.bills
+      render('edit_payment')
+    end
   end
   
   def delete_payment
-    
+    @payment = Payment.find(params[:id])
   end
   
   def destroy_payment
-    
+    @payment = Payment.find(params[:id])
+    @payment.destroy
+    redirect_to(:action => 'payments')
   end
   
   def show
@@ -142,6 +165,19 @@ class AccountingController < ApplicationController
   def import_export
 
   end
+
+  def show_vendor_bills
+    @bills = Array.new
+    @payment = params[:payment_id].present? ? Payment.find(params[:payment_id]) : Payment.new
+    if params[:payment].present? && params[:payment][:vendor_id].present?
+      @vendor = Vendor.find params[:payment][:vendor_id]
+      @bills = @vendor == @payment.vendor ? @vendor.bills : @vendor.bills.unpaid
+    end
+    respond_to do |format|
+      format.js {}
+    end
+  end
+
 
   def show_project_categories_template
     klass =  params[:type].to_s.constantize
@@ -196,12 +232,17 @@ class AccountingController < ApplicationController
     purchased_items = params[:items].select { |i| i[:id].nil? }
     amount_items = params[:items].select { |i| i[:actual_cost].present? && i[:id].present? }
     @purchasable.amount = amount_items
-    if @purchasable.update_attributes(params[@type.to_sym])
-      Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
-      @purchasable.items = Item.create(purchased_items)
-      redirect_to(:action => "#{@type}s")
-    else
-      render("new_#{@type}")
+    begin
+      if @purchasable.update_attributes(params[@type.to_sym])
+        Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
+        @purchasable.items = Item.create(purchased_items)
+        redirect_to(:action => "#{@type}s")
+      else
+        render("edit_#{@type}")
+      end
+    rescue ActiveRecord::ReadOnlyRecord
+      @purchasable.errors[:base] = "This record is Readonly"
+      render("edit_#{@type}")
     end
   end
 end

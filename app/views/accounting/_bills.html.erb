@@ -1,5 +1,5 @@
 <%@total_costs = 0 %>
-<table class="grid-view" summary="Purchase Order List">
+<table class="grid-view" summary="Bill List">
     <tr class="header">
         <th>Actions</th>
         <th>Bill #</th>
@@ -16,7 +16,7 @@
 
       <tr>
           <td class="center">
-              <% unless b.purchase_order.present? %>
+              <% unless b.purchase_order.present? || b.readonly? %>
                 <%= link_to("Edit", {:action => 'edit_bill', :id => b.id}, :class => 'action edit') %>
                 <%= link_to("Delete", {:action => 'delete_bill', :id => b.id}, :class => 'action edit') %>
               <% end %>

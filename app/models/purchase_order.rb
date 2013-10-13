@@ -14,7 +14,7 @@ class PurchaseOrder < ActiveRecord::Base
   before_destroy :raise_readonly
 
   def readonly?
-    bill.try(:paid)
+    bill.readonly?
   end
 
   def total_amount
