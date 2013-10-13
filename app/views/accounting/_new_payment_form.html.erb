@@ -1,7 +1,7 @@
 <table>
     <tr>
         <th><%= f.label :vendor_id, "Vendor" %></th>
-        <td><%= f.select(:vendor_id, Vendor.joins(:bills).uniq.all.collect { |s| [s.display_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_vendor_bills", :payment_id => @payment.id)}) %></td>
+        <td><%= f.select(:vendor_id, Vendor.has_unpaid_bills.uniq.all.collect { |s| [s.display_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_vendor_bills", :payment_id => @payment.id)}) %></td>
     </tr>
     <tr>
         <th><%= f.label :account_id, "Account" %></th>

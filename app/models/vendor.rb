@@ -15,6 +15,8 @@ class Vendor < ActiveRecord::Base
     (q ? where(["company ILIKE ? or primary_first_name ILIKE ? or primary_last_name ILIKE ? or concat(primary_first_name, ' ', primary_last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%','%'+ q + '%' ,'%'+ q + '%' ])  : {})
   }
 
+  scope :has_unpaid_bills, lambda { joins(:bills).where("payment_id is null") }
+
   validates :vendor_type, presence: true
   validates :trade, presence: { message: "cannot be blank for Subcontractors. Consider entering something such as: Framer, Plumber, Electrician, etc."}, if: :vendor_is_subcontractor?
   validates :company, presence: { message: "and Primary First Name cannot both be blank."}, if: :name_is_blank?
