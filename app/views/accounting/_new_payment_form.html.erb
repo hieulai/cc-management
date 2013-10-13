@@ -1,7 +1,11 @@
+<% vendors =  Vendor.has_unpaid_bills(session[:builder_id])
+   vendors<< @payment.vendor unless @payment.new_record?
+%>
+
 <table>
     <tr>
         <th><%= f.label :vendor_id, "Vendor" %></th>
-        <td><%= f.select(:vendor_id, Vendor.has_unpaid_bills(session[:builder_id]).collect { |s| [s.display_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_vendor_bills", :payment_id => @payment.id)}) %></td>
+        <td><%= f.select(:vendor_id, vendors.collect { |s| [s.display_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_vendor_bills", :payment_id => @payment.id)}) %></td>
     </tr>
     <tr>
         <th><%= f.label :account_id, "Account" %></th>
