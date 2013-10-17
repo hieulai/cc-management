@@ -166,7 +166,7 @@ class AccountingController < ApplicationController
     @payment = params[:payment_id].present? ? Payment.find(params[:payment_id]) : Payment.new
     if params[:payment].present? && params[:payment][:vendor_id].present?
       @vendor = Vendor.find params[:payment][:vendor_id]
-      @bills = (@payment.bills + @vendor.bills.unpaid).uniq
+      @bills = @vendor == @payment.vendor ? @vendor.bills : @vendor.bills.unpaid
     end
     respond_to do |format|
       format.js {}
