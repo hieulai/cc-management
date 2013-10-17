@@ -8,19 +8,6 @@ class AccountingController < ApplicationController
   def receivables
 
   end
-
-  def create_payment
-    @payment = Payment.new(params[:payment])
-    bill_ids = params[:bills].select { |b| b[:checked] == true.to_s }.map { |b| b[:id] }
-    @payment.builder_id = session[:builder_id]
-    if @payment.save
-      @payment.bills = Bill.find(bill_ids)
-      redirect_to(:action => 'payments')
-    else
-      @bills = Array.new
-      render('new_payment')
-    end
-  end
   
   def payment_history
     @payments = Payment.all
@@ -108,25 +95,33 @@ class AccountingController < ApplicationController
     @payments = Payment.where("builder_id = ?", session[:builder_id]).order(:id)
   end
 
-
   def new_payment
     @payment =  Payment.new
     @bills = Array.new
   end
+
+  def create_payment
+    @payment = Payment.new(params[:payment])
+    @payment.builder_id = session[:builder_id]
+    if @payment.save
+      redirect_to(:action => 'payments')
+    else
+      @bills = Array.new
+      render('new_payment')
+    end
+  end
   
   def edit_payment
     @payment = Payment.find(params[:id])
-    @bills = @payment.vendor.bills
+    @bills = (@payment.bills + @payment.vendor.bills.unpaid).uniq
   end
 
   def update_payment
     @payment = Payment.find(params[:id])
-    bill_ids = params[:bills].select { |b| b[:checked] == true.to_s }.map { |b| b[:id] }
     if @payment.update_attributes(params[:payment])
-      @payment.bills= Bill.find(bill_ids)
       redirect_to(:action => 'payments')
     else
-      @bills = @payment.vendor.bills
+      @bills = (@payment.bills + @payment.vendor.bills.unpaid).uniq
       render('edit_payment')
     end
   end
@@ -171,7 +166,7 @@ class AccountingController < ApplicationController
     @payment = params[:payment_id].present? ? Payment.find(params[:payment_id]) : Payment.new
     if params[:payment].present? && params[:payment][:vendor_id].present?
       @vendor = Vendor.find params[:payment][:vendor_id]
-      @bills = @vendor == @payment.vendor ? @vendor.bills : @vendor.bills.unpaid
+      @bills = (@payment.bills + @vendor.bills.unpaid).uniq
     end
     respond_to do |format|
       format.js {}

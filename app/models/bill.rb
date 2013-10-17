@@ -3,16 +3,22 @@ class Bill < ActiveRecord::Base
 
   belongs_to :builder
   belongs_to :purchase_order
-  belongs_to :payment
+  has_many :payments_bills, :dependent => :destroy
+  has_many :payments, :through => :payments_bills
 
-  attr_accessible :purchase_order_id, :payment_id
+  attr_accessible :purchase_order_id, :remaining_amount
 
-  scope :unpaid, -> { where 'payment_id is NULL' }
+  scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
+  scope :paid, where('remaining_amount = 0')
 
   before_destroy :raise_readonly
 
   def readonly?
-    paid
+    paid?
+  end
+
+  def paid?
+    self.payments_bills.any?
   end
 
   def source(attr)
@@ -23,8 +29,12 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  def paid
-    payment_id_was.present?
+  def paid_amount
+    self.payments_bills.map(&:paid_amount).compact.sum if self.payments_bills.any?
+  end
+
+  def payment_bill(payment_id)
+    self.payments_bills.where(:payment_id => payment_id).first
   end
 
   def total_amount

@@ -38,7 +38,7 @@ var calculatePayment = function(){
     if ($("#payment-amount").size() > 0) {
         var total = 0;
         $('input[name="bill-chosen"]:checked').each(function () {
-            total += text_to_number($(this).closest("tr").find(".bill-amount").text());
+            total += text_to_number($(this).closest("tr").find('input[name="payment[payments_bills_attributes][][paid_amount]"]').val());
         });
         $('#payment-amount').html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
     }
@@ -103,10 +103,16 @@ $(document).ready(function() {
     });
     $(document).on('change', 'input[name="bill-chosen"]', function () {
         if ($(this).is(":checked")) {
-            $(this).closest("tr").find('input[name="bills[][checked]"]').val("true");
+            toggleItemInputs(this,true);
+            $(this).closest("tr").find('input[name="payment[payments_bills_attributes][][_destroy]"]').val("false");
         } else {
-            $(this).closest("tr").find('input[name="bills[][checked]"]').val("false");
+            toggleItemInputs(this,false);
+            $(this).closest("tr").find('input[name="payment[payments_bills_attributes][][_destroy]"]').val("true");
         }
         calculatePayment();
     });
+    $(document).on('change', 'input[name="payment[payments_bills_attributes][][paid_amount]"] ', function () {
+        calculatePayment();
+    });
+
 })

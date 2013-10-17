@@ -23,7 +23,8 @@ class PurchaseOrder < ActiveRecord::Base
     amount.each do |i|
       t+= i[:actual_cost].to_f
     end
-    t + items.map(&:actual_cost).compact.sum + self.shipping
+    t+= items.map(&:actual_cost).compact.sum + self.shipping
+    t.round(2)
   end
 
   private

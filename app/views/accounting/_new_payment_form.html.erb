@@ -2,6 +2,18 @@
    vendors<< @payment.vendor unless @payment.new_record?
 %>
 
+<% if @payment.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@payment.errors.count, "Error") %> prohibited
+          this payment from being saved:</h2>
+      <ul>
+          <% @payment.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+
 <table>
     <tr>
         <th><%= f.label :vendor_id, "Vendor" %></th>

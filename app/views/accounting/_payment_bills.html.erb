@@ -5,29 +5,59 @@
         <th>Due Date</th>
         <th>Project</th>
         <th>Category</th>
+        <th>Previously Paid</th>
+        <th>Remaining Balance</th>
         <th>Amount</th>
         <th>Notes</th>
 
     </tr>
     <% bills.each do |b| %>
-
+      <%
+         remaining_amount = b.remaining_amount.presence||b.source(:total_amount)
+         if b.payment_bill(@payment.id).present?
+           text_field_display = ""
+           value_display = "none"
+           paid_amount = b.payment_bill(@payment.id).paid_amount
+         else
+           text_field_display = "none"
+           value_display = ""
+           paid_amount = b.paid? ? b.remaining_amount : b.source(:total_amount)
+         end
+      %>
       <tr>
           <td class="center">
-              <%= check_box_tag 'bill-chosen', b.id, b.paid %>
-              <%= hidden_field_tag 'bills[][id]', b.id %>
-              <%= hidden_field_tag 'bills[][checked]', b.paid %>
+              <%= check_box_tag 'bill-chosen', b.payment_bill(@payment.id).present? ? b.id : "", b.payment_bill(@payment.id).present? %>
+              <% if b.payment_bill(@payment.id).present? %>
+                <%= hidden_field_tag "payment[payments_bills_attributes][][id]", b.payment_bill(@payment.id).id %>
+              <% end %>
+              <%= hidden_field_tag "payment[payments_bills_attributes][][bill_id]", b.id %>
+              <%= hidden_field_tag 'payment[payments_bills_attributes][][_destroy]', !b.payment_bill(@payment.id).present? %>
           </td>
           <td class="center"><%= b.id %></td>
           <td class="center"><%= b.source(:due_date) %></td>
           <td><%= b.source(:project).name %></td>
           <td><%= b.source(:categories_template).category.name %></td>
-          <td class="right bill-amount"><%= number_to_currency(b.source(:total_amount)) %></td>
+          <td class="right unpaid-amount">
+              <%= price_tag(b.paid_amount) %>
+          </td>
+          <td class="right">
+              <%= price_tag(remaining_amount, "remaining-amount") %>
+              <div class="original-remaining-amount" style="display:none">
+                  <%= remaining_amount %>
+              </div>
+          </td>
+          <td class="right">
+              $<%= text_field_tag 'payment[payments_bills_attributes][][paid_amount]', paid_amount , :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+              <div class="value-field" style="display: <%= value_display %>">
+                  <%= price(paid_amount) %>
+              </div>
+          </td>
           <td><%= b.source(:notes) %></td>
       </tr>
     <% end %>
     <tr>
-        <td class="strong" colspan="5">Total</td>
+        <td class="strong" colspan="7">Total</td>
         <td class="right" id="payment-amount"></td>
-        <td></td>
+        <td colspan="1"></td>
     </tr>
 </table>
