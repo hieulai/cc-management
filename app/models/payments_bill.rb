@@ -3,7 +3,7 @@ class PaymentsBill < ActiveRecord::Base
   belongs_to :bill
   attr_accessible :paid_amount, :bill_id, :payment_id
 
-  before_create :charge_account_and_update_bill
+  before_save :refund_account_and_update_bill, :charge_account_and_update_bill
 
   after_destroy :refund_account_and_update_bill
 
@@ -17,8 +17,8 @@ class PaymentsBill < ActiveRecord::Base
   end
 
   def refund_account_and_update_bill
-    self.payment.account.update_attribute(:balance, self.payment.account.balance + self.paid_amount_was)
-    remaining_amount = self.bill.paid? ? self.bill.remaining_amount + self.paid_amount_was : nil
+    self.payment.account.update_attribute(:balance, self.payment.account.balance + self.paid_amount_was.to_f)
+    remaining_amount = self.bill.paid? ? self.bill.remaining_amount + self.paid_amount_was.to_f : nil
     self.bill.update_column(:remaining_amount, remaining_amount)
   end
 end

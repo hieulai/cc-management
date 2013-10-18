@@ -1,5 +1,5 @@
 <% vendors =  Vendor.has_unpaid_bills(session[:builder_id])
-   vendors<< @payment.vendor unless @payment.new_record?
+   (vendors<< @payment.vendor).uniq! unless @payment.new_record?
 %>
 
 <% if @payment.errors.any? %>

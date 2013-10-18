@@ -118,6 +118,12 @@ class AccountingController < ApplicationController
 
   def update_payment
     @payment = Payment.find(params[:id])
+    # Destroy all old payments_bills_attributes if vendor changed
+    if params[:payment][:vendor_id].present? && params[:payment][:vendor_id] != @payment.vendor_id.to_s
+      @payment.payments_bills.each do  |pb|
+        params[:payment][:payments_bills_attributes] << {id: pb.id, _destroy: true}.with_indifferent_access
+      end
+    end
     if @payment.update_attributes(params[:payment])
       redirect_to(:action => 'payments')
     else
