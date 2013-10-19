@@ -10,8 +10,8 @@
  *
  *= require_self
  *= require jquery.ui.all
- *= require_tree .
- *= stub pdf
+ *= require bootstrap_and_overrides
+ *= require_tree ./base
  */
 ul#tasksContainer{
     list-style: none;
