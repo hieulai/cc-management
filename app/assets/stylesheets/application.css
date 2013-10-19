@@ -27,6 +27,13 @@ ul#tasksContainer li label:hover{
     background: gainsboro;
 }
 
+.login-box {
+    border: 1px solid #000000;
+    margin: 30px auto;padding: 25px 67px;
+    width: 250px;
+}
+
+
 .change_order{
     background-color: lightgoldenrodyellow;
 }
