@@ -14,11 +14,7 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require cocoon
-//= require jquery.poshytip
-//= require jquery-editable-poshytip
-//= require jquery-editable-rails
 //= require autocomplete-rails
-//= require jquery-autocomplete-patch
 //= require_tree .
 //= stub wkhtmltopdf_tableSplitHack
 
@@ -114,6 +110,13 @@ $(document).ready(function() {
     $(document).on('click', 'input[type="submit"]', function(){
         $($(this).data("form")).submit();
     })
+
+    $(document).on('click', 'tr.clickable', function () {
+        var href = $(this).find("a.clickable-link").attr("href");
+        if (href) {
+            window.location = href;
+        }
+    });
 })
 
 //var add_fields = function(link, association, content){

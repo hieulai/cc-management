@@ -7,6 +7,8 @@ class Payment < ActiveRecord::Base
 
   has_many :bills, :through => :payments_bills
 
+  default_scope order("date DESC")
+
   accepts_nested_attributes_for :payments_bills, :allow_destroy => true
   
   attr_accessible :date, :memo, :method, :reference , :builder_id, :account_id, :vendor_id, :payments_bills_attributes

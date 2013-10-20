@@ -3,6 +3,8 @@ class PurchaseOrder < ActiveRecord::Base
 
   has_one :bill, :dependent => :destroy
 
+  default_scope order("date DESC")
+
   attr_accessible :chosen, :sales_tax_rate, :shipping, :date
 
   after_initialize :default_values

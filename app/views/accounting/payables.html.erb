@@ -1,35 +1,19 @@
-<div>
+<div id="payables">
 	<%= render(:partial => "layouts/accounting_sub_menu")%>
 	<h1>Accounts Payable</h1>
 	<%= link_to("Instructions >>", {:action => 'show'}) %>
 	</br>
-	</br>
-	
-	<h3>Create</h3>
-	<%= link_to("Create Payment >>", {:action => 'payments'}) %>
-	</br>
-	</br>
-	<%= link_to("Create Bill >>", {:action => 'bills'}) %>
-	</br>
-	</br>
-	<%= link_to("Create Purchase Order >>", {:action => 'purchase_orders'}) %>
-	</br>
-	</br>
-	
-	
-	
-	<h3>History</h3>
-	<%= link_to("Payment History >>", {:action => 'payment_history'}) %>
-	</br>
-	</br>
-	<%= link_to("Bill History >>", {:action => 'show'}) %>
-	</br>
-	</br>
-	<%= link_to("Purchase Order History >>", {:action => 'show'}) %>
-	</br>
-	</br>
-	
-	
+  <h3>Recent Payments</h3>
+  <%= link_to("All Payments >>", {:action => 'payments'}) %>
+  <%= render(:partial => "payments", :locals => {:payments => @payments}) %>
+
+  <h3>Recent Bills</h3>
+  <%= link_to("All Bills >>", {:action => 'bills'}) %>
+  <%= render(:partial => "bills", :locals => {:bills => @bills}) %>
+
+  <h3>Recent POs</h3>
+  <%= link_to("All POs >>", {:action => 'purchase_orders'}) %>
+  <%= render(:partial => "purchase_orders", :locals => {:purchase_orders => @purchase_orders}) %>
 	
 </div>
 

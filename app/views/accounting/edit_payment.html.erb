@@ -1,7 +1,7 @@
 <div>
 	<%= render(:partial => "layouts/accounting_sub_menu")%>
 	<h1 class="center">Edit Payment</h1>
-
+  <%= link_to("Delete", {:action => 'delete_payment', :id => @payment.id}, :class => 'btn btn-danger f-right') %>
 	<%= form_for(@payment, :url => {:action => 'update_payment', :id => @payment.id}) do |f| %>
 	
 	<%= render(:partial => "new_payment_form", :locals => {:f => f})%>

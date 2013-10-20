@@ -1,41 +1,9 @@
 <div>
-	<%= render(:partial => "layouts/accounting_sub_menu")%>
-	<h1>Payments</h1>
-	<%= link_to("Instructions >>", {:action => 'show'}) %>
-  <br/><br/>
+  <h3>Payments</h3>
   <%= link_to("Add Payment  >>", {:action => 'new_payment'}, :id => 'add-payment', :class => 'action vew') %>
 
 	</br>
 	</br>
-	<table class="grid-view" summary="Payment List">
-		<tr class="header">
-			<th>Actions</th>
-      <th>Reference #</th>
-			<th>Date</th>
-			<th>Payee</th>
-      <th>Type</th>
-      <th>Account</th>
-			<th>Amount</th>
-			<th>Memo</th>
-					
-		</tr>
-		<% @payments.each do |payment| %>
-		
-		<tr>
-			<td class="center">
-				<%= link_to("Edit", {:action => 'edit_payment', :id => payment.id}, :class => 'action edit') %>
-				<%= link_to("Delete", {:action => 'delete_payment', :id => payment.id}, :class => 'action delete') %>
-			</td>
-      <td><%= payment.reference %></td>
-			<td><%= payment.date %></td>
-			<td><%= payment.vendor.try(:display_name) %></td>
-      <td><%= payment.method %></td>
-      <td><%= payment.account.name %></td>
-      <td class="right"><%= price_tag(payment.amount) %></td>
-			<td><%= payment.memo %></td>	
-		</tr>
-		<% end %>
-		
-	</table>
+   <%= render(:partial => "payments", :locals => {:payments => @payments}) %>
 </div>
 

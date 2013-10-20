@@ -8,13 +8,9 @@ class AccountingController < ApplicationController
   def receivables
 
   end
-  
-  def payment_history
-    @payments = Payment.all
-  end
 
   def purchase_orders
-    @purchase_orders = PurchaseOrder.where("builder_id = ?", session[:builder_id]).order(:id)
+    @purchase_orders = PurchaseOrder.where("builder_id = ?", session[:builder_id])
   end
 
   def new_purchase_order
@@ -57,7 +53,7 @@ class AccountingController < ApplicationController
   end
 
   def bills
-    @bills = Bill.where("builder_id = ?", session[:builder_id]).order(:id)
+    @bills = Bill.where("builder_id = ?", session[:builder_id])
   end
 
   def new_bill
@@ -92,7 +88,7 @@ class AccountingController < ApplicationController
   end
 
   def payments
-    @payments = Payment.where("builder_id = ?", session[:builder_id]).order(:id)
+    @payments = Payment.where("builder_id = ?", session[:builder_id])
   end
 
   def new_payment
@@ -148,7 +144,9 @@ class AccountingController < ApplicationController
     
 
   def payables
-
+    @payments = Payment.where("builder_id = ?", session[:builder_id]).limit(50)
+    @bills = Bill.where("builder_id = ?", session[:builder_id]).limit(50)
+    @purchase_orders = PurchaseOrder.where("builder_id = ?", session[:builder_id]).limit(50)
   end
 
   def payroll

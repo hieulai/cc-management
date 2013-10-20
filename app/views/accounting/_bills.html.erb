@@ -1,27 +1,26 @@
-<%@total_costs = 0 %>
-<table class="grid-view" summary="Bill List">
-    <tr class="header">
-        <th>Actions</th>
-        <th>Bill #</th>
-        <th>PO #</th>
-        <th>Due Date</th>
-        <th>Project</th>
-        <th>Category</th>
-        <th>Vendor</th>
-        <th>Amount</th>
-        <th>Notes</th>
-
-    </tr>
+<% @total_costs = 0 %>
+<table class="grid-view scrollable" summary="Bill List">
+    <thead>
+        <tr class="header">
+            <th>Bill #</th>
+            <th>PO #</th>
+            <th>Due Date</th>
+            <th>Project</th>
+            <th>Category</th>
+            <th>Vendor</th>
+            <th>Amount</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
     <% bills.each do |b| %>
-
-      <tr>
+      <tr <% unless b.purchase_order.present? || b.readonly? %> class="clickable" <% end %>>
           <td class="center">
+              <%= b.id %>
               <% unless b.purchase_order.present? || b.readonly? %>
-                <%= link_to("Edit", {:action => 'edit_bill', :id => b.id}, :class => 'action edit') %>
-                <%= link_to("Delete", {:action => 'delete_bill', :id => b.id}, :class => 'action edit') %>
+                  <%= link_to("Edit", {:action => 'edit_bill', :id => b.id}, :class => 'action edit clickable-link', style: 'display: none') %>
               <% end %>
           </td>
-          <td class="center"><%= b.id %></td>
           <td class="center"><%= link_to b.purchase_order_id, {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :target => "_blank" if b.purchase_order.present? %></td>
           <td class="center"><%= b.source(:due_date) %></td>
           <td><%= b.source(:project).name %></td>
@@ -31,4 +30,5 @@
           <td><%= b.source(:notes) %></td>
       </tr>
     <% end %>
+    </tbody>
 </table>

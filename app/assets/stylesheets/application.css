@@ -13,6 +13,7 @@
  *= require bootstrap_and_overrides
  *= require_tree ./base
  */
+
 ul#tasksContainer{
     list-style: none;
     display: inline-block;
@@ -33,6 +34,9 @@ ul#tasksContainer li label:hover{
     width: 250px;
 }
 
+.clickable{
+    cursor: pointer;
+}
 
 .change_order{
     background-color: lightgoldenrodyellow;

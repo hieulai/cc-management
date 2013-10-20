@@ -1,7 +1,7 @@
 <div>
     <%= render(:partial => "layouts/accounting_sub_menu")%>
     <h2>Edit Bill</h2>
-
+    <%= link_to("Delete", {:action => 'delete_bill', :id => @purchasable.id}, :class => 'btn btn-danger f-right') %>
     <%= form_for @purchasable, :url => {:action => 'update_bill', :id => @purchasable.id} do |f| %>
                       
       <% if @purchasable.errors.any? %>

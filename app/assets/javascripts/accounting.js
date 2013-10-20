@@ -65,6 +65,8 @@ var toggleItemInputs = function (checbox, s) {
 };
 
 $(document).ready(function() {
+    $("#payables .scrollable").tableScroll({height:137});
+
     calculatePostTaxAmounts();
     calculateSubTotalAndTotal();
     calculatePayment();

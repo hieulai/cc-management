@@ -1,27 +1,27 @@
 <%@total_costs = 0 %>
-<table class="grid-view" summary="Purchase Order List">
-    <tr class="header">
-        <th>Actions</th>
-        <th>PO #</th>
-        <th>Order Date</th>
-        <th>Due Date</th>
-        <th>Project</th>
-        <th>Category</th>
-        <th>Vendor</th>
-        <th>Amount</th>
-        <th>Notes</th>
-
-    </tr>
+<table class="grid-view scrollable" summary="Purchase Order List">
+    <thead>
+        <tr class="header">
+            <th>PO #</th>
+            <th>Order Date</th>
+            <th>Due Date</th>
+            <th>Project</th>
+            <th>Category</th>
+            <th>Vendor</th>
+            <th>Amount</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
     <% purchase_orders.each do |po| %>
 
-      <tr>
+      <tr <% unless po.readonly? %> class="clickable" <% end %>>
           <td class="center">
+              <%= po.id %>
               <% unless po.readonly? %>
-                  <%= link_to("Edit", {:action => 'edit_purchase_order', :id => po.id}, :class => 'action edit') %>
-                  <%= link_to("Delete", {:action => 'delete_purchase_order', :id => po.id}, :class => 'action edit') %>
+                <%= link_to("Edit", {:action => 'edit_purchase_order', :id => po.id}, :class => 'action edit clickable-link', style: 'display:none') %>
               <% end %>
           </td>
-          <td class="center"><%= po.id %></td>
           <td class="center"><%= po.date %></td>
           <td class="center"><%= po.due_date %></td>
           <td><%= po.project.name %></td>
@@ -31,4 +31,5 @@
           <td><%= po.notes %></td>
       </tr>
     <% end %>
+    </tbody>
 </table>

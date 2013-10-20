@@ -6,6 +6,8 @@ class Bill < ActiveRecord::Base
   has_many :payments_bills, :dependent => :destroy
   has_many :payments, :through => :payments_bills
 
+  default_scope order("due_date DESC")
+
   attr_accessible :purchase_order_id, :remaining_amount
 
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
