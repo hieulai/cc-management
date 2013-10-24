@@ -1,30 +1,28 @@
-<table summary="Template form fields">
-  <tr>
-    <th>Item Name</th>
-    <td><%= f.text_field(:name) %>
-  </tr>
-  <tr>
-    <th>Description on Estimate</th>
-    <td><%= f.text_field(:description, :size => 100) %>
-  </tr>
-  <tr>
-      <th>Default quantity</th>
-      <td><%= f.text_field(:qty) %>
-  </tr>
-  <tr>
-    <th>Cost</th>
-    <td><%= f.text_field(:estimated_cost) %>
-  </tr>
-  <tr>
-    <th>Unit of Measure</th>
-    <td><%= f.text_field(:unit) %>
-  </tr>
-  <tr>
-    <th>Preset Margin</th>
-    <td><%= f.text_field(:markup) %>
-  </tr>
-  <tr>
-    <th>Item Notes</th>
-    <td><%= f.text_area(:notes) %></td>
-  </tr>
-</table>
+<div class="control-group">
+    <%= f.label :name, 'Item Name', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:name) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :description, 'Description on Estimate', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:description, :size => 100) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :qty, 'Default quantity', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:qty) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :estimated_cost, 'Cost', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:estimated_cost) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :unit, 'Unit of Measure', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:unit) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :markup, 'Preset Margin', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:markup) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :notes, 'Item Notes', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_area(:notes, size: '40x5') %></div>
+</div>

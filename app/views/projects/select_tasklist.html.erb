@@ -1,19 +1,21 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h2>Select Task List</h2>
-	
-	<%= form_for @project, :url => {:action => 'assign_tasklist', :id => @project.id} do |f| %>
-	
-	<table>
-		<tr>
-			<th>Choose a Task List for the Project:</th>
-			<td><%= select(:tasklist, :id, Tasklist.where("builder_id = ?", session[:builder_id]).collect{|s|[s.name, s.id]}, {:include_blank => true}) %>
-		</tr>
-	</table>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Submit") %>
-	</div>
-	
-	<% end %>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <h2>Select Task List</h2>
+
+    <%= form_for @project, :url => {:action => 'assign_tasklist', :id => @project.id}, html: {class: 'form-horizontal'} do |f| %>
+
+      <div class="control-group">
+          <%= f.label :tasklist_id, 'Choose a Task List for the Project:', class: 'col-lg-2 control-label' %>
+          <div class='controls'>
+              <%= select(:tasklist, :id, Tasklist.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+          </div>
+      </div>
+
+      <div class="control-group">
+          <div class='controls'>
+              <%= submit_tag("Submit", class: 'btn') %>
+          </div>
+      </div>
+
+    <% end %>
 </div>

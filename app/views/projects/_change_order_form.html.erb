@@ -1,18 +1,15 @@
-<table>
-    <tr>
-        <th>Name</th>
-        <td><%= f.text_field :name %></td>
-    </tr>
-    <tr>
-        <th>Approved</th>
-        <td><%= f.check_box :approved %></td>
-    </tr>
-    <tr>
-        <th>Notes</th>
-        <td><%= f.text_area :notes %></td>
-    </tr>
-</table>
-<br/>
+<div class="control-group">
+    <%= f.label :name, 'Name', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field :name %></div>
+</div>
+<div class="control-group">
+    <%= f.label :lg, 'Approved', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.check_box :approved %></div>
+</div>
+<div class="control-group">
+    <%= f.label :notes, 'Notes', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_area :notes, size: '40x5' %></div>
+</div>
 
 <table id="co-item-list" class="grid-view item-list" summary="Items List">
     <thead>

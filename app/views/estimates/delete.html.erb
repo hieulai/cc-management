@@ -7,8 +7,8 @@
 	<p>Are you sure you want to delete this estimate?</p>
 	
 	<p class="reference-name"><%= @estimate.id %></p>
-	<div class="form-buttons">
-		<%= submit_tag("Delete Estimate") %>
+  <div class="control-group">
+		<%= submit_tag("Delete Estimate", class: 'btn') %>
 	</div>
 	
 	<% end %>

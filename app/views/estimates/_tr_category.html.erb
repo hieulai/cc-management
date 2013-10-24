@@ -5,7 +5,7 @@
         </h3>
     </td>
     <td>
-        <%= link_to raw("<button type=\"button\">+ Item</button>"), "#", :class => "trigger-add" %>
+        <%= link_to '+ Item', "#", :class => "trigger-add btn" %>
         <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :confirm => 'Are you sure you want to delete this category and all its associated items?', :remote => true, :class => 'remove-category' %>
     </td>
 </tr>
@@ -14,10 +14,10 @@
 <% end %>
 <tr style="display: none" class="add add-item item_category_<%= category_template.category.id %>">
 	<td colspan=11>
-        <%= form_for :item, :url => {:controller => 'estimates', :action => 'add_item', :category_template_id => category_template.id}, :remote => true do |f| %>
+        <%= form_for :item, :url => {:controller => 'estimates', :action => 'add_item', :category_template_id => category_template.id}, html: { class: "form-inline"}, :remote => true do |f| %>
           Item:
           <%= f.select :id, @items.map { |i| [i.name, i.id] } %>
-          <%= f.submit "Add" %>
+          <%= f.submit "Add", class: 'btn' %>
           <%= link_to "Cancel", "#", :class => 'cancel-add' %>
         <% end %>
     </td>

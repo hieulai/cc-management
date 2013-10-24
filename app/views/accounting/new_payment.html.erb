@@ -2,13 +2,13 @@
 	<%= render(:partial => "layouts/accounting_sub_menu")%>
 	<h1 class="center">New Payment</h1>
 	
-	<%= form_for(@payment, :url => {:action => 'create_payment'}) do |f| %>
+	<%= form_for(@payment, :url => {:action => 'create_payment'}, html: {class: 'form-horizontal'}) do |f| %>
 	
 	<%= render(:partial => "new_payment_form", :locals => {:f => f})%>
-	
-	
+
+
 	<div class="form-buttons">
-		<%= submit_tag("Pay") %>
+      <%= submit_tag("Pay", class: 'btn') %>
 	</div>
 	
 	<% end %>

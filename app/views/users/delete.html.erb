@@ -1,5 +1,5 @@
 <div>
-	<%= render(:partial => "sub_menu")%>
+  <%= render(:partial => "layouts/user_sub_menu")%>
 	<h2>Delete User</h2>
 	
 	<%= form_for(:user, :url => {:action => 'destroy', :id => @user.id}) do |f| %>
@@ -11,7 +11,7 @@
 
 
 	<div class="form-buttons">
-		<%= submit_tag("Delete") %>
+		<%= submit_tag("Delete", class: 'btn') %>
 	</div>
 	
 	<% end %>

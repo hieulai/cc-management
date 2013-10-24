@@ -2,7 +2,7 @@
 	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h2>Add New Specification</h2>
 	
-	<%= form_for @specification, :url => {:action => 'create_specification', :id => @project.id} do |f| %>
+	<%= form_for @specification, :url => {:action => 'create_specification', :id => @project.id}, html: {class: 'form-horizontal'} do |f| %>
 	
 	<% if @specification.errors.any? %>
 	  <div id="errorExplanation">
@@ -16,10 +16,12 @@
 	  </div>
 	  <% end %>
 	<%= render(:partial => "spec_form", :locals => {:f => f})%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Create") %>
-	</div>
+
+      <div class="control-group">
+          <div class='controls'>
+              <%= submit_tag("Create", class: 'btn') %>
+          </div>
+      </div>
 	
 	<% end %>
 	

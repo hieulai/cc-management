@@ -36,7 +36,7 @@
 
 			<td><%= x.subcategory %></td>
 			<td><%= x.name %></td>
-			<td>$<%= x.balance %></td>	
+			<td><%= price_tag(x.balance) %></td>
 			
 		</tr>
 		<% end %>

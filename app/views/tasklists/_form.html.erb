@@ -1,5 +1,8 @@
-<p>
-	<%= f.label :name, "Task List Name" %>
-	<%= f.text_field(:name) %>
-</p>
+<div class="control-group">
+    <%= f.label :name, "Task List Name", class: 'col-lg-2 control-label' %>
+    <div class='controls'>
+        <%= f.text_field(:name) %>
+    </div>
+
+</div>
 <%= render :partial => 'tasks', :locals => {f: f} %>

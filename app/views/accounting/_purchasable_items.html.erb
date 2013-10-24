@@ -33,7 +33,7 @@
           <td colspan=12>
               <% @items = Item.where(builder_id: session[:builder_id]).order(:name) %>
               <%= select :purchased_item, :id, @items.map { |i| [i.name, i.id] } %>
-              <%= link_to raw("<button type=\"button\">+ Item</button>"), {:action => 'add_item_to_purchasable', :item_id => @items.first.id, :type => purchasable.class.name }, :remote => true, :id => "add-purchased-item" %>
+              <%= link_to "+ Item", {:action => 'add_item_to_purchasable', :item_id => @items.first.id, :type => purchasable.class.name }, :remote => true, :id => "add-purchased-item", :class => 'btn' %>
           </td>
       </tr>
       <tr>
@@ -56,7 +56,7 @@
 
         <tr>
             <td colspan="5">Shipping</td>
-            <td class="right light-blue">$<%= text_field(purchasable.class.name.underscore.to_sym, :shipping, :size => 10) %></td>
+            <td class="right light-blue">$<%= text_field_tag("#{purchasable.class.name.underscore.to_sym}[shipping]", purchasable.shipping, class:'input-mini') %></td>
             <% if purchasable.class == PurchaseOrder %>
                 <td></td>
             <% end %>

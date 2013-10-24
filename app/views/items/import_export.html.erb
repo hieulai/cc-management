@@ -13,7 +13,7 @@
   <%= form_for @item, url: {action: 'import'}, multipart: true do |f| %>
   <%= f.file_field :data %>
   <br/>
-  <%= submit_tag("Import") %>
+  <%= submit_tag("Import", class: 'btn') %>
 
   <% end %>
 

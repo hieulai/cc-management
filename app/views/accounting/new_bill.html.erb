@@ -2,7 +2,7 @@
     <%= render(:partial => "layouts/accounting_sub_menu")%>
     <h2>Add Bill</h2>
 
-    <%= form_for @bill, :url => {:action => 'create_bill'} do |f| %>
+    <%= form_for @bill, :url => {:action => 'create_bill'}, html: {class: 'new_bill form-horizontal'} do |f| %>
 
       <% if @bill.errors.any? %>
         <div id="errorExplanation">
@@ -23,7 +23,7 @@
     <% end %>
 
     <div class="form-buttons">
-        <%= submit_tag("Create", :data => {:form => ".new_bill"}) %>
+        <%= submit_tag("Create", :data => {:form => ".new_bill"}, class: 'btn') %>
         <%= link_to("Cancel", :action => 'bills') %>
     </div>
 

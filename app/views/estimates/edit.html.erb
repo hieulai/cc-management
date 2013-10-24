@@ -1,21 +1,21 @@
 <div>
-	<%= render(:partial => "layouts/estimating_sub_menu")%>
-	<h1 class="center">Edit Estimate</h1>
-	
-	<%= form_for(@estimate, :url => {:action => 'update', :id => @estimate.id}) do |f| %>
-	
-	  <%= render(:partial => "edit_form", :locals => {:f => f})%>
-	<% end %>
-  <div class="estimate-actions">
-    <%= link_to "Print", {:controller => 'estimates', :action => 'show', :id => @estimate.id, :format => :pdf}, :target => '_blank' %>
-    <br/>
-    <%= link_to "Email", {:controller => 'estimates', :action => 'show_email', :id => @estimate.id}, :target => '_blank' %>
-  </div>
-  <div id="template-placeholder">
-        <%= render :partial =>  'estimates/template' %>
-  </div>
-  <div class="form-buttons">
-      <%= submit_tag "Update Estimate", :data => {:form => ".edit_estimate"} %>
-  </div>
- 
+    <%= render(:partial => "layouts/estimating_sub_menu") %>
+    <h1 class="center">Edit Estimate</h1>
+
+    <%= form_for(@estimate, :url => {:action => 'update', :id => @estimate.id}, :html => {class: 'edit_estimate form-horizontal f-left'}) do |f| %>
+
+      <%= render(:partial => "edit_form", :locals => {:f => f}) %>
+    <% end %>
+    <div class="estimate-actions">
+        <%= link_to "Print", {:controller => 'estimates', :action => 'show', :id => @estimate.id, :format => :pdf}, :target => '_blank' %>
+        <br/>
+        <%= link_to "Email", {:controller => 'estimates', :action => 'show_email', :id => @estimate.id}, :target => '_blank' %>
+    </div>
+    <div id="template-placeholder">
+        <%= render :partial => 'estimates/template' %>
+    </div>
+    <div class="control-group">
+        <%= submit_tag "Update Estimate", class: 'btn', :data => {:form => ".edit_estimate"} %>
+    </div>
+
 </div>

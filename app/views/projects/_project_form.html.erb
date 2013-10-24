@@ -1,27 +1,25 @@
-	<table summary="Project form fields">
-		<tr>
-			<th>Project Name</th>
-			<td><%= p.text_field(:name) %>
-		</tr>
-		<tr>
-			<th>Project Type</th>
-			<td><%= p.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build","Residential:  New Construction", "Residential:  Remodel"]) %>
-		</tr>
-		<tr>
-			<th>Start Date</th>
-			<td><%= p.date_select(:start_date, :order => [:month, :day, :year], :include_blank => true) %>
-		</tr>
-		<tr>
-			<th>Deadline</th>
-			<td><%= p.date_select(:deadline, :order => [:month, :day, :year], :include_blank => true) %>
-		</tr>
-		<tr>
-			<th>Anticipated Revenue</th>
-			<td><%= p.text_field(:revenue) %>
-		</tr>
-		<tr>
-			<th>Notes</th>
-			<td><%= p.text_area(:project_notes) %>
-		</tr>
-	</table>
+<div class="control-group">
+    <%= p.label :name, 'Project Name', class: 'col-lg-2 control-label' %>
+    <div class='controls'><%= p.text_field(:name) %></div>
+</div>
+<div class="control-group">
+    <%= p.label :project_type, 'Project Type', class: 'col-lg-2 control-label' %>
+    <div class='controls'><%= p.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build", "Residential:  New Construction", "Residential:  Remodel"]) %></div>
+</div>
+<div class="control-group">
+    <%= p.label :start_date, 'Start Date', class: 'col-lg-2 control-label' %>
+    <div class='controls'><%= p.date_select(:start_date, {:order => [:month, :day, :year], :include_blank => true}, {class: 'input-medium'}) %></div>
+</div>
+<div class="control-group">
+    <%= p.label :deadline, 'Deadline', class: 'col-lg-2 control-label' %>
+    <div class='controls'><%= p.date_select(:deadline, {:order => [:month, :day, :year], :include_blank => true}, {class: 'input-medium'}) %></div>
+</div>
+<div class="control-group">
+    <%= p.label :revenue, 'Anticipated Revenue', class: 'col-lg-2 control-label' %>
+    <div class='controls'><%= p.text_field(:revenue) %></div>
+</div>
+<div class="control-group">
+    <%= p.label :project_notes, 'Notes', class: 'col-lg-2 control-label' %>
+    <div class='controls'><%= p.text_area(:project_notes, size: '40x5') %></div>
+</div>
 	

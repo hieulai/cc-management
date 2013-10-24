@@ -12,7 +12,7 @@
 	<%= link_to("Add New Vendor >>", {:action => 'new_vendor'}) %>
 	</br>
 	</br>
-	<%= form_tag('list_vendors', method: 'get') do %>
+	<%= form_tag('list_vendors', method: 'get', class: 'form-inline') do %>
 		<p>
 			<%= label_tag :query, "Search" %>
 			<%= text_field_tag(:query, @query) %>

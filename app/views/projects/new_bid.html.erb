@@ -2,7 +2,7 @@
 	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h2>Add New Bid</h2>
 	
-	<%= form_for @bid, :url => {:action => 'create_bid', :id => @project.id} do |f| %>
+	<%= form_for @bid, :url => {:action => 'create_bid', :id => @project.id}, html: {class: 'new_bid form-horizontal'} do |f| %>
 	
 	<% if @bid.errors.any? %>
 	  <div id="errorExplanation">
@@ -22,8 +22,10 @@
 	
 	<% end %>
 
-  <div class="form-buttons">
-      <%= submit_tag("Create", :data => {:form => ".new_bid"}) %>
-  </div>
+    <div class="control-group">
+        <div class='controls'>
+            <%= submit_tag("Create", :data => {:form => ".new_bid"}, class: 'btn') %>
+        </div>
+    </div>
 	
 </div>

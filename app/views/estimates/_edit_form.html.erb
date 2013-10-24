@@ -1,32 +1,35 @@
-	<table summary="Estimate form fields">
-		<tr>
-					<th>Project Name</th>
-        <td><%= select(:project, :id, Project.where("builder_id = ? AND status in ('Current Lead', 'Current Project')", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
-		</tr>
-		<tr>
-			<th>Template</th>
-      	  	<td>
-          <%= @template.name %></td>
-		</tr>
-		<tr>
-			<th>Progress</th>
-			<td><%= f.select(:progress, ["In Progress", "Awaiting Approval", "Completed & Sent"]) %>
-		</tr>
-		<tr>
-			<th>Due Date</th>
-			<td><%= f.date_select(:deadline, :order => [:month, :day, :year], :include_blank => true) %>
-		</tr>
-		<tr>
-			<th>Expected Revenue</th>
-			<td>
-          <div class="total-price"></div>
-          <%= f.hidden_field(:revenue, :class => "total-price") %>
-		</tr>
-		<tr>
-			<th>Expected Profit</th>
-			<td>
-          <div class="total-margin"></div>
-          <%= f.hidden_field(:profit, :class => "total-margin") %>
-		</tr>
-	</table>
+<div class="control-group">
+    <%= f.label :project_id ,'Project Name', class: 'col-lg-2 control-label' %> 
+    <div class="controls"><%= select(:project, :id, Project.where("builder_id = ? AND status in ('Current Lead', 'Current Project')", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :template_name ,'Template', class: 'col-lg-2 control-label' %> 
+    <div class="controls">
+        <%= @template.name %></div>
+</div>
+<div class="control-group">
+    <%= f.label :progress ,'Progress', class: 'col-lg-2 control-label' %> 
+    <div class="controls"><%= f.select(:progress, ["In Progress", "Awaiting Approval", "Completed & Sent"]) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :deadline ,'Due Date', class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.date_select(:deadline, {:order => [:month, :day, :year], :include_blank => true}, {class: 'input-medium'}) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :revenue ,'Expected Revenue', class: 'col-lg-2 control-label' %> 
+    <div class="controls">
+        <div class="total-price"></div>
+        <%= f.hidden_field(:revenue, :class => "total-price") %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :profit ,'Expected Profit', class: 'col-lg-2 control-label' %> 
+    <div class="controls">
+        <div class="total-margin"></div>
+        <%= f.hidden_field(:profit, :class => "total-margin") %>
+    </div>
+</div>
 	

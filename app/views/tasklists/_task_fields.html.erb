@@ -1,9 +1,14 @@
 <li class="nested-fields task" id="item_<%= f.object_id %>">
-  <p class="fields">
-    <%= f.label :name, "Task" %>
-    <%= f.text_field :name %>
-    <%= f.hidden_field :position, :class => "position" %>
-    <%= link_to 'Add', '#', :class =>"trigger_add" %>
-    <%= link_to_remove_association("Delete",f) %>
-  </p>
+    <p class="fields">
+
+    <div class="control-group">
+        <%= f.label :name, "Task", class: 'col-lg-2 control-label' %>
+        <div class='controls'>
+            <%= f.text_field :name %>
+            <%= f.hidden_field :position, :class => "position" %>
+            <%= link_to 'Add', '#', :class => "trigger_add" %>
+            <%= link_to_remove_association("Delete", f) %>
+        </div>
+    </div>
+    </p>
 </li>

@@ -2,13 +2,15 @@
 	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h2>Edit Task List</h2>
 	
-	<%= form_for @tasklist, :url => {:action => 'update', :id => @tasklist.id}, :html => {:class => 'tasklist'} do |f| %>
+	<%= form_for @tasklist, :url => {:action => 'update', :id => @tasklist.id}, :html => {:class => 'tasklist form-horizontal'} do |f| %>
 	
 	<%= render(:partial => "form", :locals => {:f => f})%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Update") %>
-	</div>
+
+      <div class="control-group">
+          <div class='controls'>
+              <%= f.submit "Update", class: 'btn' %>
+          </div>
+      </div>
 	
 	<% end %>
 	

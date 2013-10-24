@@ -1,7 +1,7 @@
 <div>
     <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
     <h2>Add New Change Order</h2>
-    <%= form_for @change_order, :url => {:action => 'create_change_order', :id => @project.id} do |f| %>
+    <%= form_for @change_order, :url => {:action => 'create_change_order', :id => @project.id}, html: {class: 'form-horizontal'} do |f| %>
           <% if @change_order.errors.any? %>
             <div id="errorExplanation">
                 <h2><%= pluralize(@change_order.errors.count, "Error") %> prohibited
@@ -14,6 +14,6 @@
             </div>
           <% end %>
           <%= render(:partial => "change_order_form", :locals => {:f => f})%>
-      <%= submit_tag "Save" %>
+      <%= submit_tag "Save", class: 'btn' %>
     <% end %>
 </div>

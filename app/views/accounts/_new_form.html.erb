@@ -1,24 +1,34 @@
 <h2>New Account Info:</h2>
-<p>
-	<%= f.label :name, "Account Name" %>
-	<%= f.text_field(:name) %>
-</p>
-<p>
-	<%= f.label :category, "Account Type" %>
-	<%= f.select(:category, ["Asset", "Liability", "Expense", "Equity", "Cost of Goods Sold"], {:include_blank => true}) %>
-</p>
-<p>
-	<%= f.label :subcategory, "Account Sub Type" %>
-	<%= f.text_field(:subcategory) %>
-</p>
-<p>
-	<%= f.label :prefix, "Account Prefix" %>
-	<%= f.text_field(:prefix) %>
-</p>
-<p>
-	<%= f.label :balance, "Beginning Balance" %>
-	<%= f.text_field(:balance) %>
-</p>
+<div class="control-group">
+    <%= f.label :name, "Account Name", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :category, "Account Type", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.select(:category, ["Asset", "Liability", "Expense", "Equity", "Cost of Goods Sold"], {:include_blank => true}) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :subcategory, "Account Sub Type", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:subcategory) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :prefix, "Account Prefix", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:prefix) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :balance, "Beginning Balance", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:balance) %>
+    </div>
+</div>
 
 
 

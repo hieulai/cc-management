@@ -1,23 +1,33 @@
-<p>
-	<%= f.label :authority, "Authority Level" %>
-	<%= f.select(:authority, ["Owner", "Admin", "Accountant", "Payroll Mgr", "Accounts Receivable Mgr", "Accounts Payable Mgr", 
-	"Project Mgr", "Estimator", "Salesman" ], {:include_blank => true}) %>
-</p>
-<p>
-	<%= f.label :first_name, "First Name" %>
-	<%= f.text_field(:first_name) %>
-</p>
-<p>
-	<%= f.label :last_name, "Last Name" %>
-	<%= f.text_field(:last_name) %>
-</p>
-<p>
-	<%= f.label :email, "Email" %>
-	<%= f.text_field(:email) %>
-</p>
-<p>
-	<%= f.label :primary_phone, "Primary Phone" %>
-	<%= f.text_field(:primary_phone) %>
-</p>
+<div class="control-group">
+    <%= f.label :authority, "Authority Level", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.select(:authority, ["Owner", "Admin", "Accountant", "Payroll Mgr", "Accounts Receivable Mgr", "Accounts Payable Mgr",
+                                  "Project Mgr", "Estimator", "Salesman"], {:include_blank => true}) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :first_name, "First Name", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:first_name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :last_name, "Last Name", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:last_name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :email, "Email", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:email) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :primary_phone, "Primary Phone", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:primary_phone) %>
+    </div>
+</div>
 
 

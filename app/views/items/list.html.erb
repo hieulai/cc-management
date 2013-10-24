@@ -7,7 +7,7 @@
   <%= link_to("Create New Item >>", {:action => 'new'}) %>
   </br>
   </br>
-	<%= form_tag('list', method: 'get') do %>
+	<%= form_tag('list', method: 'get', class: 'form-inline') do %>
 		<p>
 			<%= label_tag :query, "Search" %>
 			<%= text_field_tag(:query, @query) %>

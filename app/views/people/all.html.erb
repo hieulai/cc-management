@@ -9,7 +9,7 @@
 	</div>
 	</br>
 	</br>
-	<%= form_tag('all', method: 'get') do %>
+	<%= form_tag('all', method: 'get', class: 'form-inline') do %>
 		<p>
 			<%= label_tag :query, "Search" %>
 			<%= text_field_tag(:query, @query) %>

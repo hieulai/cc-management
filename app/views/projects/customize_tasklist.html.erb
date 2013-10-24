@@ -1,11 +1,13 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h2>Customize Task List</h2>
-	
-	<%= form_for @tasklist, :url => {:action => 'process_customize', :id => @tasklist.id}, :html => {:class => 'tasklist'}  do |f| %>
-	<%= render :partial => 'tasklists/tasks', :locals => { f: f} %>
-	<div class="form-buttons">
-		<%= submit_tag("Update") %>
-	</div>
-	<% end %>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <h2>Customize Task List</h2>
+
+    <%= form_for @tasklist, :url => {:action => 'process_customize', :id => @tasklist.id}, :html => {:class => 'tasklist form-horizontal'} do |f| %>
+      <%= render :partial => 'tasklists/tasks', :locals => {f: f} %>
+      <div class="control-group">
+          <div class='controls'>
+              <%= submit_tag("Update", class: 'btn') %>
+          </div>
+      </div>
+    <% end %>
 </div>

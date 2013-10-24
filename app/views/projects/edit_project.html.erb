@@ -1,16 +1,19 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h2>Update Project</h2>
-	<%= form_for @project, :url => {:action => 'update_project', :id => @project.id} do |p| %>
-	<%= fields_for @client do |c| %>
-	
-	
-	<%= render(:partial => "project_form", :locals => {:c => c, :p => p })%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Update") %>
-	</div>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <h2>Update Project</h2>
+    <%= form_for @project, :url => {:action => 'update_project', :id => @project.id}, html: {class: 'form-horizontal'} do |p| %>
+      <%= fields_for @client do |c| %>
 
-	<% end %>
-	<% end %>
+
+        <%= render(:partial => "project_form", :locals => {:c => c, :p => p}) %>
+
+        <div class="control-group">
+            <div class='controls'>
+                <%= submit_tag("Update", class: 'btn') %>
+            </div>
+        </div>
+
+
+      <% end %>
+    <% end %>
 </div>

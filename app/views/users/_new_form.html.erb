@@ -1,26 +1,32 @@
 <h2>User Details</h2>
-	<p>
-		<%= u.label :authority, "Authority Level" %>
-		<%= u.select(:authority, ["Owner", "Admin", "Accountant", "Payroll Mgr", "Accounts Receivable Mgr", "Accounts Payable Mgr", 
-		"Project Mgr", "Estimator", "Salesman" ], {:include_blank => true}) %>
-	</p>
-	<p>
-		<%= u.label :first_name, "First Name" %>
-		<%= u.text_field(:first_name) %>
-	</p>
-	<p>
-		<%= u.label :last_name, "Last Name" %>
-		<%= u.text_field(:last_name) %>
-	</p>
-	<p>
-		<%= u.label :email, "Email" %>
-		<%= u.text_field(:email) %>
-	</p>
-	<p>
-		<%= u.label :primary_phone, "Primary Phone" %>
-		<%= u.text_field(:primary_phone) %>
-	</p>
-	<p>
-		<%= u.label :password, "Password" %>
-		<%= u.password_field(:password) %>
-	</p>
+<div class="control-group">
+    <%= u.label :authority, "Authority Level", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= u.select(:authority, ["Owner", "Admin", "Accountant", "Payroll Mgr", "Accounts Receivable Mgr", "Accounts Payable Mgr", "Project Mgr", "Estimator", "Salesman"], {:include_blank => true}) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= u.label :first_name, "First Name", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= u.text_field(:first_name) %></div>
+</div>
+<div class="control-group">
+    <%= u.label :last_name, "Last Name", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= u.text_field(:last_name) %></div>
+</div>
+<div class="control-group">
+    <%= u.label :email, "Email", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= u.text_field(:email) %></div>
+</div>
+<div class="control-group">
+    <%= u.label :primary_phone, "Primary Phone", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= u.text_field(:primary_phone) %></div>
+</div>
+<div class="control-group">
+    <%= u.label :password, "Password", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= u.password_field(:password) %></div>
+</div>

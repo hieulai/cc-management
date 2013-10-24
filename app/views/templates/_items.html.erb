@@ -1,7 +1,9 @@
-<div class="nested-fields" style="margin-left: 100px">
-  <p>
-    <%= f.label :id, "Item"%>
-    <%= f.select :id, @items.map{ |item| [item.name, item.id] }, prompt: "Select Item" %>
-    <%= link_to_remove_association("Delete", f, style: "margin-left: 5px") %>
-  </p>
+<div class="nested-fields">
+    <div class="control-group" style="margin-left: 90px">
+        <%= f.label :id, "Item", class: 'col-lg-2 control-label' %>
+        <div class="controls">
+            <%= f.select :id, @items.map { |item| [item.name, item.id] }, prompt: "Select Item" %>
+            <%= link_to_remove_association("Delete", f, style: "margin-left: 5px") %>
+        </div>
+    </div>
 </div>

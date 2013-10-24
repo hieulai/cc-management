@@ -2,7 +2,7 @@
 	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h2>Edit Bid</h2>
 	
-	<%= form_for @bid, :url => {:action => 'update_bid', :id => @bid.id} do |f| %>
+	<%= form_for @bid, :url => {:action => 'update_bid', :id => @bid.id}, html: {class: 'edit_bid form-horizontal'} do |f| %>
 	
 	<% if @bid.errors.any? %>
 	  <div id="errorExplanation">
@@ -19,8 +19,10 @@
       <%= render(:partial => "bid_item", :locals => {:bid => @bid, :categories_template => @bid.categories_template, :co_items => @bid.categories_template.template.estimate.project.co_items(@bid.categories_template.category)}) %>
 	<% end %>
 
-  <div class="form-buttons">
-        <%= submit_tag("Update", :data => {:form => ".edit_bid"}) %>
-  </div>
+    <div class="control-group">
+        <div class='controls'>
+            <%= submit_tag("Update", :data => {:form => ".edit_bid"}, class: 'btn') %>
+        </div>
+    </div>
 	
 </div>

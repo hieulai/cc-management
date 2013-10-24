@@ -1,30 +1,29 @@
 <div>
-	<h2>New User</h2>
-	
-	<%= form_for @user, :url => {:action => 'create'} do |u| %>
-	
-	<% if @user.errors.any? %>
-	  <div id="errorExplanation">
-	    <h2><%= pluralize(@user.errors.count, "Error") %> prohibited
-	      this user from being saved:</h2>
-	    <ul>
-	    <% @user.errors.full_messages.each do |msg| %>
-	      <li><%= msg %></li>
-	    <% end %>
-	    </ul>
-	  </div>
-	<% end %>
-	
-	<%= render(:partial => "new_form", :locals => {:u => u})%>
-	
+    <%= render(:partial => "layouts/user_sub_menu") %>
+    <h2>New User</h2>
 
-	
-	
-	
-	<div class="form-buttons">
-		<%= submit_tag("Create") %>
-	</div>
-	
-	<% end %>
-	
+    <%= form_for @user, :url => {:action => 'create'}, html: {class: 'form-horizontal'} do |u| %>
+
+      <% if @user.errors.any? %>
+        <div id="errorExplanation">
+            <h2><%= pluralize(@user.errors.count, "Error") %> prohibited
+                this user from being saved:</h2>
+            <ul>
+                <% @user.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+      <% end %>
+
+      <%= render(:partial => "new_form", :locals => {:u => u}) %>
+
+      <div class="control-group">
+          <div class='controls'>
+              <%= submit_tag("Create", class: 'btn') %>
+          </div>
+      </div>
+
+    <% end %>
+
 </div>

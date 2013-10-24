@@ -1,17 +1,23 @@
 <h2>Specification Info:</h2>
 
-<p>
-	<%= f.label :category, "Category" %>
-	<%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).order(:name).collect{|s|[s.name, s.id]}) %>
-</p>
-<p>
-	<%= f.label :name, "Name" %>
-	<%= f.text_field(:name) %>
-</p>
-<p>
-	<%= f.label :description, "Notes" %>
-	<%= f.text_area(:description) %>
-</p>
+<div class="control-group">
+    <%= f.label :category, "Category", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).order(:name).collect { |s| [s.name, s.id] }) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :name, "Name", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :description, "Notes", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_area(:description, size: '40x5') %>
+    </div>
+</div>
 
 
 

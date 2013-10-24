@@ -13,13 +13,13 @@
         <%= hidden_field_tag 'items[][description]', item.description %>
     </td>
     <td class="right">
-        <%= text_field_tag 'items[][qty]', purchasable.item_qty(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+        <%= text_field_tag 'items[][qty]', purchasable.item_qty(item.id), :class => "text-field input-mini", :style => "display: #{text_field_display}", :size => 10 %>
         <div class="item-qty value-field" style="display: <%= value_display %>">
             <%= item.qty %>
         </div>
     </td>
     <td class="right">
-        $<%= text_field_tag 'items[][estimated_cost]', purchasable.item_estimated_cost(item.id), :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+        $<%= text_field_tag 'items[][estimated_cost]', purchasable.item_estimated_cost(item.id), :class => "text-field input-mini", :style => "display: #{text_field_display}", :size => 10 %>
         <div class="item-estimated_cost value-field" style="display: <%= value_display %>">
             <%= price(item.estimated_cost) %>
         </div>

@@ -4,7 +4,7 @@
 	<%= link_to("Instructions >>", {:action => 'show'}) %>
 		</br>
 		</br>
-	<%= form_tag('list', method: 'get') do %>
+	<%= form_tag('list', method: 'get', class: 'form-inline') do %>
 		<p>
 			<%= label_tag :query, "Search" %>
 			<%= text_field_tag(:query, @query) %>

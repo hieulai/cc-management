@@ -1,47 +1,69 @@
-<p>
-	<%= f.label :company_name, "Company Name:" %>
-	<%= f.text_field(:company_name) %>
-</p>
-<p>
-	<%= f.label :tax_id, "Tax ID:"%>
-	<%= f.text_field(:tax_id) %>
-</p>
-<p>
-	<%= f.label :office_phone, "Office Phone:" %>
-	<%= f.text_field(:office_phone) %>
-</p>
-<p>
-	<%= f.label :website, "Website:" %>
-	<%= f.text_field(:website) %>
-</p>
-<p>
-	<%= f.label :address, "Address:" %>
-	<%= f.text_field(:address) %>
-</p>
-<p>
-	<%= f.label :city, "City:" %>
-	<%= f.text_field(:city) %>
-</p>
-<p>
-	<%= f.label :state, "State:" %>
-	<%= f.text_field(:state) %>
-</p>
-<p>
-	<%= f.label :zipcode, "Zipcode:"%>
-	<%= f.text_field(:zipcode) %>
-</p>
-<p>
-	<%= f.label :year_founded, "Year Company Started:"%>
-	<%= f.text_field(:year_founded) %>
-</p>
-<p>
-    <%= f.label :slogan, "Slogan:"%>
-    <%= f.text_field(:slogan) %>
-</p>
-<p>
-    <%= f.label :logo, "Logo:"%>
-    <%= image_tag(@builder.logo_url) if @builder.logo? %>
-    <%= f.file_field :logo %>
-</p>
+<div class="control-group">
+    <%= f.label :company_name, "Company Name:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:company_name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :tax_id, "Tax ID:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:tax_id) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :office_phone, "Office Phone:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:office_phone) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :website, "Website:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:website) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :address, "Address:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:address) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :city, "City:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:city) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :state, "State:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:state) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :zipcode, "Zipcode:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:zipcode) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :year_founded, "Year Company Started:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:year_founded) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :slogan, "Slogan:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:slogan) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :logo, "Logo:", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= image_tag(@builder.logo_url) if @builder.logo? %>
+        <%= f.file_field :logo %>
+    </div>
+</div>
 
 

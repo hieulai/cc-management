@@ -2,7 +2,7 @@
 	<%= render(:partial => "layouts/people_sub_menu")%>
 	<h2>Create New Contact</h2>
 	
-	<%= form_for @contact, :url => {:action => 'create_contact'} do |f| %>
+	<%= form_for @contact, :url => {:action => 'create_contact'}, html: {class: 'form-horizontal'} do |f| %>
 	
 	<% if @contact.errors.any? %>
 	  <div id="errorExplanation">
@@ -16,10 +16,12 @@
 	  </div>
 	  <% end %>
 	<%= render(:partial => "contact_form", :locals => {:f => f})%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Create") %>
-	</div>
+
+      <div class="control-group">
+          <div class='controls'>
+              <%= submit_tag("Create", class: 'btn') %>
+          </div>
+      </div>
 	
 	<% end %>
 	

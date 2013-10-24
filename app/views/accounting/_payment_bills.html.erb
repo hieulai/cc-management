@@ -47,7 +47,7 @@
               </div>
           </td>
           <td class="right">
-              $<%= text_field_tag 'payment[payments_bills_attributes][][paid_amount]', paid_amount , :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
+              $<%= text_field_tag 'payment[payments_bills_attributes][][paid_amount]', paid_amount , :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10 %>
               <div class="value-field" style="display: <%= value_display %>">
                   <%= price(paid_amount) %>
               </div>

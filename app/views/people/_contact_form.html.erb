@@ -1,46 +1,67 @@
 <h2>Contact's Info:</h2>
-<p>
-	<%= f.label :primary_first_name, "First Name" %>
-	<%= f.text_field(:primary_first_name) %>
-</p>
-<p>
-	<%= f.label :primary_last_name, "Last Name" %>
-	<%= f.text_field(:primary_last_name) %>
-</p>
-<p>
-	<%= f.label :primary_phone1, "Primary Phone" %>
-	<%= f.text_field(:primary_phone1) %>
-	<%= f.select(:primary_phone1_tag,["Cell", "Office", "Home", "Pager"]) %>
-</p>
-<p>
-	<%= f.label :primary_phone2, "Secondary Phone" %>
-	<%= f.text_field(:primary_phone2) %>
-	<%= f.select(:primary_phone2_tag,["Cell", "Office", "Home", "Pager"]) %>
-</p>
-<p>
-	<%= f.label :primary_email, "Email" %>
-	<%= f.text_field(:primary_email) %>
-</p>
+<div class="control-group">
+    <%= f.label :primary_first_name, "First Name", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:primary_first_name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :primary_last_name, "Last Name", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:primary_last_name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :primary_phone1, "Primary Phone", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:primary_phone1) %>
+        <%= f.select(:primary_phone1_tag, ["Cell", "Office", "Home", "Pager"]) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :primary_phone2, "Secondary Phone", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:primary_phone2) %>
 
-<p>
-	<%= f.label :address, "Address" %>
-	<%= f.text_field(:address) %>
-</p>
-<p>
-	<%= f.label :city, "City" %>
-	<%= f.text_field(:city) %>
-</p>
-<p>
-	<%= f.label :state, "State" %>
-	<%= f.text_field(:state) %>
-</p>
-<p>
-	<%= f.label :zipcode, "Zipcode" %>
-	<%= f.text_field(:zipcode) %>
-</p>
-<p>
-	<%= f.label :notes, "Notes" %>
-	<%= f.text_area(:notes) %>
-</p>
+        <%= f.select(:primary_phone2_tag, ["Cell", "Office", "Home", "Pager"]) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :primary_email, "Email", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:primary_email) %>
+    </div>
+</div>
+
+<div class="control-group">
+    <%= f.label :address, "Address", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:address) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :city, "City", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:city) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :state, "State", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:state) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :zipcode, "Zipcode", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:zipcode) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_area(:notes, size: '40x5') %>
+    </div>
+</div>
 
 

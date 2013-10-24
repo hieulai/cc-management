@@ -1,26 +1,30 @@
 <div>
-    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
     <h2 class="center">Send Change Order <%= @change_order.name %></h2>
-    <%= form_tag({:controller => 'projects', :action => 'send_change_order_email', :id => @change_order.id}) do |f| %>
-      <table>
-          <tr>
-              <th>To</th>
-              <td><%= text_field_tag :to, @change_order.project.client.email  %></td>
-          </tr>
-          <tr>
-              <th>Subject</th>
-              <td><%= text_field_tag :subject  %></td>
-          </tr>
-          <tr>
-              <th>Attachment</th>
-              <td><%= link_to "ChangeOrder-#{@change_order.name}.pdf", {:controller => 'projects', :action => 'show_change_order', :id => @change_order.id, :format => :pdf}, :target => "_blank" %></td>
-          </tr>
-          <tr>
-              <th>Body</th>
-              <td><%= text_area_tag :body, nil, :rows => 5, :cols => 30 %></td>
-          </tr>
-      </table>
-      <%= submit_tag "Send"  %>
-      <%= link_to "Cancel", {:controller => 'projects', :action => 'edit_change_order', :id => @change_order.id}  %>
-  <% end %>
+    <%= form_tag({:controller => 'projects', :action => 'send_change_order_email', :id => @change_order.id}, class: 'form-horizontal') do |f| %>
+
+      <div class="control-group">
+          <%= label_tag :to, 'To', class: 'col-lg-2 control-label' %>
+          <div class='controls'><%= text_field_tag :to, @change_order.project.client.email %></div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :subject, 'Subject', class: 'col-lg-2 control-label' %>
+          <div class='controls'><%= text_field_tag :subject %></div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :attachment, 'Attachment', class: 'col-lg-2 control-label' %>
+          <div class='controls'><%= link_to "ChangeOrder-#{@change_order.name}.pdf", {:controller => 'projects', :action => 'show_change_order', :id => @change_order.id, :format => :pdf}, :target => "_blank" %></div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :body, 'Body', class: 'col-lg-2 control-label' %>
+          <div class='controls'><%= text_area_tag :body, nil, :rows => 5, :cols => 30 %></div>
+      </div>
+      <div class="control-group">
+          <div class='controls'>
+              <%= submit_tag "Send", class: 'btn' %>
+              <%= link_to "Cancel", {:controller => 'projects', :action => 'edit_change_order', :id => @change_order.id} %>
+          </div>
+      </div>
+
+    <% end %>
 </div>

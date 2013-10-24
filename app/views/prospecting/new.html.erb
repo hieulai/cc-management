@@ -2,7 +2,7 @@
 	<%= render(:partial => "layouts/prospecting_sub_menu")%>
 	<h2>Add Prospect</h2>
 	
-	<%= form_for @prospect, :url => {:action => 'create'} do |f| %>
+	<%= form_for @prospect, :url => {:action => 'create'}, html: {class: 'form-horizontal'} do |f| %>
 	
 	<% if @prospect.errors.any? %>
 	  <div id="errorExplanation">
@@ -17,9 +17,11 @@
 	<% end %>
 	
 	<%= render(:partial => "form", :locals => {:f => f})%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Create") %>
+
+  <div class="control-group">
+      <div class='controls'>
+		      <%= submit_tag("Create", class: 'btn') %>
+      </div>
 	</div>
 	
 	<% end %>

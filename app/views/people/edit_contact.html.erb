@@ -8,13 +8,15 @@
 	</br>
 	</br>
 	<%= link_to("Delete >>", {:action => 'delete_contact', :id => @contact.id}) %>
-	<%= form_for @contact, :url => {:action => 'update_contact', :id => @contact.id} do |f| %>
+	<%= form_for @contact, :url => {:action => 'update_contact', :id => @contact.id}, html: {class: 'form-horizontal'} do |f| %>
 	
 	<%= render(:partial => "contact_form", :locals => {:f => f})%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Update") %>
-	</div>
+
+      <div class="control-group">
+          <div class='controls'>
+              <%= submit_tag("Update", class: 'btn') %>
+          </div>
+      </div>
 	
 	<% end %>
 	

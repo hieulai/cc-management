@@ -1,79 +1,108 @@
 <h3>Project Info</h3>
-<table summary="Lead form fields">
-	<tr>
-		<th>Project Name</th>
-		<td><%= p.text_field(:name) %>
-	</tr>
-	<tr>
-		<th>Project Type</th>
-		<td><%= p.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build","Residential:  New Construction", "Residential:  Remodel"], {:include_blank => true}) %>
-	</tr>
-	<tr>
-		<th>Lead Stage</th>
-		<td><%= p.select(:lead_stage, ["1. New", "2. Made Contact", "3. Made Appointment", "4. Estimating", "5. Sent Estimate", "6. Sent Contract"]) %>
-	</tr>
-	<tr>
-		<th>Lead Source</th>
-		<td><%= c.text_field(:lead_source) %>
-	</tr>
-	<tr>
-		<th>Anticipated Revenue</th>
-		<td><%= p.text_field(:revenue) %>
-	</tr>
-	<tr>
-		<th>Lead Notes</th>
-		<td><%= p.text_area(:lead_notes) %>
-	</tr>
-</table>
 
-	<h3>Client Info</h3>
-	<table>
-		<tr>
-			<th>Date Last Contacted</th>
-			<td><%= c.date_select(:last_contacted, :order => [:month, :day, :year], :include_blank => true) %>
-		</tr>
-		<tr>
-			<th>Company</th>
-			<td><%= c.text_field(:company) %>
-		</tr>
-		<tr>
-			<th>First Name</th>
-			<td><%= c.text_field(:first_name) %>
-		</tr>
-		<tr>
-			<th>Last Name</th>
-			<td><%= c.text_field(:last_name) %>
-		</tr>
-		<tr>
-			<th>Primary Phone</th>
-			<td><%= c.text_field(:primary_phone) %>
-			<td><%= c.select(:primary_phone_tag, ["Cell", "Office", "Home"]) %>
-				
-		</tr>
-		<tr>
-			<th>Secondary Phone</th>
-			<td><%= c.text_field(:secondary_phone) %>
-			<td><%= c.select(:secondary_phone_tag, ["Cell", "Office", "Home"]) %>
-		</tr>
-		<tr>
-			<th>Email</th>
-			<td><%= c.text_field(:email) %>
-		</tr>
-		<tr>
-			<th>Address</th>
-			<td><%= c.text_field(:address) %>
-		</tr>
-		<tr>
-			<th>City</th>
-			<td><%= c.text_field(:city) %>
-		</tr>
-		<tr>
-			<th>State</th>
-			<td><%= c.text_field(:state) %>
-		</tr>
-		<tr>
-			<th>Zipcode</th>
-			<td><%= c.text_field(:zipcode) %>
-		</tr>
-		
-	</table>
+<div class="control-group">
+    <%= p.label :name, 'Project Name', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= p.text_field(:name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :project_type, 'Project Type', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= p.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel", "Residential:  Addition", "Residential:  Design/Build", "Residential:  New Construction", "Residential:  Remodel"], {:include_blank => true}) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :lead_stage, 'Lead Stage', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= p.select(:lead_stage, ["1. New", "2. Made Contact", "3. Made Appointment", "4. Estimating", "5. Sent Estimate", "6. Sent Contract"]) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :lead_source, 'Lead Source', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:lead_source) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :revenue, 'Anticipated Revenue', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= p.text_field(:revenue) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :lead_notes, 'Lead Notes', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= p.text_area(:lead_notes, size: '40x5') %>
+    </div>
+</div>
+
+<h3>Client Info</h3>
+<div class="control-group">
+    <%= p.label :last_contacted, 'Date Last Contacted', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.date_select(:last_contacted, {:order => [:month, :day, :year], :include_blank => true}, {class: 'input-medium'}) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :company, 'Company', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:company) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :first_name, 'First Name', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:first_name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :last_name, 'Last Name', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:last_name) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :primary_phone, 'Primary Phone', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:primary_phone) %>
+        <%= c.select(:primary_phone_tag, ["Cell", "Office", "Home"]) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :secondary_phone, 'Secondary Phone', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:secondary_phone) %>
+        <%= c.select(:secondary_phone_tag, ["Cell", "Office", "Home"]) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :email, 'Email', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:email) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :address, 'Address', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:address) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :city, 'City', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:city) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :state, 'State', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:state) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= p.label :zipcode, 'Zipcode', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= c.text_field(:zipcode) %>
+    </div>
+</div>

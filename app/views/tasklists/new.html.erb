@@ -2,7 +2,7 @@
 	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
 	<h2>New Task List</h2>
 
-    <%= form_for @tasklist, :url => {:action => 'create'}, :html => {:class => 'tasklist'} do |f| %>
+    <%= form_for @tasklist, :url => {:action => 'create'}, :html => {:class => 'tasklist form-horizontal'} do |f| %>
 	
 	<% if @tasklist.errors.any? %>
 	  <div id="errorExplanation">
@@ -18,6 +18,10 @@
 	
 		<%= render(:partial => "form", :locals => {:f => f})%>
 
-		<p><%= f.submit "Submit" %></p>
+      <div class="control-group">
+          <div class='controls'>
+              <%= f.submit "Submit", class: 'btn' %>
+          </div>
+      </div>
 	<% end %>
 </div>

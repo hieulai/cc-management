@@ -31,10 +31,10 @@
     <% end %>
     <tr class="add add-category">
         <td colspan=11>
-            <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @template.id}, :remote => true do |f| %>
+            <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @template.id}, html: { class: "form-inline"}, :remote => true do |f| %>
               Category:
               <%= f.select :id, @categories.map { |c| [c.name, c.id] } %>
-              <%= f.submit "Add" %>
+              <%= f.submit "Add", class: 'btn' %>
             <% end %>
         </td>
     </tr>

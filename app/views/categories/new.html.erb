@@ -1,27 +1,29 @@
 <div>
-  <%= render(:partial => "layouts/estimating_sub_menu")%>
-  <h2>New Category</h2>
+    <%= render(:partial => "layouts/estimating_sub_menu") %>
+    <h2>New Category</h2>
 
-  <%= form_for @category, :url => {:action => 'create'} do |f| %>
-	
-	<% if @category.errors.any? %>
-	  <div id="errorExplanation">
-	    <h2><%= pluralize(@category.errors.count, "Error") %> prohibited
-	      this category from being saved:</h2>
-	    <ul>
-	    <% @category.errors.full_messages.each do |msg| %>
-	      <li><%= msg %></li>
-	    <% end %>
-	    </ul>
-	  </div>
-	<% end %>
-	
-  <%= render(:partial => "new_form", :locals => {:f => f})%>
+    <%= form_for @category, :url => {:action => 'create'}, html: {class: 'form-horizontal'} do |f| %>
 
-  <div class="form-buttons">
-  <%= submit_tag("Create Category") %>
-  </div>
+      <% if @category.errors.any? %>
+        <div id="errorExplanation">
+            <h2><%= pluralize(@category.errors.count, "Error") %> prohibited
+                this category from being saved:</h2>
+            <ul>
+                <% @category.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+      <% end %>
 
-  <% end %>
+      <%= render(:partial => "new_form", :locals => {:f => f}) %>
+
+      <div class="control-group">
+          <div class='controls'>
+              <%= submit_tag("Create Category", class: 'btn') %>
+          </div>
+      </div>
+
+    <% end %>
 
 </div>
