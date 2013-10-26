@@ -3,15 +3,21 @@ class Bid < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :categories_template
 
+  has_one :bill
+
   validates_presence_of :categories_template
 
-  attr_accessible :amount, :notes, :chosen, :categories_template_id, :vendor_id
+  attr_accessible :amount, :notes, :chosen, :categories_template_id, :vendor_id, :due_date
 
   serialize :amount
 
-  before_save :unset_committed_costs, :set_committed_costs
+  before_save :unset_committed_costs, :set_committed_costs, :update_bill
 
-  before_destroy :unset_committed_costs
+  before_destroy :raise_readonly, :unset_committed_costs, :destroy_bill
+
+  def readonly?
+    bill.try(:readonly?)
+  end
 
   def total_amount
     t=0
@@ -30,9 +36,10 @@ class Bid < ActiveRecord::Base
     return nil
   end
 
+  private
   def set_committed_costs
-    self.amount.each do |i|
-      if self.chosen
+    if self.chosen
+      self.amount.each do |i|
         item = Item.find(i[:id])
         if item.present?
           updated_cost = item.committed_cost.to_f + i[:uncommitted_cost].to_f
@@ -43,8 +50,8 @@ class Bid < ActiveRecord::Base
   end
 
   def unset_committed_costs
-    self.amount_was.try(:each) do |i|
-      if self.chosen_was
+    if self.chosen_was
+      self.amount_was.try(:each) do |i|
         item = Item.find(i[:id])
         if item.present?
           updated_cost = item.committed_cost.to_f - i[:uncommitted_cost].to_f
@@ -52,5 +59,25 @@ class Bid < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def update_bill
+    if chosen
+      create_bill(builder_id: self.project.builder_id, vendor_id: vendor_id ) unless bill.present?
+    elsif bill.present?
+      raise_readonly
+      bill.destroy
+    end
+  end
+
+  def destroy_bill
+    if chosen && bill.present?
+      raise_readonly
+      bill.destroy
+    end
+  end
+
+  def raise_readonly
+    raise ActiveRecord::ReadOnlyRecord if readonly?
   end
 end

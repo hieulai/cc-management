@@ -28,8 +28,10 @@
 
 			<tr>
 				<td class="center">
-					<%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'action edit') %>
-					<%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'action edit') %>
+            <% unless bid.readonly? %>
+              <%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'action edit') %>
+              <%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'action edit') %>
+            <% end %>
 				</td>
 				<td><%= bid.categories_template.category.name %></td>
 				<td><%= bid.vendor.try(:display_name) %></td>

@@ -371,14 +371,20 @@ class ProjectsController < ApplicationController
   def update_bid
     #Instantiate a new object using form parameters
     @bid = Bid.find(params[:id])
+    @project = @bid.project
     @bid.amount = params[:item]
     #save subject
-    if @bid.update_attributes(params[:bid])
-      #if save succeeds, redirect to list action
-      redirect_to(:action => 'bids', :id => @bid.project_id)
-    else
-      #if save fails, redisplay form to user can fix problems
-      render('new_bid')
+    begin
+      if @bid.update_attributes(params[:bid])
+        #if save succeeds, redirect to list action
+        redirect_to(:action => 'bids', :id => @bid.project_id)
+      else
+        #if save fails, redisplay form to user can fix problems
+        render('edit_bid')
+      end
+    rescue ActiveRecord::ReadOnlyRecord
+      @bid.errors[:base] = "This record is Readonly"
+      render('edit_bid')
     end
   end  
   
@@ -389,8 +395,13 @@ class ProjectsController < ApplicationController
   def destroy_bid
     @bid = Bid.find(params[:id])
     @id = @bid.project_id
-    @bid.destroy
-    redirect_to(:action => 'bids', :id => @id)
+    begin
+      @bid.destroy
+      redirect_to(:action => 'bids', :id => @id)
+    rescue ActiveRecord::ReadOnlyRecord
+      @bid.errors[:base] = "This record is Readonly"
+      render('delete_bid')
+    end
   end
 
   def budget

@@ -116,4 +116,8 @@ $(document).ready(function () {
         calculateCOAmount(this);
         calculateCOTotals();
     });
+
+    $('.edit_bid').on('change','input[name="bid[chosen]"]', function () {
+        $('.edit_bid').find('.due-date-inputs').toggle();
+    });
 })

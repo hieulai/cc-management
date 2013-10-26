@@ -31,7 +31,7 @@
       </div>
     <% end %>
     <div class="control-group">
-        <%= f.label :date, "Due Date", class: 'col-lg-2 control-label' %>
+        <%= f.label :due_date, "Due Date", class: 'col-lg-2 control-label' %>
         <div class="controls"><%= f.date_select :due_date, {}, {class: 'input-medium'} %></div>
     </div>
     <% if purchasable.class == PurchaseOrder  %>
