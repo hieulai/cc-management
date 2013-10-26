@@ -31,7 +31,7 @@
         <%= f.check_box(:chosen) %>
         <div class="help-block">
         <% if @bid.chosen? %>
-              (Un-check to remove generated bill)
+              (Un-check to remove generated bill: <%= link_to @bid.bill.id, {controller: 'accounting', action: 'bills' } %>)
         <% else %>
               (Check to generate bill for items bellow)
         <% end %>
