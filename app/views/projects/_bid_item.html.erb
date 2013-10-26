@@ -17,7 +17,7 @@
             <td>$<%= item.amount %></td>
             <td>$<%= item.margin %></div></td>
             <td>
-                $<%= text_field_tag 'item[][uncommitted_cost]', (bid.item_amount(item.id) if (defined? bid) && bid.present?) %>
+                $<%= text_field_tag 'item[][uncommitted_cost]', (bid.item_amount(item.id) if (defined? bid) && bid.present?), class: 'input-mini' %>
                 <%= hidden_field_tag 'item[][id]', item.id %>
             </td>
         </tr>
@@ -32,7 +32,7 @@
             <td>$<%= item.amount %></td>
             <td>$<%= item.margin %></div></td>
             <td>
-                $<%= text_field_tag 'item[][uncommitted_cost]', (bid.item_amount(item.id) if (defined? bid) && bid.present?) %>
+                $<%= text_field_tag 'item[][uncommitted_cost]', (bid.item_amount(item.id) if (defined? bid) && bid.present?), class: 'input-mini' %>
                 <%= hidden_field_tag 'item[][id]', item.id %>
             </td>
         </tr>
