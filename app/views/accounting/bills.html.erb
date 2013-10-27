@@ -9,7 +9,6 @@
     </div>
 
     </br>
-    <%= link_to("Add Bill  >>", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew') %>
-    <br/><br/>
+    <%= link_to("+ Bill", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew btn') %>
     <%= render(:partial => "bills", :locals => {:bills => @bills}) %>
 </div>

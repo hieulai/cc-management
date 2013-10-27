@@ -10,7 +10,7 @@
 	</br>
 	</br>
 
-		<%= link_to("Add Bid >>", {:action => 'new_bid', :id => @project.id}, :class => 'action vew') %>
+		<%= link_to("+ New Bid", {:action => 'new_bid', :id => @project.id}, :class => 'action vew btn') %>
 	</br>
 	</br>
 		<%@total_costs = 0 %>
@@ -26,7 +26,7 @@
 			</tr>
 			<% @bids.each do |bid| %>
 
-			<tr>
+       <tr <% if bid.readonly? %> class="unclickable" <% end %> >
 				<td class="center">
             <% unless bid.readonly? %>
               <%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'action edit') %>

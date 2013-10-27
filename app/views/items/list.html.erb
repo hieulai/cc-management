@@ -4,7 +4,7 @@
   <%= link_to("Instructions >>", {:action => 'show'}) %>
   </br>
   </br>
-  <%= link_to("Create New Item >>", {:action => 'new'}) %>
+  <%= link_to("+ New Item", {:action => 'new'}, class: 'btn') %>
   </br>
   </br>
 	<%= form_tag('list', method: 'get', class: 'form-inline') do %>

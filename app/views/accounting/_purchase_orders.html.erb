@@ -15,7 +15,7 @@
     <tbody>
     <% purchase_orders.each do |po| %>
 
-      <tr <% unless po.readonly? %> class="clickable" <% end %>>
+      <tr <% unless po.readonly? %> class="clickable" <% else %> class="unclickable" <% end %>>
           <td class="center">
               <%= po.id %>
               <% unless po.readonly? %>
