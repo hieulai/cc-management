@@ -51,9 +51,9 @@ class Bill < ActiveRecord::Base
     return bid.total_amount if bid.present?
     t=0
     amount.each do |i|
-      t+= i[:estimated_cost].to_f
+      t+= i[:actual_cost].to_f
     end
-    t + items.map(&:estimated_cost).compact.sum
+    t + items.map(&:actual_cost).compact.sum
   end
 
   private
