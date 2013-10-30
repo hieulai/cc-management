@@ -86,10 +86,13 @@ $(document).ready(function() {
         }
         calculateSubTotalAndTotal();
     });
-    $(document).on('change', "select#purchased_item_id", function () {
+
+    $(document).on('railsAutocomplete.select', '.purchasable-list input[name="name[]"]', function () {
+        var itemId = $('input[name="purchased_item[id]"]').val();
         var link = $("a#add-purchased-item").attr("href");
-        $("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", $(this).val()));
+        $("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", itemId));
     });
+
     $(document).on('click', '.purchasable-list a.remove-item', function (e) {
         e.preventDefault();
         $(this).closest("tr").remove();

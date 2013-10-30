@@ -1,8 +1,13 @@
 <tr class="nested-fields co-item">
     <td></td>
     <td>
-        <% item_id = @items.select { |i| i.name == f.object.name }.first.try(:id) %>
-        <%= f.select :id, @items.map { |item| [item.name, item.id] }, {prompt: "Select Item", :selected => item_id}, {:class => 'change-order-items', "data-select-url" => url_for(:controller => 'projects', :action => 'show_item')} %>
+        <%= autocomplete_field :name, nil, items_autocomplete_name_path, :class => 'co-item-name', :value => f.object.name %>
+        <% if f.object.id %>
+          <%= f.hidden_field :id, :value => f.object.id %>
+        <% else %>
+          <%= f.hidden_field :id, :class => 'id' %>
+        <% end %>
+
         <%= f.hidden_field :name, :class => 'name' %>
         <%= f.hidden_field :unit, :class => 'unit' %>
     </td>
@@ -10,13 +15,13 @@
         <%= f.text_field :description, :class => 'description' %>
     </td>
     <td>
-        <%= f.text_field :qty, :class => 'inline-table-input co-factor qty' %>
+        <%= f.text_field :qty, :class => 'input-mini co-factor qty' %>
     </td>
     <td>
-        $<%= f.text_field :estimated_cost, :class => 'inline-table-input co-factor estimated_cost' %>
+        $<%= f.text_field :estimated_cost, :class => 'input-mini co-factor estimated_cost' %>
     </td>
     <td>
-        $<%= f.text_field :margin, :class => 'inline-table-input co-factor margin' %>
+        $<%= f.text_field :margin, :class => 'input-mini co-factor margin' %>
     </td>
     <td class="item-total right"></td>
     <td>

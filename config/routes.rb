@@ -62,4 +62,7 @@ Cc::Application.routes.draw do
   resources :projects do
     get :autocomplete_vendor_name, :on => :collection
   end
+
+  get 'items/autocomplete_name', to: 'items#autocomplete_name'
+
 end

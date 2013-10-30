@@ -88,4 +88,16 @@ class ItemsController < ApplicationController
     end
   end
 
+  def autocomplete_name
+    @items = Item.where("builder_id = ?", session[:builder_id]).search_by_name(params[:term])
+    render :json => @items.map { |i| {:id => i.id,
+                                      :label => i.name,
+                                      :value => i.name,
+                                      :unit => i.unit,
+                                      :description => i.description,
+                                      :qty => i.qty,
+                                      :estimated_cost => i.estimated_cost,
+                                      :margin => i.margin} }.to_json
+  end
+
 end

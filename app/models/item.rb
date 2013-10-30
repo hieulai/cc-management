@@ -17,8 +17,12 @@ class Item < ActiveRecord::Base
 
   before_save :reset_markup
 
+  default_scope order("name ASC")
+
   scope :search, lambda{|query| where("name ILIKE ? OR description ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%")}
+
+  scope :search_by_name, lambda { |q| where("name ILIKE ?", '%'+ q + '%') }
 
   HEADERS = ["Name", "Description", "Estimated_cost", "Unit", "Margin", "Price", "Notes"]
   after_initialize :default_values

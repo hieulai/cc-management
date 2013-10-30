@@ -249,6 +249,7 @@ class ProjectsController < ApplicationController
             if val[:items_attributes]
               val[:items_attributes].map do |item_key, item_val|
                 unless (item_val["_destroy"].eql? "1")
+                  next if item_val[:id].blank?
                   item = Item.find(item_val[:id])
                   next if item.nil?
                   item_attributes = item_val.except(:id, :_destroy)

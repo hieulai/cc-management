@@ -46,7 +46,7 @@ class AccountingController < ApplicationController
 
   def add_item_to_purchasable
     @type = params[:type]
-    @item = Item.find(params[:item_id])
+    @item = Item.find(params[:item_id]) if params[:item_id].present?
     respond_to do |format|
       format.js {}
     end

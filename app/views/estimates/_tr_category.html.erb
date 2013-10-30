@@ -16,7 +16,8 @@
 	<td colspan=11>
         <%= form_for :item, :url => {:controller => 'estimates', :action => 'add_item', :category_template_id => category_template.id}, html: { class: "form-inline"}, :remote => true do |f| %>
           Item:
-          <%= f.select :id, @items.map { |i| [i.name, i.id] } %>
+          <%= f.autocomplete_field :name, items_autocomplete_name_path, :id_element => "##{f.object_id}", :update_elements => {} %>
+          <%= f.hidden_field :id, id: f.object_id %>
           <%= f.submit "Add", class: 'btn' %>
           <%= link_to "Cancel", "#", :class => 'cancel-add' %>
         <% end %>

@@ -31,9 +31,9 @@
 
       <tr class="add add-item" id="add-item">
           <td colspan=12>
-              <% @items = Item.where(builder_id: session[:builder_id]).order(:name) %>
-              <%= select :purchased_item, :id, @items.map { |i| [i.name, i.id] } %>
-              <%= link_to "+ Item", {:action => 'add_item_to_purchasable', :item_id => @items.first.id, :type => purchasable.class.name }, :remote => true, :id => "add-purchased-item", :class => 'btn' %>
+              <%= autocomplete_field :name, nil, items_autocomplete_name_path, :id_element => "#purchased_item_id", :update_elements => {} %>
+              <%= hidden_field :purchased_item, :id %>
+              <%= link_to "+ Item", {:action => 'add_item_to_purchasable', :item_id => "", :type => purchasable.class.name }, :remote => true, :id => "add-purchased-item", :class => 'btn' %>
           </td>
       </tr>
       <tr>

@@ -4,6 +4,9 @@
 
 
 $(document).ready(function(){
+    $(".template-fields").on('railsAutocomplete.select', '.template-item-name', function (event,data) {
+        $(this).next(".template-item-id").val(data.item.id);
+    });
 })
 
 var add_item = function(el){

@@ -2,7 +2,8 @@
     <div class="control-group" style="margin-left: 90px">
         <%= f.label :id, "Item", class: 'col-lg-2 control-label' %>
         <div class="controls">
-            <%= f.select :id, @items.map { |item| [item.name, item.id] }, prompt: "Select Item" %>
+            <%= f.autocomplete_field :name, items_autocomplete_name_path, class: 'template-item-name' %>
+            <%= f.hidden_field :id, {class: 'template-item-id'} %>
             <%= link_to_remove_association("Delete", f, style: "margin-left: 5px") %>
         </div>
     </div>

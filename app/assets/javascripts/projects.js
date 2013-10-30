@@ -30,9 +30,7 @@ function calculateCOTotals(){
     $("tr.co-item:visible").each(function () {
         total += text_to_number($(this).find("td.item-total").text());
     });
-    if  ($("tr.co-item:visible").size() > 0){
-        $("td#item-totals").text(number_to_currency_with_unit(total, 2, '.', ','));
-    }
+    $("td#item-totals").text(number_to_currency_with_unit(total, 2, '.', ','));
 };
 
 function calculateBudgetSubtotalAndCOAndTotal(s) {
@@ -97,19 +95,16 @@ $(document).ready(function () {
         calculateCOTotals();
     })
 
-    $(document).on('change', ".change-order-items", function () {
-        var me = this;
-        $.get($(this).attr("data-select-url") + "/a.json", {"item[id]": $(this).val()})
-            .done(function (data) {
-                $(me).closest("tr").find("input.name").val(data.name);
-                $(me).closest("tr").find("input.description").val(data.description);
-                $(me).closest("tr").find("input.unit").val(data.unit);
-                $(me).closest("tr").find("input.qty").val(data.qty);
-                $(me).closest("tr").find("input.estimated_cost").val(data.estimated_cost);
-                $(me).closest("tr").find("input.margin").val(data.margin);
-                calculateCOAmount(me);
-                calculateCOTotals();
-            });
+    $("#co-item-list").on('railsAutocomplete.select', '.co-item-name', function (event,data) {
+        $(this).closest("tr").find("input.id").val(data.item.id);
+        $(this).closest("tr").find("input.name").val(data.item.label);
+        $(this).closest("tr").find("input.description").val(data.item.description);
+        $(this).closest("tr").find("input.unit").val(data.item.unit);
+        $(this).closest("tr").find("input.qty").val(data.item.qty);
+        $(this).closest("tr").find("input.estimated_cost").val(data.item.estimated_cost);
+        $(this).closest("tr").find("input.margin").val(data.item.margin);
+        calculateCOAmount(this);
+        calculateCOTotals();
     });
 
     $("#co-item-list").on('change', 'input.co-factor', function () {

@@ -7,7 +7,9 @@
 </div>
 <span id="alertError" style="display:none;">this field can't be empty</span>
 </p>
-<%= f.fields_for :categories_templates do |ct| %>
-  <%= render('categories', f: ct) %>
-<% end %>
+<div class="template-fields">
+    <%= f.fields_for :categories_templates do |ct| %>
+      <%= render('categories', f: ct) %>
+    <% end %>
+</div>
 <p style="margin-left: 75px"><%= link_to_add_association 'Add Category', f, :categories_templates, partial: 'categories' %></p>
