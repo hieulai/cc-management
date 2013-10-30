@@ -76,10 +76,10 @@ class ItemsController < ApplicationController
       redirect_to action: 'import_export', notice: "No file to import."
     else
       begin
-        errors = Item.import(params[:item][:data], @builder)
+        result = Item.import(params[:item][:data], @builder)
         msg = "Item imported."
-        unless errors.empty?
-          msg = errors.join(",")
+        unless result[:errors].empty?
+          msg = result[:errors].join(",")
         end
         redirect_to action: 'list', notice: msg
       rescue StandardError => e

@@ -8,6 +8,11 @@ class TasklistsController < ApplicationController
   
   def show
     @tasklist = Tasklist.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.csv { send_data @tasklist.to_csv, filename: "Tasklist-#{@tasklist.name}.csv"  }
+      format.xls { send_data @tasklist.tasks.to_xls(:headers => Task::HEADERS, :columns => [:name, :completed, :time_to_complete, :department]), content_type: 'application/vnd.ms-excel', filename: "Tasklist-#{@tasklist.name}.xls" }
+    end
   end
   
   def new
@@ -43,6 +48,29 @@ class TasklistsController < ApplicationController
     else
       #if save fails, redisplay form to user can fix problems
       render('edit')
+    end
+  end
+
+  def show_import
+    @tasklist = Tasklist.new
+  end
+
+  def import
+    if params[:tasklist].nil? || params[:tasklist][:data].nil?
+      redirect_to action: 'show_import', notice: "No file to import."
+    else
+      begin
+        tasklist = Tasklist.create(name: params[:tasklist][:name], builder_id: session[:builder_id])
+        result = Task.import(params[:tasklist][:data])
+        tasklist.tasks << result[:objects]
+        msg = "Tasklist imported."
+        unless result[:errors].empty?
+          msg = result[:errors].join(",")
+        end
+        redirect_to action: 'list', notice: msg
+      rescue StandardError => e
+        redirect_to action: 'show_import', notice: e
+      end
     end
   end
 

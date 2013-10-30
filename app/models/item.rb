@@ -1,4 +1,6 @@
 class Item < ActiveRecord::Base
+  include Importable
+
   # belongs_to :template
   belongs_to :builder
   belongs_to :category
@@ -59,34 +61,6 @@ class Item < ActiveRecord::Base
       items.each do |item|
         csv << [item.name, item.description, item.estimated_cost, item.unit, item.markup, item.price, item.notes]
       end
-    end
-  end
-
-  def self.import(file, builder)
-    spreadsheet = open_spreadsheet(file)
-    if spreadsheet.first_row.nil?
-      raise "There is no data in file"
-    end
-    header = spreadsheet.row(1).map! { |c| c.downcase.strip }
-    errors = []
-    (2..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
-      item = find_by_id(row["id"]) || new
-      item.attributes = row.to_hash.slice(*accessible_attributes)
-      item.builder_id = builder.id
-      unless item.save
-        errors << "Importing Error at line #{i}: #{item.errors.full_messages}"
-      end
-    end
-    return errors
-  end
-
-  def self.open_spreadsheet(file)
-    case File.extname(file.original_filename)
-    when ".csv" then Roo::Csv.new(file.path,nil)
-    when ".xls" then Roo::Excel.new(file.path, nil, :ignore)
-    when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
-    else raise "Unknown file type: #{file[:data].original_filename}"
     end
   end
 
