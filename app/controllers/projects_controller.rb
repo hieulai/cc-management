@@ -352,9 +352,9 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @bid = Bid.new(params[:bid])
     @bid.amount = params[:item]
+    @bid.project = @project
     #save subject
     if @bid.save
-      @project.bids << @bid
       #if save succeeds, redirect to list action
       redirect_to(:action => 'bids', :id => @bid.project_id)
     else
