@@ -2,7 +2,7 @@ class Task < ActiveRecord::Base
   include Importable
 
   belongs_to :tasklist
-  default_scope { order("position ASC") }
+  default_scope { order("position ASC, id ASC") }
 
   attr_accessible :name, :tasklist_id, :completed, :time_to_complete, :department, :position
 
