@@ -20,7 +20,7 @@ class TemplatesController < ApplicationController
     params[:template].delete(:categories_templates_attributes)
     @template = @builder.templates.new(params[:template])
 
-    if @template.save!
+    if @template.save
       # @template.categories_templates.create(categories)
       unless categories.blank?
         categories.map do |key, val|

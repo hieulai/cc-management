@@ -1,15 +1,13 @@
-<p>
-<div class="control-group">
-    <%= f.label(:name, 'Template Name', class: 'col-lg-2 control-label') %>
-    <div class='controls'>
-        <%= f.text_field(:name) %>
-    </div>
-</div>
-<span id="alertError" style="display:none;">this field can't be empty</span>
-</p>
 <div class="template-fields">
+    <div class="control-group">
+        <%= f.label(:name, 'Template Name', class: 'col-lg-2 control-label') %>
+        <div class='controls'>
+            <%= f.text_field(:name) %>
+        </div>
+    </div>
+
     <%= f.fields_for :categories_templates do |ct| %>
       <%= render('categories', f: ct) %>
     <% end %>
+    <p style="margin-left: 75px"><%= link_to_add_association 'Add Category', f, :categories_templates, partial: 'categories' %></p>
 </div>
-<p style="margin-left: 75px"><%= link_to_add_association 'Add Category', f, :categories_templates, partial: 'categories' %></p>
