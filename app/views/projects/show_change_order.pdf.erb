@@ -2,10 +2,6 @@
     @change_order = change_order if change_order.present?
     @builder = @change_order.builder
     @client = @change_order.project.client
-    def pdf_image_tag(image, options = {})
-      options[:src] = File.expand_path(Rails.root) + '/public' + image
-      tag(:img, options)
-    end
 %>
 <% content_for :head do %>
   <div class="left-header">
@@ -65,19 +61,8 @@
         </tr>
     </thead>
     <tbody>
-        <%- total = 0
-            amount = 0
-            margin = 0
-        %>
         <%- @change_order.change_orders_categories.each do |co_category| %>
-            <%- subtotal = co_category.items.map(&:price).sum
-                subamount = co_category.items.map(&:amount).sum
-                submargin = co_category.items.map(&:margin).sum
-                total+= subtotal
-                amount+= subamount
-                margin+= submargin
-            %>
-            <tr class="tr-category">
+      <tr class="tr-category category" id="category_<%= co_category.category.id %>">
                 <td class="td-category left-bold">
                     <%= co_category.category.name %>
                 </td>
@@ -93,7 +78,7 @@
                     </td>
                     <td class="unit"><%= item.unit %></td>
                     <td>
-                        $<%= number_with_precision(item.price, precision: 2) %>
+                        <%= price_tag(item.price, "amount") %>
                     </td>
                 </tr>
             <% end %>
@@ -101,14 +86,15 @@
                 <td class="td-subtotal left-bold">
                     <%= co_category.category.name %> Subtotal
                 </td>
-                <td></td><td></td><td class="right-bold">$<%= number_with_precision(subtotal, precision: 2) %></td>
+                <td></td><td></td>
+                <td class="right-bold"><div class="subtotal-amount"></div></td>
             </tr>
         <% end %>
             <tr class="tr-footer">
                 <td colspan="3" class="right-bold">
                     TOTAL
                 </td>
-                <td>$<%= number_with_precision(total, precision: 2) %></td>
+                <td class="right-bold"><div class="total-amount"></div></td>
             </tr>
     </tbody>
 </table>

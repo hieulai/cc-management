@@ -1,0 +1,14 @@
+<tr class="item item_category_<%= category_template.category.id %>" id="item_<%= item.id %>">
+    <td class="description">
+        <%= item.description %>
+    </td>
+    <td>
+        <%= price_tag(item.price, "amount") %>
+    </td>
+    <td>
+        <%= price_tag(item.prior_amount, "prior-amount") %>
+    </td>
+    <td>
+        <%= price_tag(item.invoice_item(@invoice.id).try(:amount), "invoice-amount") %>
+    </td>
+</tr>

@@ -8,7 +8,7 @@
 <% category_template.items.each do |item| %>
   <%= render :partial => 'invoice_tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
-<% category_template.template.estimate.project.co_items(category_template.category).try(:each) do |item| %>
+<% category_template.co_items.try(:each) do |item| %>
   <%= render :partial => 'invoice_tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <tr class="subtotal item_category_<%= category_template.category.id %>">

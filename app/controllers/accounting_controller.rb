@@ -13,6 +13,28 @@ class AccountingController < ApplicationController
     @invoices = Invoice.where("builder_id = ?", session[:builder_id])
   end
 
+  def invoice
+    @invoice = Invoice.find(params[:id])
+    respond_to do |format|
+      format.pdf do
+        render :pdf => "Invoice-#{@invoice.id}",
+               :layout => 'pdf.html',
+               #:show_as_html => true, // for debugging html & css
+               :footer => {:center => 'Page [page]'}
+      end
+    end
+  end
+
+  def invoice_email
+    @invoice = Invoice.find(params[:id])
+  end
+
+  def send_invoice_email
+    @invoice = Invoice.find(params[:id])
+    Mailer.delay.send_invoice(params[:to], params[:subject], params[:body], @invoice)
+    redirect_to :action => 'invoice_email', :id => @invoice.id, :notice => "Email was sent."
+  end
+
  def new_invoice
     @invoice = Invoice.new
  end

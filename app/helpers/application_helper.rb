@@ -34,4 +34,9 @@ module ApplicationHelper
     n.nil? ? n : raw(content_tag(:div, number_to_currency(number_with_precision(n, precision: 2)), :class => inner_class))
   end
 
+  def pdf_image_tag(image, options = {})
+    options[:src] = File.expand_path(Rails.root) + '/public' + image
+    tag(:img, options)
+  end
+
 end

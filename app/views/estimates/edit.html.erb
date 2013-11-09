@@ -6,7 +6,7 @@
 
       <%= render(:partial => "edit_form", :locals => {:f => f}) %>
     <% end %>
-    <div class="estimate-actions">
+    <div class="more-actions">
         <%= link_to "Print", {:controller => 'estimates', :action => 'show', :id => @estimate.id, :format => :pdf}, :target => '_blank' %>
         <br/>
         <%= link_to "Email", {:controller => 'estimates', :action => 'show_email', :id => @estimate.id}, :target => '_blank' %>

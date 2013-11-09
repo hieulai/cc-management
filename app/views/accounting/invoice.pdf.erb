@@ -1,7 +1,7 @@
-<%- estimate ||= nil
-    @estimate = estimate if estimate.present?
-    @builder = @estimate.builder
-    @client = @estimate.project.client
+<%- invoice ||= nil
+    @invoice = invoice if invoice.present?
+    @builder = @invoice.builder
+    @client = @invoice.estimate.project.client
 %>
 <% content_for :head do %>
   <div class="left-header">
@@ -22,16 +22,20 @@
   <div class="right-header">
       <table class="top">
           <tr>
-              <td>Estimate</td>
+              <td>Invoice</td>
           </tr>
           <tr>
               <td>Date</td>
           </tr>
           <tr>
-              <td><%= @estimate.deadline.strftime("%m/%d/%Y") if @estimate.deadline.present? %>&nbsp;</td>
+              <td>
+                  Created Date: <%= @invoice.created_at.strftime("%m/%d/%Y") %>
+                  <br/>
+                  Sent Date: <%= @invoice.sent_date.try(:strftime, "%m/%d/%Y") %>
+              </td>
           </tr>
           <tr>
-              <td><%= @estimate.project.name %></td>
+              <td><%= @invoice.estimate.project.name %></td>
           </tr>
       </table>
       <table class="bottom">
@@ -55,13 +59,13 @@
     <thead>
         <tr class="header">
             <th>Description</th>
-            <th>Quantity</th>
-            <th>Unit</th>
             <th>Total</th>
+            <th>Prior Amount</th>
+            <th>Amount</th>
         </tr>
     </thead>
     <tbody>
-        <%- @estimate.template.categories_templates.each do |category_template| %>
+        <%- @invoice.estimate.template.categories_templates.each do |category_template| %>
             <tr class="tr-category category" id="category_<%= category_template.category.id %>">
                 <td class="td-category left-bold">
                     <%= category_template.category.name %>
@@ -69,32 +73,27 @@
                 <td></td><td></td><td></td>
             </tr>
             <% category_template.items.each do |item| %>
-                <tr class="item item_category_<%= category_template.category.id %>" id="item_<%= item.id %>">
-                    <td class="description">
-                        <%= item.description %>
-                    </td>
-                    <td class="quantity">
-                        <%= item.qty %>
-                    </td>
-                    <td class="unit"><%= item.unit %></td>
-                    <td>
-                        <%= price_tag(item.price, "amount") %>
-                    </td>
-                </tr>
+              <%= render :partial => 'accounting/invoice_tr_item', :locals => {:item => item, :category_template => category_template} %>
+            <% end %>
+            <% category_template.co_items.try(:each) do |item| %>
+              <%= render :partial => 'accounting/invoice_tr_item', :locals => {:item => item, :category_template => category_template} %>
             <% end %>
             <tr>
                 <td class="td-subtotal left-bold">
                     <%= category_template.category.name %> Subtotal
                 </td>
-                <td></td><td></td>
                 <td class="right-bold"><div class="subtotal-amount"></div></td>
+                <td class="right-bold"><div class="subtotal-prior-amount"></div></td>
+                <td class="right-bold"><div class="subtotal-invoice-amount"></div></td>
             </tr>
         <% end %>
             <tr class="tr-footer">
-                <td colspan="3" class="right-bold">
+                <td class="right-bold">
                     TOTAL
                 </td>
                 <td class="right-bold"><div class="total-amount"></div></td>
+                <td class="right-bold"><div class="total-prior-amount"></div></td>
+                <td class="right-bold"><div class="total-invoice-amount"></div></td>
             </tr>
     </tbody>
 </table>

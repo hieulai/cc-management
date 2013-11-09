@@ -1,0 +1,30 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu")%>
+    <h2 class="center">Send Invoice <%= @invoice.id %></h2>
+    <%= form_tag({:action => 'send_invoice_email', :id => @invoice.id}, class: 'form-horizontal') do |f| %>
+
+      <div class="control-group">
+          <%= label_tag :to, 'To', class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= text_field_tag :to, @invoice.estimate.project.client.email %></div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :subject, 'Subject', class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= text_field_tag :subject %></div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :attachment, 'Attachment', class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= link_to "Invoice-#{@invoice.id}.pdf", {:action => 'invoice', :id => @invoice.id, :format => :pdf}, :target => "_blank" %></div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :body, 'Body', class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= text_area_tag :body, nil, :rows => 5, :cols => 30 %></div>
+      </div>
+      <div class="control-group">
+          <div class="controls">
+              <%= submit_tag "Send", class: 'btn' %>
+              <%= link_to "Cancel", {:controller => 'estimates', :action => 'edit', :id => @invoice.id} %>
+          </div>
+      </div>
+
+    <% end %>
+</div>
