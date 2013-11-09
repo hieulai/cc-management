@@ -3,8 +3,18 @@
 	<h2>Delete Estimate</h2>
 	
 	<%= form_for(:estimate, :url => {:action => 'destroy', :id => @estimate.id}) do |f| %>
-	
 	<p>Are you sure you want to delete this estimate?</p>
+      <% if @estimate.errors.any? %>
+        <div id="errorExplanation">
+            <h2><%= pluralize(@estimate.errors.count, "Error") %> prohibited
+                this estimate from being deleted:</h2>
+            <ul>
+                <% @estimate.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+      <% end %>
 	
 	<p class="reference-name"><%= @estimate.id %></p>
   <div class="control-group">

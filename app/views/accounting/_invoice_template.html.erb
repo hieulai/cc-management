@@ -1,0 +1,26 @@
+<table class="grid-view invoice-items-list" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th></th>
+        <th>Category</th>
+        <th>Item Name</th>
+        <th>Description</th>
+        <th class="price">Total</th>
+        <th class="price">Prior Amount</th>
+        <th class="price">Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+        <% template.try(:categories_templates).try(:each) do |category_template| %>
+          <%= render :partial => 'invoice_tr_category', :locals => {:category_template => category_template} %>
+        <% end %>
+        <tr class="total">
+            <td colspan=4>
+                TOTAL
+            </td>
+            <td class="right"><div class="total-amount"></div></td>
+            <td class="right"><div class="total-prior-amount"></div></td>
+            <td class="right"><div class="total-invoice-amount"></div></td>
+        </tr>
+    </tbody>
+</table>

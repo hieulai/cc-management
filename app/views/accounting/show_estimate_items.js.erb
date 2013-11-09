@@ -1,0 +1,3 @@
+$('#invoice-items-placeholder').html('<%= escape_javascript(render :partial =>  'invoice_template', :locals => {:template => @estimate.template}) %>');
+calculateSubTotals();
+calculateTotals();

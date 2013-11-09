@@ -4,12 +4,12 @@ class EstimatesController < ApplicationController
     
     def list_current
       #add condition to filter leads by lead_status
-      @estimates = Estimate.where("builder_id = ? AND status = ?", session[:builder_id], "Current Estimate")
+      @estimates = Estimate.current(session[:builder_id])
     end
 
     def list_past
       #add condition to filter leads by lead_status
-      @estimates = Estimate.where("builder_id = ? AND status = ?", session[:builder_id], "Past Estimate")
+      @estimates = Estimate.past(session[:builder_id])
     end
 
     def show
@@ -146,14 +146,14 @@ class EstimatesController < ApplicationController
       @estimate = Estimate.find(params[:id])
     end
 
-    def destroy
-      @estimate = Estimate.find(params[:id])
-      unless @estimate.template.nil?
-        @estimate.template.destroy_with_associations
-      end
-      @estimate.destroy
+  def destroy
+    @estimate = Estimate.find(params[:id])
+    if @estimate.destroy
       redirect_to(:action => 'list_current')
+    else
+      render :delete
     end
+  end
 
     def show_template
       @template = Template.find(params[:template][:id])

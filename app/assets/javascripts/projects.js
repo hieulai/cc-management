@@ -15,22 +15,14 @@ function calculateCOAmount(coFactor){
     var tdEstimatedCost = $(trItem).find("input.estimated_cost");
     var tdMargin = $(trItem).find("input.margin");
     var total = text_to_number($(tdQty).val()) * text_to_number($(tdEstimatedCost).val()) + text_to_number($(tdMargin).val());
-    $(trItem).find("td.item-total").text(number_to_currency_with_unit(total, 2, '.', ','))
+    $(trItem).find("div.co-amount").text(number_to_currency_with_unit(total, 2, '.', ','))
 }
 
 function calculateCOAmounts() {
     $('input.co-factor').each(function () {
         calculateCOAmount(this);
     });
-    calculateCOTotals();
-};
-
-function calculateCOTotals(){
-    var total = 0;
-    $("tr.co-item:visible").each(function () {
-        total += text_to_number($(this).find("td.item-total").text());
-    });
-    $("td#item-totals").text(number_to_currency_with_unit(total, 2, '.', ','));
+    calculateTotals();
 };
 
 function calculateBudgetSubtotalAndCOAndTotal(s) {
@@ -92,7 +84,7 @@ $(document).ready(function () {
         if ($(i).hasClass("co-category")) {
             $(i).nextUntil(".co-category").remove();
         }
-        calculateCOTotals();
+        calculateTotals();
     })
 
     $("#co-item-list").on('railsAutocomplete.select', '.co-item-name', function (event,data) {
@@ -104,12 +96,12 @@ $(document).ready(function () {
         $(this).closest("tr").find("input.estimated_cost").val(data.item.estimated_cost);
         $(this).closest("tr").find("input.margin").val(data.item.margin);
         calculateCOAmount(this);
-        calculateCOTotals();
+        calculateTotals();
     });
 
     $("#co-item-list").on('change', 'input.co-factor', function () {
         calculateCOAmount(this);
-        calculateCOTotals();
+        calculateTotals();
     });
 
     $('.edit_bid').on('change','input[name="bid[chosen]"]', function () {

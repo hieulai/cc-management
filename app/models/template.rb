@@ -1,4 +1,6 @@
 class Template < ActiveRecord::Base
+  before_destroy :check_destroyable
+
   belongs_to :builder
   belongs_to :estimate
   has_many :categories_templates
@@ -34,12 +36,25 @@ class Template < ActiveRecord::Base
   end
 
   def destroy_with_associations
+    return false if check_destroyable == false
     categories_templates.each do |ct|
       ct.items.each do |i|
         i.destroy
       end
-      ct.category.destroy
+      ct.category.destroy if ct.category.present?
     end
     destroy
+  end
+
+  def undestroyable?
+    categories_templates.select { |ct| ct.undestroyable? }.any?
+  end
+
+  private
+  def check_destroyable
+    if undestroyable?
+      errors[:base] << "Template #{name} cannot be deleted once containing items which are added to an invoice"
+      false
+    end
   end
 end

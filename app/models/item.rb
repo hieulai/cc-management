@@ -1,6 +1,8 @@
 class Item < ActiveRecord::Base
   include Importable
 
+  before_destroy :check_readonly
+
   # belongs_to :template
   belongs_to :builder
   belongs_to :category
@@ -9,23 +11,23 @@ class Item < ActiveRecord::Base
   belongs_to :change_orders_category
   has_many :categories_templates, through: :categories_templates_items
   has_many :templates, through: :categories_templates_items
+  has_many :invoices_items, :dependent => :destroy
+  has_many :invoices, :through => :invoices_items
   has_and_belongs_to_many :categories_templates
 
   attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :purchase_order_id, :bill_id
-
   validates :name, presence: true
 
+  before_save :check_readonly, :if => :changed?
   before_save :reset_markup
+  after_initialize :default_values
 
   default_scope order("name ASC")
-
   scope :search, lambda{|query| where("name ILIKE ? OR description ILIKE ? OR notes ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%")}
-
   scope :search_by_name, lambda { |q| where("name ILIKE ?", '%'+ q + '%') }
 
   HEADERS = ["Name", "Description", "Estimated_cost", "Unit", "Margin", "Price", "Notes"]
-  after_initialize :default_values
 
   def margin
     if read_attribute(:margin).present?
@@ -59,6 +61,26 @@ class Item < ActiveRecord::Base
     self.actual_cost.present? ? (self.amount - self.actual_cost) + self.margin : nil
   end
 
+  def prior_amount
+    invoices_items.map(&:amount).compact.sum if invoices_items.any?
+  end
+
+  def invoice_item(invoice_id)
+    self.invoices_items.where(:invoice_id => invoice_id).first
+  end
+
+  def billed?
+    self.invoices.any?
+  end
+
+  def billable?(invoice_id =nil)
+    invoice_item(invoice_id).present? || prior_amount.nil? || billable_amount > 0
+  end
+
+  def billable_amount
+    price.to_f - prior_amount.to_f
+  end
+
   def self.to_csv(items, options = {})
     CSV.generate(options = {}) do |csv|
       csv << HEADERS
@@ -68,15 +90,22 @@ class Item < ActiveRecord::Base
     end
   end
 
+  private
   def reset_markup
-     if read_attribute(:margin).presence
-        self.markup = nil
-     end
+    if read_attribute(:margin).presence
+      self.markup = nil
+    end
   end
 
-  private
   def default_values
     self.qty ||= 1
     self.estimated_cost ||= 0
+  end
+
+  def check_readonly
+    if self.billed?
+      errors[:base] << "Item #{name} cannot be edited/deleted once added to an invoice. Please delete invoice to edit item details"
+      false
+    end
   end
 end

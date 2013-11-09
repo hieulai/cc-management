@@ -1,7 +1,7 @@
-<tr class="nested-fields co-item">
+<tr class="nested-fields co-item <%= f.object.billable? ? '' : 'unclickable' %>">
     <td></td>
     <td>
-        <%= autocomplete_field :name, nil, items_autocomplete_name_path, :class => 'co-item-name', :value => f.object.name %>
+        <%= autocomplete_field :name, nil, items_autocomplete_name_path, :class => 'co-item-name', :value => f.object.name, disabled: f.object.billed? %>
         <% if f.object.id %>
           <%= f.hidden_field :id, :value => f.object.id %>
         <% else %>
@@ -12,19 +12,23 @@
         <%= f.hidden_field :unit, :class => 'unit' %>
     </td>
     <td>
-        <%= f.text_field :description, :class => 'description' %>
+        <%= f.text_field :description, :class => 'description', disabled: f.object.billed? %>
     </td>
     <td>
-        <%= f.text_field :qty, :class => 'input-mini co-factor qty' %>
+        <%= f.text_field :qty, :class => 'input-mini co-factor qty', disabled: f.object.billed? %>
     </td>
     <td>
-        $<%= f.text_field :estimated_cost, :class => 'input-mini co-factor estimated_cost' %>
+        $<%= f.text_field :estimated_cost, :class => 'input-mini co-factor estimated_cost', disabled: f.object.billed? %>
     </td>
     <td>
-        $<%= f.text_field :margin, :class => 'input-mini co-factor margin' %>
+        $<%= f.text_field :margin, :class => 'input-mini co-factor margin', disabled: f.object.billed? %>
     </td>
-    <td class="item-total right"></td>
+    <td class="right">
+        <div class="co-amount"></div>
+    </td>
     <td>
-        <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
+        <% unless f.object.billed? %>
+          <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
+        <% end %>
     </td>
 </tr>

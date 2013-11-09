@@ -22,7 +22,9 @@
 				<%= link_to("View", {:action => 'show', :id => estimate.id}, :class => 'action vew') %>
 				<%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :class => 'action edit') %>
 				<%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :class => 'action convert') %>
-				<%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>
+        <% unless estimate.undestroyable? %>
+				    <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>
+        <% end %>
 			</td>
       <td><%= estimate.project.name %></td>
       <td><%= estimate.template.name %></td>

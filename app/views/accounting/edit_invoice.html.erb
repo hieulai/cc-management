@@ -1,0 +1,16 @@
+<div>
+	<%= render(:partial => "layouts/accounting_sub_menu")%>
+	<h1 class="center">Edit Invoice</h1>
+	
+	<%= form_for(@invoice, :url => {:action => 'update_invoice', :id => @invoice.id}, html: {class: 'form-horizontal'}) do |f| %>
+	
+	<%= render(:partial => "invoice_form", :locals => {:f => f})%>
+
+
+	<div class="form-buttons">
+      <%= submit_tag("Save", class: 'btn') %>
+	</div>
+	
+	<% end %>
+ 
+</div>

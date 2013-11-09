@@ -1,8 +1,12 @@
-var item = $("#item_<%=@id%>");
-var category = item.prevAll("tr.category").first();
-item.remove();
-calculateSubTotals(category);
-if ((category.size() > 0) && (category.next().hasClass("add-item"))) {
-  category.next().show();
-}
-calculateTotals();
+<% unless @item.errors.any? %>
+    var item = $("#item_<%=@id%>");
+    var category = item.prevAll("tr.category").first();
+    item.remove();
+    calculateSubTotals();
+    if ((category.size() > 0) && (category.next().hasClass("add-item"))) {
+      category.next().show();
+    }
+    calculateTotals();
+<% else %>
+  alert('<%= @item.errors.full_messages.join(".") %>');
+<% end %>

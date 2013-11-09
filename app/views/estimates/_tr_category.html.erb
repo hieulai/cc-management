@@ -6,10 +6,12 @@
     </td>
     <td>
         <%= link_to '+ Item', "#", :class => "trigger-add btn" %>
-        <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :confirm => 'Are you sure you want to delete this category and all its associated items?', :remote => true, :class => 'remove-category' %>
+        <% unless  category_template.undestroyable? %>
+            <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :confirm => 'Are you sure you want to delete this category and all its associated items?', :remote => true, :class => 'remove-category' %>
+         <% end %>
     </td>
 </tr>
-<% category_template.items.order(:change_order).each do |item| %>
+<% category_template.items.each do |item| %>
   <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <tr style="display: none" class="add add-item item_category_<%= category_template.category.id %>">
@@ -27,8 +29,8 @@
     <td colspan=5>
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>
-    <td class="right" colspan="2"><%= price_tag(category_template.items.map(&:amount).sum, "subtotal-amount") %></td>
-    <td class="right" colspan="2"><%= price_tag(category_template.items.map(&:margin).sum, "subtotal-margin") %></td>
-    <td class="right"><%= price_tag(category_template.items.map(&:price).sum, "subtotal-price") %></div></td>
+    <td class="right" colspan="2"><div class="subtotal-amount"></div></td>
+    <td class="right" colspan="2"><div class="subtotal-margin"></div></td>
+    <td class="right"><div class="subtotal-price"></div></td>
     <td></td>
 </tr>

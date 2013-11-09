@@ -1,6 +1,7 @@
 <% purchased = item.purchase_order_id.present? || item.bill_id.present? ? "purchased" : "" %>
 <% changed = item.change_orders_category.present? ? "change_order" : "" %>
-<tr class="item <%= purchased %> <%= changed %>" id="item_<%= item.id %> ">
+<% billable = item.billable? ? '' : 'unclickable'  %>
+<tr class="item <%= purchased %> <%= changed %> <%= billable %>" id="item_<%= item.id %> ">
   <td>
 	</td>
 	<td>

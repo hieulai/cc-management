@@ -1,0 +1,34 @@
+<table class="grid-view" summary="Invoice Items List" cellspacing="0">
+    <thead>
+    <tr class="header">
+        <th>Actions</th>
+        <th>Reference #</th>
+        <th>Created Date</th>
+        <th>Sent Date</th>
+        <th>Project</th>
+        <th>Estimate</th>
+        <th>Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% invoices.each do |invoice| %>
+      <tr>
+          <td class="center">
+              <%= link_to("Edit", {:action => 'edit_invoice', :id => invoice.id}, :class => 'action edit') %>
+              <%= link_to("Delete", {:action => 'delete_invoice', :id => invoice.id}, :class => 'action edit') %>
+          </td>
+          <td>
+              <%= invoice.reference %>
+          </td>
+          <td class="center"><%= date_tag(invoice.created_at) %></td>
+          <td class="center"><%= invoice.sent_date %></td>
+          <td><%= invoice.estimate.project.name %></td>
+          <td class="center">
+              <%= link_to( invoice.estimate.id, {:controller => 'estimates', :action => 'edit', :id => invoice.estimate.id}, :class => 'action edit') %>
+          </td>
+          <td class="right"><%= price_tag(invoice.amount) %></td>
+      </tr>
+    <% end %>
+    </tbody>
+
+</table>

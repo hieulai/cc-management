@@ -18,6 +18,7 @@
             <th>Actions</th>
             <th>Name</th>
             <th>Amount</th>
+            <th>Approved</th>
             <th>Notes</th>
         </tr>
         <% @change_orders.each do |co| %>
@@ -25,10 +26,13 @@
           <tr>
               <td class="center">
                   <%= link_to("Edit", {:action => 'edit_change_order', :id => co.id}, :class => 'action edit') %>
-                  <%= link_to("Delete", {:action => 'delete_change_order', :id => co.id}, :class => 'action edit') %>
+                  <% unless co.undestroyable? %>
+                      <%= link_to("Delete", {:action => 'delete_change_order', :id => co.id}, :class => 'action edit') %>
+                  <% end %>
               </td>
               <td><%= co.name %></td>
               <td class="right">$<%= co.amount %></td>
+              <td class="center"><%= co.approved %></td>
               <td><%= co.notes %></td>
           </tr>
         <% end %>

@@ -1,0 +1,7 @@
+<div>
+  <%= render(:partial => "layouts/accounting_sub_menu")%>
+  <h3>Invoices</h3>
+  <%= link_to("+ Invoice", {:action => 'new_invoice'}, :id => 'add-invoice', :class => 'action vew btn') %>
+  <%= render(:partial => "invoices", :locals => {:invoices => @invoices}) %>
+</div>
+

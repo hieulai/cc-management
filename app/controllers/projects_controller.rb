@@ -239,10 +239,14 @@ class ProjectsController < ApplicationController
     params[:change_order].delete(:change_orders_categories_attributes)
     if @change_order.update_attributes(params[:change_order])
       unless categories.blank?
+        errors = []
         categories.map do |key, val|
           cat_temp_ids = @change_order.change_orders_categories.pluck(:id)
           if val["_destroy"].eql? "1"
-            @change_order.change_orders_categories.find(val[:id]).delete
+            category_co =  @change_order.change_orders_categories.find(val[:id])
+           unless category_co.destroy
+             @change_order.errors[:base] << category_co.errors.full_messages.join(".")
+           end
           elsif cat_temp_ids.include? val[:id].to_i
             change_orders_category = @change_order.change_orders_categories.find(val[:id])
             change_orders_category.update_attribute(:category_id, val[:category_id])
@@ -254,15 +258,21 @@ class ProjectsController < ApplicationController
                   next if item.nil?
                   item_attributes = item_val.except(:id, :_destroy)
                   if item.change_orders_category.present?
-                    item.update_attributes(item_attributes)
+                    unless item.update_attributes(item_attributes)
+                      @change_order.errors[:base] << item.errors.full_messages.join(".")
+                    end
                   else
                     @item = Item.create(item_attributes)
                     change_orders_category.items << @item
                   end
                 else
-                  Item.find(item_val[:id]).destroy
+                  item = Item.find(item_val[:id])
+                  unless item.destroy
+                    @change_order.errors[:base] << item.errors.full_messages.join(".")
+                  end
                 end
               end
+
             end
           elsif val[:category_id].present?
             change_orders_category = @change_order.change_orders_categories.create(category_id: val[:category_id])
@@ -277,9 +287,18 @@ class ProjectsController < ApplicationController
         end
       end
 
-      redirect_to(:action => 'change_orders', :id => @change_order.project_id)
+      if @change_order.errors.any?
+        @project = @change_order.project
+        @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
+        @items = Item.where("builder_id = ?", session[:builder_id])
+        return render :edit_change_order
+      else
+        redirect_to(:action => 'change_orders', :id => @change_order.project_id)
+      end
     else
-      #if save fails, redisplay form to user can fix problems
+      @project = @change_order.project
+      @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
+      @items = Item.where("builder_id = ?", session[:builder_id])
       render :edit_change_order
     end
   end
@@ -291,8 +310,16 @@ class ProjectsController < ApplicationController
   def destroy_change_order
     @change_order = ChangeOrder.find(params[:id])
     @id = @change_order.project_id
-    @change_order.destroy
-    redirect_to(:action => 'change_orders', :id => @id)
+    respond_to do |format|
+      format.html do
+        if @change_order.destroy
+          redirect_to(:action => 'change_orders', :id => @id)
+        else
+          render :delete_change_order
+        end
+      end
+    end
+
   end
   
   def tasklist

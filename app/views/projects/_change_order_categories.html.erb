@@ -4,7 +4,9 @@
         <%= f.select :category_id, @categories.map{ |category| [category.name, category.id]}, {prompt: "Select Category"}, class: "change_order_categories" %>
     </td>
     <td>
-        <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
+        <% unless  f.object.undestroyable?  %>
+            <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
+        <% end %>
     </td>
 </tr>
 <%= f.fields_for :items do |item| %>

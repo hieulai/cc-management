@@ -1,0 +1,34 @@
+<% if @invoice.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@invoice.errors.count, "Error") %> prohibited
+          this invoice from being saved:</h2>
+      <ul>
+          <% @invoice.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+
+<div class="control-group">
+    <%= f.label :estimate_id, "Estimate", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.select(:estimate_id, @estimates = Estimate.current(session[:builder_id]).collect { |s| [s.project.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_estimate_items", :invoice_id => @invoice.id)}) %></div>
+</div>
+<% unless @invoice.new_record? %>
+    <div class="control-group">
+        <%= f.label :created_at, "Created Date", class: 'col-lg-2 control-label' %>
+        <div class="controls"><%= date_tag @invoice.created_at %></div>
+    </div>
+<% end %>
+<div class="control-group">
+    <%= f.label :sent_date, "Sent Date", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.date_select(:sent_date, {}, {class: 'input-medium'}) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:reference) %></div>
+</div>
+
+<div id="invoice-items-placeholder">
+    <%= render(:partial => "invoice_template", :locals => {:template => @invoice.try(:estimate).try(:template)}) %>
+</div>

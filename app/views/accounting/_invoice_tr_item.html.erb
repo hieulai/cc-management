@@ -1,0 +1,34 @@
+<% changed = item.change_orders_category.present? ? "change_order" : "" %>
+<% billable = item.billable?(@invoice.id) ? '' : 'unclickable'  %>
+<tr class="item item_category_<%= category_template.category.id %> <%= changed %> <%= billable %>" id="item_<%= item.id %>">
+  <td>
+      <% if item.billable?(@invoice.id) %>
+        <%= check_box_tag 'item-chosen', item.invoice_item(@invoice.id).present? ? item.id : "", item.invoice_item(@invoice.id).present? %>
+        <% if item.invoice_item(@invoice.id).present? %>
+          <%= hidden_field_tag "invoice[invoices_items_attributes][][id]", item.invoice_item(@invoice.id).id %>
+        <% end %>
+        <%= hidden_field_tag "invoice[invoices_items_attributes][][item_id]", item.id %>
+        <%= hidden_field_tag 'invoice[invoices_items_attributes][][_destroy]', !item.invoice_item(@invoice.id).present? %>
+      <% end %>
+	</td>
+  <td></td>
+	<td>
+        <%= item.name %>
+    </td>
+    <td>
+        <%= item.description %>
+    </td>
+    <td class="right">
+        <%= price_tag(item.price, "amount") %>
+    </td>
+    <td class="right">
+        <%= price_tag(item.prior_amount, "prior-amount") %>
+    </td>
+    <td class="right">
+        <% if item.billable?(@invoice.id) %>
+            <div class="text-field" <% unless item.invoice_item(@invoice.id).present? %> style="display: none" <% end %>>
+                $<%= text_field_tag 'invoice[invoices_items_attributes][][amount]', item.invoice_item(@invoice.id).try(:amount) || item.billable_amount, :class => "input-mini invoice-amount" %>
+            </div>
+        <% end %>
+    </td>
+</tr>

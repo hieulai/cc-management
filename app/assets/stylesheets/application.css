@@ -46,6 +46,18 @@ ul#tasksContainer li label:hover{
     background-color: #FFE4E1;
 }
 
+.unclickable, .unclickable:hover{
+    background-color: #f5f5f5 !important;
+}
+
+.unclickable.change_order{
+    background-color: #E5F1F4 !important;
+}
+
+a.uneditable, a.uneditable:hover{
+    color: #808080;
+}
+
 .autocomplete-sublabel{
     font-style: italic;
     font-size: 10px;

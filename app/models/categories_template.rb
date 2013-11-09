@@ -1,4 +1,6 @@
 class CategoriesTemplate < ActiveRecord::Base
+  before_destroy :check_destroyable, :destroy_items
+
   attr_accessible :category_id, :template_id, :items_attributes
 
   belongs_to :template
@@ -30,7 +32,23 @@ class CategoriesTemplate < ActiveRecord::Base
     return r
   end
 
-  before_destroy do
+  def co_items
+    template.estimate.project.co_items(category)
+  end
+
+  def undestroyable?
+    items.select { |i| i.billed? }.any? || co_items.select { |i| i.billed? }.any?
+  end
+
+  private
+  def check_destroyable
+    if self.undestroyable?
+      errors[:base] << "Category Template #{id} cannot be deleted once containing items which are added to an invoice"
+      false
+    end
+  end
+
+  def destroy_items
     items.destroy_all
   end
 end

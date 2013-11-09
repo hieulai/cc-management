@@ -9,6 +9,53 @@ class AccountingController < ApplicationController
 
   end
 
+  def invoices
+    @invoices = Invoice.where("builder_id = ?", session[:builder_id])
+  end
+
+ def new_invoice
+    @invoice = Invoice.new
+ end
+
+  def create_invoice
+    @invoice = Invoice.new(params[:invoice])
+    @invoice.builder_id = session[:builder_id]
+    if @invoice.save
+      redirect_to(:action => 'invoices')
+    else
+      render('new_invoice')
+    end
+  end
+
+  def edit_invoice
+    @invoice = Invoice.find(params[:id])
+  end
+
+  def update_invoice
+    @invoice = Invoice.find(params[:id])
+    # Destroy all old invoices_items_attributes if estimate changed
+    if params[:invoice][:estimate_id].present? && params[:invoice][:estimate_id] != @invoice.estimate_id.to_s
+      @invoice.invoices_items.each do  |ii|
+        params[:invoice][:invoices_items_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
+      end
+    end
+    if @invoice.update_attributes(params[:invoice])
+      redirect_to(:action => 'invoices')
+    else
+      render('edit_invoice')
+    end
+  end
+
+  def delete_invoice
+    @invoice = Invoice.find(params[:id])
+  end
+
+  def destroy_invoice
+    @invoice = Invoice.find(params[:id])
+    @invoice.destroy
+    redirect_to(:action => 'invoices')
+  end
+
   def purchase_orders
     @purchase_orders = PurchaseOrder.where("builder_id = ?", session[:builder_id])
   end
@@ -163,6 +210,16 @@ class AccountingController < ApplicationController
   
   def import_export
 
+  end
+
+  def show_estimate_items
+    @invoice = params[:invoice_id].present? ? Invoice.find(params[:invoice_id]) : Invoice.new
+    if params[:invoice].present? && params[:invoice][:estimate_id].present?
+      @estimate = Estimate.find(params[:invoice][:estimate_id])
+    end
+    respond_to do |format|
+      format.js {}
+    end
   end
 
   def show_vendor_bills

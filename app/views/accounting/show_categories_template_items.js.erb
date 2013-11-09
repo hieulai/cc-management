@@ -1,2 +1,2 @@
 $('#item-placeholder').html('<%= escape_javascript(render :partial =>  'purchasable_items', :locals => {:purchasable => @purchasable, :categories_template => @categories_template}) %>');
-calculateSubTotalAndTotal();
+calculatePurchasableSubTotalAndTotal();

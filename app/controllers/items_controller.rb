@@ -42,11 +42,11 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     respond_to do |format|
       if @item.update_attributes(params[:item])
-        format.html {redirect_to(:action => 'list')}
-        format.json { render json:  @item.to_json(:methods => [:amount,:price]) }
+        format.html { redirect_to(:action => 'list') }
+        format.json { render json: @item.to_json(:methods => [:amount, :price]) }
       else
-        format.html {render('edit')}
-        format.json { render json: resource.errors}
+        format.html { render('edit') }
+        format.json { render :json => {:errors => @item.errors.full_messages.join("\n")}, :status => 500 }
       end
     end
   end
@@ -56,10 +56,16 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    Item.find(params[:id]).destroy
+    @id = params[:id]
+    @item = Item.find(params[:id])
     respond_to do |format|
-      format.html {redirect_to(:action => 'list')}
-      format.js { @id = params[:id] }
+      if @item.destroy
+        format.html { redirect_to(:action => 'list') }
+        format.js
+      else
+        format.html { render('edit') }
+        format.js
+      end
     end
   end
 

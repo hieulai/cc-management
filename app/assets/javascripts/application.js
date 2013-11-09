@@ -79,9 +79,65 @@ var updateQueryStringParameter = function (uri, key, value) {
         return uri + separator + key + "=" + value;
     }
 }
+/**
+ * Global Total calculation based on column names
+ */
+function calculateTotals(s) {
+    s = typeof s !== 'undefined' ? s : "";
+    $("div[class^='total-" + s + "']").each(function () {
+        var suffix = $(this).attr("class").substr(6);
+        var amount = 0;
+        var empty = true;
+        $("." + suffix + ":visible").each(function () {
+            var value = $(this).is("input") ? $(this).val() : $(this).text();
+            if (value.trim() != "" && empty) {
+                empty = false;
+            }
+            amount += text_to_number(value);
+        });
+        if (!empty) {
+            $(this).text(number_to_currency_with_unit(amount, 2, '.', ','));
+        } else {
+            $(this).text("");
+        }
+    })
+};
+
+/**
+ * Global Subtotal calculation based on column names
+ */
+function calculateSubTotals(s) {
+    s = typeof s !== 'undefined' ? s : "";
+    $("div[class^='subtotal-" + s + "']").each(function () {
+        var trCategory = $(this).closest("tr").prevAll("tr.category").first();
+        var suffix = $(this).attr("class").substr(9);
+        var amount = 0;
+        var empty = true;
+        $("tr.item.item_" + trCategory.attr("id")).each(function () {
+            var me = $(this).find("." + suffix + ":visible");
+            var value = $(me).is("input") ? $(me).val() : $(me).text();
+            if (value.trim() != "" && empty){
+                empty = false;
+            }
+            amount += text_to_number(value);
+        });
+        if (!empty) {
+            $(this).text(number_to_currency_with_unit(amount, 2, '.', ','));
+        } else {
+            $(this).text("");
+        }
+    })
+};
+
+var toggleItemInputs = function (checbox, s) {
+    $(checbox).closest("tr").find('.text-field').toggle(s);
+    $(checbox).closest("tr").find('.value-field').toggle(!s);
+};
 
 $(document).ready(function() {
     load_add_link();
+    calculateTotals();
+    calculateSubTotals();
 
     $(document).on('click', '.trigger_add', function(){
         var container = $(this).closest(".cocoon-container");

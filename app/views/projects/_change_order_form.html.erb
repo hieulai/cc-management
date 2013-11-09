@@ -4,7 +4,14 @@
 </div>
 <div class="control-group">
     <%= f.label :lg, 'Approved', class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.check_box :approved %></div>
+    <div class="controls">
+        <%= f.check_box :approved,  disabled: f.object.undestroyable? %>
+        <% if f.object.undestroyable? %>
+          <div class="help-block">
+              (Cannot be disapproved once containing items which are added to an invoice)
+          </div>
+        <% end %>
+    </div>
 </div>
 <div class="control-group">
     <%= f.label :notes, 'Notes', class: 'col-lg-2 control-label' %>
@@ -35,7 +42,7 @@
       </tr>
       <tr class="total">
           <td colspan="6">TOTALS</td>
-          <td id="item-totals" class="right"></td>
+          <td class="right"><div class="total-co-amount"></div></td>
           <td></td>
       </tr>
     </tbody>

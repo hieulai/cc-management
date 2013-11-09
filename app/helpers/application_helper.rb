@@ -22,6 +22,10 @@ module ApplicationHelper
     end
   end
 
+  def date_tag(datetime)
+    datetime.strftime("%Y-%m-%d")
+  end
+
   def price n
     n.nil? ? n : number_to_currency(number_with_precision(n, precision: 2), :unit =>"")
   end

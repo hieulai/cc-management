@@ -13,7 +13,7 @@ var calculatePurchaseAmount = function (obj, f){
     calculatePostTaxAmount($(placeHolder).find(".actual-amount"));
 };
 
-var calculateSubTotalAndTotal = function () {
+var calculatePurchasableSubTotalAndTotal = function () {
     if ($("#total").size() > 0) {
         var subtotal = 0;
         $('.actual-amount').each(function () {
@@ -59,23 +59,18 @@ var calculatePostTaxAmounts = function () {
     });
 }
 
-var toggleItemInputs = function (checbox, s) {
-    $(checbox).closest("tr").find('.text-field').toggle(s);
-    $(checbox).closest("tr").find('.value-field').toggle(!s);
-};
-
 $(document).ready(function() {
     $("#payables .scrollable").tableScroll({height:137});
 
     calculatePostTaxAmounts();
-    calculateSubTotalAndTotal();
+    calculatePurchasableSubTotalAndTotal();
     calculatePayment();
 
     $(document).on('change', 'input[name="items[][qty]"], input[name="items[][estimated_cost]"]', function () {
         calculatePurchaseAmount(this);
-        calculateSubTotalAndTotal();
+        calculatePurchasableSubTotalAndTotal();
     });
-    $(document).on('change', 'input[name="item-chosen"]', function () {
+    $(document).on('change', '.purchasable-items-list input[name="item-chosen"]', function () {
         if ($(this).is(":checked")) {
             toggleItemInputs(this, true);
             calculatePurchaseAmount(this);
@@ -84,27 +79,44 @@ $(document).ready(function() {
             $(this).closest("tr").find(".actual-amount-placeholder").text("");
             $(this).closest("tr").find('input[name="items[][actual_cost]"]').val("");
         }
-        calculateSubTotalAndTotal();
+        calculatePurchasableSubTotalAndTotal();
     });
 
-    $(document).on('railsAutocomplete.select', '.purchasable-list input[name="name[]"]', function () {
+    $(document).on('change', '.invoice-items-list input[name="item-chosen"]', function () {
+        if ($(this).is(":checked")) {
+            toggleItemInputs(this, true);
+            $(this).closest("tr").find('input[name="invoice[invoices_items_attributes][][_destroy]"]').val("false");
+        } else {
+            toggleItemInputs(this, false);
+            $(this).closest("tr").find('input[name="invoice[invoices_items_attributes][][_destroy]"]').val("true");
+        }
+        calculateSubTotals("invoice-amount");
+        calculateTotals("invoice-amount");
+    });
+
+    $(document).on('change', '.invoice-items-list input.invoice-amount', function () {
+        calculateSubTotals("invoice-amount");
+        calculateTotals("invoice-amount");
+    });
+
+    $(document).on('railsAutocomplete.select', '.purchasable-items-list input[name="name[]"]', function () {
         var itemId = $('input[name="purchased_item[id]"]').val();
         var link = $("a#add-purchased-item").attr("href");
         $("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", itemId));
     });
 
-    $(document).on('click', '.purchasable-list a.remove-item', function (e) {
+    $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
         e.preventDefault();
         $(this).closest("tr").remove();
-        calculateSubTotalAndTotal();
+        calculatePurchasableSubTotalAndTotal();
         return false;
     });
     $(document).on('change', 'input[name$="[shipping]"] ', function () {
-        calculateSubTotalAndTotal();
+        calculatePurchasableSubTotalAndTotal();
     });
     $(document).on('change', 'input[name$="[sales_tax_rate]"]', function () {
         calculatePostTaxAmounts();
-        calculateSubTotalAndTotal();
+        calculatePurchasableSubTotalAndTotal();
     });
     $(document).on('change', 'input[name="bill-chosen"]', function () {
         if ($(this).is(":checked")) {
