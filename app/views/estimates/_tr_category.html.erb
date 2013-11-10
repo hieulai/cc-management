@@ -7,7 +7,7 @@
     <td>
         <%= link_to '+ Item', "#", :class => "trigger-add btn" %>
         <% unless  category_template.undestroyable? %>
-            <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :confirm => 'Are you sure you want to delete this category and all its associated items?', :remote => true, :class => 'remove-category' %>
+            <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :data => { :title => "Confirmation" , :confirm => "Are you sure you want to delete category #{category_template.category.name} and all its associated items?", :remote => true }, :class => 'remove-category' %>
          <% end %>
     </td>
 </tr>

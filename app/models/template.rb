@@ -53,7 +53,7 @@ class Template < ActiveRecord::Base
   private
   def check_destroyable
     if undestroyable?
-      errors[:base] << "Template #{name} cannot be deleted once containing items which are added to an invoice"
+      errors[:invoice] << "Template #{name} cannot be deleted once containing items which are added to an invoice"
       false
     end
   end

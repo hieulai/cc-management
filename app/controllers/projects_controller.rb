@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-
+  include ItemsHelper
   before_filter :authenticate_user!
   
   def list_current_projects
@@ -259,7 +259,11 @@ class ProjectsController < ApplicationController
                   item_attributes = item_val.except(:id, :_destroy)
                   if item.change_orders_category.present?
                     unless item.update_attributes(item_attributes)
-                      @change_order.errors[:base] << item.errors.full_messages.join(".")
+                      msg = item.errors.full_messages.join(".")
+                      if item.errors.has_key? :invoice
+                        msg += invoice_list item
+                      end
+                      @change_order.errors[:base] << msg
                     end
                   else
                     @item = Item.create(item_attributes)
@@ -267,8 +271,13 @@ class ProjectsController < ApplicationController
                   end
                 else
                   item = Item.find(item_val[:id])
+
                   unless item.destroy
-                    @change_order.errors[:base] << item.errors.full_messages.join(".")
+                    msg = item.errors.full_messages.join(".")
+                    if item.errors.has_key? :invoice
+                      msg += invoice_list item
+                    end
+                    @change_order.errors[:base] << msg
                   end
                 end
               end

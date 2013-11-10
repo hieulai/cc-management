@@ -26,7 +26,7 @@ $(document).ready(function () {
         },
         error: function (response, newValue) {
             var errors = $.parseJSON(response.responseText).errors;
-            alert(errors);
+            $.rails.createConfirmDialog('Information', errors, true);
         }
     });
 

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+
   before_filter :find_builder
 
   protect_from_forgery

@@ -7,6 +7,6 @@
     category.remove();
     calculateTotals();
 <% else %>
-  alert('<%= @category.errors.full_messages.join(".") %>');
+    $.rails.createConfirmDialog('Information', '<%= @category.errors.full_messages.join(".") %>', true);
 <% end %>
 

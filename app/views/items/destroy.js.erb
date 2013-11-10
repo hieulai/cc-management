@@ -7,6 +7,11 @@
       category.next().show();
     }
     calculateTotals();
-<% else %>
-  alert('<%= @item.errors.full_messages.join(".") %>');
+<% else
+   msg = @item.errors.full_messages.join(".")
+   if @item.errors.has_key? :invoice
+     msg+= invoice_list @item
+   end
+%>
+  $.rails.createConfirmDialog('Information', '<%= msg.html_safe  %>', true);
 <% end %>

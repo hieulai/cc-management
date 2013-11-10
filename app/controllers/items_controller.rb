@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-
+  include ItemsHelper
   before_filter :authenticate_user!
 
   def list
@@ -46,7 +46,14 @@ class ItemsController < ApplicationController
         format.json { render json: @item.to_json(:methods => [:amount, :price]) }
       else
         format.html { render('edit') }
-        format.json { render :json => {:errors => @item.errors.full_messages.join("\n")}, :status => 500 }
+        format.json do
+          msg = @item.errors.full_messages.join(".")
+          if @item.errors.has_key? :invoice
+            msg+=  invoice_list @item
+          end
+          msg =
+          render :json => {:errors => msg}, :status => 500
+        end
       end
     end
   end

@@ -18,7 +18,7 @@ class ChangeOrdersCategory < ActiveRecord::Base
   private
   def check_destroyable
     if self.undestroyable?
-      errors[:base] << "Change Order Category #{id} cannot be deleted once containing items which are added to an invoice"
+      errors[:invoice] << "Change Order Category #{id} cannot be deleted once containing items which are added to an invoice"
       false
     end
   end

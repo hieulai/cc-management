@@ -32,7 +32,7 @@ class Category < ActiveRecord::Base
   private
   def check_destroyable
     if undestroyable?
-      errors[:base] << "Category #{name} cannot be deleted once containing items or change orders which are added to an invoice"
+      errors[:invoice] << "Category #{name} cannot be deleted once containing items or change orders which are added to an invoice"
       false
     end
   end

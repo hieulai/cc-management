@@ -15,6 +15,7 @@
 //= require jquery.ui.all
 //= require cocoon
 //= require autocomplete-rails
+//= require bootstrap-modal
 //= require_tree .
 //= stub wkhtmltopdf_tableSplitHack
 

@@ -104,7 +104,7 @@ class Item < ActiveRecord::Base
 
   def check_readonly
     if self.billed?
-      errors[:base] << "Item #{name} cannot be edited/deleted once added to an invoice. Please delete invoice to edit item details"
+      errors[:invoice] << "Item #{name} cannot be edited/deleted once added to an invoice. Please delete invoice to edit item details"
       false
     end
   end
