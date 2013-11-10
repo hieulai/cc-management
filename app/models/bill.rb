@@ -1,6 +1,8 @@
 class Bill < ActiveRecord::Base
   include Purchasable
 
+  before_destroy :check_readonly
+
   belongs_to :builder
   belongs_to :purchase_order
   belongs_to :bid
@@ -14,11 +16,7 @@ class Bill < ActiveRecord::Base
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :paid, where('remaining_amount = 0')
 
-  before_destroy :raise_readonly
-
-  def readonly?
-    paid?
-  end
+  before_save :check_readonly
 
   def paid?
     self.payments_bills.any?
@@ -58,8 +56,11 @@ class Bill < ActiveRecord::Base
 
   private
 
-  def raise_readonly
-    raise ActiveRecord::ReadOnlyRecord if self.readonly?
+  def check_readonly
+    if paid?
+      errors[:base] << "This record is readonly"
+      false
+    end
   end
 
 end

@@ -104,11 +104,9 @@ class AccountingController < ApplicationController
 
   def destroy_purchase_order
     @purchase_order = PurchaseOrder.find(params[:id])
-    begin
-      @purchase_order.destroy
+    if @purchase_order.destroy
       redirect_to(:action => 'purchase_orders')
-    rescue ActiveRecord::ReadOnlyRecord
-      @purchase_order.errors[:base] = "This record is Readonly"
+    else
       render :delete_purchase_order
     end
   end
@@ -147,11 +145,9 @@ class AccountingController < ApplicationController
 
   def destroy_bill
     @bill = Bill.find(params[:id])
-    begin
-      @bill.destroy
+    if @bill.destroy
       redirect_to(:action => 'bills')
-    rescue ActiveRecord::ReadOnlyRecord
-      @bill.errors[:base] = "This record is Readonly"
+    else
       render :delete_bill
     end
   end
@@ -304,22 +300,17 @@ class AccountingController < ApplicationController
   end
 
   def update_purchasable(type)
-    klass =  type.to_s.constantize
+    klass = type.to_s.constantize
     @type = type.to_s.underscore
     @purchasable = klass.find(params[:id])
     purchased_items = params[:items].select { |i| i[:id].nil? }
     amount_items = params[:items].select { |i| i[:actual_cost].present? && i[:id].present? }
     @purchasable.amount = amount_items
-    begin
-      if @purchasable.update_attributes(params[@type.to_sym])
-        Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
-        @purchasable.items = Item.create(purchased_items)
-        redirect_to(:action => "#{@type}s")
-      else
-        render("edit_#{@type}")
-      end
-    rescue ActiveRecord::ReadOnlyRecord
-      @purchasable.errors[:base] = "This record is Readonly"
+    if @purchasable.update_attributes(params[@type.to_sym])
+      Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
+      @purchasable.items = Item.create(purchased_items)
+      redirect_to(:action => "#{@type}s")
+    else
       render("edit_#{@type}")
     end
   end

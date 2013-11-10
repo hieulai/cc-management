@@ -26,9 +26,9 @@
 			</tr>
 			<% @bids.each do |bid| %>
 
-       <tr <% if bid.readonly? %> class="unclickable" <% end %> >
+       <tr <% if bid.has_bill_paid? %> class="unclickable" <% end %> >
 				<td class="center">
-            <% unless bid.readonly? %>
+            <% unless bid.has_bill_paid? %>
               <%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'action edit') %>
               <%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'action edit') %>
             <% end %>

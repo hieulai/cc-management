@@ -15,10 +15,10 @@
     </thead>
     <tbody>
     <% bills.each do |b| %>
-      <tr <% unless b.generated? || b.readonly? %> class="clickable" <% else %> class="unclickable" <% end %> >
+      <tr <% unless b.generated? || b.paid? %> class="clickable" <% else %> class="unclickable" <% end %> >
           <td class="center">
               <%= b.id %>
-              <% unless b.generated? || b.readonly? %>
+              <% unless b.generated? || b.paid? %>
                   <%= link_to("Edit", {:action => 'edit_bill', :id => b.id}, :class => 'action edit clickable-link', style: 'display: none') %>
               <% end %>
           </td>

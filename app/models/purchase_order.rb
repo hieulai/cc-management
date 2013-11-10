@@ -1,6 +1,8 @@
 class PurchaseOrder < ActiveRecord::Base
   include Purchasable
 
+  before_destroy :check_readonly
+
   has_one :bill, :dependent => :destroy
 
   default_scope order("date DESC")
@@ -11,12 +13,11 @@ class PurchaseOrder < ActiveRecord::Base
 
   validates_presence_of :categories_template, :project
 
+  before_save :check_readonly
   after_save :create_bill
 
-  before_destroy :raise_readonly
-
-  def readonly?
-    bill.try(:readonly?)
+  def has_bill_paid?
+    bill.try(:paid?)
   end
 
   def total_amount
@@ -41,7 +42,10 @@ class PurchaseOrder < ActiveRecord::Base
     end
   end
 
-  def raise_readonly
-    raise ActiveRecord::ReadOnlyRecord if self.readonly?
+  def check_readonly
+    if has_bill_paid?
+      errors[:base] << "This record is readonly"
+      false
+    end
   end
 end
