@@ -61,7 +61,18 @@ class Item < ActiveRecord::Base
     self.actual_cost.present? ? (self.amount - self.actual_cost) + self.margin : nil
   end
 
-  def prior_amount
+  def prior_amount(invoice_id)
+    previous_ii = InvoicesItem.where(:item_id => id)
+    if invoice_id.present?
+      first_ii = invoice_item(invoice_id)
+      if first_ii.present?
+        previous_ii = InvoicesItem.previous_created_by_item(id, first_ii.created_at)
+      end
+    end
+    previous_ii.map(&:amount).compact.sum if previous_ii.any?
+  end
+
+  def invoice_amount
     invoices_items.map(&:amount).compact.sum if invoices_items.any?
   end
 
@@ -74,11 +85,11 @@ class Item < ActiveRecord::Base
   end
 
   def billable?(invoice_id =nil)
-    invoice_item(invoice_id).present? || prior_amount.nil? || billable_amount > 0
+    invoice_item(invoice_id).present? || invoice_amount.nil? || billable_amount > 0
   end
 
   def billable_amount
-    price.to_f - prior_amount.to_f
+    price.to_f - invoice_amount.to_f
   end
 
   def self.to_csv(items, options = {})

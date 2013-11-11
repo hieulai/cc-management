@@ -9,7 +9,7 @@ class Mailer < ActionMailer::Base
     pdf_html = av.render :template => 'estimates/show.pdf.erb', :layout => 'layouts/pdf.html.erb', :locals => {:estimate => estimate}, :footer => {:center => 'Page [page]'}
 
     # use wicked_pdf gem to create PDF from the doc HTML
-    doc_pdf = WickedPdf.new.pdf_from_string(pdf_html, :page_size => 'Letter')
+    doc_pdf = WickedPdf.new.pdf_from_string(pdf_html, :page_size => 'A4')
 
     attachments["Estimate-#{estimate.project.name}.pdf"] = doc_pdf
     mail :to => to, :subject => subject
@@ -23,7 +23,7 @@ class Mailer < ActionMailer::Base
     pdf_html = av.render :template => 'accounting/invoice.pdf.erb', :layout => 'layouts/pdf.html.erb', :locals => {:invoice => invoice}, :footer => {:center => 'Page [page]'}
 
     # use wicked_pdf gem to create PDF from the doc HTML
-    doc_pdf = WickedPdf.new.pdf_from_string(pdf_html, :page_size => 'Letter')
+    doc_pdf = WickedPdf.new.pdf_from_string(pdf_html, :page_size => 'A4')
 
     attachments["Invoice-#{invoice.id}.pdf"] = doc_pdf
     mail :to => to, :subject => subject
@@ -37,7 +37,7 @@ class Mailer < ActionMailer::Base
     pdf_html = av.render :template => 'projects/show_change_order.pdf.erb', :layout => 'layouts/pdf.html.erb', :locals => {:change_order => change_order}, :footer => {:center => 'Page [page]'}
 
     # use wicked_pdf gem to create PDF from the doc HTML
-    doc_pdf = WickedPdf.new.pdf_from_string(pdf_html, :page_size => 'Letter')
+    doc_pdf = WickedPdf.new.pdf_from_string(pdf_html, :page_size => 'A4')
 
     attachments["ChangeOrder-#{change_order.name}.pdf"] = doc_pdf
     mail :to => to, :subject => subject

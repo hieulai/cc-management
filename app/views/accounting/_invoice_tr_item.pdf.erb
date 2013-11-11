@@ -6,7 +6,7 @@
         <%= price_tag(item.price, "amount") %>
     </td>
     <td>
-        <%= price_tag(item.prior_amount, "prior-amount") %>
+        <%= price_tag(item.prior_amount(@invoice.id), "prior-amount") %>
     </td>
     <td>
         <%= price_tag(item.invoice_item(@invoice.id).try(:amount), "invoice-amount") %>

@@ -6,7 +6,6 @@
         <th>Created Date</th>
         <th>Sent Date</th>
         <th>Project</th>
-        <th>Estimate</th>
         <th>Amount</th>
     </tr>
     </thead>
@@ -23,9 +22,6 @@
           <td class="center"><%= date_tag(invoice.created_at) %></td>
           <td class="center"><%= invoice.sent_date %></td>
           <td><%= invoice.estimate.project.name %></td>
-          <td class="center">
-              <%= link_to( invoice.estimate.id, {:controller => 'estimates', :action => 'edit', :id => invoice.estimate.id}, :class => 'action edit') %>
-          </td>
           <td class="right"><%= price_tag(invoice.amount) %></td>
       </tr>
     <% end %>
