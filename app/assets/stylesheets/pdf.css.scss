@@ -17,7 +17,6 @@ table {
     vertical-align: top;
   }
   tr.tr-footer{
-     font-size: 20px;
      font-weight: bold;
   }
 }
@@ -47,6 +46,18 @@ table.item-list {
 
 .tr-category, .tr-footer{
     border-top: solid 1px #000000 ;
+}
+
+.large{
+  font-size: 16px;
+}
+
+.xlarge{
+  font-size: 20px;
+}
+
+.highlight{
+   background: #CCC;
 }
 
 #header{

@@ -58,10 +58,10 @@
 <table class="item-list splitForPrint">
     <thead>
         <tr class="header">
-            <th>Description</th>
-            <th>Estimated Amount</th>
-            <th>Previously Invoiced</th>
-            <th>This Invoice</th>
+            <th width="70%">Description</th>
+            <th >Estimated Amount</th>
+            <th >Previously Invoiced</th>
+            <th >This Invoice</th>
         </tr>
     </thead>
     <tbody>
@@ -87,13 +87,25 @@
                 <td class="right-bold"><div class="subtotal-invoice-amount"></div></td>
             </tr>
         <% end %>
-            <tr class="tr-footer">
-                <td class="right-bold">
-                    TOTAL
-                </td>
-                <td class="right-bold"><div class="total-amount"></div></td>
-                <td class="right-bold"><div class="total-prior-amount"></div></td>
-                <td class="right-bold"><div class="total-invoice-amount"></div></td>
-            </tr>
+        <tr class="tr-category large">
+            <td class="left-bold">
+                TOTALS
+            </td>
+            <td class="right-bold">
+                <div class="total-amount"></div>
+            </td>
+            <td class="right-bold">
+                <div class="total-prior-amount"></div>
+            </td>
+            <td class="right-bold">
+                <div class="total-invoice-amount"></div>
+            </td>
+        </tr>
+        <tr class="tr-footer xlarge highlight">
+            <td colspan="3">CURRENT BALANCE DUE</td>
+            <td class="right">
+                <div class="total-invoice-amount"></div>
+            </td>
+        </tr>
     </tbody>
 </table>

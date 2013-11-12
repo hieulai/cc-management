@@ -14,12 +14,16 @@
         <% template.try(:categories_templates).try(:each) do |category_template| %>
           <%= render :partial => 'invoice_tr_category', :locals => {:category_template => category_template} %>
         <% end %>
-        <tr class="total">
+        <tr class="large">
             <td colspan=4>
-                TOTAL
+                TOTALS
             </td>
             <td class="right"><div class="total-amount"></div></td>
             <td class="right"><div class="total-prior-amount"></div></td>
+            <td class="right"><div class="total-invoice-amount"></div></td>
+        </tr>
+        <tr class="total unclickable xlarge">
+            <td colspan="6">CURRENT BALANCE DUE</td>
             <td class="right"><div class="total-invoice-amount"></div></td>
         </tr>
     </tbody>
