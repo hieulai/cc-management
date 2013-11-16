@@ -2,7 +2,7 @@ class AccountingController < ApplicationController
   before_filter :authenticate_user!
   
   def index
-    render('receivables')
+    redirect_to(:action => 'receivables')
   end
 
   def receivables
