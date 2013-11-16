@@ -1,0 +1,60 @@
+<table class="grid-view" summary="Bill List">
+    <tr class="header">
+        <th></th>
+        <th>Receipt #</th>
+        <th>Reference #</th>
+        <th>Date Received</th>
+        <th>Client</th>
+        <th>Previously Billed</th>
+        <th>Remaining Balance</th>
+        <th>Amount</th>
+
+    </tr>
+    <% receipts.each do |receipt| %>
+      <%
+         remaining_amount = receipt.remaining_amount.presence||receipt.amount
+         if receipt.deposit_receipt(@deposit.id).present?
+           text_field_display = ""
+           value_display = "none"
+           billed_amount = receipt.deposit_receipt(@deposit.id).amount
+         else
+           text_field_display = "none"
+           value_display = ""
+           billed_amount = receipt.billed? ? receipt.remaining_amount : receipt.amount
+         end
+      %>
+      <tr>
+          <td class="center">
+              <%= check_box_tag 'receipt-chosen', receipt.deposit_receipt(@deposit.id).present? ? receipt.id : "", receipt.deposit_receipt(@deposit.id).present? %>
+              <% if receipt.deposit_receipt(@deposit.id).present? %>
+                <%= hidden_field_tag "deposit[deposits_receipts_attributes][][id]", receipt.deposit_receipt(@deposit.id).id %>
+              <% end %>
+              <%= hidden_field_tag "deposit[deposits_receipts_attributes][][receipt_id]", receipt.id %>
+              <%= hidden_field_tag 'deposit[deposits_receipts_attributes][][_destroy]', !receipt.deposit_receipt(@deposit.id).present? %>
+          </td>
+          <td class="center"><%= receipt.id %></td>
+          <td class="center"><%= receipt.reference %></td>
+          <td class="center"><%= receipt.received_at %></td>
+          <td><%= receipt.client.full_name %></td>
+          <td class="right unpaid-amount">
+              <%= price_tag(receipt.billed_amount) %>
+          </td>
+          <td class="right">
+              <%= price_tag(remaining_amount, "remaining-amount") %>
+              <div class="original-remaining-amount" style="display:none">
+                  <%= remaining_amount %>
+              </div>
+          </td>
+          <td class="right">
+              $<%= text_field_tag 'deposit[deposits_receipts_attributes][][amount]', billed_amount , :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10 %>
+              <div class="value-field" style="display: <%= value_display %>">
+                  <%= price(billed_amount) %>
+              </div>
+          </td>
+      </tr>
+    <% end %>
+    <tr>
+        <td class="strong" colspan="7">Total</td>
+        <td class="right" id="deposit-amount"></td>
+    </tr>
+</table>

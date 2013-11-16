@@ -1,0 +1,32 @@
+<% accounts = Account.has_unbilled_receipts(session[:builder_id])
+   (accounts<< @deposit.account).uniq! unless @deposit.new_record?
+%>
+
+<% if @deposit.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@deposit.errors.count, "Error") %> prohibited
+          this deposit from being saved:</h2>
+      <ul>
+          <% @deposit.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+
+<div class="control-group">
+    <%= f.label :account_id, "Deposit to", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.select(:account_id, accounts.collect { |s| [s.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_account_receipts", :deposit_id => @deposit.id)}) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :date, "Deposit Date", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.date_select(:deposit_date, {}, {class: 'input-medium'}) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_area(:notes, :size => '10x3') %></div>
+</div>
+
+<div id="receipt-placeholder">
+    <%= render(:partial => "deposit_receipts", :locals => {:f => f, :receipts => @receipts}) %>
+</div>

@@ -6,7 +6,111 @@ class AccountingController < ApplicationController
   end
 
   def receivables
+    @invoices = Invoice.where("builder_id = ?", session[:builder_id]).limit(50)
+    @receipts = Receipt.where("builder_id = ?", session[:builder_id]).limit(50)
+    @deposits = Deposit.where("builder_id = ?", session[:builder_id]).limit(50)
+  end
 
+  def deposits
+    @deposits = Deposit.where("builder_id = ?", session[:builder_id])
+  end
+
+  def new_deposit
+    @deposit = Deposit.new
+    @receipts = Array.new
+  end
+
+  def create_deposit
+    @deposit = Deposit.new(params[:deposit])
+    @deposit.builder_id = session[:builder_id]
+    if @deposit.save
+      redirect_to(:action => 'deposits')
+    else
+      @receipts = Array.new
+      render('new_deposit')
+    end
+  end
+
+  def edit_deposit
+    @deposit = Deposit.find(params[:id])
+    @receipts = (@deposit.receipts + @deposit.account.receipts.unbilled).uniq
+  end
+
+  def update_deposit
+    @deposit = Deposit.find(params[:id])
+    # Destroy all old deposits_receipts_attributes if account changed
+    if params[:deposit][:client_id].present? && params[:deposit][:client_id] != @deposit.client_id.to_s
+      @deposit.deposits_receipts.each do  |dr|
+        params[:deposit][:deposits_receipts_attributes] << {id: dr.id, _destroy: true}.with_indifferent_access
+      end
+    end
+    if @deposit.update_attributes(params[:deposit])
+      redirect_to(:action => 'deposits')
+    else
+      @receipts = (@deposit.receipts + @deposit.account.receipts.unbilled).uniq
+      render('edit_deposit')
+    end
+  end
+
+  def delete_deposit
+    @deposit = Deposit.find(params[:id])
+  end
+
+  def destroy_deposit
+    @deposit = Deposit.find(params[:id])
+    @deposit.destroy
+    redirect_to(:action => 'deposits')
+  end
+
+  def receipts
+    @receipts = Receipt.where("builder_id = ?", session[:builder_id])
+  end
+
+  def new_receipt
+    @receipt = Receipt.new
+    @invoices = Array.new
+  end
+
+  def create_receipt
+    @receipt = Receipt.new(params[:receipt])
+    @receipt.builder_id = session[:builder_id]
+    if @receipt.save
+      redirect_to(:action => 'receipts')
+    else
+      @invoices = Array.new
+      render('new_receipt')
+    end
+  end
+
+  def edit_receipt
+    @receipt = Receipt.find(params[:id])
+    @invoices = (@receipt.invoices + @receipt.client.invoices.unbilled).uniq
+  end
+
+  def update_receipt
+    @receipt = Receipt.find(params[:id])
+    # Destroy all old receipts_invoices_attributes if client changed
+    if params[:receipt][:client_id].present? && params[:receipt][:client_id] != @receipt.client_id.to_s
+      @receipt.receipts_invoices.each do  |ri|
+        params[:receipt][:receipts_invoices_attributes] << {id: ri.id, _destroy: true}.with_indifferent_access
+      end
+    end
+    if @receipt.update_attributes(params[:receipt])
+      redirect_to(:action => 'receipts')
+    else
+      @invoices = (@receipt.invoices + @receipt.client.invoices.unbilled).uniq
+      render('edit_receipt')
+    end
+  end
+
+  def delete_receipt
+    @receipt = Receipt.find(params[:id])
+  end
+
+  def destroy_receipt
+    @receipt = Receipt.find(params[:id])
+    @receipt.destroy
+    redirect_to(:action => 'receipts')
   end
 
   def invoices
@@ -252,6 +356,29 @@ class AccountingController < ApplicationController
     end
   end
 
+  def show_account_receipts
+    @receipts = Array.new
+    @deposit = params[:deposit_id].present? ? Deposit.find(params[:deposit_id]) : Deposit.new
+    if params[:deposit].present? && params[:deposit][:account_id].present?
+      @account = Account.find params[:deposit][:account_id]
+      @receipts = @account == @deposit.account ? @account.receipts : @account.receipts.unbilled
+    end
+    respond_to do |format|
+      format.js {}
+    end
+  end
+
+  def show_client_invoices
+    @invoices = Array.new
+    @receipt = params[:receipt_id].present? ? Receipt.find(params[:receipt_id]) : Receipt.new
+    if params[:receipt].present? && params[:receipt][:client_id].present?
+      @client = Client.find params[:receipt][:client_id]
+      @invoices = @client == @receipt.client ? @client.invoices : @client.invoices.unbilled
+    end
+    respond_to do |format|
+      format.js {}
+    end
+  end
 
   def show_project_categories_template
     klass =  params[:type].to_s.constantize

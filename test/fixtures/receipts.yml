@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  method: MyString
+  received_at: 2013-11-14
+  reference: 1
+  notes: MyText
+
+two:
+  method: MyString
+  received_at: 2013-11-14
+  reference: 1
+  notes: MyText

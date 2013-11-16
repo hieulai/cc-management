@@ -1,0 +1,24 @@
+<table class="grid-view scrollable" summary="Payment List" cellspacing="0">
+    <thead>
+    <tr class="header">
+        <th>Deposit Date</th>
+        <th>Deposit to</th>
+        <th>Amount</th>
+        <th>Notes</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% deposits.each do |deposit| %>
+      <tr class="clickable">
+          <td class="center">
+              <%= deposit.deposit_date %>
+              <%= link_to("Edit", {:action => 'edit_deposit', :id => deposit.id}, :class => 'action edit clickable-link', style: 'display: none') %>
+          </td>
+          <td><%= deposit.account.name %></td>
+          <td class="right"><%= price_tag(deposit.amount) %></td>
+          <td><%= deposit.notes %></td>
+      </tr>
+    <% end %>
+    </tbody>
+
+</table>

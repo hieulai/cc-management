@@ -1,0 +1,30 @@
+<table class="grid-view scrollable" summary="Payment List" cellspacing="0">
+    <thead>
+    <tr class="header">
+        <th>Reference #</th>
+        <th>Date Received</th>
+        <th>Client</th>
+        <th>Payment Type</th>
+        <th>Deposit to</th>
+        <th>Amount</th>
+        <th>Notes</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% receipts.each do |receipt| %>
+      <tr class="clickable">
+          <td>
+              <%= receipt.reference %>
+              <%= link_to("Edit", {:action => 'edit_receipt', :id => receipt.id}, :class => 'action edit clickable-link', style: 'display: none') %>
+          </td>
+          <td class="center"><%= receipt.received_at %></td>
+          <td><%= receipt.client.try(:full_name) %></td>
+          <td><%= receipt.method %></td>
+          <td><%= receipt.account.name %></td>
+          <td class="right"><%= price_tag(receipt.amount) %></td>
+          <td><%= receipt.notes %></td>
+      </tr>
+    <% end %>
+    </tbody>
+
+</table>

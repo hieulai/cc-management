@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  deposited_date: 2013-11-15
+  notes: MyText
+
+two:
+  deposited_date: 2013-11-15
+  notes: MyText

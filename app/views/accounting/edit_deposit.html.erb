@@ -1,0 +1,16 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu")%>
+    <h1 class="center">Edit Deposit</h1>
+    <%= link_to("Delete", {:action => 'delete_deposit', :id => @deposit.id}, :class => 'btn btn-danger f-right') %>
+    <%= form_for(@deposit, :url => {:action => 'update_deposit', :id => @deposit.id}, html: {class: 'form-horizontal'}) do |f| %>
+
+      <%= render(:partial => "deposit_form", :locals => {:f => f})%>
+
+
+      <div class="form-buttons">
+          <%= submit_tag("Save", class: 'btn') %>
+      </div>
+
+    <% end %>
+
+</div>

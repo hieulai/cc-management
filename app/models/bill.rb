@@ -37,7 +37,7 @@ class Bill < ActiveRecord::Base
   end
 
   def paid_amount
-    self.payments_bills.map(&:paid_amount).compact.sum if self.payments_bills.any?
+    self.payments_bills.map(&:amount).compact.sum if self.payments_bills.any?
   end
 
   def payment_bill(payment_id)

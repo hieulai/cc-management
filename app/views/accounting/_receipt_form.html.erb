@@ -1,0 +1,44 @@
+<% clients =  Client.has_unbilled_invoices(session[:builder_id])
+   (clients<< @receipt.client).uniq! unless @receipt.new_record?
+%>
+
+<% if @receipt.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@receipt.errors.count, "Error") %> prohibited
+          this receipt from being saved:</h2>
+      <ul>
+          <% @receipt.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+
+<div class="control-group">
+    <%= f.label :client_id, "Client", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.select(:client_id, clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :account_id, "Deposit to", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.select(:account_id, Account.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :method, "Payment Type", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.select(:method, Receipt::METHODS, {:include_blank => true}) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:reference) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :date, "Date Received", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.date_select(:received_at, {}, {class: 'input-medium'}) %></div>
+</div>
+<div class="control-group">
+    <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_area(:notes, :size => '10x3') %></div>
+</div>
+
+<div id="invoice-placeholder">
+    <%= render(:partial => "receipt_invoices", :locals => {:f => f, :invoices => @invoices}) %>
+</div>

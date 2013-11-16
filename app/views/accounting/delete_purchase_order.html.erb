@@ -2,7 +2,7 @@
     <%= render(:partial => "layouts/accounting_sub_menu")%>
     <h2>Delete Purchase Order</h2>
 
-    <%= form_for(:vendor, :url => {:action => 'destroy_purchase_order', :id => @purchase_order.id}) do |f| %>
+    <%= form_for(:purchase_order, :url => {:action => 'destroy_purchase_order', :id => @purchase_order.id}) do |f| %>
       <% if @purchase_order.errors.any? %>
         <div id="errorExplanation">
             <h2><%= pluralize(@purchase_order.errors.count, "Error") %> prohibited

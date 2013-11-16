@@ -34,15 +34,32 @@ var calculatePurchasableSubTotalAndTotal = function () {
     }
 };
 
-var calculatePayment = function(){
-    if ($("#payment-amount").size() > 0) {
+var calculateAccounting = function(parent, child) {
+    if ($("#" + parent + "-amount").size() > 0) {
         var total = 0;
-        $('input[name="bill-chosen"]:checked').each(function () {
-            total += text_to_number($(this).closest("tr").find('input[name="payment[payments_bills_attributes][][paid_amount]"]').val());
+        $('input[name="' + child + '-chosen"]:checked').each(function () {
+            total += text_to_number($(this).closest("tr").find('input[name="' + parent + '[' + parent + 's_' + child + 's_attributes][][amount]"]').val());
         });
-        $('#payment-amount').html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
+        $("#" + parent + "-amount").html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
     }
-}
+};
+
+var initAccounting = function (parent, child) {
+    calculateAccounting(parent, child);
+    $(document).on('change', 'input[name="' + child + '-chosen"]', function () {
+        if ($(this).is(":checked")) {
+            toggleItemInputs(this, true);
+            $(this).closest("tr").find('input[name="' + parent + '[' + parent + 's_' + child + 's_attributes][][_destroy]"]').val("false");
+        } else {
+            toggleItemInputs(this, false);
+            $(this).closest("tr").find('input[name="' + parent + '[' + parent + 's_' + child + 's_attributes][][_destroy]"]').val("true");
+        }
+        calculateAccounting(parent, child);
+    });
+    $(document).on('change', 'input[name="' + parent + '[' + parent + 's_' + child + 's_attributes][][amount]"] ', function () {
+        calculateAccounting(parent, child);
+    });
+};
 
 var calculatePostTaxAmount = function (i) {
     var actualAmount = text_to_number($(i).text());
@@ -51,20 +68,24 @@ var calculatePostTaxAmount = function (i) {
         $(i).closest("tr").find(".post-tax-actual-amount").text(number_to_currency_with_unit(actualAmount, 2, '.', ','))
     }
     $(i).closest("tr").find('input[name="items[][actual_cost]"]').val(actualAmount.toFixed(2));
-}
+};
 
 var calculatePostTaxAmounts = function () {
     $('.actual-amount').each(function () {
         calculatePostTaxAmount(this);
     });
-}
+};
 
 $(document).ready(function() {
     $("#payables .scrollable").tableScroll({height:137});
+    $("#receivables .scrollable").tableScroll({height:137});
 
     calculatePostTaxAmounts();
     calculatePurchasableSubTotalAndTotal();
-    calculatePayment();
+
+    initAccounting("payment", "bill");
+    initAccounting("receipt", "invoice");
+    initAccounting("deposit", "receipt");
 
     $(document).on('change', 'input[name="items[][qty]"], input[name="items[][estimated_cost]"]', function () {
         calculatePurchaseAmount(this);
@@ -117,19 +138,6 @@ $(document).ready(function() {
     $(document).on('change', 'input[name$="[sales_tax_rate]"]', function () {
         calculatePostTaxAmounts();
         calculatePurchasableSubTotalAndTotal();
-    });
-    $(document).on('change', 'input[name="bill-chosen"]', function () {
-        if ($(this).is(":checked")) {
-            toggleItemInputs(this,true);
-            $(this).closest("tr").find('input[name="payment[payments_bills_attributes][][_destroy]"]').val("false");
-        } else {
-            toggleItemInputs(this,false);
-            $(this).closest("tr").find('input[name="payment[payments_bills_attributes][][_destroy]"]').val("true");
-        }
-        calculatePayment();
-    });
-    $(document).on('change', 'input[name="payment[payments_bills_attributes][][paid_amount]"] ', function () {
-        calculatePayment();
     });
 
 })

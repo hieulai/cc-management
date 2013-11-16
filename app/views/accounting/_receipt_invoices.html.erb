@@ -1,0 +1,58 @@
+<table class="grid-view" summary="Bill List">
+    <tr class="header">
+        <th></th>
+        <th>Invoice #</th>
+        <th>Sent Date</th>
+        <th>Project</th>
+        <th>Previously Billed</th>
+        <th>Remaining Balance</th>
+        <th>Amount</th>
+
+    </tr>
+    <% invoices.each do |i| %>
+      <%
+         remaining_amount = i.remaining_amount.presence||i.amount
+         if i.receipt_invoice(@receipt.id).present?
+           text_field_display = ""
+           value_display = "none"
+           billed_amount = i.receipt_invoice(@receipt.id).amount
+         else
+           text_field_display = "none"
+           value_display = ""
+           billed_amount = i.billed? ? i.remaining_amount : i.amount
+         end
+      %>
+      <tr>
+          <td class="center">
+              <%= check_box_tag 'invoice-chosen', i.receipt_invoice(@receipt.id).present? ? i.id : "", i.receipt_invoice(@receipt.id).present? %>
+              <% if i.receipt_invoice(@receipt.id).present? %>
+                <%= hidden_field_tag "receipt[receipts_invoices_attributes][][id]", i.receipt_invoice(@receipt.id).id %>
+              <% end %>
+              <%= hidden_field_tag "receipt[receipts_invoices_attributes][][invoice_id]", i.id %>
+              <%= hidden_field_tag 'receipt[receipts_invoices_attributes][][_destroy]', !i.receipt_invoice(@receipt.id).present? %>
+          </td>
+          <td class="center"><%= i.id %></td>
+          <td class="center"><%= i.sent_date %></td>
+          <td><%= i.estimate.project.name %></td>
+          <td class="right unpaid-amount">
+              <%= price_tag(i.billed_amount) %>
+          </td>
+          <td class="right">
+              <%= price_tag(remaining_amount, "remaining-amount") %>
+              <div class="original-remaining-amount" style="display:none">
+                  <%= remaining_amount %>
+              </div>
+          </td>
+          <td class="right">
+              $<%= text_field_tag 'receipt[receipts_invoices_attributes][][amount]', billed_amount , :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10 %>
+              <div class="value-field" style="display: <%= value_display %>">
+                  <%= price(billed_amount) %>
+              </div>
+          </td>
+      </tr>
+    <% end %>
+    <tr>
+        <td class="strong" colspan="6">Total</td>
+        <td class="right" id="receipt-amount"></td>
+    </tr>
+</table>

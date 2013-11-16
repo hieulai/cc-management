@@ -1,10 +1,10 @@
 <div>
     <%= render(:partial => "layouts/accounting_sub_menu")%>
-    <h2>Delete Payment</h2>
+    <h2>Delete Receipt</h2>
 
-    <%= form_for(:payment, :url => {:action => 'destroy_payment', :id => @payment.id}) do |f| %>
+    <%= form_for(:receipt, :url => {:action => 'destroy_receipt', :id => @receipt.id}) do |f| %>
 
-      <p>Are you sure you want to delete this payment?</p>
+      <p>Are you sure you want to delete this receipt?</p>
 
       <div class="form-buttons">
           <%= submit_tag("Delete", class: 'btn') %>

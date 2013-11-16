@@ -7,6 +7,7 @@ class Estimate < ActiveRecord::Base
   has_many :items
   has_many :measurements , :dependent => :destroy
   has_one :template
+  has_many :invoices
 
   scope :current, lambda { |builder_id| where("builder_id = ? AND status = ?", builder_id, "Current Estimate") }
   scope :past, lambda { |builder_id| where("builder_id = ? AND status = ?", builder_id, "Past Estimate") }

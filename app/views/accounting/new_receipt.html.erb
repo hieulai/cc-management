@@ -1,0 +1,16 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu")%>
+    <h1 class="center">New Receipt</h1>
+
+    <%= form_for(@receipt, :url => {:action => 'create_receipt'}, html: {class: 'form-horizontal'}) do |f| %>
+
+      <%= render(:partial => "receipt_form", :locals => {:f => f})%>
+
+
+      <div class="form-buttons">
+          <%= submit_tag("Create", class: 'btn') %>
+      </div>
+
+    <% end %>
+
+</div>

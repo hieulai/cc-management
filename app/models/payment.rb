@@ -18,7 +18,7 @@ class Payment < ActiveRecord::Base
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 
   def amount
-    payments_bills.map(&:paid_amount).compact.sum if payments_bills.any?
+    payments_bills.map(&:amount).compact.sum if payments_bills.any?
   end
 
 end

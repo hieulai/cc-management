@@ -17,11 +17,11 @@
          if b.payment_bill(@payment.id).present?
            text_field_display = ""
            value_display = "none"
-           paid_amount = b.payment_bill(@payment.id).paid_amount
+           amount = b.payment_bill(@payment.id).amount
          else
            text_field_display = "none"
            value_display = ""
-           paid_amount = b.paid? ? b.remaining_amount : b.source(:total_amount)
+           amount = b.paid? ? b.remaining_amount : b.source(:total_amount)
          end
       %>
       <tr>
@@ -47,9 +47,9 @@
               </div>
           </td>
           <td class="right">
-              $<%= text_field_tag 'payment[payments_bills_attributes][][paid_amount]', paid_amount , :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10 %>
+              $<%= text_field_tag 'payment[payments_bills_attributes][][amount]', amount , :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10 %>
               <div class="value-field" style="display: <%= value_display %>">
-                  <%= price(paid_amount) %>
+                  <%= price(amount) %>
               </div>
           </td>
           <td><%= b.source(:notes) %></td>

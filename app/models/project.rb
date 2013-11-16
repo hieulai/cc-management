@@ -7,7 +7,7 @@ class Project < ActiveRecord::Base
   has_many :specifications
   has_many :purchase_orders
   has_one :tasklist
-  
+  has_many :invoices, :through => :estimates
 
   attr_accessible :name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
   :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes
