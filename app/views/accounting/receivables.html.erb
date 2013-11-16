@@ -4,7 +4,7 @@
     <%= link_to("Instructions >>", {:action => 'show'}) %>
     </br>
     <h3>Recent Invoices</h3>
-    <%= link_to("+ Invoices", {:action => 'new_invoice'}, :id => 'add-invoice', :class => 'action vew btn') %>
+    <%= link_to("+ Invoice", {:action => 'new_invoice'}, :id => 'add-invoice', :class => 'action vew btn') %>
     <%= link_to("All Invoices >>", {:action => 'invoices'}, class: 'btn f-right') %>
     <%= render(:partial => "invoices", :locals => {:invoices => @invoices}) %>
 
