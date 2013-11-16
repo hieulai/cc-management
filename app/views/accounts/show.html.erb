@@ -37,7 +37,7 @@
           </tr>
           <% balance = @account.balance %>
           <% @account.transactions.each_with_index do |t, index| %>
-            <% balance += t.amount if index >0 %>
+            <% balance += t.amount.to_f if index >0 %>
             <tr>
                 <td class="center"><%= t.date %></td>
                 <td><%= t.method %></td>
