@@ -33,10 +33,11 @@
               <th>Payee</th>
               <th>Memo</th>
               <th>Amount</th>
-
+              <th>Balance</th>
           </tr>
-          <% @account.transactions.each do |t| %>
-
+          <% balance = @account.balance %>
+          <% @account.transactions.each_with_index do |t, index| %>
+            <% balance += t.amount if index >0 %>
             <tr>
                 <td class="center"><%= t.date %></td>
                 <td><%= t.method %></td>
@@ -44,6 +45,7 @@
                 <td><%= t.payee %></td>
                 <td><%= t.memo %></td>
                 <td class="right"><%= price_tag(t.amount) %></td>
+                <td class="right"><%= price_tag(balance) %></td>
             </tr>
           <% end %>
 
