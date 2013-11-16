@@ -11,7 +11,7 @@
     <% deposits.each do |deposit| %>
       <tr class="clickable">
           <td class="center">
-              <%= deposit.deposit_date %>
+              <%= deposit.date %>
               <%= link_to("Edit", {:action => 'edit_deposit', :id => deposit.id}, :class => 'action edit clickable-link', style: 'display: none') %>
           </td>
           <td><%= deposit.account.name %></td>

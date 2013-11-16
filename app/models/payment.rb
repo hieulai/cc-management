@@ -21,4 +21,8 @@ class Payment < ActiveRecord::Base
     payments_bills.map(&:amount).compact.sum if payments_bills.any?
   end
 
+  def payee
+    vendor.try(:display_name)
+  end
+
 end

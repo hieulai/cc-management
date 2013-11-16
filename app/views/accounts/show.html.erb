@@ -23,27 +23,27 @@
 		<%= "Balance: $" %>
 		<%= @account.balance %>
 	</p>
-    <% if @account.payments.any? %>
+    <% if @account.transactions.any? %>
       <h2>Payment history:</h2>
       <table class="grid-view" summary="Payment List">
           <tr class="header">
-              <th>Reference #</th>
               <th>Date</th>
-              <th>Payee</th>
               <th>Type</th>
-              <th>Amount</th>
+              <th>Reference #</th>
+              <th>Payee</th>
               <th>Memo</th>
+              <th>Amount</th>
 
           </tr>
-          <% @account.payments.each do |payment| %>
+          <% @account.transactions.each do |t| %>
 
             <tr>
-                <td><%= payment.reference %></td>
-                <td><%= payment.date %></td>
-                <td><%= payment.vendor.try(:display_name) %></td>
-                <td><%= payment.method %></td>
-                <td class="right"><%= price_tag(payment.amount) %></td>
-                <td><%= payment.memo %></td>
+                <td class="center"><%= t.date %></td>
+                <td><%= t.method %></td>
+                <td><%= t.reference %></td>
+                <td><%= t.payee %></td>
+                <td><%= t.memo %></td>
+                <td class="right"><%= price_tag(t.amount) %></td>
             </tr>
           <% end %>
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131116014039) do
+ActiveRecord::Schema.define(:version => 20131116150439) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -231,10 +231,10 @@ ActiveRecord::Schema.define(:version => 20131116014039) do
   create_table "deposits", :force => true do |t|
     t.integer  "builder_id"
     t.integer  "account_id"
-    t.date     "deposit_date"
+    t.date     "date"
     t.text     "notes"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "deposits_receipts", :force => true do |t|
