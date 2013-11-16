@@ -7,6 +7,8 @@
       <%= link_to "Print", {:action => 'invoice', :id => @invoice.id, :format => :pdf}, :target => '_blank' %>
       <br/>
       <%= link_to "Email", {:action => 'invoice_email', :id => @invoice.id}, :target => '_blank' %>
+      <br/>
+      <%= link_to("Delete", {:action => 'delete_invoice', :id => @invoice.id}, :class => 'btn btn-danger') %>
   </div>
 	<%= render(:partial => "invoice_form", :locals => {:f => f})%>
 

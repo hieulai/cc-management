@@ -15,7 +15,7 @@
     </thead>
     <tbody>
     <% bills.each do |b| %>
-      <tr <% unless b.generated? || b.paid? %> class="clickable" <% else %> class="unclickable" <% end %> >
+      <tr class="<%= b.generated? || b.paid? ? "unclickable" : "clickable" %>" >
           <td class="center">
               <%= b.id %>
               <% unless b.generated? || b.paid? %>

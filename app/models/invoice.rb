@@ -1,4 +1,6 @@
 class Invoice < ActiveRecord::Base
+  before_destroy :check_readonly
+
   belongs_to :builder
   belongs_to :estimate
   has_many :invoices_items, :dependent => :destroy
@@ -6,13 +8,14 @@ class Invoice < ActiveRecord::Base
   has_many :receipts_invoices, :dependent => :destroy
   has_many :receipts, :through => :receipts_invoices
 
-
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
   attr_accessible :reference, :sent_date, :estimate_id, :invoices_items_attributes, :remaining_amount
 
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
+
+  before_save :check_readonly
 
   validates_presence_of :estimate, :builder
 
@@ -35,5 +38,12 @@ class Invoice < ActiveRecord::Base
   private
   def unbillable_item(attributes)
     attributes['item_id'].blank? || !Item.find(attributes['item_id'].to_i).billable?(self.id)
+  end
+
+  def check_readonly
+    if billed?
+      errors[:base] << "This record is readonly"
+      false
+    end
   end
 end

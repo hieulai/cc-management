@@ -109,8 +109,11 @@ class AccountingController < ApplicationController
 
   def destroy_receipt
     @receipt = Receipt.find(params[:id])
-    @receipt.destroy
-    redirect_to(:action => 'receipts')
+    if @receipt.destroy
+      redirect_to(:action => 'receipts')
+    else
+      render :delete_receipt
+    end
   end
 
   def invoices
@@ -178,8 +181,11 @@ class AccountingController < ApplicationController
 
   def destroy_invoice
     @invoice = Invoice.find(params[:id])
-    @invoice.destroy
-    redirect_to(:action => 'invoices')
+    if @invoice.destroy
+      redirect_to(:action => 'invoices')
+    else
+      render :delete_invoice
+    end
   end
 
   def purchase_orders

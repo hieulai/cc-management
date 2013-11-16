@@ -10,7 +10,7 @@
     </thead>
     <tbody>
     <% invoices.each do |invoice| %>
-      <tr class="clickable">
+      <tr class="<%= invoice.billed? ? "unclickable" : "clickable" %>" >
           <td>
               <%= invoice.reference %>
               <%= link_to("Edit", {:action => 'edit_invoice', :id => invoice.id}, :class => 'action edit clickable-link', style: 'display: none') %>

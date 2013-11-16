@@ -1,4 +1,6 @@
 class Receipt < ActiveRecord::Base
+  before_destroy :check_readonly
+
   belongs_to :builder
   belongs_to :account
   belongs_to :client
@@ -13,6 +15,8 @@ class Receipt < ActiveRecord::Base
   default_scope order("received_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
+
+  before_save :check_readonly
 
   validates_presence_of :account, :client, :builder, :method
 
@@ -32,5 +36,12 @@ class Receipt < ActiveRecord::Base
 
   def deposit_receipt(deposit_id)
     self.deposits_receipts.where(:deposit_id => deposit_id).first
+  end
+
+  def check_readonly
+    if billed?
+      errors[:base] << "This record is readonly"
+      false
+    end
   end
 end
