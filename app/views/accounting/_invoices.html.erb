@@ -1,7 +1,6 @@
 <table class="grid-view scrollable" summary="Invoice Items List" cellspacing="0">
     <thead>
     <tr class="header">
-        <th>Actions</th>
         <th>Reference #</th>
         <th>Created Date</th>
         <th>Sent Date</th>
@@ -11,13 +10,10 @@
     </thead>
     <tbody>
     <% invoices.each do |invoice| %>
-      <tr>
-          <td class="center">
-              <%= link_to("Edit", {:action => 'edit_invoice', :id => invoice.id}, :class => 'action edit') %>
-              <%= link_to("Delete", {:action => 'delete_invoice', :id => invoice.id}, :class => 'action edit') %>
-          </td>
+      <tr class="clickable">
           <td>
               <%= invoice.reference %>
+              <%= link_to("Edit", {:action => 'edit_invoice', :id => invoice.id}, :class => 'action edit clickable-link', style: 'display: none') %>
           </td>
           <td class="center"><%= date_tag(invoice.created_at) %></td>
           <td class="center"><%= invoice.sent_date %></td>
