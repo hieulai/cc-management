@@ -20,6 +20,14 @@ var text_to_number = function (c) {
     return Number(c.replace(/[^-0-9\.]+/g, ""));
 };
 
+var fillValue = function (selector, value, empty) {
+    if (!empty) {
+        $(selector).html(number_to_currency_with_unit(value, 2, '.', ','));
+    } else {
+        $(selector).text("");
+    }
+};
+
 /**
  * Global Total calculation based on column names
  */
@@ -36,11 +44,7 @@ function calculateTotals(s) {
             }
             amount += text_to_number(value);
         });
-        if (!empty) {
-            $(this).text(number_to_currency_with_unit(amount, 2, '.', ','));
-        } else {
-            $(this).text("");
-        }
+        fillValue(this, amount, empty);
     })
 };
 
@@ -62,11 +66,7 @@ function calculateSubTotals(s) {
             }
             amount += text_to_number(value);
         });
-        if (!empty) {
-            $(this).text(number_to_currency_with_unit(amount, 2, '.', ','));
-        } else {
-            $(this).text("");
-        }
+        fillValue(this, amount, empty);
     })
 };
 

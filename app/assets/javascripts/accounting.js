@@ -16,10 +16,15 @@ var calculatePurchaseAmount = function (obj, f){
 var calculatePurchasableSubTotalAndTotal = function () {
     if ($("#total").size() > 0) {
         var subtotal = 0;
+        var empty = true;
         $('.actual-amount').each(function () {
-            subtotal += text_to_number($(this).text());
+            var value = $(this).text();
+            if (value.trim() != "" && empty) {
+                empty = false;
+            }
+            subtotal += text_to_number(value);
         });
-        $('#subtotal').html(subtotal == 0 ? "" : number_to_currency_with_unit(subtotal, 2, '.', ','));
+        fillValue("#subtotal", subtotal, empty);
         var total = subtotal;
         if ($('input[name$="[sales_tax_rate]"]').size() > 0) {
             var salesTax = subtotal * text_to_number($('input[name$="[sales_tax_rate]"]').val()) / 100;
@@ -30,7 +35,7 @@ var calculatePurchasableSubTotalAndTotal = function () {
             var shipping = text_to_number($('input[name$="[shipping]"]').val());
             total += shipping;
         }
-        $('#total').html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
+        fillValue("#total", total, empty);
     }
 };
 

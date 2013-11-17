@@ -71,7 +71,7 @@ module Purchasable
         if Item.exists?(i[:id])
           item = Item.find(i[:id])
           updated_cost = item.actual_cost.to_f + i[:actual_cost].to_f
-          item.update_attribute(:actual_cost, updated_cost == 0 ? nil : updated_cost)
+          item.update_attribute(:actual_cost, updated_cost)
         end
       end
     end
