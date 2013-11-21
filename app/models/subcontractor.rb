@@ -1,6 +1,6 @@
 class Subcontractor < ActiveRecord::Base
   
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   attr_accessible :company,:first_name,:last_name,:email,:primary_phone,:secondary_phone,:website,:address,:city,:state,:zipcode,:notes, 
   :trade, :primary_phone_tag, :secondary_phone_tag, :file
   

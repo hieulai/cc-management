@@ -1,7 +1,7 @@
 class Invoice < ActiveRecord::Base
   before_destroy :check_readonly
 
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :estimate
   has_many :invoices_items, :dependent => :destroy
   has_many :items, :through => :invoices_items

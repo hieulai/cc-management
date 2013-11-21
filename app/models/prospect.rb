@@ -1,5 +1,5 @@
 class Prospect < ActiveRecord::Base
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   
   attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone, 
       :address, :city, :state, :zipcode, :notes, :last_contacted, :lead_source, :primary_phone_tag, :secondary_phone_tag

@@ -29,6 +29,8 @@ end
 gem 'roo'
 gem 'to_xls', '~> 1.0.0'
 gem 'carrierwave'
+gem 'fog'
+gem 'unf'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'cocoon'

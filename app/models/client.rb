@@ -1,6 +1,6 @@
 class Client < ActiveRecord::Base
   
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   has_many :projects, dependent: :destroy
   has_many :invoices, :through => :projects
   

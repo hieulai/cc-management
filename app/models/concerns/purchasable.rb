@@ -5,7 +5,7 @@ module Purchasable
     belongs_to :project
     belongs_to :vendor
     belongs_to :categories_template
-    belongs_to :builder
+    belongs_to :builder, :class_name => "Base::Builder"
 
     has_many :items, :dependent => :destroy
 

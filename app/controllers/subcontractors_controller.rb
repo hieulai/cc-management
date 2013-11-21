@@ -24,7 +24,7 @@ class SubcontractorsController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @subcontractor = Subcontractor.new(params[:subcontractor])
     #save subject
     if @subcontractor.save

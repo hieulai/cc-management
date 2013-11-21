@@ -26,14 +26,14 @@ class LeadsController < ApplicationController
   
   def create_from_new
     #creates new project, but is originally known as a "Lead"
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @client = Client.create(params[:client])
     @project = Project.new(params[:project])
     @project.builder_id = session[:builder_id]
     #save subject
     if @project.save 
       @client.projects << @project
-      #Attaches Client to Builder
+      #Attaches Client to Base::Builder
       @builder.clients << @client
       redirect_to(:action => 'list_current_leads')
     else
@@ -44,7 +44,7 @@ class LeadsController < ApplicationController
   
   def create_from_existing
     #creates new project, but is originally known as a "Lead"
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @client = Client.find(params[:client][:id])
     @project = Project.create(params[:project])
     @project.builder_id = session[:builder_id]

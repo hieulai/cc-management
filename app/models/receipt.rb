@@ -1,7 +1,7 @@
 class Receipt < ActiveRecord::Base
   before_destroy :check_readonly
 
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
   belongs_to :client
   has_many :receipts_invoices, :dependent => :destroy

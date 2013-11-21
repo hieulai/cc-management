@@ -1,7 +1,7 @@
 class ChangeOrder < ActiveRecord::Base
   before_destroy :check_destroyable
 
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :project
   has_many :change_orders_categories, :dependent => :delete_all
 

@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @category = Category.find(params[:category][:id]) unless params[:category].blank?
     @item = Item.new(params[:item])
 

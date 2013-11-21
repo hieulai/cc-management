@@ -40,7 +40,7 @@ class EstimatesController < ApplicationController
     end
 
     def create
-      @builder = Builder.find(session[:builder_id])
+      @builder = Base::Builder.find(session[:builder_id])
       #Reads in the project ID selected by the User
       @project = Project.find(params[:project][:id])
       #Reads in the project ID selected by the User

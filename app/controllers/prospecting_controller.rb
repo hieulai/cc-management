@@ -14,7 +14,7 @@ class ProspectingController < ApplicationController
 
   def create
     #Instantiate a new object using form parameters
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @prospect = Prospect.new(params[:prospect])
     #save subject
     if @prospect.save

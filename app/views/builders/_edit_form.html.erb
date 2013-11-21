@@ -58,12 +58,19 @@
         <%= f.text_field(:slogan) %>
     </div>
 </div>
-<div class="control-group">
-    <%= f.label :logo, "Logo:", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= image_tag(@builder.logo_url) if @builder.logo? %>
-        <%= f.file_field :logo %>
-    </div>
-</div>
+
+<%= f.fields_for :image do |imf| %>
+  <div class="control-group">
+      <%= imf.label :name, "Logo:", class: 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= image_tag(@builder.image.name_url) if @builder.image.try(:name).present? %>
+          <%= imf.file_field :name %>
+      </div>
+  </div>
+<% end %>
+
+
+
+
 
 

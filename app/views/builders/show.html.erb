@@ -46,7 +46,7 @@
   </p>
   <p>
       <%= "Logo:" %>
-      <%= image_tag(@builder.logo_url) if @builder.logo? %>
+      <%= image_tag(@builder.image.name_url) if @builder.image.present? %>
   </p>
 	
 	

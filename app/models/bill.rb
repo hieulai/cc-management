@@ -3,7 +3,7 @@ class Bill < ActiveRecord::Base
 
   before_destroy :check_readonly
 
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :purchase_order
   belongs_to :bid
   has_many :payments_bills, :dependent => :destroy

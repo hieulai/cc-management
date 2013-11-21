@@ -1,7 +1,7 @@
 class Template < ActiveRecord::Base
   before_destroy :check_destroyable
 
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :estimate
   has_many :categories_templates
   has_many :categories, class_name: 'Category', through: :categories_templates, source: :category

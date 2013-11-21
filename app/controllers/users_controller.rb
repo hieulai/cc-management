@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @user = @builder.users.new(params[:user])
     #save subject
     if @user.save

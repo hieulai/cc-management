@@ -30,7 +30,7 @@ class VendorsController < ApplicationController
   
     def create
       #Instantiate a new object using form parameters
-      @builder = Builder.find(session[:builder_id])
+      @builder = Base::Builder.find(session[:builder_id])
       @vendor = Vendor.new(params[:vendor])
       #save subject
       if @vendor.save

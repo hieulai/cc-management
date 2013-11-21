@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
   belongs_to :client
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   has_many :estimates
   has_many :bids
   has_many :change_orders

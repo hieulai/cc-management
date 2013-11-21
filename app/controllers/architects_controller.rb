@@ -23,7 +23,7 @@ class ArchitectsController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @architect = Architect.new(params[:architect])
     #save subject
     if @architect.save

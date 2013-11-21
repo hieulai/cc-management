@@ -8,20 +8,21 @@ class BuildersController < ApplicationController
   
   #User actions
   def show
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
   end
   
   #Creation of a builder happens in User->Registration
   
   def edit
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
+    @builder.build_image unless @builder.image.present?
   end
   
   def update
     #Find object using form parameters
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     #Update subject
-    if @builder.update_attributes(params[:builder])
+    if @builder.update_attributes(params[:base_builder])
       #if save succeeds, redirect to list action
       redirect_to(:action => 'show')
     else

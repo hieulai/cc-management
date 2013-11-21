@@ -21,7 +21,7 @@ class TasklistsController < ApplicationController
   end
   
   def create
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @tasklist = Tasklist.new(params[:tasklist])
     #saves creation of Estimate
     if @tasklist.save

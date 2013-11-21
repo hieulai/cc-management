@@ -1,5 +1,5 @@
 class Vendor < ActiveRecord::Base
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   has_many :bid, :dependent => :destroy
   has_many :payments
   has_many :bills

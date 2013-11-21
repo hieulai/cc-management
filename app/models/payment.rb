@@ -1,6 +1,6 @@
 class Payment < ActiveRecord::Base
 
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
   belongs_to :vendor
   has_many :payments_bills, :dependent => :destroy

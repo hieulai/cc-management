@@ -35,7 +35,7 @@ module ApplicationHelper
   end
 
   def pdf_image_tag(image, options = {})
-    options[:src] = File.expand_path(Rails.root) + '/public' + image
+    options[:src] =  image
     tag(:img, options)
   end
 

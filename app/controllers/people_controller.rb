@@ -31,7 +31,7 @@ class PeopleController < ApplicationController
   
     def create_vendor
       #Instantiate a new object using form parameters
-      @builder = Builder.find(session[:builder_id])
+      @builder = Base::Builder.find(session[:builder_id])
       @vendor = Vendor.new(params[:vendor])
       #save subject
       if @vendor.save
@@ -85,7 +85,7 @@ class PeopleController < ApplicationController
   
     def create_contact
       #Instantiate a new object using form parameters
-      @builder = Builder.find(session[:builder_id])
+      @builder = Base::Builder.find(session[:builder_id])
       @contact = Contact.new(params[:contact])
       #save subject
       if @contact.save

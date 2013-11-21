@@ -2,7 +2,7 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
 
   #relations
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
 
   #Variables
   attr_accessible :first_name, :last_name, :email, :primary_phone, :authority, :legacy_salt, :legacy_hashed_password, :password

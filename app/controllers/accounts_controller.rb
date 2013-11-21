@@ -15,7 +15,7 @@ class AccountsController < ApplicationController
   
   def create
     #Instantiate a new object using form parameters
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @account = Account.new(params[:account])
     #save subject
     if @account.save

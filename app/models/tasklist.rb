@@ -1,7 +1,7 @@
 class Tasklist < ActiveRecord::Base
 
   belongs_to :project
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   has_many :tasks, dependent: :destroy
 
   attr_accessible :name, :tasks_attributes, :builder_id

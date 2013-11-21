@@ -4,7 +4,7 @@ class Item < ActiveRecord::Base
   before_destroy :check_readonly
 
   # belongs_to :template
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :category
   belongs_to :purchase_order
   belongs_to :bill

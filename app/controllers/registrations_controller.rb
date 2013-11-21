@@ -3,7 +3,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def create
     #Instantiate a new object using form parameters
-    @builder = Builder.new(params[:builder])
+    @builder = Base::Builder.new(params[:builder])
     @user = User.new(params[:user])
     @builder.save
     @user.authority = "Owner"

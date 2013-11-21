@@ -10,7 +10,7 @@ class CategoriesController < ApplicationController
   end
 
   def create
-    @builder = Builder.find(session[:builder_id])
+    @builder = Base::Builder.find(session[:builder_id])
     @category = Category.new(params[:category])
 
     if @category.save

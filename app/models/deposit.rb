@@ -1,5 +1,5 @@
 class Deposit < ActiveRecord::Base
-  belongs_to :builder
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
   has_many :deposits_receipts, :dependent => :destroy
   has_many :receipts, :through => :deposits_receipts
