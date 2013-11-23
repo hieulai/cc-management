@@ -61,6 +61,17 @@ module Purchasable
       end
     end
 
+    def item_description(item_id)
+      if Item.exists?(item_id)
+        self.amount.try(:each) do |i|
+          if item_id.to_s == i[:id]
+            return i[:description]
+          end
+        end
+        return Item.find(item_id).description
+      end
+    end
+
     private
     def default_init
       self.due_date||=  1.month.from_now
