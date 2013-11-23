@@ -5,8 +5,7 @@
         <%= hidden_field_tag 'items[][name]', item.name %>
     </td>
     <td>
-        <%= item.description %>
-        <%= hidden_field_tag 'items[][description]', item.description %>
+        <%= text_field_tag 'items[][description]', item.description, :class => "text-field"%>
     </td>
     <td class="right">
         <%= text_field_tag 'items[][qty]', item.qty, :class => "text-field input-mini"%>
