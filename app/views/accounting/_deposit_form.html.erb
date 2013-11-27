@@ -23,6 +23,10 @@
     <div class="controls"><%= f.date_select(:date, {}, {class: 'input-medium'}) %></div>
 </div>
 <div class="control-group">
+    <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>
+    <div class="controls"><%= f.text_field(:reference) %></div>
+</div>
+<div class="control-group">
     <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
     <div class="controls"><%= f.text_area(:notes, :size => '10x3') %></div>
 </div>
