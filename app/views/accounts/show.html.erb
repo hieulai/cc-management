@@ -20,8 +20,8 @@
 		<%= @account.prefix %>
 	</p>
 	<p>
-		<%= "Balance: $" %>
-		<%= @account.balance %>
+		<%= "Balance: " %>
+		<%= price_tag(@account.balance) %>
 	</p>
     <% if @account.transactions.any? %>
       <h2>Payment history:</h2>
