@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131127144424) do
+ActiveRecord::Schema.define(:version => 20131129074734) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -453,7 +453,6 @@ ActiveRecord::Schema.define(:version => 20131127144424) do
 
   create_table "receipts", :force => true do |t|
     t.integer  "builder_id"
-    t.integer  "account_id"
     t.integer  "client_id"
     t.string   "method"
     t.date     "received_at"

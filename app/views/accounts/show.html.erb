@@ -54,7 +54,11 @@
                 <td class="right"><%= price_tag(t.amount) %></td>
                 <td class="right"><%= price_tag(balance) %></td>
             </tr>
-            <% balance += t.amount.to_f%>
+            <% if t.instance_of? Payment %>
+                <% balance += t.amount.to_f%>
+            <% elsif t.instance_of? Deposit %>
+                <% balance -= t.amount.to_f%>
+            <% end %>
           <% end %>
 
       </table>

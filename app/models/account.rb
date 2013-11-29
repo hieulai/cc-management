@@ -2,7 +2,6 @@ class Account < ActiveRecord::Base
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :payments
   has_many :deposits
-  has_many :receipts
   
   attr_accessible :name,:balance,:number,:category,:subcategory,:prefix
 

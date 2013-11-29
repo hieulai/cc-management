@@ -9,6 +9,8 @@ class Deposit < ActiveRecord::Base
 
   default_scope order("date DESC")
 
+  after_update :update_account_balance, :if => :account_id_changed?
+
   validates_presence_of :account, :builder
 
   def amount
@@ -16,7 +18,7 @@ class Deposit < ActiveRecord::Base
   end
 
   def method
-
+      "Deposit"
   end
 
   def memo
@@ -25,5 +27,15 @@ class Deposit < ActiveRecord::Base
 
   def payee
 
+  end
+
+  private
+  def update_account_balance
+    old_account = Account.find(account_id_was)
+    account = Account.find(account_id)
+    deposits_receipts.each do |dr|
+      old_account.update_attribute(:balance, old_account.balance + dr.amount)
+      account.update_attribute(:balance, account.balance - dr.amount)
+    end
   end
 end

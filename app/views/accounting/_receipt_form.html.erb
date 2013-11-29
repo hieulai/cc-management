@@ -19,10 +19,6 @@
     <div class="controls"><%= f.select(:client_id, clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %></div>
 </div>
 <div class="control-group">
-    <%= f.label :account_id, "Deposit to", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.select(:account_id, Account.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %></div>
-</div>
-<div class="control-group">
     <%= f.label :method, "Payment Type", class: 'col-lg-2 control-label' %>
     <div class="controls"><%= f.select(:method, Receipt::METHODS, {:include_blank => true}) %></div>
 </div>

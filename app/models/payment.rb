@@ -27,6 +27,7 @@ class Payment < ActiveRecord::Base
     vendor.try(:display_name)
   end
 
+  private
   def update_account_balance
     old_account = Account.find(account_id_was)
     account = Account.find(account_id)

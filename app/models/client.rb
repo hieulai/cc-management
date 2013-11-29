@@ -11,6 +11,8 @@ class Client < ActiveRecord::Base
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")}
 
   scope :has_unbilled_invoices, lambda { |builder_id| joins(:invoices).where("clients.builder_id= ? AND (invoices.remaining_amount is NULL OR invoices.remaining_amount > 0)", builder_id).uniq.all }
+
+  scope :has_unbilled_receipts, lambda { |builder_id| joins(:receipts).where("clients.builder_id= ? AND (receipts.remaining_amount is NULL OR receipts.remaining_amount > 0)", builder_id).uniq.all }
       
   def full_name
      "#{first_name} #{last_name}"

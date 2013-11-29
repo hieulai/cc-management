@@ -2,14 +2,13 @@ class Receipt < ActiveRecord::Base
   before_destroy :check_readonly
 
   belongs_to :builder, :class_name => "Base::Builder"
-  belongs_to :account
   belongs_to :client
   has_many :receipts_invoices, :dependent => :destroy
   has_many :invoices, :through => :receipts_invoices
   has_many :deposits_receipts, :dependent => :destroy
   has_many :deposits, :through => :deposits_receipts
 
-  attr_accessible :method, :notes, :received_at, :reference, :client_id, :account_id, :receipts_invoices_attributes, :remaining_amount
+  attr_accessible :method, :notes, :received_at, :reference, :client_id, :receipts_invoices_attributes, :remaining_amount
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true
 
   default_scope order("received_at DESC")
@@ -18,7 +17,7 @@ class Receipt < ActiveRecord::Base
 
   before_save :check_readonly
 
-  validates_presence_of :account, :client, :builder, :method
+  validates_presence_of :client, :builder, :method
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 

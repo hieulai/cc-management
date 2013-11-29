@@ -17,7 +17,7 @@ class AccountingController < ApplicationController
 
   def new_deposit
     @deposit = Deposit.new
-    @receipts = Array.new
+    @receipts = Receipt.unbilled
   end
 
   def create_deposit
@@ -26,14 +26,14 @@ class AccountingController < ApplicationController
     if @deposit.save
       redirect_to(:action => 'deposits')
     else
-      @receipts = Array.new
+      @receipts = Receipt.unbilled
       render('new_deposit')
     end
   end
 
   def edit_deposit
     @deposit = Deposit.find(params[:id])
-    @receipts = (@deposit.receipts + @deposit.account.receipts.unbilled).uniq
+    @receipts = (@deposit.receipts + Receipt.unbilled).uniq
   end
 
   def update_deposit

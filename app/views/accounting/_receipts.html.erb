@@ -5,7 +5,6 @@
         <th>Date Received</th>
         <th>Client</th>
         <th>Payment Type</th>
-        <th>Deposit to</th>
         <th>Amount</th>
         <th>Notes</th>
     </tr>
@@ -20,7 +19,6 @@
           <td class="center"><%= receipt.received_at %></td>
           <td><%= receipt.client.try(:full_name) %></td>
           <td><%= receipt.method %></td>
-          <td><%= receipt.account.name %></td>
           <td class="right"><%= price_tag(receipt.amount) %></td>
           <td><%= receipt.notes %></td>
       </tr>

@@ -9,7 +9,7 @@ class DepositsReceipt < ActiveRecord::Base
 
   private
   def charge_account_and_update_receipt
-    self.deposit.account.update_attribute(:balance, self.deposit.account.balance - self.amount)
+    self.deposit.account.update_attribute(:balance, self.deposit.account.balance + self.amount)
     # Avoid overbilled
     remaining_amount = self.receipt.remaining_amount.presence ||self.receipt.amount
     self.amount = remaining_amount if self.amount > remaining_amount
@@ -17,7 +17,7 @@ class DepositsReceipt < ActiveRecord::Base
   end
 
   def refund_account_and_update_receipt
-    self.deposit.account.update_attribute(:balance, self.deposit.account.balance + self.amount_was.to_f)
+    self.deposit.account.update_attribute(:balance, self.deposit.account.balance - self.amount_was.to_f)
     remaining_amount = self.receipt.billed? ? self.receipt.remaining_amount + self.amount_was.to_f : nil
     self.receipt.update_column(:remaining_amount, remaining_amount)
   end
