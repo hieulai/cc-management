@@ -37,9 +37,16 @@
           </tr>
           <% balance = @account.balance %>
           <% @account.transactions.each_with_index do |t, index| %>
-            <% balance += t.amount.to_f if index >0 %>
             <tr>
-                <td class="center"><%= t.date %></td>
+            <tr class="clickable">
+                <td class="center">
+                    <%= t.date %>
+                    <% if t.instance_of? Payment %>
+                      <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_payment', :id => t.id}, :class => 'action edit clickable-link', style: 'display: none') %>
+                    <% elsif t.instance_of? Deposit %>
+                      <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_deposit', :id => t.id}, :class => 'action edit clickable-link', style: 'display: none') %>
+                    <% end %>
+                </td>
                 <td><%= t.method %></td>
                 <td><%= t.reference %></td>
                 <td><%= t.payee %></td>
@@ -47,6 +54,7 @@
                 <td class="right"><%= price_tag(t.amount) %></td>
                 <td class="right"><%= price_tag(balance) %></td>
             </tr>
+            <% balance += t.amount.to_f%>
           <% end %>
 
       </table>
