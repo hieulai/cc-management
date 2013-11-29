@@ -34,8 +34,8 @@ class Deposit < ActiveRecord::Base
     old_account = Account.find(account_id_was)
     account = Account.find(account_id)
     deposits_receipts.each do |dr|
-      old_account.update_attribute(:balance, old_account.balance + dr.amount)
-      account.update_attribute(:balance, account.balance - dr.amount)
+      old_account.update_attribute(:balance, old_account.balance - dr.amount)
+      account.update_attribute(:balance, account.balance + dr.amount)
     end
   end
 end
