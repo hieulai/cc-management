@@ -19,10 +19,10 @@
 		<%= "Account Prefix:" %>
 		<%= @account.prefix %>
 	</p>
-	<p>
-		<%= "Balance: " %>
-		<%= price_tag(@account.balance) %>
-	</p>
+	<div>
+		<%= "Balance:" %>
+		<%= price_tag(@account.balance,"inline-block") %>
+	</div>
     <% if @account.transactions.any? %>
       <h2>Payment history:</h2>
       <table class="grid-view" summary="Payment List">
