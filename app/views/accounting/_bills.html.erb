@@ -15,11 +15,15 @@
     </thead>
     <tbody>
     <% bills.each do |b| %>
-      <tr class="<%= b.generated? || b.paid? ? "unclickable" : "clickable" %>" >
+      <tr class="<%= b.paid? ? "unclickable" : "clickable" %>" >
           <td class="center">
               <%= b.id %>
-              <% unless b.generated? || b.paid? %>
+              <% unless b.paid? %>
+                <% if b.generated? %>
+                  <%= link_to("Edit", {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :class => 'action edit clickable-link', style: 'display: none') %>
+                <% else %>
                   <%= link_to("Edit", {:action => 'edit_bill', :id => b.id}, :class => 'action edit clickable-link', style: 'display: none') %>
+                <% end %>
               <% end %>
           </td>
           <td class="center"><%= link_to b.purchase_order_id, {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :target => "_blank" if b.purchase_order.present? %></td>

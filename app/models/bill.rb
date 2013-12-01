@@ -11,7 +11,8 @@ class Bill < ActiveRecord::Base
 
   default_scope order("due_date DESC")
 
-  attr_accessible :purchase_order_id, :remaining_amount
+  attr_accessible :purchase_order_id, :remaining_amount, :create_payment
+  attr_accessor :create_payment
 
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :paid, where('remaining_amount = 0')

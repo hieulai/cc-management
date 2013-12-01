@@ -1,6 +1,12 @@
 // Place all the styles related to the Accounting controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+#payables, #receivables{
+  a.btn{
+    width: 120px;
+  }
+}
+
 .light-blue{
   background-color: #E5F1F4
 }

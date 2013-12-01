@@ -101,6 +101,9 @@ $(document).ready(function() {
             window.location = href;
         }
     });
+    $(document).on('change', 'input[type="checkbox"].toggle', function () {
+        $($(this).attr("target")).toggle();
+    });
 })
 
 //var add_fields = function(link, association, content){

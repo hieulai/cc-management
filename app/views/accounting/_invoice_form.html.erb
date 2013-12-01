@@ -22,7 +22,7 @@
 <% end %>
 <div class="control-group">
     <%= f.label :sent_date, "Sent Date", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.date_select(:sent_date, {}, {class: 'input-medium'}) %></div>
+    <div class="controls"><%= f.date_select(:sent_date, {order: [:month, :day, :year]}, {class: 'input-medium'}) %></div>
 </div>
 <div class="control-group">
     <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>

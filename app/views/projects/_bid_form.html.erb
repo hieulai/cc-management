@@ -40,7 +40,7 @@
 </div>
 <div class="control-group due-date-inputs" <% unless @bid.chosen? %> style="display: none" <% end %> >
     <%= f.label :due_date, "Due Date", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.date_select :due_date, {}, {class: 'input-medium'} %></div>
+    <div class="controls"><%= f.date_select :due_date, {order: [:month, :day, :year]}, {class: 'input-medium'} %></div>
 </div>
 
 
