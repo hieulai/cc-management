@@ -9,6 +9,8 @@
     </div>
 
     </br>
-    <%= link_to("+ Bill", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew btn') %>
+    <div class="button-group">
+        <%= link_to("+ Bill", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew btn') %>
+    </div>
     <%= render(:partial => "bills", :locals => {:bills => @bills}) %>
 </div>

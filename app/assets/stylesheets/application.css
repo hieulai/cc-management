@@ -71,6 +71,30 @@ a.uneditable, a.uneditable:hover{
     float:right;
 }
 
+.dataTable thead{
+    cursor: pointer;
+}
+
+.sorting {
+    background: url('/assets/sort_both.gif') no-repeat center right;
+}
+
+.sorting_asc {
+    background: url('/assets/sort_asc.gif') no-repeat center right;
+}
+
+.sorting_desc {
+    background: url('/assets/sort_desc.gif') no-repeat center right;
+}
+
+.dataTables_wrapper label input{
+    margin: auto 10px 0 auto;
+}
+
+.button-group, .dataTables_wrapper label{
+    display: inline-block;
+}
+
 ul.ui-autocomplete {
   position: absolute;
   list-style: none;

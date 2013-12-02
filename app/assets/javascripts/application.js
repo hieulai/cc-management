@@ -16,6 +16,8 @@
 //= require cocoon
 //= require autocomplete-rails
 //= require bootstrap-modal
+//= require jquery.dataTables
+//= require jquery.dataTables.extends
 //= require_tree .
 //= stub wkhtmltopdf_tableSplitHack
 
@@ -104,12 +106,34 @@ $(document).ready(function() {
     $(document).on('change', 'input[type="checkbox"].toggle', function () {
         $($(this).attr("target")).toggle();
     });
-})
 
-//var add_fields = function(link, association, content){
-//	var new_id = new Date().getTime();
-//	var regexp = new RegExp("new_" + association, "g")
-//	$(link).up().insert({
-//		before: content.replace(regexp, new_id)
-//	});
-//}
+    $(".data-tables").each(function(){
+        var options = { "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": false,
+            "bAutoWidth": false
+        }
+        if ($(this).closest("#payables").size() > 0 ||  $(this).closest("#receivables").size()>0){
+            options.sScrollY = "137px";
+        }
+
+        // Setup ordering on currency columns
+        if ($(this).attr("id") == "payment-list") {
+            options.aoColumns = [null, null, null, null, null, {"sType": "currency"}, null];
+        } else if ($(this).attr("id") == "bill-list") {
+            options.aoColumns = [null, null, null, null, null, null, null , {"sType": "currency"}, null];
+        } else  if ($(this).attr("id") == "po-list") {
+            options.aoColumns = [null, null, null, null, null, null, {"sType": "currency"}, null];
+        } else  if ($(this).attr("id") == "invoice-list") {
+            options.aoColumns = [null, null, null, null, {"sType": "currency"}];
+        } else  if ($(this).attr("id") == "receipt-list") {
+            options.aoColumns = [null, null, null, null, {"sType": "currency"}, null];
+        } else  if ($(this).attr("id") == "deposit-list") {
+            options.aoColumns = [null, null, {"sType": "currency"}, null];
+        }
+        $(this).dataTable(options);
+        $("#" + $(this).attr("id") + "_wrapper").prev(".button-group").appendTo("#" + $(this).attr("id") + "_filter");
+    })
+})

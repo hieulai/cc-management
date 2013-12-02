@@ -82,9 +82,6 @@ var calculatePostTaxAmounts = function () {
 };
 
 $(document).ready(function() {
-    $("#payables .scrollable").tableScroll({height:137});
-    $("#receivables .scrollable").tableScroll({height:137});
-
     calculatePostTaxAmounts();
     calculatePurchasableSubTotalAndTotal();
 
@@ -144,5 +141,4 @@ $(document).ready(function() {
         calculatePostTaxAmounts();
         calculatePurchasableSubTotalAndTotal();
     });
-
 })
