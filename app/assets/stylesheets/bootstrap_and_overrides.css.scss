@@ -302,3 +302,7 @@ $fluidGridGutterWidth768:      percentage($gridGutterWidth768/$gridRowWidth768) 
 
 
 @import "bootstrap";
+
+.input-medium {
+    width: 110px;
+}

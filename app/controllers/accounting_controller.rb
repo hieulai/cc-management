@@ -419,13 +419,13 @@ class AccountingController < ApplicationController
     klass =  type.to_s.constantize
     @type = type.to_s.underscore
     @purchasable = klass.new(params[@type.to_sym])
-    purchased_items = params[:items].select { |i| i[:id].nil? }
-    amount_items = params[:items].select { |i| i[:actual_cost].present? && i[:id].present? }
+    purchased_items = params[:items].present? ? params[:items].select { |i| i[:id].nil? } : []
+    amount_items = params[:items].present? ? params[:items].select { |i| i[:actual_cost].present? && i[:id].present? } : []
     @purchasable.amount = amount_items
     @purchasable.builder_id = session[:builder_id]
     # Checking for valid payment
     if @purchasable.instance_of? Bill
-      if params[:bill][:create_payment]
+      if params[:bill][:create_payment] == "1"
         payment = Payment.new(params[:payment].merge(:builder_id => session[:builder_id],
                                                       :vendor_id => @purchasable.vendor_id,
                                                       :date => @purchasable.due_date))
@@ -444,11 +444,12 @@ class AccountingController < ApplicationController
       Item.where(:purchase_order_id => @purchasable.id).destroy_all
       @purchasable.items = Item.create(purchased_items)
       # Create payment simultaneously for bills
-      if @purchasable.instance_of?(Bill) && payment.save
+      if @purchasable.instance_of?(Bill) && payment && payment.save
         payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
       end
       redirect_to(:action => "#{@type}s")
     else
+      @bill = @purchasable
       render("new_#{@type}")
     end
   end

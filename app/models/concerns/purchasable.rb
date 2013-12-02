@@ -13,11 +13,11 @@ module Purchasable
 
     serialize :amount
 
-    after_initialize :default_init
-
     before_save :unset_actual_costs, :set_actual_costs
 
     before_destroy :unset_actual_costs
+
+    validates_presence_of :vendor, :project, :categories_template
 
     def item_amount(item_id)
       self.amount.try(:each) do |i|
@@ -70,11 +70,6 @@ module Purchasable
         end
         return Item.find(item_id).description
       end
-    end
-
-    private
-    def default_init
-      self.due_date||=  1.month.from_now
     end
 
     def set_actual_costs
