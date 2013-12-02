@@ -24,7 +24,7 @@ class AccountingController < ApplicationController
     @deposit = Deposit.new(params[:deposit])
     @deposit.builder_id = session[:builder_id]
     if @deposit.save
-      redirect_to(:action => 'deposits')
+      redirect_to(:action => 'receivables')
     else
       @receipts = Receipt.unbilled
       render('new_deposit')
@@ -45,7 +45,7 @@ class AccountingController < ApplicationController
       end
     end
     if @deposit.update_attributes(params[:deposit])
-      redirect_to(:action => 'deposits')
+      redirect_to(:action => 'receivables')
     else
       @receipts = (@deposit.receipts + @deposit.account.receipts.unbilled).uniq
       render('edit_deposit')
@@ -75,7 +75,7 @@ class AccountingController < ApplicationController
     @receipt = Receipt.new(params[:receipt])
     @receipt.builder_id = session[:builder_id]
     if @receipt.save
-      redirect_to(:action => 'receipts')
+      redirect_to(:action => 'receivables')
     else
       @invoices = Array.new
       render('new_receipt')
@@ -96,7 +96,7 @@ class AccountingController < ApplicationController
       end
     end
     if @receipt.update_attributes(params[:receipt])
-      redirect_to(:action => 'receipts')
+      redirect_to(:action => 'receivables')
     else
       @invoices = (@receipt.invoices + @receipt.client.invoices.unbilled).uniq
       render('edit_receipt')
@@ -150,7 +150,7 @@ class AccountingController < ApplicationController
     @invoice = Invoice.new(params[:invoice])
     @invoice.builder_id = session[:builder_id]
     if @invoice.save
-      redirect_to(:action => 'invoices')
+      redirect_to(:action => 'receivables')
     else
       render('new_invoice')
     end
@@ -169,7 +169,7 @@ class AccountingController < ApplicationController
       end
     end
     if @invoice.update_attributes(params[:invoice])
-      redirect_to(:action => 'invoices')
+      redirect_to(:action => 'receivables')
     else
       render('edit_invoice')
     end
@@ -275,7 +275,7 @@ class AccountingController < ApplicationController
     @payment = Payment.new(params[:payment])
     @payment.builder_id = session[:builder_id]
     if @payment.save
-      redirect_to(:action => 'payments')
+      redirect_to(:action => "payables")
     else
       @bills = Array.new
       render('new_payment')
@@ -296,7 +296,7 @@ class AccountingController < ApplicationController
       end
     end
     if @payment.update_attributes(params[:payment])
-      redirect_to(:action => 'payments')
+      redirect_to(:action => "payables")
     else
       @bills = (@payment.bills + @payment.vendor.bills.unpaid).uniq
       render('edit_payment')
@@ -447,7 +447,7 @@ class AccountingController < ApplicationController
       if @purchasable.instance_of?(Bill) && payment && payment.save
         payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
       end
-      redirect_to(:action => "#{@type}s")
+      redirect_to(:action => "payables")
     else
       @bill = @purchasable
       render("new_#{@type}")
@@ -464,7 +464,7 @@ class AccountingController < ApplicationController
     if @purchasable.update_attributes(params[@type.to_sym])
       Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
       @purchasable.items = Item.create(purchased_items)
-      redirect_to(:action => "#{@type}s")
+      redirect_to(:action => "payables")
     else
       render("edit_#{@type}")
     end

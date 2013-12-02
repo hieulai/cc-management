@@ -126,6 +126,7 @@ $(document).ready(function() {
         var itemId = $('input[name="purchased_item[id]"]').val();
         var link = $("a#add-purchased-item").attr("href");
         $("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", itemId));
+        $("a#add-purchased-item").click();
     });
 
     $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
