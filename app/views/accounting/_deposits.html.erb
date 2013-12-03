@@ -1,6 +1,7 @@
 <table class="grid-view data-tables" id="deposit-list" summary="Payment List" cellspacing="0">
     <thead>
     <tr class="header">
+        <th>Reference #</th>
         <th>Deposit Date</th>
         <th>Deposit to</th>
         <th>Amount</th>
@@ -10,9 +11,12 @@
     <tbody>
     <% deposits.each do |deposit| %>
       <tr class="clickable">
+          <td>
+              <%= deposit.reference %>
+              <%= link_to("Edit", {:action => 'edit_deposit', :id => deposit.id}, :class => 'action edit clickable-link', style: 'display: none') %>
+          </td>
           <td class="center">
               <%= deposit.date %>
-              <%= link_to("Edit", {:action => 'edit_deposit', :id => deposit.id}, :class => 'action edit clickable-link', style: 'display: none') %>
           </td>
           <td><%= deposit.account.name %></td>
           <td class="right"><%= price_tag(deposit.amount) %></td>

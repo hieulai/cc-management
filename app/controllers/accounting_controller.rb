@@ -59,7 +59,7 @@ class AccountingController < ApplicationController
   def destroy_deposit
     @deposit = Deposit.find(params[:id])
     @deposit.destroy
-    redirect_to(:action => 'deposits')
+    redirect_to(:action => "payables")
   end
 
   def receipts
@@ -110,7 +110,7 @@ class AccountingController < ApplicationController
   def destroy_receipt
     @receipt = Receipt.find(params[:id])
     if @receipt.destroy
-      redirect_to(:action => 'receipts')
+      redirect_to(:action => "payables")
     else
       render :delete_receipt
     end
@@ -182,7 +182,7 @@ class AccountingController < ApplicationController
   def destroy_invoice
     @invoice = Invoice.find(params[:id])
     if @invoice.destroy
-      redirect_to(:action => 'invoices')
+      redirect_to(:action => "payables")
     else
       render :delete_invoice
     end
@@ -215,7 +215,7 @@ class AccountingController < ApplicationController
   def destroy_purchase_order
     @purchase_order = PurchaseOrder.find(params[:id])
     if @purchase_order.destroy
-      redirect_to(:action => 'purchase_orders')
+      redirect_to(:action => "payables")
     else
       render :delete_purchase_order
     end
@@ -256,7 +256,7 @@ class AccountingController < ApplicationController
   def destroy_bill
     @bill = Bill.find(params[:id])
     if @bill.destroy
-      redirect_to(:action => 'bills')
+      redirect_to(:action => "payables")
     else
       render :delete_bill
     end
@@ -310,7 +310,7 @@ class AccountingController < ApplicationController
   def destroy_payment
     @payment = Payment.find(params[:id])
     @payment.destroy
-    redirect_to(:action => 'payments')
+    redirect_to(:action => "payables")
   end
   
   def show

@@ -131,7 +131,7 @@ $(document).ready(function() {
         } else  if ($(this).attr("id") == "receipt-list") {
             options.aoColumns = [null, null, null, null, {"sType": "currency"}, null];
         } else  if ($(this).attr("id") == "deposit-list") {
-            options.aoColumns = [null, null, {"sType": "currency"}, null];
+            options.aoColumns = [null, null, null, {"sType": "currency"}, null];
         }
         $(this).dataTable(options);
         $("#" + $(this).attr("id") + "_wrapper").prev(".button-group").appendTo("#" + $(this).attr("id") + "_filter");
