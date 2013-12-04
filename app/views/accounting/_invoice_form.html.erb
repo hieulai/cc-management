@@ -22,7 +22,10 @@
 <% end %>
 <div class="control-group">
     <%= f.label :sent_date, "Sent Date", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.date_select(:sent_date, {order: [:month, :day, :year]}, {class: 'input-medium'}) %></div>
+    <div class="controls">
+      <%= f.text_field(:sent_date, class: 'datepicker', :value => f.object.try(:sent_date).try(:strftime, '%m-%d-%Y')) %>
+        <%= f.hidden_field(:sent_date, id: 'invoice_sent_date_hidden', :value => f.object.try(:sent_date).try(:strftime, '%Y-%m-%d')) %>
+    </div>
 </div>
 <div class="control-group">
     <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>

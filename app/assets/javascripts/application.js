@@ -135,5 +135,14 @@ $(document).ready(function() {
         }
         $(this).dataTable(options);
         $("#" + $(this).attr("id") + "_wrapper").prev(".button-group").appendTo("#" + $(this).attr("id") + "_filter");
+    });
+
+    $(".datepicker").each(function(){
+        $(this).datepicker({
+            altField: "#" + $(this).next().attr("id"),
+            altFormat: "yy-mm-dd",
+            dateFormat: "mm-dd-yy"
+        });
     })
+
 })

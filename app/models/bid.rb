@@ -63,7 +63,7 @@ class Bid < ActiveRecord::Base
 
   def update_bill
     if chosen
-      create_bill(builder_id: self.project.builder_id, vendor_id: vendor_id ) unless bill.present?
+      create_bill(builder_id: self.project.builder_id, vendor_id: vendor_id, project_id: project_id, categories_template_id: categories_template_id) unless bill.present?
     elsif bill.present?
       return false if check_readonly == false
       bill.destroy

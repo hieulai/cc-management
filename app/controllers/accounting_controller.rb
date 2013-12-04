@@ -427,8 +427,7 @@ class AccountingController < ApplicationController
     if @purchasable.instance_of? Bill
       if params[:bill][:create_payment] == "1"
         payment = Payment.new(params[:payment].merge(:builder_id => session[:builder_id],
-                                                      :vendor_id => @purchasable.vendor_id,
-                                                      :date => @purchasable.due_date))
+                                                      :vendor_id => @purchasable.vendor_id))
         unless payment.valid?
           @bill = @purchasable
           payment.errors.full_messages.each do |m|

@@ -27,8 +27,11 @@
     <div class="controls"><%= f.text_field(:reference) %></div>
 </div>
 <div class="control-group">
-    <%= f.label :date, "Date Received", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.date_select(:received_at, {order: [:month, :day, :year]}, {class: 'input-medium'}) %></div>
+    <%= f.label :received_at, "Date Received", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+      <%= f.text_field(:received_at, class: 'datepicker', :value => f.object.try(:received_at).try(:strftime, '%m-%d-%Y')) %>
+      <%= f.hidden_field(:received_at, id: 'receipt_received_date_hidden', :value => f.object.try(:received_at).try(:strftime, '%Y-%m-%d')) %>
+    </div>
 </div>
 <div class="control-group">
     <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>

@@ -39,69 +39,70 @@
 
 <h3>Client Info</h3>
 <div class="control-group">
-    <%= p.label :last_contacted, 'Date Last Contacted', class: 'col-lg-2 control-label' %>
+    <%= c.label :last_contacted, 'Date Last Contacted', class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= c.date_select(:last_contacted, {:order => [:month, :day, :year], :include_blank => true}, {class: 'input-medium'}) %>
+        <%= c.text_field(:last_contacted, class: 'datepicker', :value => c.object.try(:last_contacted).try(:strftime, '%m-%d-%Y')) %>
+        <%= c.hidden_field(:last_contacted, id: 'lead_last_contacted_hidden', :value => c.object.try(:last_contacted).try(:strftime, '%Y-%m-%d')) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :company, 'Company', class: 'col-lg-2 control-label' %>
+    <%= c.label :company, 'Company', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:company) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :first_name, 'First Name', class: 'col-lg-2 control-label' %>
+    <%= c.label :first_name, 'First Name', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:first_name) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :last_name, 'Last Name', class: 'col-lg-2 control-label' %>
+    <%= c.label :last_name, 'Last Name', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:last_name) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :primary_phone, 'Primary Phone', class: 'col-lg-2 control-label' %>
+    <%= c.label :primary_phone, 'Primary Phone', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:primary_phone) %>
         <%= c.select(:primary_phone_tag, ["Cell", "Office", "Home"]) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :secondary_phone, 'Secondary Phone', class: 'col-lg-2 control-label' %>
+    <%= c.label :secondary_phone, 'Secondary Phone', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:secondary_phone) %>
         <%= c.select(:secondary_phone_tag, ["Cell", "Office", "Home"]) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :email, 'Email', class: 'col-lg-2 control-label' %>
+    <%= c.label :email, 'Email', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:email) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :address, 'Address', class: 'col-lg-2 control-label' %>
+    <%= c.label :address, 'Address', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:address) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :city, 'City', class: 'col-lg-2 control-label' %>
+    <%= c.label :city, 'City', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:city) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :state, 'State', class: 'col-lg-2 control-label' %>
+    <%= c.label :state, 'State', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:state) %>
     </div>
 </div>
 <div class="control-group">
-    <%= p.label :zipcode, 'Zipcode', class: 'col-lg-2 control-label' %>
+    <%= c.label :zipcode, 'Zipcode', class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:zipcode) %>
     </div>

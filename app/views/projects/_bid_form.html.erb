@@ -40,7 +40,10 @@
 </div>
 <div class="control-group due-date-inputs" <% unless @bid.chosen? %> style="display: none" <% end %> >
     <%= f.label :due_date, "Due Date", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.date_select :due_date, {order: [:month, :day, :year]}, {class: 'input-medium'} %></div>
+    <div class="controls">
+        <%= f.text_field(:due_date, class: 'datepicker', :value => f.object.try(:due_date).try(:strftime, '%m-%d-%Y')) %>
+        <%= f.hidden_field(:due_date, id: 'bid_due_date_hidden', :value => f.object.try(:due_date).try(:strftime, '%Y-%m-%d')) %>
+    </div>
 </div>
 
 

@@ -1,7 +1,9 @@
 <table>
 	<tr>
 		<th>Date Last Contacted</th>
-		<td><%= c.date_select(:last_contacted, :order => [:month, :day, :year], :include_blank => true) %>
+		<td>
+			<%= c.text_field(:last_contacted, class: 'datepicker', :value => c.object.try(:last_contacted).try(:strftime, '%m-%d-%Y')) %>
+        	<%= c.hidden_field(:last_contacted, id: 'lead_last_contacted_hidden', :value => c.object.try(:last_contacted).try(:strftime, '%Y-%m-%d')) %>
 	</tr>
 	<tr>
 		<th>First Name</th>

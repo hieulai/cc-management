@@ -8,11 +8,17 @@
 </div>
 <div class="control-group">
     <%= p.label :start_date, 'Start Date', class: 'col-lg-2 control-label' %>
-    <div class='controls'><%= p.date_select(:start_date, {:order => [:month, :day, :year], :include_blank => true}, {class: 'input-medium'}) %></div>
+    <div class='controls'>
+        <%= p.text_field(:start_date, class: 'datepicker', :value => p.object.try(:start_date).try(:strftime, '%m-%d-%Y')) %>
+        <%= p.hidden_field(:start_date, id: 'project_start_date_hidden', :value => p.object.try(:start_date).try(:strftime, '%Y-%m-%d')) %>
+    </div>
 </div>
 <div class="control-group">
     <%= p.label :deadline, 'Deadline', class: 'col-lg-2 control-label' %>
-    <div class='controls'><%= p.date_select(:deadline, {:order => [:month, :day, :year], :include_blank => true}, {class: 'input-medium'}) %></div>
+    <div class='controls'>
+        <%= p.text_field(:deadline, class: 'datepicker', :value => p.object.try(:deadline).try(:strftime, '%m-%d-%Y')) %>
+        <%= p.hidden_field(:deadline, id: 'project_deadline_hidden', :value => p.object.try(:deadline).try(:strftime, '%Y-%m-%d')) %>
+    </div>
 </div>
 <div class="control-group">
     <%= p.label :revenue, 'Anticipated Revenue', class: 'col-lg-2 control-label' %>

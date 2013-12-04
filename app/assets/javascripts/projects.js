@@ -104,7 +104,7 @@ $(document).ready(function () {
         calculateTotals();
     });
 
-    $('.edit_bid').on('change','input[name="bid[chosen]"]', function () {
-        $('.edit_bid').find('.due-date-inputs').toggle();
+    $('.edit_bid, .new_bid').on('change','input[name="bid[chosen]"]', function () {
+        $(this).closest("form").find('.due-date-inputs').toggle();
     });
 })

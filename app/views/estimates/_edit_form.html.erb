@@ -15,7 +15,9 @@
 </div>
 <div class="control-group">
     <%= f.label :deadline ,'Due Date', class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.date_select(:deadline, {:order => [:month, :day, :year], :include_blank => true}, {class: 'input-medium'}) %>
+    <div class="controls">
+        <%= f.text_field(:deadline, class: 'datepicker', :value => f.object.try(:deadline).try(:strftime, '%m-%d-%Y')) %>
+        <%= f.hidden_field(:deadline, id: 'estimate_deadline_hidden', :value => f.object.try(:deadline).try(:strftime, '%Y-%m-%d')) %>
     </div>
 </div>
 <div class="control-group">
