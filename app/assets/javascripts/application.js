@@ -18,6 +18,7 @@
 //= require bootstrap-modal
 //= require jquery.dataTables
 //= require jquery.dataTables.extends
+//= require shared
 //= require_tree .
 //= stub wkhtmltopdf_tableSplitHack
 
