@@ -14,7 +14,7 @@
         <% template.try(:categories_templates).try(:each) do |category_template| %>
           <%= render :partial => 'invoice_tr_category', :locals => {:category_template => category_template} %>
         <% end %>
-        <tr class="large">
+        <tr class="total large">
             <td colspan=4>
                 TOTALS
             </td>

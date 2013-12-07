@@ -266,6 +266,12 @@ table.grid-view th a
 	text-decoration: none;
 }
 
+table.grid-view .subtotal, table.grid-view .total
+{
+  border-top: solid 2px black;
+  font-weight: bold;
+}
+
 .grid-view table.items th
 {
 	background: url("bg.gif") repeat-x scroll left top white;
