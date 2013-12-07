@@ -101,8 +101,8 @@ module Purchasable
     end
 
     def destroy_purchased_categories_template
-      if categories_template.purchased && categories_template.bills.empty? && categories_template.purchase_orders.empty?
-        categories_template.destroy
+      if categories_template && categories_template.purchased && categories_template.bills.empty? && categories_template.purchase_orders.empty?
+        categories_template.category.destroy
       end
     end
   end
