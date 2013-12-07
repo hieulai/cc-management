@@ -1,7 +1,7 @@
 class CategoriesTemplate < ActiveRecord::Base
   before_destroy :check_destroyable, :destroy_items
 
-  attr_accessible :category_id, :template_id, :items_attributes
+  attr_accessible :category_id, :template_id, :items_attributes, :purchased
 
   belongs_to :template
   belongs_to :category

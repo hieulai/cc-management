@@ -2,7 +2,7 @@
    value_display = purchasable.item_chosen(item.id) ? "none" : ""
    change_order_item = item.change_orders_category_id.present? ? "change_order" : ""
 %>
-<tr class="<%= change_order_item %>">
+<tr class="item <%= change_order_item %>" id="item_<%= item.id %> ">
     <td class="center"><%= check_box_tag 'item-chosen', item.id, purchasable.item_chosen(item.id) %></td>
     <td>
         <%= item.name %>
@@ -42,5 +42,5 @@
           </div>
       </td>
     <% end %>
-    <td class="right"><%= price_tag(item.amount) %></td>
+    <td class="right"><%= price_tag(item.amount, 'amount') %></td>
 </tr>

@@ -6,59 +6,63 @@
         <th>Description</th>
         <th class="cell-price">Qty</th>
         <th class="cell-price">Rate</th>
-        <% if purchasable.class == PurchaseOrder %>
+        <% if purchasable.instance_of? PurchaseOrder %>
           <th class="cell-price">Pre-Tax Amount</th>
           <th class="cell-price">Post-Tax Amount</th>
-        <% elsif purchasable.class == Bill %>
+        <% elsif purchasable.instance_of? Bill %>
           <th class="cell-price">Amount</th>
         <% end %>
-        <th class="cell-price amount">Estimated Costs</th>
+        <th class="cell-price">Estimated Costs</th>
     </tr>
     </thead>
     <tbody>
-    <% if defined?(categories_template) && categories_template.present? && categories_template.items.any? %>
-      <% categories_template.items.each do |i| %>
-        <%= render :partial => 'purchasable_item', :locals => {:item => i, :purchasable => purchasable} %>
-
-      <% end %>
-      <% categories_template.template.estimate.project.co_items(categories_template.category).try(:each) do |i| %>
+    <% if defined?(categories_template) && categories_template.present? %>
+      <% categories_template.try(:items).try(:each) do |i| %>
         <%= render :partial => 'purchasable_item', :locals => {:item => i, :purchasable => purchasable} %>
       <% end %>
 
-      <% purchasable.items.try(:each) do |i| %>
-        <%= render :partial => 'purchased_item', :locals => {:item => i, :type => purchasable.class.name} %>
+      <% if categories_template.template %>
+        <% categories_template.template.estimate.project.co_items(categories_template.category).try(:each) do |i| %>
+          <%= render :partial => 'purchasable_item', :locals => {:item => i, :purchasable => purchasable} %>
+        <% end %>
       <% end %>
 
+      <% if categories_template == purchasable.categories_template %>
+        <% purchasable.items.try(:each) do |i| %>
+          <%= render :partial => 'purchased_item', :locals => {:item => i, :type => purchasable.class.name} %>
+        <% end %>
+      <% end %>
       <tr class="add add-item" id="add-item">
           <td colspan=12>
               <%= autocomplete_field :name, nil, items_autocomplete_name_path, :id_element => "#purchased_item_id", :update_elements => {} %>
               <%= hidden_field :purchased_item, :id %>
-              <%= link_to "+ Item", {:action => 'add_item_to_purchasable', :item_id => "", :type => purchasable.class.name }, :remote => true, :id => "add-purchased-item", :class => 'btn' %>
+              <%= link_to "+ Item", {:action => 'add_item_to_purchasable', :item_id => "", :type => purchasable.class.name}, :remote => true, :id => "add-purchased-item", :class => 'btn' %>
           </td>
       </tr>
       <tr>
           <td colspan="5">Subtotal</td>
           <td id="subtotal" class="right light-blue"></td>
-          <% if purchasable.class == PurchaseOrder %>
-              <td></td>
+          <% if purchasable.instance_of? PurchaseOrder %>
+            <td></td>
           <% end %>
-          <td class="right"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
+          <td class="right">
+              <div class="total-amount"></div>
+          </td>
       </tr>
-      <% if purchasable.class == PurchaseOrder %>
+      <% if purchasable.instance_of? PurchaseOrder %>
         <tr>
             <td colspan="5">Sales Tax</td>
             <td id="sales_tax" class="right light-blue"></td>
-            <% if purchasable.class == PurchaseOrder %>
-                <td></td>
+            <% if purchasable.instance_of? PurchaseOrder %>
+              <td></td>
             <% end %>
             <td></td>
         </tr>
-
         <tr>
             <td colspan="5">Shipping</td>
-            <td class="right light-blue">$<%= text_field_tag("#{purchasable.class.name.underscore.to_sym}[shipping]", purchasable.shipping, class:'input-mini') %></td>
-            <% if purchasable.class == PurchaseOrder %>
-                <td></td>
+            <td class="right light-blue">$<%= text_field_tag("#{purchasable.class.name.underscore.to_sym}[shipping]", purchasable.shipping, class: 'input-mini') %></td>
+            <% if purchasable.instance_of? PurchaseOrder %>
+              <td></td>
             <% end %>
             <td></td>
         </tr>
@@ -66,11 +70,14 @@
       <tr>
           <td colspan="5" class="strong">TOTAL</td>
           <td id="total" class="right light-blue strong"></td>
-          <% if purchasable.class == PurchaseOrder %>
-              <td></td>
+          <% if purchasable.instance_of? PurchaseOrder %>
+            <td></td>
           <% end %>
-          <td class="right strong"><%= price_tag(categories_template.items.map(&:amount).sum) %></td>
+          <td class="right strong">
+              <div class="total-amount"></div>
+          </td>
       </tr>
+      </tbody>
+
     <% end %>
-    </tbody>
 </table>

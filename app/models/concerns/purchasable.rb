@@ -9,13 +9,15 @@ module Purchasable
 
     has_many :items, :dependent => :destroy
 
-    attr_accessible :amount, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date
-
+    attr_accessible :amount, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date, :category_id
+    attr_accessor :category_id
     serialize :amount
 
     before_save :unset_actual_costs, :set_actual_costs
 
     before_destroy :unset_actual_costs
+
+    after_destroy :destroy_purchased_categories_template
 
     validates_presence_of :vendor, :project, :categories_template
 
@@ -98,6 +100,11 @@ module Purchasable
       end
     end
 
+    def destroy_purchased_categories_template
+      if categories_template.purchased && categories_template.bills.empty? && categories_template.purchase_orders.empty?
+        categories_template.destroy
+      end
+    end
   end
 
 end

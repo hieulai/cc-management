@@ -387,20 +387,27 @@ class AccountingController < ApplicationController
   end
 
   def show_project_categories_template
-    klass =  params[:type].to_s.constantize
+    klass = params[:type].to_s.constantize
     @type = params[:type].to_s.underscore
     @purchasable = params[:id].present? ? klass.find(params[:id]) : klass.new
-    @project = Project.find(params[@type.to_sym][:project_id])
+    @project = params[@type.to_sym][:project_id].present? ? Project.find(params[@type.to_sym][:project_id]) : nil
     respond_to do |format|
       format.js {}
     end
   end
 
-  def show_categories_template_items
+  def show_category_items
     klass =  params[:type].to_s.constantize
     @type = params[:type].to_s.underscore
     @purchasable = params[:id].present? ? klass.find(params[:id]) : klass.new
-    @categories_template = params[@type.to_sym][:categories_template_id].present? ? CategoriesTemplate.find(params[@type.to_sym][:categories_template_id]) : CategoriesTemplate.new
+    project = params[:project_id].present? ? Project.find(params[:project_id]) : nil
+    category = params[@type.to_sym][:category_id].present? ? Category.find(params[@type.to_sym][:category_id]) : nil
+    if project && category
+      @categories_template = CategoriesTemplate.where(:category_id => category.id, :template_id => project.estimates.first.template.id).first
+      @categories_template||= CategoriesTemplate.new
+    else
+      @categories_template = nil
+    end
     respond_to do |format|
       format.js {}
     end
@@ -438,7 +445,7 @@ class AccountingController < ApplicationController
         end
       end
     end
-
+    assign_categories_template
     if @purchasable.save
       Item.where(:purchase_order_id => @purchasable.id).destroy_all
       @purchasable.items = Item.create(purchased_items)
@@ -460,12 +467,25 @@ class AccountingController < ApplicationController
     purchased_items = params[:items].present? ? params[:items].select { |i| i[:id].nil? } : []
     amount_items = params[:items].present? ? params[:items].select { |i| i[:actual_cost].present? && i[:id].present? } : []
     @purchasable.amount = amount_items
+    assign_categories_template
     if @purchasable.update_attributes(params[@type.to_sym])
       Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
       @purchasable.items = Item.create(purchased_items)
       redirect_to(:action => "payables")
     else
       render("edit_#{@type}")
+    end
+  end
+
+  private
+  def assign_categories_template
+    if params[@type.to_sym][:category_id].present? && params[@type.to_sym][:project_id].present?
+      project = Project.find(params[@type.to_sym][:project_id])
+      category_template = CategoriesTemplate.where(:category_id => params[@type.to_sym][:category_id], :template_id => project.estimates.first.template.id).first
+      unless category_template
+        category_template = CategoriesTemplate.create(:category_id => params[@type.to_sym][:category_id], :template_id => project.estimates.first.template.id, :purchased => true)
+      end
+      @purchasable.categories_template_id = category_template.id
     end
   end
 end

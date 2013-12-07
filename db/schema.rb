@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131129074734) do
+ActiveRecord::Schema.define(:version => 20131207043443) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(:version => 20131129074734) do
   create_table "categories_templates", :force => true do |t|
     t.integer "category_id"
     t.integer "template_id"
+    t.boolean "purchased"
   end
 
   add_index "categories_templates", ["category_id"], :name => "index_categories_templates_on_category_id"

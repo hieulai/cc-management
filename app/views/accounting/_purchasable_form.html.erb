@@ -12,10 +12,12 @@
             <div class="controls"><%= f.select(:project_id, Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => purchasable.id, :type => purchasable.class.name)}) %></div>
         </div>
         <div class="control-group">
-            <%= f.label :categories_template_id, "Category", class: 'col-lg-2 control-label' %>
+            <%= f.label :category_id, "Category", class: 'col-lg-2 control-label' %>
             <div class="controls">
                 <div id="categories_template-placeholder">
-                    <%= f.select(:categories_template_id, purchasable.project.try(:estimates).try(:any?) ? purchasable.project.estimates.first.template.categories_templates.sort_by { |c| c.category.name }.map { |c| [c.category.name, c.id] } : Array.new, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_categories_template_items", :id => purchasable.id, :type => purchasable.class.name)}) %>
+                    <% categories_template = purchasable.categories_template_id.present? ? CategoriesTemplate.find(purchasable.categories_template_id) : CategoriesTemplate.new %>
+                    <%= f.select(:category_id, grouped_category_options(purchasable.project), {:selected => categories_template.category_id, :include_blank => true},
+                                 :data => {:remote => true, :url => url_for(:action => "show_category_items", :id => purchasable.id, :type => purchasable.class.name, :project_id => purchasable.project.try(:id))}) %>
                 </div>
             </div>
         </div>

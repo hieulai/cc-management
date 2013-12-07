@@ -1,4 +1,5 @@
-<tr class="category" id="category_<%= category_template.category.id %>">
+<% purchased = category_template.purchased ? "purchased" : "" %>
+<tr class="category <%= purchased %>" id="category_<%= category_template.category.id %>">
     <td colspan=9>
         <h3>
             <%= category_template.category.name %>
@@ -17,7 +18,7 @@
 <% category_template.co_items.try(:each) do |item| %>
   <%= render :partial => 'tr_item', :locals => {:item => item} %>
 <% end %>
-<tr class="subtotal item_category_<%= category_template.category.id %>">
+<tr class="subtotal item_category_<%= category_template.category.id %> <%= purchased %>">
     <td colspan=3>
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
     </td>

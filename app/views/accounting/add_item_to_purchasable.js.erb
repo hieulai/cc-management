@@ -2,6 +2,7 @@
     $('tr#add-item').before('<%= escape_javascript(render :partial =>  'purchased_item', :locals => {:item => @item, :type => @type}) %>')
     calculatePostTaxAmount($('tr#add-item').prev().find('.actual-amount'));
     calculatePurchasableSubTotalAndTotal();
+    calculateTotals();
 
     $('tr#add-item input[name="name[]"]').val("");
     var link = $("a#add-purchased-item").attr("href");
