@@ -1,8 +1,8 @@
 <table class="grid-view data-tables" id="payment-list" summary="Payment List" cellspacing="0">
     <thead>
     <tr class="header">
+        <th>Paid</th>
         <th>Reference #</th>
-        <th>Date</th>
         <th>Payee</th>
         <th>Type</th>
         <th>Account</th>
@@ -13,11 +13,13 @@
     <tbody>
     <% @payments.each do |payment| %>
       <tr class="clickable">
-          <td>
-              <%= payment.reference %>
+          <td class="center">
+              <%= payment.date %>
               <%= link_to("Edit", {:action => 'edit_payment', :id => payment.id}, :class => 'action edit clickable-link', style: 'display: none') %>
           </td>
-          <td class="center"><%= payment.date %></td>
+          <td>
+              <%= payment.reference %>
+          </td>
           <td><%= payment.vendor.try(:display_name) %></td>
           <td><%= payment.method %></td>
           <td><%= payment.account.name %></td>

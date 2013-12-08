@@ -23,6 +23,10 @@ class Bill < ActiveRecord::Base
     self.payments_bills.any?
   end
 
+  def full_paid?
+     self.remaining_amount == 0
+  end
+
   def generated?
     self.purchase_order.present? || self.bid.present?
   end
@@ -59,7 +63,7 @@ class Bill < ActiveRecord::Base
 
   def check_readonly
     if paid?
-      errors[:base] << "This record is readonly"
+      errors[:base] << "This bill is already paid and can not be modified."
       false
     end
   end

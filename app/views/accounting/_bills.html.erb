@@ -1,10 +1,10 @@
 <table class="grid-view data-tables" id="bill-list" summary="Bill List">
     <thead>
         <tr class="header">
+            <th>Due Date</th>
             <th>Bill #</th>
             <th>PO #</th>
             <th>Bid #</th>
-            <th>Due Date</th>
             <th>Project</th>
             <th>Category</th>
             <th>Vendor</th>
@@ -14,24 +14,26 @@
     </thead>
     <tbody>
     <% bills.each do |b| %>
-      <tr class="<%= b.paid? ? "unclickable" : "clickable" %>" >
+      <tr class="<%= b.full_paid? ? "unclickable" : "clickable" %>" >
           <td class="center">
-              <%= b.id %>
-              <% unless b.paid? %>
+              <%= b.source(:due_date) %>
+              <% unless b.full_paid? %>
                 <% if b.generated? %>
                   <% if b.purchase_order_id %>
-                      <%= link_to("Edit", {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :class => 'action edit clickable-link', style: 'display: none') %>
+                    <%= link_to("Edit", {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :class => 'action edit clickable-link', style: 'display: none') %>
                   <% elsif b.bid_id %>
-                      <%= link_to("Edit", {:controller => 'projects', :action => 'edit_bid', :id => b.bid_id}, :class => 'action edit clickable-link', style: 'display: none') %>
+                    <%= link_to("Edit", {:controller => 'projects', :action => 'edit_bid', :id => b.bid_id}, :class => 'action edit clickable-link', style: 'display: none') %>
                   <% end %>
                 <% else %>
                   <%= link_to("Edit", {:action => 'edit_bill', :id => b.id}, :class => 'action edit clickable-link', style: 'display: none') %>
                 <% end %>
               <% end %>
           </td>
+          <td class="center">
+              <%= b.id %>
+          </td>
           <td class="center"><%= link_to b.purchase_order_id, {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :target => "_blank" if b.purchase_order.present? %></td>
           <td class="center"><%= link_to b.bid_id, {:controller => 'projects', :action => 'edit_bid', :id => b.bid_id}, :target => "_blank" if b.bid.present? %></td>
-          <td class="center"><%= b.source(:due_date) %></td>
           <td><%= b.source(:project).name %></td>
           <td><%= b.source(:categories_template).category.name %></td>
           <td><%= b.source(:vendor).try(:display_name) %></td>

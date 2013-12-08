@@ -20,6 +20,10 @@ class PurchaseOrder < ActiveRecord::Base
     bill.try(:paid?)
   end
 
+  def has_bill_full_paid?
+    bill.try(:full_paid?)
+  end
+
   def total_amount
     t=0
     self.shipping||=0
@@ -38,13 +42,17 @@ class PurchaseOrder < ActiveRecord::Base
 
   def create_bill
     unless bill.present?
-      Bill.create!(:purchase_order_id => self.id, :builder_id => self.builder_id, :vendor_id => self.vendor_id)
+      Bill.create!(:purchase_order_id => self.id,
+                   :builder_id => self.builder_id,
+                   :vendor_id => self.vendor_id,
+                   :project_id => self.project_id,
+                   :categories_template_id => self.categories_template_id)
     end
   end
 
   def check_readonly
     if has_bill_paid?
-      errors[:base] << "This record is readonly"
+      errors[:base] << "This purchase order is already paid and can not be modified."
       false
     end
   end

@@ -455,7 +455,7 @@ class AccountingController < ApplicationController
       end
       redirect_to(:action => "payables")
     else
-      @bill = @purchasable
+      @bill = @purchase_order = @purchasable
       render("new_#{@type}")
     end
   end

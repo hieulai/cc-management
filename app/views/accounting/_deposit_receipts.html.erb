@@ -1,18 +1,14 @@
 <table class="grid-view" summary="Bill List">
     <tr class="header">
         <th></th>
-        <th>Receipt #</th>
-        <th>Reference #</th>
         <th>Date Received</th>
+        <th>Receipt #</th>
         <th>Client</th>
-        <th>Previously Billed</th>
-        <th>Remaining Balance</th>
         <th>Amount</th>
 
     </tr>
-    <% receipts.each do |receipt| %>
+    <% receipts.sort_by{ |x| x.received_at }.reverse.each do |receipt| %>
       <%
-         remaining_amount = receipt.remaining_amount.presence||receipt.amount
          if receipt.deposit_receipt(@deposit.id).present?
            text_field_display = ""
            value_display = "none"
@@ -32,21 +28,11 @@
               <%= hidden_field_tag "deposit[deposits_receipts_attributes][][receipt_id]", receipt.id %>
               <%= hidden_field_tag 'deposit[deposits_receipts_attributes][][_destroy]', !receipt.deposit_receipt(@deposit.id).present? %>
           </td>
-          <td class="center"><%= receipt.id %></td>
-          <td class="center"><%= receipt.reference %></td>
           <td class="center"><%= receipt.received_at %></td>
+          <td class="center"><%= receipt.id %></td>
           <td><%= receipt.client.full_name %></td>
-          <td class="right unpaid-amount">
-              <%= price_tag(receipt.billed_amount) %>
-          </td>
           <td class="right">
-              <%= price_tag(remaining_amount, "remaining-amount") %>
-              <div class="original-remaining-amount" style="display:none">
-                  <%= remaining_amount %>
-              </div>
-          </td>
-          <td class="right">
-              $<%= text_field_tag 'deposit[deposits_receipts_attributes][][amount]', billed_amount , :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10 %>
+              $<%= text_field_tag 'deposit[deposits_receipts_attributes][][amount]', billed_amount, :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10, :disabled => true %>
               <div class="value-field" style="display: <%= value_display %>">
                   <%= price(billed_amount) %>
               </div>
@@ -54,7 +40,7 @@
       </tr>
     <% end %>
     <tr>
-        <td class="strong" colspan="7">Total</td>
+        <td class="strong" colspan="4">Total</td>
         <td class="right" id="deposit-amount"></td>
     </tr>
 </table>
