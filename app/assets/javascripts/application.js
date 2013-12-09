@@ -127,7 +127,7 @@ $(document).ready(function() {
 
     $(".datepicker").each(function(){
         $(this).datepicker({
-            altField: "#" + $(this).next().attr("id"),
+            altField: "#" + $(this).closest(".controls").find('input[type="hidden"]').attr("id"),
             altFormat: "yy-mm-dd",
             dateFormat: "mm-dd-yy"
         });
