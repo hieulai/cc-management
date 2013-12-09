@@ -91,6 +91,11 @@ a.uneditable, a.uneditable:hover{
     margin: auto 10px 0 auto;
 }
 
+.dataTables_filter{
+    float: right;
+    margin-top: 15px;
+}
+
 .button-group, .dataTables_wrapper label{
     display: inline-block;
 }
