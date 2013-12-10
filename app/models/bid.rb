@@ -1,23 +1,17 @@
 class Bid < ActiveRecord::Base
-  before_destroy :check_readonly, :unset_committed_costs
+  before_destroy :unset_committed_costs
 
   belongs_to :project
   belongs_to :vendor
   belongs_to :categories_template
 
-  has_one :bill, :dependent => :destroy
-
   validates_presence_of :categories_template
 
-  attr_accessible :amount, :notes, :chosen, :categories_template_id, :vendor_id, :due_date
+  attr_accessible :amount, :notes, :chosen, :categories_template_id, :vendor_id
 
   serialize :amount
 
-  before_save :check_readonly, :unset_committed_costs, :set_committed_costs, :update_bill
-
-  def has_bill_paid?
-    bill.try(:paid?)
-  end
+  before_save :unset_committed_costs, :set_committed_costs
 
   def total_amount
     t=0
@@ -58,22 +52,6 @@ class Bid < ActiveRecord::Base
           item.update_attribute(:committed_cost, updated_cost == 0 ? nil : updated_cost)
         end
       end
-    end
-  end
-
-  def update_bill
-    if chosen
-      create_bill(builder_id: self.project.builder_id, vendor_id: vendor_id, project_id: project_id, categories_template_id: categories_template_id) unless bill.present?
-    elsif bill.present?
-      return false if check_readonly == false
-      bill.destroy
-    end
-  end
-
-  def check_readonly
-    if has_bill_paid?
-      errors[:base] << "This record is readonly"
-      false
     end
   end
 end

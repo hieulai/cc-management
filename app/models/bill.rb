@@ -5,7 +5,6 @@ class Bill < ActiveRecord::Base
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :purchase_order
-  belongs_to :bid
   has_many :payments_bills, :dependent => :destroy
   has_many :payments, :through => :payments_bills
 
@@ -28,14 +27,12 @@ class Bill < ActiveRecord::Base
   end
 
   def generated?
-    self.purchase_order.present? || self.bid.present?
+    self.purchase_order.present?
   end
 
   def source(attr)
     if self.purchase_order.present?
       purchase_order.try(attr)
-    elsif self.bid.present?
-      bid.try(attr)
     else
       self.try(attr)
     end
@@ -51,7 +48,6 @@ class Bill < ActiveRecord::Base
 
   def total_amount
     return purchase_order.total_amount if purchase_order.present?
-    return bid.total_amount if bid.present?
     t=0
     amount.each do |i|
       t+= i[:actual_cost].to_f

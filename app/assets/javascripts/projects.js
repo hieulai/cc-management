@@ -103,8 +103,4 @@ $(document).ready(function () {
         calculateCOAmount(this);
         calculateTotals();
     });
-
-    $('.edit_bid, .new_bid').on('change','input[name="bid[chosen]"]', function () {
-        $(this).closest("form").find('.due-date-inputs').toggle();
-    });
 })
