@@ -10,7 +10,7 @@
                 this purchase order from being saved:</h2>
             <ul>
                 <% @purchase_order.errors.full_messages.each do |msg| %>
-                  <li><%= msg %></li>
+                  <li><%= msg.html_safe %></li>
                 <% end %>
             </ul>
         </div>

@@ -10,7 +10,7 @@
                 this bill from being saved:</h2>
             <ul>
                 <% @bill.errors.full_messages.each do |msg| %>
-                  <li><%= msg %></li>
+                  <li><%= msg.html_safe %></li>
                 <% end %>
             </ul>
         </div>

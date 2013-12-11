@@ -19,7 +19,7 @@ class Item < ActiveRecord::Base
   validates :name, presence: true
 
   before_save :check_readonly, :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
-  before_save :reset_markup
+  before_save :check_overpaid, :reset_markup
   after_initialize :default_values
 
   default_scope order("name ASC")
@@ -115,7 +115,14 @@ class Item < ActiveRecord::Base
 
   def check_readonly
     if self.billed?
-      errors[:invoice] << "Item #{name} cannot be edited/deleted once added to an invoice. Please delete invoice to edit item details"
+      errors[:base] << "Item #{name} cannot be edited/deleted once added to an invoice. Please delete invoice to edit item details"
+      false
+    end
+  end
+
+  def check_overpaid
+    if self.actual_cost.present? && self.committed_cost.present? && (self.actual_cost > self.committed_cost)
+      errors[:base] << "Total paid amount of item #{name}: $#{self.actual_cost} is greater than total bid amount: $#{self.committed_cost}"
       false
     end
   end
