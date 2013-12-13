@@ -3,11 +3,11 @@ class Bid < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :vendor
-  belongs_to :categories_template
+  belongs_to :category
 
-  validates_presence_of :categories_template
+  validates_presence_of :category
 
-  attr_accessible :amount, :notes, :chosen, :categories_template_id, :vendor_id
+  attr_accessible :amount, :notes, :chosen, :vendor_id, :category_id
 
   serialize :amount
 
@@ -28,6 +28,18 @@ class Bid < ActiveRecord::Base
       end
     end
     return nil
+  end
+
+  def items
+    categories_template.try(:items)
+  end
+
+  def co_items
+    if categories_template
+      categories_template.co_items
+    else
+      project.co_items(category)
+    end
   end
 
   private
@@ -53,5 +65,9 @@ class Bid < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def categories_template
+    CategoriesTemplate.where(:category_id => category_id, :template_id => project.estimates.first.template.id).first
   end
 end

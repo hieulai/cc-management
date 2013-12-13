@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131209151503) do
+ActiveRecord::Schema.define(:version => 20131212161639) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -54,14 +54,14 @@ ActiveRecord::Schema.define(:version => 20131209151503) do
     t.text     "amount"
     t.text     "notes"
     t.boolean  "chosen"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
-    t.integer  "categories_template_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.integer  "vendor_id"
     t.date     "due_date"
+    t.integer  "category_id"
   end
 
-  add_index "bids", ["categories_template_id"], :name => "index_bids_on_categories_template_id"
+  add_index "bids", ["category_id"], :name => "index_bids_on_category_id"
   add_index "bids", ["project_id"], :name => "index_bids_on_project_id"
   add_index "bids", ["vendor_id"], :name => "index_bids_on_vendor_id"
 

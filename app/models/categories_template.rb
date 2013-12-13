@@ -5,7 +5,6 @@ class CategoriesTemplate < ActiveRecord::Base
 
   belongs_to :template
   belongs_to :category
-  has_many :bids, :dependent => :delete_all
   has_many :purchase_orders, :dependent => :delete_all
   has_many :bills, :dependent => :delete_all
   has_and_belongs_to_many :items

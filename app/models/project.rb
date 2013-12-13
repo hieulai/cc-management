@@ -38,10 +38,12 @@ class Project < ActiveRecord::Base
     co_categories.map(&:items).flatten
   end
 
-  def co_categories(template)
+  def cos_categories
+    template = estimates.first.template
     categories = Category.where(:id => template.categories_templates.pluck(:category_id))
-    co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.approved.pluck(:id))
-    co_categories.reject! { |co_category| categories.pluck(:name).include? co_category.category.name }
+    co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.approved.pluck(:id)).uniq
+    cos_categories = co_categories.map(&:category).uniq
+    cos_categories.reject! { |c| categories.pluck(:name).include? c.name }
   end
   
 end

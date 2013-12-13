@@ -17,7 +17,7 @@
 	  <% end %>
 	<%= render(:partial => "bid_form", :locals => {:f => f, :project => @project})%>
   <div id="item-placeholder">
-      <%= render(:partial => "bid_item", :locals => {:bid => @bid, :categories_template => @bid.categories_template})%>
+      <%= render(:partial => "bid_item", :locals => {:bid => @bid})%>
   </div>
 	
 	<% end %>

@@ -18,7 +18,7 @@ class Item < ActiveRecord::Base
   attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :purchase_order_id, :bill_id
   validates :name, presence: true
 
-  before_save :check_readonly, :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
+  before_save :check_readonly, :if => :changed? , :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
   before_save :check_overpaid, :reset_markup
   after_initialize :default_values
 

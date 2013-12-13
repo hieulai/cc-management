@@ -3,7 +3,7 @@
 <div class="control-group">
     <%= f.label :categories_template, "Category", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.select(:categories_template_id, @project.estimates.any? ? @project.estimates.first.template.categories_templates.sort_by { |c| c.category.name }.map { |c| [c.category.name, c.id] } : Array.new, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_categories_template_items")}) %>
+        <%= f.select(:category_id, grouped_bid_category_options(project), {:selected => @bid.category.try(:id), :include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_items", :project_id => project.id)}) %>
     </div>
 </div>
 <div class="control-group">

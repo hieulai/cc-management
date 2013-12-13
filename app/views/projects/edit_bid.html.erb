@@ -15,8 +15,10 @@
 	    </ul>
 	  </div>
 	  <% end %>
-	<%= render(:partial => "bid_form", :locals => {:f => f})%>
-      <%= render(:partial => "bid_item", :locals => {:bid => @bid, :categories_template => @bid.categories_template, :co_items => @bid.categories_template.template.estimate.project.co_items(@bid.categories_template.category)}) %>
+	<%= render(:partial => "bid_form", :locals => {:f => f, :project => @bid.project })%>
+  <div id="item-placeholder">
+      <%= render(:partial => "bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
+  </div>
 	<% end %>
 
     <div class="control-group">

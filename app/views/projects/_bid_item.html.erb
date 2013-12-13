@@ -9,8 +9,8 @@
     </tr>
     </thead>
     <tbody>
-    <% if defined?(categories_template) && categories_template.present? %>
-      <% categories_template.items.each do |item| %>
+    <% if defined?(items) && items.present? %>
+      <% items.each do |item| %>
         <tr>
             <td><%= item.name %></td>
             <td><%= item.description %></td>

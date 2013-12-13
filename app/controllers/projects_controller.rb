@@ -385,17 +385,13 @@ class ProjectsController < ApplicationController
   end
   
   def create_bid
-    #Instantiate a new object using form parameters
     @project = Project.find(params[:id])
     @bid = Bid.new(params[:bid])
     @bid.amount = params[:item]
     @bid.project = @project
-    #save subject
     if @bid.save
-      #if save succeeds, redirect to list action
       redirect_to(:action => 'bids', :id => @bid.project_id)
     else
-      #if save fails, redisplay form to user can fix problems
       render('new_bid')
     end
   end
@@ -406,16 +402,12 @@ class ProjectsController < ApplicationController
   end
 
   def update_bid
-    #Instantiate a new object using form parameters
     @bid = Bid.find(params[:id])
     @project = @bid.project
     @bid.amount = params[:item]
-    #save subject
     if @bid.update_attributes(params[:bid])
-      #if save succeeds, redirect to list action
       redirect_to(:action => 'bids', :id => @bid.project_id)
     else
-      #if save fails, redisplay form to user can fix problems
       render('edit_bid')
     end
   end
@@ -448,9 +440,16 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def show_categories_template_items
-    @categories_template = CategoriesTemplate.find(params[:bid][:categories_template_id])
-    @co_items = @categories_template.template.estimate.project.co_items(@categories_template.category)
+  def show_project_items
+    project = Project.find(params[:project_id])
+    categories_template = CategoriesTemplate.where(:category_id => params[:bid][:category_id], :template_id => project.estimates.first.template.id).first
+    if categories_template
+      @items = categories_template.items
+      @co_items = categories_template.template.estimate.project.co_items(categories_template.category)
+    else
+      change_orders_categories = ChangeOrdersCategory.where('category_id = ? AND change_order_id in (?)', params[:bid][:category_id], project.change_orders.pluck(:id))
+      @co_items = change_orders_categories.map(&:items).flatten
+    end
     respond_to do |format|
       format.js {}
     end
@@ -463,5 +462,4 @@ class ProjectsController < ApplicationController
       {:id => v.id, :label => label, :value => v.display_name}
     }.to_json
   end
-    
 end
