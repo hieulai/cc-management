@@ -90,7 +90,6 @@ module Purchasable
           msg << "<li>#{ie}</li>"
         end
         msg << "</ul>"
-        msg << "<br/>"
         msg << "You can remedy the issue in one of the following ways:"
         msg << "<ol>"
         msg << "<li>If a change order billed to the client is needed, create a change order with the client for the amount over the bid.</li>"

@@ -2,7 +2,7 @@
     <%= render(:partial => "layouts/accounting_sub_menu")%>
     <h2>Add Bill</h2>
 
-    <%= form_for @bill, :url => {:action => 'create_bill'}, html: {class: 'new_bill form-horizontal'} do |f| %>
+    <%= form_for @bill, :url => {:action => 'create_bill'}, :remote => true, html: {class: 'new_bill form-horizontal'} do |f| %>
 
       <% if @bill.errors.any? %>
         <div id="errorExplanation">

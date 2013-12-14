@@ -453,10 +453,16 @@ class AccountingController < ApplicationController
       if @purchasable.instance_of?(Bill) && payment && payment.save
         payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
       end
-      redirect_to(:action => "payables")
+      respond_to do |format|
+        format.html {redirect_to(:action => "payables")}
+        format.js {render :js => "window.location = '#{url_for(:action => "payables")}'"}
+      end
     else
       @bill = @purchase_order = @purchasable
-      render("new_#{@type}")
+      respond_to do |format|
+        format.html { render("new_#{@type}") }
+        format.js { render "purchasable_response" }
+      end
     end
   end
 
@@ -471,9 +477,16 @@ class AccountingController < ApplicationController
     if @purchasable.update_attributes(params[@type.to_sym])
       Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
       @purchasable.items = Item.create(purchased_items)
-      redirect_to(:action => "payables")
+      respond_to do |format|
+        format.html {redirect_to(:action => "payables")}
+        format.js {render :js => "window.location = '#{url_for(:action => "payables")}'"}
+      end
     else
-      render("edit_#{@type}")
+      @bill = @purchase_order = @purchasable
+      respond_to do |format|
+        format.html { render("edit_#{@type}") }
+        format.js { render "purchasable_response" }
+      end
     end
   end
 

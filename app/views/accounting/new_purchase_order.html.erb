@@ -2,7 +2,7 @@
     <%= render(:partial => "layouts/accounting_sub_menu")%>
     <h2>Add Purchase Order</h2>
 
-    <%= form_for @purchase_order, :url => {:action => 'create_purchase_order'}, html: {class: 'new_purchase_order form-horizontal'}  do |f| %>
+    <%= form_for @purchase_order, :url => {:action => 'create_purchase_order'}, :remote => true, html: {class: 'new_purchase_order form-horizontal'}  do |f| %>
 
       <% if @purchase_order.errors.any? %>
         <div id="errorExplanation">

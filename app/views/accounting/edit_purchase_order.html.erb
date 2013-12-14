@@ -2,7 +2,7 @@
     <%= render(:partial => "layouts/accounting_sub_menu")%>
     <h2>Edit Purchase Order</h2>
     <%= link_to("Delete", {:action => 'delete_purchase_order', :id => @purchasable.id}, :class => 'btn btn-danger f-right') %>
-    <%= form_for @purchasable, :url => {:action => 'update_purchase_order', :id => @purchasable.id}, html: {class: 'edit_purchase_order form-horizontal'} do |f| %>
+    <%= form_for @purchasable, :url => {:action => 'update_purchase_order', :id => @purchasable.id}, :remote => true, html: {class: 'edit_purchase_order form-horizontal'} do |f| %>
 
       <% if @purchasable.errors.any? %>
         <div id="errorExplanation">
