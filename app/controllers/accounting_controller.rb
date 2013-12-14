@@ -488,10 +488,7 @@ class AccountingController < ApplicationController
         if dup_c
           category_template = dup_c.categories_templates.where(:template_id => project.estimates.first.template.id).first
         else
-          dup_c = category.dup
-          dup_c.builder_id = nil
-          dup_c.save
-          category_template = CategoriesTemplate.create(:category_id => dup_c.id, :template_id => project.estimates.first.template.id, :purchased => true)
+          category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.estimates.first.template.id, :purchased => true)
         end
       end
       @purchasable.categories_template_id = category_template.id

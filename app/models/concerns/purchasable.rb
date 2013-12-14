@@ -17,8 +17,6 @@ module Purchasable
 
     before_destroy :unset_actual_costs
 
-    after_destroy :destroy_purchased_categories_template
-
     validates_presence_of :vendor, :project, :categories_template
 
     def item_amount(item_id)
@@ -111,12 +109,6 @@ module Purchasable
           updated_cost = item.actual_cost.to_f - i[:actual_cost].to_f
           item.update_attribute(:actual_cost, updated_cost == 0 ? nil : updated_cost)
         end
-      end
-    end
-
-    def destroy_purchased_categories_template
-      if categories_template && categories_template.purchased && categories_template.bills.empty? && categories_template.purchase_orders.empty?
-        categories_template.category.destroy
       end
     end
   end
