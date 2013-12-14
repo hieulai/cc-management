@@ -1,1 +1,1 @@
-$.rails.createConfirmDialog('Information', '<%= @purchasable.errors.full_messages.join(".").html_safe %>', true);
+$.rails.createConfirmDialog('Information', '<%= escape_javascript(@purchasable.errors.full_messages.join(".").html_safe) %>', true);
