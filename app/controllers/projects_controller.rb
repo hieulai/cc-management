@@ -85,10 +85,11 @@ class ProjectsController < ApplicationController
   end
 
   def complete_task
-    @tasks = Task.find(params[:task_ids].keys)
-    @tasks.each do |task|
+    tasks = Task.find(params[:task_ids].keys)
+    tasks.each do |task|
       task.update_attribute(:completed, true)
     end
+    @project = tasks.first.tasklist.project
     respond_to do |format|
       format.js
     end
