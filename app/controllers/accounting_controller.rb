@@ -437,10 +437,11 @@ class AccountingController < ApplicationController
                                                       :vendor_id => @purchasable.vendor_id))
         unless payment.valid?
           @bill = @purchasable
-          payment.errors.full_messages.each do |m|
-            @bill.errors[:base] << "Payment: #{m}"
+          @bill.errors[:base] << "Payment information invalid: <br/> #{payment.errors.full_messages.join("<br/>")}"
+          respond_to do |format|
+            format.html { render("new_bill") }
+            format.js { render "purchasable_response" }
           end
-          render("new_bill")
           return
         end
       end
