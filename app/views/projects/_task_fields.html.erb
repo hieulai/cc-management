@@ -1,7 +1,9 @@
 <div class="nested-fields">
 	<p class="fields">
-		<%= f.object.name %>
-		<%= f.check_box :completed %>
+		<%= f.label :completed do %>
+        <%= f.check_box :completed %>
+        <%= f.object.name %>
+    <% end %>
 		<%= f.hidden_field :name %>
 	</p>
 </div>

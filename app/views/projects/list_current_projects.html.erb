@@ -43,11 +43,14 @@
 			<td><%= project.deadline %></td>
 			<td><%= project.schedule_variance %></td>
       <td>
-            <ul>
-                <%- project.next_tasks(5).each do |t| %>
-                  <li><%= t.name %></li>
+          <%- project.next_tasks(5).each do |t| %>
+            <div id="task_<%= t.id %>">
+                <%= label_tag "task_ids[#{t.id}]" do %>
+                  <%= check_box_tag("task_ids[#{t.id}]", t.id, t.completed, :data => {:remote => true, :url => url_for(:action => "complete_task")}) %>
+                  <%= t.name %>
                 <% end %>
-            </ul>
+            </div>
+          <% end %>
       </td>
 			<td><%= project.project_notes %></td>
 			

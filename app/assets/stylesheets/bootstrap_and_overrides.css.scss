@@ -306,3 +306,11 @@ $fluidGridGutterWidth768:      percentage($gridGutterWidth768/$gridRowWidth768) 
 .input-medium {
     width: 110px;
 }
+
+input[type="checkbox"] {
+  margin: 0;
+}
+
+label {
+  display: inline-block;
+}

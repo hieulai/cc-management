@@ -83,6 +83,16 @@ class ProjectsController < ApplicationController
       render('edit_tasklist')
     end
   end
+
+  def complete_task
+    @tasks = Task.find(params[:task_ids].keys)
+    @tasks.each do |task|
+      task.update_attribute(:completed, true)
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
   
   def customize_tasklist
     @tasklist = Tasklist.find(params[:id])
