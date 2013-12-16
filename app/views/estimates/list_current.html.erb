@@ -24,11 +24,9 @@
         <%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :class => 'action measurements') %>
         <%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :class => 'action edit') %>
         <%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :class => 'action convert') %>
-        <% unless estimate.undestroyable? %>
-          <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>
-        <% end %>
+        <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :class => 'action delete') %>
       </td>
-      <td><%= estimate.project.name %></td>
+      <td><%= estimate.project.try(:name) %></td>
       <td><%= estimate.template.name %></td>
       <td><%= estimate.progress %></td>
       <td><%= estimate.deadline %></td>

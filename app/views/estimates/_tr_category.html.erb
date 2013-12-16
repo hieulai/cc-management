@@ -6,9 +6,7 @@
     </td>
     <td>
         <%= link_to '+ Item', "#", :class => "trigger-add btn" %>
-        <% unless  category_template.undestroyable? %>
-            <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :data => { :title => "Confirmation" , :confirm => "Are you sure you want to delete category #{category_template.category.name} and all its associated items?", :remote => true }, :class => 'remove-category' %>
-         <% end %>
+        <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :data => { :title => "Confirmation" , :confirm => "Are you sure you want to delete category #{category_template.category.name} and all its associated items?", :remote => true }, :class => 'remove-category' %>
     </td>
 </tr>
 <% category_template.items.each do |item| %>
