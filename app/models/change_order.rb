@@ -11,6 +11,7 @@ class ChangeOrder < ActiveRecord::Base
   accepts_nested_attributes_for :change_orders_categories, reject_if: :all_blank, allow_destroy: true
 
   before_save :check_destroyable, :if => :approved_changed?
+  after_initialize :default_values
 
   validates :name, presence: true
 
@@ -28,5 +29,9 @@ class ChangeOrder < ActiveRecord::Base
       errors[:invoice] << "Change Order #{name} cannot be disapproved/deleted once containing items which are added to an invoice"
       false
     end
+  end
+
+  def default_values
+    self.approved||= true
   end
 end
