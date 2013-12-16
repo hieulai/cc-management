@@ -4,7 +4,7 @@ class AddChangeOrdersCategoryIdAndRemoveCategoriesTemplateIdFromBids < ActiveRec
     add_index :bids, :category_id
 
     # Migrate categories_template_id to category_id
-    Bid.all.each do |bid|
+    Bid.where('categories_template_id is not null').each do |bid|
       categories_template = CategoriesTemplate.find(bid.categories_template_id)
       bid.update_attributes(:category_id => categories_template.category_id, :categories_template_id => nil)
     end
