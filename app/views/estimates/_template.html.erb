@@ -19,7 +19,7 @@
         amount = 0
         margin = 0
     %>
-    <%- @template.categories_templates.each do |category_template| %>
+    <%- @estimate.template.categories_templates.each do |category_template| %>
       <%- subtotal = category_template.items.map(&:price).sum
           subamount = category_template.items.map(&:amount).sum
           submargin = category_template.items.map(&:margin).sum
@@ -31,9 +31,9 @@
     <% end %>
     <tr class="add add-category">
         <td colspan=11>
-            <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @template.id}, html: { class: "form-inline"}, :remote => true do |f| %>
+            <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @estimate.template.id}, html: { class: "form-inline"}, :remote => true do |f| %>
               Category:
-              <%= f.select :id, @categories.map { |c| [c.name, c.id] } %>
+              <%= f.select :id, Category.where(builder_id: session[:builder_id]).order(:name).map { |c| [c.name, c.id] } %>
               <%= f.submit "Add", class: 'btn' %>
             <% end %>
         </td>

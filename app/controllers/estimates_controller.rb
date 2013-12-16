@@ -41,17 +41,10 @@ class EstimatesController < ApplicationController
 
     def create
       @builder = Base::Builder.find(session[:builder_id])
-      #Reads in the project ID selected by the User
-      @project = Project.find(params[:project][:id])
-      #Reads in the project ID selected by the User
       @template = Template.find(params[:template][:id])
-      #Assigns the estimate to the correct Project
-      @estimate = @project.estimates.new(params[:estimate])
+      @estimate = Estimate.new(params[:estimate].merge(:builder_id => @builder.id))
       @estimate.template = @template.clone_with_associations
-      #saves creation of Estimate
       if @estimate.save
-        @builder.estimates << @estimate
-        
         #Assigns all appropriate measurements to the Estimate
         @measurements = Measurement.all
         @measurements.each do |m|
@@ -67,17 +60,11 @@ class EstimatesController < ApplicationController
 
     def edit
       @estimate = Estimate.find(params[:id])
-      @template = @estimate.template
-      @items = Item.where(builder_id: session[:builder_id]).order(:name)
-      @categories = Category.where(builder_id: session[:builder_id]).order(:name)
-      @project = @estimate.project
     end
 
     def update
       #Find object using form parameters
       @estimate = Estimate.find(params[:id])
-      @project = Project.find(params[:project][:id])
-      @estimate.project = @project
       if @estimate.update_attributes(params[:estimate])
         #if save succeeds, redirect to list action
         redirect_to(:action => 'list_current')
