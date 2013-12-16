@@ -4,7 +4,6 @@ class Estimate < ActiveRecord::Base
   # mount_uploader :data, DataUploader
   belongs_to :builder, :class_name => "Base::Builder", :class_name => "Base::Builder"
   belongs_to :project
-  has_many :items, :dependent => :destroy
   has_many :measurements , :dependent => :destroy
   has_one :template, :dependent => :destroy
   has_many :invoices, :dependent => :destroy
