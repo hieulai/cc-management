@@ -3,7 +3,7 @@ class Template < ActiveRecord::Base
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :estimate
-  has_many :categories_templates
+  has_many :categories_templates, :dependent => :destroy
   has_many :categories, class_name: 'Category', through: :categories_templates, source: :category
   has_many :items, class_name: 'Item', through: :categories_templates, source: :item
 

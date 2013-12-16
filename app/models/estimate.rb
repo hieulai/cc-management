@@ -4,10 +4,10 @@ class Estimate < ActiveRecord::Base
   # mount_uploader :data, DataUploader
   belongs_to :builder, :class_name => "Base::Builder", :class_name => "Base::Builder"
   belongs_to :project
-  has_many :items
+  has_many :items, :dependent => :destroy
   has_many :measurements , :dependent => :destroy
-  has_one :template
-  has_many :invoices
+  has_one :template, :dependent => :destroy
+  has_many :invoices, :dependent => :destroy
 
   scope :current, lambda { |builder_id| where("builder_id = ? AND status = ?", builder_id, "Current Estimate") }
   scope :past, lambda { |builder_id| where("builder_id = ? AND status = ?", builder_id, "Past Estimate") }

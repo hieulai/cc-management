@@ -1,12 +1,12 @@
 class Project < ActiveRecord::Base
   belongs_to :client
   belongs_to :builder, :class_name => "Base::Builder"
-  has_many :estimates
-  has_many :bids
-  has_many :change_orders
-  has_many :specifications
-  has_many :purchase_orders
-  has_one :tasklist
+  has_many :estimates, :dependent => :destroy
+  has_many :bids, :dependent => :destroy
+  has_many :change_orders, :dependent => :destroy
+  has_many :specifications, :dependent => :destroy
+  has_many :purchase_orders, :dependent => :destroy
+  has_one :tasklist, :dependent => :destroy
   has_many :invoices, :through => :estimates
 
   attr_accessible :name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
