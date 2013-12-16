@@ -1,45 +1,41 @@
 <div>
-	<%= render(:partial => "layouts/accounting_sub_menu")%>
-	<h1>Accounts</h1>
-	<%= link_to("Instructions >>", {:action => 'show'}) %>
-	</br>
-	</br>
-	<%= link_to("Add New Accounts >>", {:controller => 'accounts', :action => 'new'}) %>
-	</br>
-	</br>
-	<%= link_to("Make Transfers >>", {:action => 'show'}) %>
-	</br>
-	</br>
-	<%= link_to("Reconcile >>", {:action => 'show'}) %>
-	</br>
-	</br>
-	
-	<table class="grid-view" summary="Project List">
-		<tr class="header">
-			<th>Actions</th>
-			<th>Type</th>
-			<th>Subtype</th>
-			<th>Name</th>
-			<th>Balance</th>			
-					
-		</tr>
-		<% @accounts.each do |x| %>
-		
-		<tr>
-			<td class="center">
-				<%= link_to("Ledger", {:action => 'show', :id => x.id}, :class => 'action edit') %>
-				<%= link_to("Edit", {:action => 'edit', :id => x.id}, :class => 'action edit') %>
-				<%= link_to("Delete", {:action => 'delete', :id => x.id}, :class => 'action delete') %>
-			</td>
-			<td><%= x.category%></td>
-
-			<td><%= x.subcategory %></td>
-			<td><%= x.name %></td>
-			<td><%= price_tag(x.balance) %></td>
-			
-		</tr>
-		<% end %>
-		
-	</table>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Add New Accounts >>", {:controller => 'accounts', :action => 'new'}, :title => 'Add New Accounts', :class => 'add action-button') %>
+            <%= link_to("Make Transfers >>", {:action => 'show'}, :title => 'Make Transfers', :class => 'add action-button') %>
+            <%= link_to("Reconcile >>", {:action => 'show'}, :title => 'Reconcile', :class => 'add action-button') %>
+            <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Accounts</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <table class="grid-view responsive" summary="Project List">
+            <tr class="header">
+                <th>Actions</th>
+                <th>Type</th>
+                <th>Subtype</th>
+                <th>Name</th>
+                <th>Balance</th>
+            </tr>
+            <% @accounts.each do |x| %>
+                <tr>
+                    <td class="center">
+                        <%= link_to("Ledger", {:action => 'show', :id => x.id}, :title => 'Ledger', :class => 'view table-action') %>
+                        <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
+                        <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
+                    </td>
+                    <td><%= x.category %></td>
+                    <td><%= x.subcategory %></td>
+                    <td><%= x.name %></td>
+                    <td><%= price_tag(x.balance) %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 

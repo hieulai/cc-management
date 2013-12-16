@@ -1,50 +1,56 @@
 <div>
-  <%= render(:partial => "layouts/estimating_sub_menu")%>
-  <h1>Items List</h1>
-  <%= link_to("Instructions >>", {:action => 'show'}) %>
-  </br>
-  </br>
-  <%= link_to("+ New Item", {:action => 'new'}, class: 'btn') %>
-  </br>
-  </br>
-	<%= form_tag('list', method: 'get', class: 'form-inline') do %>
-		<p>
-			<%= label_tag :query, "Search" %>
-			<%= text_field_tag(:query, @query) %>
-		</p>
-	<% end %>
-  <table class="grid-view" summary="Project List">
-    <tr class="header">
-      <th>Actions</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Default Quantity</th>
-      <th>Cost</th>
-      <th>Unit</th>
-      <th>Preset Margin</th>
-      <th>Price</th>
-      <th>Notes</th>
-    <!-- Displays all items that are attached to a category -->
-    </tr>
-    <!-- Displays all items that are NOT attached to a category -->
-    <% @items.each do |item| %>
-
-    <tr>
-      <td class="center">
-        <%= link_to("Edit", {:action => 'edit', :id => item.id}, :class => 'action edit') %>
-        <%= link_to("Delete", {:action => 'delete', :id => item.id}, :class => 'action delete') %>
-      </td>
-      <td><%= item.name %></td>
-      <td><%= item.description %></td>
-      <td><%= item.qty %></td>
-      <td><%= price_tag(item.estimated_cost) %></td>
-      <td><%= item.unit %></td>
-      <td><%= price_tag(item.markup) %></td>
-      <td><%= price_tag(item.price) %></td>
-      <td><%= item.notes %></td>
-    </tr>
-
-    <% end %>
-  </table>
+    <%= render(:partial => "layouts/estimating_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("+ New Item", {:action => 'new'}, :class => 'add action-button') %>
+            <%= link_to("Instructions >>", {:action => 'show'}, :class => 'help action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Items List</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <%= form_tag('list', :method => 'get', :class => 'form-inline') do %>
+                <p>
+                    <%= label_tag :query, "Search" %>
+                    <%= text_field_tag(:query, @query) %>
+                </p>
+            <% end %>
+        </div>
+        <table class="grid-view" summary="Project List">
+            <tr class="header">
+                <th>Actions</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Default Quantity</th>
+                <th>Cost</th>
+                <th>Unit</th>
+                <th>Preset Margin</th>
+                <th>Price</th>
+                <th>Notes</th>
+                <!-- Displays all items that are attached to a category -->
+            </tr>
+            <!-- Displays all items that are NOT attached to a category -->
+            <% @items.each do |item| %>
+                <tr>
+                    <td class="center">
+                        <%= link_to("Edit", {:action => 'edit', :id => item.id}, :title => 'Edit', :class => 'edit table-action') %>
+                        <%= link_to("Delete", {:action => 'delete', :id => item.id}, :title => 'Delete', :class => 'delete table-action') %>
+                    </td>
+                    <td><%= item.name %></td>
+                    <td><%= item.description %></td>
+                    <td><%= item.qty %></td>
+                    <td><%= price_tag(item.estimated_cost) %></td>
+                    <td><%= item.unit %></td>
+                    <td><%= price_tag(item.markup) %></td>
+                    <td><%= price_tag(item.price) %></td>
+                    <td><%= item.notes %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 

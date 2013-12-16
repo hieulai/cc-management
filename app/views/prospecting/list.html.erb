@@ -1,65 +1,65 @@
 <div>
-	<%= render(:partial => "layouts/prospecting_sub_menu")%>
-	<h1>Prospect List</h1>
-	<p class="trigger">Instructions >></p>
-	<div class="instructions">
-		<p>Single-click on the row of the vendor you want for a detailed view. </p>
-		<p>Double-click on the row of the vendor you want to
-		edit their information.</p>
-	</div>
-	</br>
-	</br>
-	<%= link_to("+ New Prospect", {:action => 'new'}, class: 'btn') %>
-	</br>
-	</br>
-    <%= form_tag('list', method: 'get', class: 'form-inline') do %>
-      <%= label_tag :query, "Search", class: 'col-lg-1 control-label' %>
-      <%= text_field_tag(:query, @query) %>
-      </div>
-    <% end %>
+    <%= render(:partial => "layouts/prospecting_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("+ New Prospect", {:action => 'new'}, :class => 'add action-button') %>
+            <span class="trigger help action-button">Instructions >></span>
 
+            <div class="instructions">
+                <p>Single-click on the row of the vendor you want for a detailed view. </p>
 
-	<table class="grid-view" summary="Project List">
-		<tr class="header">
-			<th>Company</th>
-			<th>Prospect Name</th>
-			<th>Primary Phone</th>
-			<th>Email</th>
-			<th>Notes</th>
-
-
-		</tr>
-		<% @prospects.each do |prospect| %>
-
-		<tr class="rows">
-			<td><a href='<%= prospect.id %>'></a><%= prospect.company %></td>
-			<td><%= prospect.full_name %></td>
-			<td><%= number_to_phone(prospect.primary_phone, area_code: true) %></td>
-			<td><%= prospect.email %></td>
-			<td><%= prospect.notes %></td>
-
-		</tr>
-		<% end %>
-
-	</table>
+                <p>Double-click on the row of the vendor you want to edit their information.</p>
+            </div>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Prospect List</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <%= form_tag('list', :method => 'get', :class => 'form-inline') do %>
+                <%= label_tag :query, "Search", :class => 'col-lg-1 control-label' %>
+                <%= text_field_tag(:query, @query) %>
+            <% end %>
+        </div>
+        <table class="grid-view responsive" summary="Project List">
+            <tr class="header">
+                <th>Company</th>
+                <th>Prospect Name</th>
+                <th>Primary Phone</th>
+                <th>Email</th>
+                <th>Notes</th>
+            </tr>
+            <% @prospects.each do |prospect| %>
+                <tr class="rows">
+                    <td><a href='<%= prospect.id %>'></a><%= prospect.company %></td>
+                    <td><%= prospect.full_name %></td>
+                    <td><%= number_to_phone(prospect.primary_phone, :area_code => true) %></td>
+                    <td><%= prospect.email %></td>
+                    <td><%= prospect.notes %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 
 <script>
-	$(".instructions").hide();
-	$( ".trigger" ).click(function() {
-		if ($(".instructions").is(":hidden")) {
-			$(".instructions").slideDown("slow");
-		}
-		else {
-			$(".instructions").hide();
-		}
-	});
+    $(".instructions").hide();
+    $(".trigger").click(function () {
+        if ($(".instructions").is(":hidden")) {
+            $(".instructions").slideDown("slow");
+        }
+        else {
+            $(".instructions").hide();
+        }
+    });
 
-
-	$(".rows").click(function() {
-		window.location.href = '/prospecting/show/' + $(this).find("a").attr("href");
-	});
-	$(".rows").dblclick(function() {
-		window.location.href = '/prospecting/edit/' + $(this).find("a").attr("href");
-	});
+    $(".rows").click(function () {
+        window.location.href = '/prospecting/show/' + $(this).find("a").attr("href");
+    });
+    $(".rows").dblclick(function () {
+        window.location.href = '/prospecting/edit/' + $(this).find("a").attr("href");
+    });
 </script>

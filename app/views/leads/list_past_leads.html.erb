@@ -1,46 +1,52 @@
 <div>
-	<%= render(:partial => "layouts/leads_sub_menu")%>
-	<h1>Past Leads</h1>
-	<%= link_to("Instructions >>", {:action => 'show'}) %>
-	</br>
-	</br>
-	<table class="grid-view" summary="Lead List">
-		<tr class="header">
-			<th>Actions</th>
-			<th>Lead Stage</th>
-			<th>Project Name</th>
-			<th>Last Contacted</th>
-			<th>Client Name</th>
-			<th>Primary Phone</th>
-			<th>Email</th>
-			<th>Project Type</th>
-			<th>Exp. Revenue</th>
-			<th>Lead Source</th>
-			<th>Notes</th>
-			
-		</tr>
-		<% @projects.each do |lead| %>
-		<% client = Client.find(lead.client_id)%>
-		
-		<tr>
-			<td class="center">
-				<%= link_to("View", {:action => 'show', :id => lead.id}, :class => 'action vew') %>
-				<%= link_to("Edit", {:action => 'edit', :id => lead.id}, :class => 'action edit') %>
-				<%= link_to("Convert", {:action => 'convert', :id => lead.id}, :class => 'action convert') %>
-				<%= link_to("Delete", {:action => 'delete', :id => lead.id}, :class => 'action delete') %>
-			</td>
-			<td><%= lead.lead_stage %></td>
-			<td><%= lead.name %></td>
-			<td class="center"><%= client.last_contacted %></td>
-			<td><%= client.full_name %></td>
-			<td><%= number_to_phone(client.primary_phone, area_code: true) %></td>
-			<td><%= client.email %></td>
-			<td><%= lead.project_type %></td>
-			<td>$<%= number_with_delimiter(lead.revenue)%></td>
-			<td><%= client.lead_source %></td>
-			<td><%= lead.lead_notes%></td>
-		</tr>
-		<% end %>
-	</table>
+    <%= render(:partial => "layouts/leads_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Instructions >>", {:action => 'show'}, :class => 'help action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Past Leads</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <table class="grid-view responsive" summary="Lead List">
+            <tr class="header">
+                <th>Actions</th>
+                <th>Lead Stage</th>
+                <th>Project Name</th>
+                <th>Last Contacted</th>
+                <th>Client Name</th>
+                <th>Primary Phone</th>
+                <th>Email</th>
+                <th>Project Type</th>
+                <th>Exp. Revenue</th>
+                <th>Lead Source</th>
+                <th>Notes</th>
+            </tr>
+            <% @projects.each do |lead| %>
+                <% client = Client.find(lead.client_id) %>
+                <tr>
+                    <td class="center">
+                        <%= link_to("View", {:action => 'show', :id => lead.id}, :title => 'View', :class => 'view table-action') %>
+                        <%= link_to("Edit", {:action => 'edit', :id => lead.id}, :title => 'Edit', :class => 'edit table-action') %>
+                        <%= link_to("Convert", {:action => 'convert', :id => lead.id}, :title => 'Convert', :class => 'convert table-action') %>
+                        <%= link_to("Delete", {:action => 'delete', :id => lead.id}, :title => 'Delete', :class => 'delete table-action') %>
+                    </td>
+                    <td><%= lead.lead_stage %></td>
+                    <td><%= lead.name %></td>
+                    <td class="center"><%= client.last_contacted %></td>
+                    <td><%= client.full_name %></td>
+                    <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
+                    <td><%= client.email %></td>
+                    <td><%= lead.project_type %></td>
+                    <td>$<%= number_with_delimiter(lead.revenue) %></td>
+                    <td><%= client.lead_source %></td>
+                    <td><%= lead.lead_notes %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 

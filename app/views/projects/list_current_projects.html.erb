@@ -1,74 +1,80 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h1>Current Projects</h1>
-	</br>
-	<p class="trigger">Instructions >></p>
-	<div class="instructions">
-		<p>Single-click on the row of the vendor you want for a detailed view. </p>
-		<p>Double-click on the row of the vendor you want to 
-		edit their information.</p>
-	</div>
-	
-	</br>
-	</br>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <span class="trigger help action-button">Instructions >></span>
 
-	<table class="grid-view" summary="Project List">
-		<tr class="header">
-			<th>Actions</th>
-			<th>Project</th>
-			<th>Type</th>
-			<th>Start Date</th>
-			<th>Progress</th>
-			<th>Deadline</th>
-			<th>Schedule Variance</th>
-			<th>Next 5 Tasks</th>
-			<th>Notes</th>
-		</tr>
-		<% @projects.each do |project| %>
-		<tr id="project_<%= project.id %>">
-			<td class="center">
-				<%= link_to("Tasks", {:action => 'tasklist', :id => project.id}, :class => 'action vew') %>
-				<%= link_to("Bids", {:action => 'bids', :id => project.id}, :class => 'action vew') %>
-				<%= link_to("Budget", {:action => 'budget', :id => project.id}, :class => 'action vew') %>
-        		<%= link_to("COs", {:action => 'change_orders', :id => project.id}, :class => 'action edit') %>
-				<%= link_to("Specs", {:action => 'specifications', :id => project.id}, :class => 'action edit') %>
-				<%= link_to("View", {:action => 'show_project', :id => project.id}, :class => 'action vew') %>
-				<%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :class => 'action edit') %>
-				<%= link_to("Convert", {:action => 'convert_project', :id => project.id}, :class => 'action edit') %>
-			</td>
-			<td><a href='<%= project.id %>'></a><%= project.name %></td>
-			<td><%= project.project_type %></td>
-			<td><%= project.start_date %></td>
-			<td class="center"><div class="percentage"><%= number_to_percentage(project.current_progress, precision: 2) %></div></td>
-			<td><%= project.deadline %></td>
-			<td><%= project.schedule_variance %></td>
-      <td class="tasklist">
-          <%= render(:partial => "checkable_tasks", :locals => {:project => project}) %>
-      </td>
-			<td><%= project.project_notes %></td>
-			
-		</tr>
-		<% end %>
-	</table>
+            <div class="instructions">
+                <p>Single-click on the row of the vendor you want for a detailed view. </p>
+
+                <p>Double-click on the row of the vendor you want to edit their information.</p>
+            </div>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Current Projects</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <table class="grid-view responsive" summary="Project List">
+            <tr class="header">
+                <th>Actions</th>
+                <th>Project</th>
+                <th>Type</th>
+                <th>Start Date</th>
+                <th>Progress</th>
+                <th>Deadline</th>
+                <th>Schedule Variance</th>
+                <th>Next 5 Tasks</th>
+                <th>Notes</th>
+            </tr>
+            <% @projects.each do |project| %>
+                <tr id="project_<%= project.id %>">
+                    <td class="center">
+                        <%= link_to("Tasks", {:action => 'tasklist', :id => project.id}, :title => 'Tasks', :class => 'view table-action') %>
+                        <%= link_to("Bids", {:action => 'bids', :id => project.id}, :title => 'Bids', :class => 'view table-action') %>
+                        <%= link_to("Budget", {:action => 'budget', :id => project.id}, :title => 'Budget', :class => 'view table-action') %>
+                        <%= link_to("COs", {:action => 'change_orders', :id => project.id}, :title => 'COs', :class => 'view table-action') %>
+                        <%= link_to("Specs", {:action => 'specifications', :id => project.id}, :title => 'Specs', :class => 'view table-action') %>
+                        <%= link_to("View", {:action => 'show_project', :id => project.id}, :title => 'View', :class => 'view table-action') %>
+                        <%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :title => 'Edit', :class => 'edit table-action') %>
+                        <%= link_to("Convert", {:action => 'convert_project', :id => project.id}, :title => 'Convert', :class => 'convert table-action') %>
+                    </td>
+                    <td><a href='<%= project.id %>'></a><%= project.name %></td>
+                    <td><%= project.project_type %></td>
+                    <td><%= project.start_date %></td>
+                    <td class="center">
+                        <div class="percentage"><%= number_to_percentage(project.current_progress, :precision => 2) %></div>
+                    </td>
+                    <td><%= project.deadline %></td>
+                    <td><%= project.schedule_variance %></td>
+                    <td class="tasklist">
+                        <%= render(:partial => "checkable_tasks", :locals => {:project => project}) %>
+                    </td>
+                    <td><%= project.project_notes %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 
 <script>
-	$(".instructions").hide();
-	$( ".trigger" ).click(function() {
-		if ($(".instructions").is(":hidden")) {
-			$(".instructions").slideDown("slow");
-		} 
-		else {
-			$(".instructions").hide();
-		}
-	});
-		
-	
-	$(".rows").click(function() {
-		window.location.href = '/projects/show_project/' + $(this).find("a").attr("href");	
-	});
-	$(".rows").dblclick(function() {
-		window.location.href = '/projects/edit_project/' + $(this).find("a").attr("href");
-	});
+    $(".instructions").hide();
+    $(".trigger").click(function () {
+        if ($(".instructions").is(":hidden")) {
+            $(".instructions").slideDown("slow");
+        }
+        else {
+            $(".instructions").hide();
+        }
+    });
+
+    $(".rows").click(function () {
+        window.location.href = '/projects/show_project/' + $(this).find("a").attr("href");
+    });
+    $(".rows").dblclick(function () {
+        window.location.href = '/projects/edit_project/' + $(this).find("a").attr("href");
+    });
 </script>
 

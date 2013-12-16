@@ -1,37 +1,35 @@
 <div>
-  <%= render(:partial => "layouts/user_sub_menu")%>
-	<h1>Users</h1>
-	<%= link_to("Instructions >>", {:action => 'show'}) %>
-	</br>
-	</br>
-	<%= link_to("+ New User", {:controller => 'users', :action => 'new'}, class: 'btn') %>
-	</br>
-	</br>
-	
-	
-	<table class="grid-view" summary="Project List">
-		<tr class="header">
-			<th>Actions</th>
-			<th>Name</th>
-			<th>Authority Level</th>
-					
-					
-		</tr>
-		<% @builder.users.each do |x| %>
-		
-		<tr>
-			<td class="center">
-				<%= link_to("Show", {:action => 'show', :id => x.id}, :class => 'action edit') %>
-				<%= link_to("Edit", {:action => 'edit', :id => x.id}, :class => 'action edit') %>
-				<%= link_to("Delete", {:action => 'delete', :id => x.id}, :class => 'action delete') %>
-			</td>
-			<td><%= x.full_name%></td>
-			<td><%= x.authority %></td>
-		
-			
-		</tr>
-		<% end %>
-		
-	</table>
+    <%= render(:partial => "layouts/user_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("+ New User", {:controller => 'users', :action => 'new'}, :title => 'New User', :class => 'add action-button') %>
+            <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Users</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <table class="grid-view responsive" summary="Project List">
+            <tr class="header">
+                <th>Actions</th>
+                <th>Name</th>
+                <th>Authority Level</th>
+            </tr>
+            <% @builder.users.each do |x| %>
+                <tr>
+                    <td class="center">
+                        <%= link_to("Show", {:action => 'show', :id => x.id}, :title => 'Show', :class => 'view table-action') %>
+                        <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
+                        <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
+                    </td>
+                    <td><%= x.full_name %></td>
+                    <td><%= x.authority %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 

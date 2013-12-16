@@ -1,34 +1,35 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h1>Task Lists</h1>
-	<%= link_to("Instructions >>", {:action => 'show'}) %>
-	<p>
-	<%= link_to("+ New Task List", { :action => 'new'}, class: 'btn') %>
-  </p>
-
-  <p>
-  <%= link_to("Import Task List", { :action => 'show_import'}, class: 'btn') %>
-	</p>
-
-	<table class="grid-view" summary="Project List">
-		<tr class="header">
-			<th>Actions</th>
-			<th>Name</th>
-		</tr>
-		<% @tasklists.each do |x| %>
-
-		<tr>
-			<td class="center">
-				<%= link_to("Show", {:action => 'show', :id => x.id}, :class => 'action edit') %>
-        <%= link_to("Export", {:action => 'show', :id => x.id, :format => 'xls'}, :class => 'action') %>
-				<%= link_to("Edit", {:action => 'edit', :id => x.id}, :class => 'action edit') %>
-				<%= link_to("Delete", {:action => 'delete', :id => x.id}, :class => 'action delete') %>
-			</td>
-			<td><%= x.name%></td>
-
-		</tr>
-		<% end %>
-
-	</table>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("+ New Task List", {:action => 'new'}, :title => 'New Task List', :class => 'add action-button') %>
+            <%= link_to("Import Task List", {:action => 'show_import'}, :title => 'Import Task List', :class => 'add action-button') %>
+            <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Task Lists</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <table class="grid-view responsive" summary="Project List">
+            <tr class="header">
+                <th>Actions</th>
+                <th>Name</th>
+            </tr>
+            <% @tasklists.each do |x| %>
+                <tr>
+                    <td class="center">
+                        <%= link_to("Show", {:action => 'show', :id => x.id}, :title => 'Show', :class => 'view table-action') %>
+                        <%= link_to("Export", {:action => 'show', :id => x.id, :format => 'xls'}, :title => 'Export', :class => 'convert table-action') %>
+                        <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
+                        <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
+                    </td>
+                    <td><%= x.name %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 

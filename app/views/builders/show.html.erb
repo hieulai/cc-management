@@ -1,53 +1,61 @@
 <div>
-	<%= render(:partial => "layouts/company_sub_menu")%>
-	
-	<h2 class="center">Company Details:</h2>
-	
-	<%= link_to("Update", {:action => 'edit', :id => @builder.id}, :class => 'action edit') %>
-	<p>
-		<%= "Company Name:" %>
-		<%= @builder.company_name %>
-	</p>
-	<p>
-		<%= "Tax ID:" %>
-		<%= @builder.tax_id %>
-	</p>
-	<p>
-		<%= "Office Phone:" %>
-		<%= @builder.office_phone %>
-	</p>
-	<p>
-		<%= "Website:" %>
-		<%= @builder.website %>
-	</p>
-	<p>
-		<%= "Address: " %>
-		<%= @builder.address %>
-	</p>
-	<p>
-		<%= "City: " %>
-		<%= @builder.city %>
-	</p>
-	<p>
-		<%= "State: " %>
-		<%= @builder.state %>
-	</p>
-	<p>
-		<%= "Zipcode: " %>
-		<%= @builder.zipcode %>
-	</p>
-	<p>
-		<%= "In Business Since:" %>
-		<%= @builder.year_founded %>
-	</p>
-  <p>
-      <%= "Slogan:" %>
-      <%= @builder.slogan %>
-  </p>
-  <p>
-      <%= "Logo:" %>
-      <%= image_tag(@builder.image.name_url) if @builder.image.present? %>
-  </p>
-	
-	
+    <%= render(:partial => "layouts/company_sub_menu") %>
+    <h2 class="center">Company Details:</h2>
+    <%= link_to("Update", {:action => 'edit', :id => @builder.id}, :title => 'Update', :class => 'edit table-action') %>
+    <br/><br/>
+
+    <p>
+        <%= "Company Name:" %>
+        <%= @builder.company_name %>
+    </p>
+
+    <p>
+        <%= "Tax ID:" %>
+        <%= @builder.tax_id %>
+    </p>
+
+    <p>
+        <%= "Office Phone:" %>
+        <%= @builder.office_phone %>
+    </p>
+
+    <p>
+        <%= "Website:" %>
+        <%= @builder.website %>
+    </p>
+
+    <p>
+        <%= "Address: " %>
+        <%= @builder.address %>
+    </p>
+
+    <p>
+        <%= "City: " %>
+        <%= @builder.city %>
+    </p>
+
+    <p>
+        <%= "State: " %>
+        <%= @builder.state %>
+    </p>
+
+    <p>
+        <%= "Zipcode: " %>
+        <%= @builder.zipcode %>
+    </p>
+
+    <p>
+        <%= "In Business Since:" %>
+        <%= @builder.year_founded %>
+    </p>
+
+    <p>
+        <%= "Slogan:" %>
+        <%= @builder.slogan %>
+    </p>
+
+    <p>
+        <%= "Logo:" %>
+        <%= image_tag(@builder.image.name_url) if @builder.image.present? %>
+    </p>
 </div>

@@ -1,65 +1,71 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h1>Other Contacts</h1>
-	<p class="trigger">Instructions >></p>
-	<div class="instructions">
-		<p>Single-click on the row of the contact you want for a detailed view. </p>
-		<p>Double-click on the row of the contact you want to 
-		edit their information.</p>
-	</div>
-	</br>
-	</br>
-	<%= link_to("+ New Contact", {:action => 'new_contact'}, class: 'btn') %>
-	</br>
-	</br>
-	<%= form_tag('list_contacts', method: 'get', class: 'form-inline') do %>
-		<p>
-			<%= label_tag :query, "Search" %>
-			<%= text_field_tag(:query, @query) %>
-		</p>
-	<% end %>
-	<table class="grid-view" summary="Project List">
-		<tr class="header">
-			<th>Type</th>
-			<th>Main Contact</th>
-			<th>Primary Phone</th>
-			<th>Email</th>
-			<th>Associated Projects</th>
-			<th>Notes</th>
-		</tr>
-		<% @contacts.each do |c| %>
-		
-		<tr class="rows">
-			<td><a href='<%= c.id %>'></a>Other</td>
-			<td><%= c.full_name %></td>
-			<td><%= number_to_phone(c.primary_phone1, area_code: true) %></td>
-			<td><%= c.primary_email %></td>	
-			<td></td>	
-			<td><%= c.notes %></td>		
-		</tr>
-		<% end %>
-		
-	</table>
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("+ New Contact", {:action => 'new_contact'}, :title => 'New Contact', :class => 'add action-button') %>
+            <span class="trigger help action-button" title="Instructions">Instructions >></span>
+
+            <div class="instructions">
+                <p>Single-click on the row of the vendor you want for a detailed view. </p>
+
+                <p>Double-click on the row of the vendor you want to edit their information.</p>
+            </div>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Other Contacts</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <%= form_tag('list_contacts', :method => 'get', :class => 'form-inline') do %>
+                <p>
+                    <%= label_tag :query, "Search" %>
+                    <%= text_field_tag(:query, @query) %>
+                </p>
+            <% end %>
+        </div>
+        <table class="grid-view responsive" summary="Project List">
+            <tr class="header">
+                <th>Type</th>
+                <th>Main Contact</th>
+                <th>Primary Phone</th>
+                <th>Email</th>
+                <th>Associated Projects</th>
+                <th>Notes</th>
+            </tr>
+            <% @contacts.each do |c| %>
+                <tr class="rows">
+                    <td><a href='<%= c.id %>'></a>Other</td>
+                    <td><%= c.full_name %></td>
+                    <td><%= number_to_phone(c.primary_phone1, :area_code => true) %></td>
+                    <td><%= c.primary_email %></td>
+                    <td></td>
+                    <td><%= c.notes %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 
 <script>
-	$(".instructions").hide();
-	$( ".trigger" ).click(function() {
-		if ($(".instructions").is(":hidden")) {
-			$(".instructions").slideDown("slow");
-		} 
-		else {
-			$(".instructions").hide();
-		}
-	});
-		
-	
-	$(".rows").click(function() {
-		window.location.href = '/people/show_contact/' + $(this).find("a").attr("href");	
-	});
-	$(".rows").dblclick(function() {
-		window.location.href = '/people/edit_contact/' + $(this).find("a").attr("href");
-	});
+    $(".instructions").hide();
+    $(".trigger").click(function () {
+        if ($(".instructions").is(":hidden")) {
+            $(".instructions").slideDown("slow");
+        }
+        else {
+            $(".instructions").hide();
+        }
+    });
+
+    $(".rows").click(function () {
+        window.location.href = '/people/show_contact/' + $(this).find("a").attr("href");
+    });
+    $(".rows").dblclick(function () {
+        window.location.href = '/people/edit_contact/' + $(this).find("a").attr("href");
+    });
 </script>
 
 

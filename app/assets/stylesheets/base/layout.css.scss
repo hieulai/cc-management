@@ -2,357 +2,514 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#page
-{
-	width: 80%;
-	background: white;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 10px;
-	border: 1px solid #C9E0ED;
+*, ::before, ::after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-#header
-{
-	margin: 0;
-	padding: 0;
-	border-top: 3px solid #C9E0ED;
-	background: white;
+.zurb-row::before, .zurb-row::after {
+  content: " ";
+  display: table;
 }
 
-#header h1
-{
-	font-size: 3em;
-	text-align: left;
+.zurb-row::after {
+  clear: both;
 }
 
-#content h1
-{
-	text-align:center;
-	margin-top: 10px;
+.zurb-row {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  //max-width : 75 em;
 }
 
-#content
-{
-	text-align: left;
+.column, .columns {
+  position: relative;
+  padding-left: 0.9375em;
+  padding-right: 0.9375em;
+  width: 100%;
+  float: left;
 }
 
-#username
-{
-	text-align: right;
-	padding: 10px;
-	
+@media only screen {
+
+  .column, .columns {
+    position: relative;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    float: left;
+  }
+
+  .small-12 {
+    position: relative;
+    width: 100%;
+  }
+
+  .small-centered {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    float: none !important;
+  }
+
 }
 
-#footer
-{
-	padding: 10px;
-	margin: 10px 20px;
-	font-size: 0.8em;
-	text-align: center;
-	border-top: 1px solid #C9E0ED;
+@media only screen and (min-width: 40.063em) {
+  .medium-1 {
+    position: relative;
+    width: 8.33333%;
+  }
+
+  .medium-2 {
+    position: relative;
+    width: 16.66667%;
+  }
+
+  .medium-3 {
+    position: relative;
+    width: 25%;
+  }
+
+  .medium-4 {
+    position: relative;
+    width: 33.33333%;
+  }
+
+  .medium-6 {
+    position: relative;
+    width: 50%;
+  }
+
+  .medium-8 {
+    position: relative;
+    width: 66.66667%;
+  }
+
+  .medium-9 {
+    position: relative;
+    width: 75%;
+  }
 }
 
-#mainmenu
-{
-	background:#6399cd url(bg.gif) repeat-x left top;
-	width: 100%;
-	border: 1px solid rgb(48, 101, 151);
+@media only screen and (min-width: 64.063em) {
+
+  .column, .columns {
+    position: relative;
+    padding-left: 0.9375em;
+    padding-right: 0.9375em;
+    float: left;
+  }
+
+  .large-1 {
+    position: relative;
+    width: 8.33333%;
+  }
+
+  .large-2 {
+    position: relative;
+    width: 16.66667%;
+  }
+
+  .large-3 {
+    position: relative;
+    width: 25%;
+  }
+
+  .large-4 {
+    position: relative;
+    width: 33.33333%;
+  }
+
+  .large-6 {
+    position: relative;
+    width: 50%;
+  }
+
+  .large-8 {
+    position: relative;
+    width: 66.66667%;
+  }
+
+  .large-9 {
+    position: relative;
+    width: 75%;
+  }
+
+  .large-centered {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    float: none !important;
+  }
+
+}
+
+body {
+  font-family: "Calibri-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 25px;
+  background-color: #ececec;
+}
+
+form {
+  margin: 0 0 0.8em;
+}
+
+label, input[type="text"] {
+  font-size: 0.8em;
+}
+
+input[type="text"] {
+  height: 1.8em;
+  width: 13em;
+}
+
+#header {
+  padding-top: 0.8em;
+  padding-bottom: 0.45em;
+}
+
+#header h1 {
+  font-size: 4em;
+  line-height: 0.9em;
+  margin: 0;
+  text-align: left;
+  font-weight: normal;
+  color: #414143;
+}
+
+#content h1 {
+  text-align: center;
+  margin: 0;
+  font-size: 2.33em;
+  font-weight: normal;
+  line-height: 0.9em;
+  padding-top: 0.25em;
+  color: #414143;
+}
+
+#content {
+  text-align: left;
+}
+
+#username {
+  text-align: right;
+  line-height: 1.15em;
+  color: #414143;
+}
+
+#username a {
+  color: #414143;
+}
+
+#footer {
+  padding: 10px;
+  margin: 10px 20px;
+  font-size: 0.8em;
+  text-align: center;
+  border-top: 1px solid #C9E0ED;
+}
+
+#mainmenu {
+  background: url(image_path('menu-bg.png')) repeat left top;
+  width: 100%;
 }
 
 #mainmenu ul {
-	margin: 0 !important;
-	text-align: center;
-	padding: 0;
+  margin: 0 !important;
+  text-align: center;
+  padding: 0;
 }
 
-#mainmenu li
-{
-	margin: 0 0 0 -4px;
+#mainmenu li {
+  margin: 0 0 0 -6px;
+  line-height: 1.6em;
 }
 
-
-#mainmenu ul li
-{
-	display: inline-block;
-	text-align: center;
-	position: relative;
+#mainmenu ul li {
+  display: inline-block;
+  text-align: center;
+  position: relative;
 }
 
-#mainmenu ul li a
-{
-	color:#ffffff;
-	background-color:transparent;
-	font-size:14px;
-	font-weight:bold;
-	text-decoration:none;
-	/*padding:0px;*/
-	text-decoration:none;
-	display:block;
-	padding: 15px;
+#mainmenu ul li a {
+  color: #ececec;
+  background-color: transparent;
+  font-size: 1em;
+  text-decoration: none;
+  display: block;
+  padding: 0.6em;
 }
 
-#mainmenu ul li:hover
-{
-	font-weight:bold;
-	color: white;
-	background-color:rgb(48, 101, 151);
-	cursor: pointer;
-	/* Removing hover feature on main menu
-	color: #6399cd;
-	background-color:#EFF4FA;
-	text-decoration:none;
-	*/
-}
- #mainmenu ul li.active{
-	background-color:rgb(48, 101, 151);
+#mainmenu ul li:hover {
+  background: url(image_path('menu-active.png')) repeat-x left top;
+  cursor: pointer;
+  /* Removing hover feature on main menu
+  color: #6399cd;
+  background-color:#EFF4FA;
+  text-decoration:none;
+  */
 }
 
- #mainmenu ul li.active .arrow{
-	position: absolute;
-	width: 0;
-	height: 0;
-	border-color: transparent;
-	border-style: solid;
-	margin-left: -9px;
-	border-bottom-color: gray;
-	border-width: 0 9px 9px;
-	display: block;
-	bottom: -1px;
-	left: 50%;
+#mainmenu ul li.active {
+  background: url(image_path('menu-active.png')) repeat-x left top;
+}
+
+#mainmenu ul li.active .arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  margin-left: -9px;
+  border-bottom-color: gray;
+  border-width: 0 9px 9px;
+  display: none;
+  bottom: -1px;
+  left: 50%;
 
 }
 
-#submenu
-{
-	clear: both;
-	background: gray;
-	width: 100%;
-	padding: 5px 0 5px 0;
-	border-left: solid 1px rgb(73, 72, 72);
-	border-right: solid 1px rgb(73, 72, 72);
-	border-bottom: solid 1px rgb(73, 72, 72);
-	/*background:white url(bg.gif) repeat-x left top;*/
+#submenu {
+  clear: both;
+  background: #808080;
+  width: 100%;
 }
 
-#submenu ul
-{
-	padding:6px 20px 5px 20px;
-	margin:0px;
-	text-align: center;
-	margin: 0 auto;
+#submenu ul {
+  margin: 0px;
+  text-align: center;
+  margin: 0 auto;
 }
 
-#submenu ul li
-{
-	display: inline-block;
-	text-align: center;
-	position: relative;
-	margin: 3px;
+#submenu ul li {
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  line-height: 1.4em;
+  margin-left: -6px;
 }
 
-#submenu ul li a
-{
-	color:#fff;
-	font-size:1em;
-	font-weight:bold;
-	text-decoration:none;
-	padding:5px 8px;
-	border: solid 1px transparent;
+#submenu ul li a {
+  color: #fff;
+  font-size: 1em;
+  text-decoration: none;
+  padding: 0.45em;
+  border: solid 1px transparent;
+  display: block;
 }
 
-#submenu ul li a:hover
-{
-	color: #fff;
-	background-color:rgb(88, 86, 86);
-	// box-shadow: inset 0px 1px 2px rgb(73, 72, 72);
-	text-decoration:none;
-	border: solid 1px rgb(73, 72, 72);
-	border-radius: 3px;
+#submenu ul li a:hover, #submenu ul li.active a, #submenu ul li a.active {
+  color: #fff;
+  background-color: #414143;
+  text-decoration: none;
 }
 
-#submenu ul li a.active
-{
-	color: #fff;
-	background-color:rgb(88, 86, 86);
-	// box-shadow: inset 0px 1px 2px rgb(73, 72, 72);
-	text-decoration:none;
-	border: solid 1px rgb(73, 72, 72);
-	border-radius: 3px;
+.main-action-bar {
+  padding: 0.9em 0 0.7em 0;
 }
 
-
-#submenu ul li.active a
-{
-	color: #6399cd;
-	background-color:white;
-	text-decoration:none;
+.add {
+  background-image: url(image_path('plus-mark.png'));
+  background-size: 2.72em 2.72em;
 }
 
-.trigger
-{
-	color: #0000EE;
-	text-decoration:underline;
-	
+.help {
+  background-image: url(image_path('question-mark.png'));
+  background-size: 2.72em 2.72em;
 }
 
-.trigger.visited
-{
-	
-	color: #551A8B;
-	text-decoration:underline; 
+.action-button {
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  height: 2.72em;
+  text-align: left;
+  text-indent: -9000em;
+  width: 2.72em;
+  margin-right: 0.6em;
+  cursor: pointer;
 }
 
-.instructions
-{
-	//background-color: gray; 
+.table-action-bar {
+  width: 6.8em;
 }
 
-.f-left{
-  float:left;
+.view {
+  background-image: url(image_path('magnifying-glass-view.png'));
 }
 
-.f-right{
-  float:right;
+.edit {
+  background-image: url(image_path('pencil-edit.png'));
 }
 
-.center
-{
-	text-align:center;
+.convert {
+  background-image: url(image_path('convert-icon.png'));
 }
 
-.right
-{
-	text-align:right;
+.delete {
+  background-image: url(image_path('delete.png'));
 }
 
-.left
-{
-	text-align:left;
+.table-action {
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 0.95em 1.1em;
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  height: 1.1em;
+  text-align: left;
+  text-indent: -9000em;
+  width: 0.95em;
+  margin-right: 0.2em;
 }
 
-table.grid-view
-{
-	width: 100%;
-	padding: 15px 0;
-	border-collapse: collapse;
+.trigger {
+  color: #0000EE;
+  text-decoration: underline;
+
 }
 
-table.grid-view th, td
-{
-	font-size: 0.9em;
-	border: 1px white solid;
-	padding: 0.3em;
-	border: 1px #D0E3EF solid;
+.trigger.visited {
+
+  color: #551A8B;
+  text-decoration: underline;
 }
 
-table.grid-view th
-{
-	color: white;
-	background-color: #6399cd;
-	text-align: center;
-	font-size: 1.5em;
+.instructions {
+  margin-top: 0.5em;
 }
 
-table.grid-view th a:hover
-{
-	color: #FFF;
+.f-left {
+  float: left;
 }
 
-table.grid-view th a
-{
-	color: #EEE;
-	font-weight: bold;
-	text-decoration: none;
+.f-right {
+  float: right;
 }
 
-table.grid-view .subtotal, table.grid-view .total
-{
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.left {
+  text-align: left;
+}
+
+table.grid-view {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.grid-view th, table.grid-view td {
+  font-size: 0.8em;
+  font-weight: normal;
+}
+
+table.grid-view th {
+  color: white;
+  background-color: #004899;
+  text-align: center;
+  border: none;
+  padding: 0em 0.3em;
+  height: 3em;
+}
+
+table.grid-view td {
+  padding: 0.35em 0.3em;
+  border: 1px #909090 solid;
+}
+
+table.grid-view th a:hover {
+  color: #FFF;
+}
+
+table.grid-view th a {
+  color: #EEE;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+table.grid-view .subtotal, table.grid-view .total {
   border-top: solid 2px black;
   font-weight: bold;
 }
 
-.grid-view table.items th
-{
-	background: url("bg.gif") repeat-x scroll left top white;
+.grid-view table.items th {
+  background: url("bg.gif") repeat-x scroll left top white;
 }
 
-
-
-.grid-view table.items th a.asc
-{
-	background:url(up.gif) right center no-repeat;
-	padding-right: 10px;
+.grid-view table.items th a.asc {
+  background: url(up.gif) right center no-repeat;
+  padding-right: 10px;
 }
 
-.grid-view table.items th a.desc
-{
-	background:url(down.gif) right center no-repeat;
-	padding-right: 10px;
+.grid-view table.items th a.desc {
+  background: url(down.gif) right center no-repeat;
+  padding-right: 10px;
 }
 
-.grid-view table.items tr.even
-{
-	background: #F8F8F8;
+.grid-view table.items tr.even {
+  background: #F8F8F8;
 }
 
-.grid-view tr:hover
-{
-	background: #E5F1F4;
+.grid-view tr:hover {
+  background: #E5F1F4;
 }
 
-.grid-view table.items tr.selected
-{
-	background: #BCE774;
+.grid-view table.items tr.selected {
+  background: #BCE774;
 }
 
-table.gridview tbody tr:hover
-{
-	background: #ECFBD4;
+table.gridview tbody tr:hover {
+  background: #ECFBD4;
 }
 
-.grid-view .link-column img
-{
-	border: 0;
+.grid-view .link-column img {
+  border: 0;
 }
 
-.grid-view .button-column
-{
-	text-align: center;
-	width: 60px;
+.grid-view .button-column {
+  text-align: center;
+  width: 60px;
 }
 
-.grid-view .button-column img
-{
-	border: 0;
+.grid-view .button-column img {
+  border: 0;
 }
 
-.grid-view .checkbox-column
-{
-	width: 15px;
+.grid-view .checkbox-column {
+  width: 15px;
 }
 
-.grid-view .summary
-{
-	margin: 0 0 5px 0;
-	text-align: right;
+.grid-view .summary {
+  margin: 0 0 5px 0;
+  text-align: right;
 }
 
-.grid-view .pager
-{
-	margin: 5px 0 0 0;
-	text-align: right;
+.grid-view .pager {
+  margin: 5px 0 0 0;
+  text-align: right;
 }
 
-.grid-view .empty
-{
-	font-style: italic;
+.grid-view .empty {
+  font-style: italic;
 }
 
 .grid-view .filters input,
-.grid-view .filters select
-{
-	width: 100%;
-	border: 1px solid #ccc;
+.grid-view .filters select {
+  width: 100%;
+  border: 1px solid #ccc;
 }
 

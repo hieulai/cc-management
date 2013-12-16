@@ -19,6 +19,7 @@
 //= require jquery.dataTables
 //= require jquery.dataTables.extends
 //= require shared
+//= require responsive-tables
 //= require_tree .
 //= stub wkhtmltopdf_tableSplitHack
 

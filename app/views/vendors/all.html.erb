@@ -1,85 +1,88 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h1>All People</h1>
-	<p class="trigger">Instructions >></p>
-	<div class="instructions">
-		<p>Single-click on the row of the vendor you want for a detailed view. </p>
-		<p>Double-click on the row of the vendor you want to 
-		edit their information.</p>
-	</div>
-	</br>
-	</br>
-	<%= form_tag('all', method: 'get', class: 'form-inline') do %>
-		<p>
-			<%= label_tag :query, "Search" %>
-			<%= text_field_tag(:query, @query) %>
-		</p>
-	<% end %>
-	<table class="grid-view" summary="Project List">
-		<tr class="header">
-			<th>Type</th>
-			<th>Company</th>
-			<th>Main Contact</th>
-			<th>Primary Phone</th>
-			<th>Email</th>
-			<th>Associated Projects</th>
-			<th>Notes</th>
-					
-		</tr>
-		<% @clients.each do |client| %>
-		
-		<tr class="client-rows">
-			<td><a href='<%= client.id %>'></a>Client</td>
-			<td><%= client.company %></td>
-			<td><%= client.full_name %></td>
-			<td><%= number_to_phone(client.primary_phone, area_code: true) %></td>
-			<td><%= client.email %></td>	
-			<td></td>	
-			<td><%= client.notes %></td>	
-			
-		</tr>
-		<% end %>
-		<% @vendors.each do |v| %>
-		
-		<tr class="vendor-rows">
-			<td><a href='<%= v.id %>'></a><%= v.vendor_type %></td>
-			<td><%= v.company %></td>
-			<td><%= v.full_name %></td>
-			<td><%= number_to_phone(v.primary_phone1, area_code: true) %></td>
-			<td><%= v.primary_email %></td>	
-			<td></td>	
-			<td><%= v.notes %></td>	
-			
-		</tr>
-		<% end %>
-		
-		
-	</table>
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <span class="trigger help action-button">Instructions >></span>
+
+            <div class="instructions">
+                <p>Single-click on the row of the vendor you want for a detailed view. </p>
+
+                <p>Double-click on the row of the vendor you want to edit their information.</p>
+            </div>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>All People</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <%= form_tag('all', :method => 'get', :class => 'form-inline') do %>
+                <p>
+                    <%= label_tag :query, "Search" %>
+                    <%= text_field_tag(:query, @query) %>
+                </p>
+            <% end %>
+        </div>
+        <table class="grid-view responsive" summary="Project List">
+            <tr class="header">
+                <th>Type</th>
+                <th>Company</th>
+                <th>Main Contact</th>
+                <th>Primary Phone</th>
+                <th>Email</th>
+                <th>Associated Projects</th>
+                <th>Notes</th>
+            </tr>
+            <% @clients.each do |client| %>
+                <tr class="client-rows">
+                    <td><a href='<%= client.id %>'></a>Client</td>
+                    <td><%= client.company %></td>
+                    <td><%= client.full_name %></td>
+                    <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
+                    <td><%= client.email %></td>
+                    <td></td>
+                    <td><%= client.notes %></td>
+                </tr>
+            <% end %>
+            <% @vendors.each do |v| %>
+                <tr class="vendor-rows">
+                    <td><a href='<%= v.id %>'></a><%= v.vendor_type %></td>
+                    <td><%= v.company %></td>
+                    <td><%= v.full_name %></td>
+                    <td><%= number_to_phone(v.primary_phone1, :area_code => true) %></td>
+                    <td><%= v.primary_email %></td>
+                    <td></td>
+                    <td><%= v.notes %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
 </div>
 
 <script>
-	$(".instructions").hide();
-	$( ".trigger" ).click(function() {
-		if ($(".instructions").is(":hidden")) {
-			$(".instructions").slideDown("slow");
-		} 
-		else {
-			$(".instructions").hide();
-		}
-	});
-		
-	
-	$(".client-rows").click(function() {
-		window.location.href = '/clients/show/' + $(this).find("a").attr("href");	
-	});
-	$(".client-rows").dblclick(function() {
-		window.location.href = '/clients/edit/' + $(this).find("a").attr("href");
-	});
-	$(".vendor-rows").click(function() {
-		window.location.href = '/vendors/show/' + $(this).find("a").attr("href");	
-	});
-	$(".vendor-rows").dblclick(function() {
-		window.location.href = '/vendors/edit/' + $(this).find("a").attr("href");
-	});
+    $(".instructions").hide();
+    $(".trigger").click(function () {
+        if ($(".instructions").is(":hidden")) {
+            $(".instructions").slideDown("slow");
+        }
+        else {
+            $(".instructions").hide();
+        }
+    });
+
+    $(".client-rows").click(function () {
+        window.location.href = '/clients/show/' + $(this).find("a").attr("href");
+    });
+    $(".client-rows").dblclick(function () {
+        window.location.href = '/clients/edit/' + $(this).find("a").attr("href");
+    });
+    $(".vendor-rows").click(function () {
+        window.location.href = '/vendors/show/' + $(this).find("a").attr("href");
+    });
+    $(".vendor-rows").dblclick(function () {
+        window.location.href = '/vendors/edit/' + $(this).find("a").attr("href");
+    });
 </script>
 
