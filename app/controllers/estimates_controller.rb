@@ -51,7 +51,7 @@ class EstimatesController < ApplicationController
           @estimate.measurements << m
         end
         #if save succeeds, redirect to list action
-        redirect_to(:action => 'list_current')
+        redirect_to(:action => 'edit', :id => @estimate.id )
       else
         #if save fails, redisplay form to user can fix problems
         render('new')

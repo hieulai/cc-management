@@ -28,7 +28,6 @@
                     <td class="center">
                         <%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :title => 'Meas', :class => 'view table-action') %>
                         <%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Convert", {:action => 'convert', :id => estimate.id}, :title => 'Convert', :class => 'convert table-action') %>
                         <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :title => 'Delete', :class => 'delete table-action') %>
                     </td>
                     <td><%= estimate.project.try(:name) %></td>

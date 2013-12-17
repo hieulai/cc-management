@@ -13,18 +13,18 @@ class Project < ActiveRecord::Base
   :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes
 
   def next_tasks n
-    incompleted_tasks[0..n-1]
+    incomplete_tasks[0..n-1]
   end
 
   def current_progress
     if tasklist.present? && tasklist.tasks.any?
-     (1 - incompleted_tasks.count.to_f/tasklist.tasks.count.to_f)*100.00
+     (1 - incomplete_tasks.count.to_f/tasklist.tasks.count.to_f)*100.00
     else
       0.00
     end
   end
 
-  def incompleted_tasks
+  def incomplete_tasks
     unless tasklist.nil?
       tasklist.tasks.select { |t| !t.completed? }
     else

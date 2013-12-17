@@ -1,3 +1,8 @@
 var tr = $("#project_<%= @project.id %>");
-$(tr).find(".percentage").html('<%= escape_javascript(number_to_percentage(@project.current_progress, precision: 2)) %>');
-$(tr).find(".tasklist").html('<%= escape_javascript(render(:partial => "checkable_tasks", :locals => {:project => @project})) %>');
+<% if @project.incomplete_tasks.empty?  %>
+  $(tr).remove();
+<% else %>
+  $(tr).find(".percentage").html('<%= escape_javascript(number_to_percentage(@project.current_progress, precision: 2)) %>');
+  $(tr).find(".tasklist").html('<%= escape_javascript(render(:partial => "checkable_tasks", :locals => {:project => @project})) %>');
+<% end %>
+
