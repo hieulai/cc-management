@@ -20,37 +20,39 @@
                 </p>
             <% end %>
         </div>
-        <table class="grid-view" summary="Project List">
-            <tr class="header">
-                <th>Actions</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Default Quantity</th>
-                <th>Cost</th>
-                <th>Unit</th>
-                <th>Preset Margin</th>
-                <th>Price</th>
-                <th>Notes</th>
-                <!-- Displays all items that are attached to a category -->
-            </tr>
-            <!-- Displays all items that are NOT attached to a category -->
-            <% @items.each do |item| %>
-                <tr>
-                    <td class="center">
-                        <%= link_to("Edit", {:action => 'edit', :id => item.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Delete", {:action => 'delete', :id => item.id}, :title => 'Delete', :class => 'delete table-action') %>
-                    </td>
-                    <td><%= item.name %></td>
-                    <td><%= item.description %></td>
-                    <td><%= item.qty %></td>
-                    <td><%= price_tag(item.estimated_cost) %></td>
-                    <td><%= item.unit %></td>
-                    <td><%= price_tag(item.markup) %></td>
-                    <td><%= price_tag(item.price) %></td>
-                    <td><%= item.notes %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Default Quantity</th>
+                    <th>Cost</th>
+                    <th>Unit</th>
+                    <th>Preset Margin</th>
+                    <th>Price</th>
+                    <th>Notes</th>
+                    <!-- Displays all items that are attached to a category -->
                 </tr>
-            <% end %>
-        </table>
+                <!-- Displays all items that are NOT attached to a category -->
+                <% @items.each do |item| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Edit", {:action => 'edit', :id => item.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => item.id}, :title => 'Delete', :class => 'delete table-action') %>
+                        </td>
+                        <td><%= item.name %></td>
+                        <td><%= item.description %></td>
+                        <td><%= item.qty %></td>
+                        <td><%= price_tag(item.estimated_cost) %></td>
+                        <td><%= item.unit %></td>
+                        <td><%= price_tag(item.markup) %></td>
+                        <td><%= price_tag(item.price) %></td>
+                        <td><%= item.notes %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 

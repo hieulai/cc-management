@@ -11,42 +11,44 @@
         </div>
     </div>
     <div class="zurb-row">
-        <table class="grid-view responsive" summary="Project List">
-            <tr class="header">
-                <th>Actions</th>
-                <th>Project</th>
-                <th>Type</th>
-                <th>Start Date</th>
-                <th>Progress</th>
-                <th>Deadline</th>
-                <th>Schedule Variance</th>
-                <th>Next 5 Tasks</th>
-                <th>Notes</th>
-            </tr>
-            <% @projects.each do |project| %>
-                <tr>
-                    <td class="center">
-                        <%= link_to("Tasklist", {:action => 'tasklist', :id => project.id}, :title => 'Tasklist', :class => 'view table-action') %>
-                        <%= link_to("View", {:action => 'show_project', :id => project.id}, :title => 'View', :class => 'view table-action') %>
-                        <%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Convert", {:action => 'convert_project', :id => project.id}, :title => 'Convert', :class => 'convert table-action') %>
-                    </td>
-                    <td><%= project.name %></td>
-                    <td><%= project.project_type %></td>
-                    <td><%= project.start_date %></td>
-                    <td class="center"><%= number_to_percentage(project.current_progress, :precision => 2) %></td>
-                    <td><%= project.deadline %></td>
-                    <td><%= project.schedule_variance %></td>
-                    <td>
-                        <ul>
-                            <%- project.next_tasks(5).each do |t| %>
-                                <li><%= t.name %></li>
-                            <% end %>
-                        </ul>
-                    </td>
-                    <td><%= project.project_notes %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Project</th>
+                    <th>Type</th>
+                    <th>Start Date</th>
+                    <th>Progress</th>
+                    <th>Deadline</th>
+                    <th>Schedule Variance</th>
+                    <th>Next 5 Tasks</th>
+                    <th>Notes</th>
                 </tr>
-            <% end %>
-        </table>
+                <% @projects.each do |project| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Tasklist", {:action => 'tasklist', :id => project.id}, :title => 'Tasklist', :class => 'view table-action') %>
+                            <%= link_to("View", {:action => 'show_project', :id => project.id}, :title => 'View', :class => 'view table-action') %>
+                            <%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Convert", {:action => 'convert_project', :id => project.id}, :title => 'Convert', :class => 'convert table-action') %>
+                        </td>
+                        <td><%= project.name %></td>
+                        <td><%= project.project_type %></td>
+                        <td><%= project.start_date %></td>
+                        <td class="center"><%= number_to_percentage(project.current_progress, :precision => 2) %></td>
+                        <td><%= project.deadline %></td>
+                        <td><%= project.schedule_variance %></td>
+                        <td>
+                            <ul>
+                                <%- project.next_tasks(5).each do |t| %>
+                                    <li><%= t.name %></li>
+                                <% end %>
+                            </ul>
+                        </td>
+                        <td><%= project.project_notes %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>

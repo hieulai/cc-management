@@ -25,39 +25,41 @@
                 </p>
             <% end %>
         </div>
-        <table class="grid-view responsive" summary="Project List">
-            <tr class="header">
-                <th>Type</th>
-                <th>Company</th>
-                <th>Main Contact</th>
-                <th>Primary Phone</th>
-                <th>Email</th>
-                <th>Associated Projects</th>
-                <th>Notes</th>
-            </tr>
-            <% @clients.each do |client| %>
-                <tr class="client-rows">
-                    <td><a href='<%= client.id %>'></a>Client</td>
-                    <td><%= client.company %></td>
-                    <td><%= client.full_name %></td>
-                    <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
-                    <td><%= client.email %></td>
-                    <td></td>
-                    <td><%= client.notes %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Type</th>
+                    <th>Company</th>
+                    <th>Main Contact</th>
+                    <th>Primary Phone</th>
+                    <th>Email</th>
+                    <th>Associated Projects</th>
+                    <th>Notes</th>
                 </tr>
-            <% end %>
-            <% @vendors.each do |v| %>
-                <tr class="vendor-rows">
-                    <td><a href='<%= v.id %>'></a><%= v.vendor_type %></td>
-                    <td><%= v.company %></td>
-                    <td><%= v.full_name %></td>
-                    <td><%= number_to_phone(v.primary_phone1, :area_code => true) %></td>
-                    <td><%= v.primary_email %></td>
-                    <td></td>
-                    <td><%= v.notes %></td>
-                </tr>
-            <% end %>
-        </table>
+                <% @clients.each do |client| %>
+                    <tr class="client-rows">
+                        <td><a href='<%= client.id %>'></a>Client</td>
+                        <td><%= client.company %></td>
+                        <td><%= client.full_name %></td>
+                        <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
+                        <td><%= client.email %></td>
+                        <td></td>
+                        <td><%= client.notes %></td>
+                    </tr>
+                <% end %>
+                <% @vendors.each do |v| %>
+                    <tr class="vendor-rows">
+                        <td><a href='<%= v.id %>'></a><%= v.vendor_type %></td>
+                        <td><%= v.company %></td>
+                        <td><%= v.full_name %></td>
+                        <td><%= number_to_phone(v.primary_phone1, :area_code => true) %></td>
+                        <td><%= v.primary_email %></td>
+                        <td></td>
+                        <td><%= v.notes %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 

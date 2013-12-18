@@ -12,24 +12,26 @@
         </div>
     </div>
     <div class="zurb-row">
-        <table class="grid-view responsive" summary="Project List">
-            <tr class="header">
-                <th>Actions</th>
-                <th>Name</th>
-                <th>Authority Level</th>
-            </tr>
-            <% @builder.users.each do |x| %>
-                <tr>
-                    <td class="center">
-                        <%= link_to("Show", {:action => 'show', :id => x.id}, :title => 'Show', :class => 'view table-action') %>
-                        <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
-                    </td>
-                    <td><%= x.full_name %></td>
-                    <td><%= x.authority %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Name</th>
+                    <th>Authority Level</th>
                 </tr>
-            <% end %>
-        </table>
+                <% @builder.users.each do |x| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Show", {:action => 'show', :id => x.id}, :title => 'Show', :class => 'view table-action') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
+                        </td>
+                        <td><%= x.full_name %></td>
+                        <td><%= x.authority %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 

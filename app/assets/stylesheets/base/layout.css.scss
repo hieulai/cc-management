@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-*, ::before, ::after {
+.zurb-row, .column, .columns, ::before, ::after {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -147,23 +147,8 @@
 
 }
 
-body {
-  font-family: "Calibri-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 25px;
-  background-color: #ececec;
-}
-
 form {
   margin: 0 0 0.8em;
-}
-
-label, input[type="text"] {
-  font-size: 0.8em;
-}
-
-input[type="text"] {
-  height: 1.8em;
-  width: 13em;
 }
 
 #header {
@@ -202,6 +187,7 @@ input[type="text"] {
 
 #username a {
   color: #414143;
+  text-decoration: none;
 }
 
 #footer {
@@ -214,6 +200,7 @@ input[type="text"] {
 
 #mainmenu {
   background: url(image_path('menu-bg.png')) repeat left top;
+  background-size: 0.5em 2.8em;
   width: 100%;
 }
 
@@ -243,14 +230,9 @@ input[type="text"] {
   padding: 0.6em;
 }
 
-#mainmenu ul li:hover {
+#mainmenu ul li a:hover {
   background: url(image_path('menu-active.png')) repeat-x left top;
   cursor: pointer;
-  /* Removing hover feature on main menu
-  color: #6399cd;
-  background-color:#EFF4FA;
-  text-decoration:none;
-  */
 }
 
 #mainmenu ul li.active {
@@ -279,7 +261,6 @@ input[type="text"] {
 }
 
 #submenu ul {
-  margin: 0px;
   text-align: center;
   margin: 0 auto;
 }
@@ -288,7 +269,7 @@ input[type="text"] {
   display: inline-block;
   text-align: center;
   position: relative;
-  line-height: 1.4em;
+  line-height: 1.5em;
   margin-left: -6px;
 }
 
@@ -296,15 +277,13 @@ input[type="text"] {
   color: #fff;
   font-size: 1em;
   text-decoration: none;
-  padding: 0.45em;
-  border: solid 1px transparent;
+  padding: 0.46em;
+  border: none;
   display: block;
 }
 
 #submenu ul li a:hover, #submenu ul li.active a, #submenu ul li a.active {
-  color: #fff;
   background-color: #414143;
-  text-decoration: none;
 }
 
 .main-action-bar {
@@ -313,12 +292,12 @@ input[type="text"] {
 
 .add {
   background-image: url(image_path('plus-mark.png'));
-  background-size: 2.72em 2.72em;
+  background-size: 2.7em 2.7em;
 }
 
 .help {
   background-image: url(image_path('question-mark.png'));
-  background-size: 2.72em 2.72em;
+  background-size: 2.7em 2.7em;
 }
 
 .action-button {
@@ -337,7 +316,7 @@ input[type="text"] {
 }
 
 .table-action-bar {
-  width: 6.8em;
+  width: 8.5em;
 }
 
 .view {
@@ -359,7 +338,7 @@ input[type="text"] {
 .table-action {
   background-position: 0 0;
   background-repeat: no-repeat;
-  background-size: 0.95em 1.1em;
+  background-size: 1em 1.1em;
   display: -moz-inline-box;
   -moz-box-orient: vertical;
   display: inline-block;
@@ -367,8 +346,8 @@ input[type="text"] {
   height: 1.1em;
   text-align: left;
   text-indent: -9000em;
-  width: 0.95em;
-  margin-right: 0.2em;
+  width: 1em;
+  margin-right: 0.4em;
 }
 
 .trigger {
@@ -421,7 +400,7 @@ table.grid-view th {
   color: white;
   background-color: #004899;
   text-align: center;
-  border: none;
+  border: 1px solid #004899;
   padding: 0em 0.3em;
   height: 3em;
 }
@@ -511,5 +490,9 @@ table.gridview tbody tr:hover {
 .grid-view .filters select {
   width: 100%;
   border: 1px solid #ccc;
+}
+
+.margin-bottom {
+  margin-bottom: 2.4em;
 }
 

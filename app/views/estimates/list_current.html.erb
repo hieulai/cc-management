@@ -12,34 +12,36 @@
         </div>
     </div>
     <div class="zurb-row">
-        <table class="grid-view responsive" summary="Project List">
-            <tr class="header">
-                <th>Actions</th>
-                <th>Project Name</th>
-                <th>Template</th>
-                <th>Status</th>
-                <th>Due Date</th>
-                <th>Exp. Revenue</th>
-                <th>Exp. Profit</th>
-                <th>Notes</th>
-            </tr>
-            <% @estimates.each do |estimate| %>
-                <tr>
-                    <td class="center">
-                        <%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :title => 'Meas', :class => 'view table-action') %>
-                        <%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :title => 'Delete', :class => 'delete table-action') %>
-                    </td>
-                    <td><%= estimate.project.try(:name) %></td>
-                    <td><%= estimate.template.name %></td>
-                    <td><%= estimate.progress %></td>
-                    <td><%= estimate.deadline %></td>
-                    <td><%= price_tag(estimate.revenue) %></td>
-                    <td><%= price_tag(estimate.profit) %></td>
-                    <td><%= estimate.notes %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Project Name</th>
+                    <th>Template</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Exp. Revenue</th>
+                    <th>Exp. Profit</th>
+                    <th>Notes</th>
                 </tr>
-            <% end %>
-        </table>
+                <% @estimates.each do |estimate| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :title => 'Meas', :class => 'view table-action') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :title => 'Delete', :class => 'delete table-action') %>
+                        </td>
+                        <td><%= estimate.project.try(:name) %></td>
+                        <td><%= estimate.template.name %></td>
+                        <td><%= estimate.progress %></td>
+                        <td><%= estimate.deadline %></td>
+                        <td><%= price_tag(estimate.revenue) %></td>
+                        <td><%= price_tag(estimate.profit) %></td>
+                        <td><%= estimate.notes %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 

@@ -11,42 +11,44 @@
         </div>
     </div>
     <div class="zurb-row">
-        <table class="grid-view responsive" summary="Lead List">
-            <tr class="header">
-                <th>Actions</th>
-                <th>Lead Stage</th>
-                <th>Project Name</th>
-                <th>Last Contacted</th>
-                <th>Client Name</th>
-                <th>Primary Phone</th>
-                <th>Email</th>
-                <th>Project Type</th>
-                <th>Exp. Revenue</th>
-                <th>Lead Source</th>
-                <th>Notes</th>
-            </tr>
-            <% @projects.each do |lead| %>
-                <% client = Client.find(lead.client_id) %>
-                <tr>
-                    <td class="center">
-                        <%= link_to("View", {:action => 'show', :id => lead.id}, :title => 'View', :class => 'view table-action') %>
-                        <%= link_to("Edit", {:action => 'edit', :id => lead.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Convert", {:action => 'convert', :id => lead.id}, :title => 'Convert', :class => 'convert table-action') %>
-                        <%= link_to("Delete", {:action => 'delete', :id => lead.id}, :title => 'Delete', :class => 'delete table-action') %>
-                    </td>
-                    <td><%= lead.lead_stage %></td>
-                    <td><%= lead.name %></td>
-                    <td class="center"><%= client.last_contacted %></td>
-                    <td><%= client.full_name %></td>
-                    <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
-                    <td><%= client.email %></td>
-                    <td><%= lead.project_type %></td>
-                    <td>$<%= number_with_delimiter(lead.revenue) %></td>
-                    <td><%= client.lead_source %></td>
-                    <td><%= lead.lead_notes %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Lead List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Lead Stage</th>
+                    <th>Project Name</th>
+                    <th>Last Contacted</th>
+                    <th>Client Name</th>
+                    <th>Primary Phone</th>
+                    <th>Email</th>
+                    <th>Project Type</th>
+                    <th>Exp. Revenue</th>
+                    <th>Lead Source</th>
+                    <th>Notes</th>
                 </tr>
-            <% end %>
-        </table>
+                <% @projects.each do |lead| %>
+                    <% client = Client.find(lead.client_id) %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("View", {:action => 'show', :id => lead.id}, :title => 'View', :class => 'view table-action') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => lead.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Convert", {:action => 'convert', :id => lead.id}, :title => 'Convert', :class => 'convert table-action') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => lead.id}, :title => 'Delete', :class => 'delete table-action') %>
+                        </td>
+                        <td><%= lead.lead_stage %></td>
+                        <td><%= lead.name %></td>
+                        <td class="center"><%= client.last_contacted %></td>
+                        <td><%= client.full_name %></td>
+                        <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
+                        <td><%= client.email %></td>
+                        <td><%= lead.project_type %></td>
+                        <td>$<%= number_with_delimiter(lead.revenue) %></td>
+                        <td><%= client.lead_source %></td>
+                        <td><%= lead.lead_notes %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 

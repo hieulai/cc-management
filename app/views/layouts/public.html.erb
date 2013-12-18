@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Construction Central</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag :application %>
-  <%= csrf_meta_tags %>
+    <title>Construction Central</title>
+    <%= stylesheet_link_tag "application", :media => "all" %>
+    <%= stylesheet_link_tag "public", :media => "all" %>
+    <%= javascript_include_tag :application %>
+    <%= csrf_meta_tags %>
 </head>
 <body>
-	<div id='page'>
-		<div id='header'>
-			<h1>Construction Central</h1>
-		</div>
-			
-		<div id='content'>
-			<%= yield %>
-		</div>
-	</div>
+<div id='page'>
+    <div id='header'>
+        <h1>Construction Central</h1>
+    </div>
+
+    <div id='content'>
+        <%= yield %>
+    </div>
+</div>
 </body>
 </html>
 

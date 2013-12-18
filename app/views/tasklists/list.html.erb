@@ -13,23 +13,25 @@
         </div>
     </div>
     <div class="zurb-row">
-        <table class="grid-view responsive" summary="Project List">
-            <tr class="header">
-                <th>Actions</th>
-                <th>Name</th>
-            </tr>
-            <% @tasklists.each do |x| %>
-                <tr>
-                    <td class="center">
-                        <%= link_to("Show", {:action => 'show', :id => x.id}, :title => 'Show', :class => 'view table-action') %>
-                        <%= link_to("Export", {:action => 'show', :id => x.id, :format => 'xls'}, :title => 'Export', :class => 'convert table-action') %>
-                        <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
-                    </td>
-                    <td><%= x.name %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Name</th>
                 </tr>
-            <% end %>
-        </table>
+                <% @tasklists.each do |x| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Show", {:action => 'show', :id => x.id}, :title => 'Show', :class => 'view table-action') %>
+                            <%= link_to("Export", {:action => 'show', :id => x.id, :format => 'xls'}, :title => 'Export', :class => 'convert table-action') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
+                        </td>
+                        <td><%= x.name %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 

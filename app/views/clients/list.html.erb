@@ -19,39 +19,41 @@
                 </p>
             <% end %>
         </div>
-        <table class="grid-view responsive" summary="Project List">
-            <tr class="header">
-                <th>Actions</th>
-                <th>Company</th>
-                <th>Client Name</th>
-                <th>Primary Phone</th>
-                <th>Email</th>
-                <th>Associated Projects</th>
-                <th>Lead Source</th>
-                <th>Notes</th>
-            </tr>
-            <% @clients.each do |client| %>
-                <tr>
-                    <td class="center">
-                        <%= link_to("Show", {:action => 'show', :id => client.id}, :title => 'Show', :class => 'view table-action') %>
-                        <%= link_to("Edit", {:action => 'edit', :id => client.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Delete", {:action => 'delete', :id => client.id}, :title => 'Delete', :class => 'delete table-action') %>
-                    </td>
-                    <td><%= client.company %></td>
-                    <td><%= client.full_name %></td>
-                    <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
-                    <td><%= client.email %></td>
-                    <td>
-                        <% client.projects.each do |project| %>
-                            <%= project.name %>
-                            </br>
-                        <% end %>
-                    </td>
-                    <td><%= client.lead_source %></td>
-                    <td><%= client.notes %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Company</th>
+                    <th>Client Name</th>
+                    <th>Primary Phone</th>
+                    <th>Email</th>
+                    <th>Associated Projects</th>
+                    <th>Lead Source</th>
+                    <th>Notes</th>
                 </tr>
-            <% end %>
-        </table>
+                <% @clients.each do |client| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Show", {:action => 'show', :id => client.id}, :title => 'Show', :class => 'view table-action') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => client.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => client.id}, :title => 'Delete', :class => 'delete table-action') %>
+                        </td>
+                        <td><%= client.company %></td>
+                        <td><%= client.full_name %></td>
+                        <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
+                        <td><%= client.email %></td>
+                        <td>
+                            <% client.projects.each do |project| %>
+                                <%= project.name %>
+                                </br>
+                            <% end %>
+                        </td>
+                        <td><%= client.lead_source %></td>
+                        <td><%= client.notes %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 

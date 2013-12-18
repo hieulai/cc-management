@@ -1,0 +1,11 @@
+body {
+    font-family: "Calibri-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    background-color: #ececec;
+}
+
+@media only screen and (min-width: 1580px) {
+    body {
+        font-size: 25px;
+    }
+}

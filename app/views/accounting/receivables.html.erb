@@ -10,31 +10,33 @@
         <div class="large-3 medium-2 columns">
         </div>
     </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <h3>Recent Invoices</h3>
 
-    <h3>Recent Invoices</h3>
+            <div class="button-group">
+                <%= link_to("All Invoices >>", {:action => 'invoices'}, :class => 'btn') %>
+                <%= link_to("+ Invoice", {:action => 'new_invoice'}, :id => 'add-invoice', :class => 'action vew btn') %>
+            </div>
+            <%= render(:partial => "invoices", :locals => {:invoices => @invoices}) %>
 
-    <div class="button-group">
-        <%= link_to("All Invoices >>", {:action => 'invoices'}, :class => 'btn') %>
-        <%= link_to("+ Invoice", {:action => 'new_invoice'}, :id => 'add-invoice', :class => 'action vew btn') %>
+            <h3>Recent Receipts</h3>
+
+            <div class="button-group">
+                <%= link_to("All Receipts >>", {:action => 'receipts'}, :class => 'btn') %>
+                <%= link_to("+ Receipt", {:action => 'new_receipt'}, :id => 'add-receipt', :class => 'action vew btn') %>
+            </div>
+            <%= render(:partial => "receipts", :locals => {:receipts => @receipts}) %>
+
+            <h3>Recent Deposits</h3>
+
+            <div class="button-group">
+                <%= link_to("All Deposits >>", {:action => 'deposits'}, :class => 'btn') %>
+                <%= link_to("+ Deposit", {:action => 'new_deposit'}, :id => 'add-deposit', :class => 'action vew btn') %>
+            </div>
+            <%= render(:partial => "deposits", :locals => {:deposits => @deposits}) %>
+        </div>
     </div>
-    <%= render(:partial => "invoices", :locals => {:invoices => @invoices}) %>
-
-    <h3>Recent Receipts</h3>
-
-    <div class="button-group">
-        <%= link_to("All Receipts >>", {:action => 'receipts'}, :class => 'btn') %>
-        <%= link_to("+ Receipt", {:action => 'new_receipt'}, :id => 'add-receipt', :class => 'action vew btn') %>
-    </div>
-    <%= render(:partial => "receipts", :locals => {:receipts => @receipts}) %>
-
-    <h3>Recent Deposits</h3>
-
-    <div class="button-group">
-        <%= link_to("All Deposits >>", {:action => 'deposits'}, :class => 'btn') %>
-        <%= link_to("+ Deposit", {:action => 'new_deposit'}, :id => 'add-deposit', :class => 'action vew btn') %>
-    </div>
-    <%= render(:partial => "deposits", :locals => {:deposits => @deposits}) %>
-
 </div>
 
 

@@ -12,23 +12,25 @@
         </div>
     </div>
     <div class="zurb-row">
-        <table class="grid-view responsive" summary="Project List">
-            <tr class="header">
-                <th>Actions</th>
-                <th>Name</th>
-                <th>Notes</th>
-            </tr>
-            <% @categories.each do |category| %>
-                <tr>
-                    <td class="center">
-                        <%= link_to("Edit", {:action => 'edit', :id => category.id}, :title => 'Edit', :class => 'edit table-action') %>
-                        <%= link_to("Delete", {:action => 'delete', :id => category.id}, :title => 'Delete', :class => 'delete table-action') %>
-                    </td>
-                    <td><%= category.name %></td>
-                    <td><%= %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Name</th>
+                    <th>Notes</th>
                 </tr>
-            <% end %>
-        </table>
+                <% @categories.each do |category| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Edit", {:action => 'edit', :id => category.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => category.id}, :title => 'Delete', :class => 'delete table-action') %>
+                        </td>
+                        <td><%= category.name %></td>
+                        <td><%= %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 

@@ -24,24 +24,26 @@
                 <%= text_field_tag(:query, @query) %>
             <% end %>
         </div>
-        <table class="grid-view responsive" summary="Project List">
-            <tr class="header">
-                <th>Company</th>
-                <th>Prospect Name</th>
-                <th>Primary Phone</th>
-                <th>Email</th>
-                <th>Notes</th>
-            </tr>
-            <% @prospects.each do |prospect| %>
-                <tr class="rows">
-                    <td><a href='<%= prospect.id %>'></a><%= prospect.company %></td>
-                    <td><%= prospect.full_name %></td>
-                    <td><%= number_to_phone(prospect.primary_phone, :area_code => true) %></td>
-                    <td><%= prospect.email %></td>
-                    <td><%= prospect.notes %></td>
+        <div class="columns">
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Company</th>
+                    <th>Prospect Name</th>
+                    <th>Primary Phone</th>
+                    <th>Email</th>
+                    <th>Notes</th>
                 </tr>
-            <% end %>
-        </table>
+                <% @prospects.each do |prospect| %>
+                    <tr class="rows">
+                        <td><a href='<%= prospect.id %>'></a><%= prospect.company %></td>
+                        <td><%= prospect.full_name %></td>
+                        <td><%= number_to_phone(prospect.primary_phone, :area_code => true) %></td>
+                        <td><%= prospect.email %></td>
+                        <td><%= prospect.notes %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
     </div>
 </div>
 
