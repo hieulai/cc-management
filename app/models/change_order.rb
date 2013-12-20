@@ -3,7 +3,7 @@ class ChangeOrder < ActiveRecord::Base
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :project
-  has_many :change_orders_categories, :dependent => :delete_all
+  has_many :change_orders_categories, :dependent => :destroy
 
   scope :approved, -> { where approved: true }
 

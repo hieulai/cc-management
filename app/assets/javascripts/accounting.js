@@ -1,6 +1,6 @@
 var calculatePurchaseAmount = function (obj, f){
-    var estimateCost = $(obj).closest("tr").find('input[name="items[][estimated_cost]"]');
-    var qty = $(obj).closest("tr").find('input[name="items[][qty]"]');
+    var estimateCost = $(obj).closest("tr").find('input[name$="[][estimated_cost]"]');
+    var qty = $(obj).closest("tr").find('input[name$="[][qty]"]');
     var eValue = text_to_number($(estimateCost).val());
     var qValue = text_to_number(qty.val());
     var pValue = eValue * qValue;
@@ -72,7 +72,7 @@ var calculatePostTaxAmount = function (i) {
         actualAmount *= (1 + text_to_number($('input[name$="[sales_tax_rate]"]').val()) / 100);
         $(i).closest("tr").find(".post-tax-actual-amount").text(number_to_currency_with_unit(actualAmount, 2, '.', ','))
     }
-    $(i).closest("tr").find('input[name="items[][actual_cost]"]').val(actualAmount.toFixed(2));
+    $(i).closest("tr").find('input[name$="[][actual_cost]"]').val(actualAmount.toFixed(2));
 };
 
 var calculatePostTaxAmounts = function () {
@@ -89,7 +89,7 @@ $(document).ready(function() {
     initAccounting("receipt", "invoice");
     initAccounting("deposit", "receipt");
 
-    $(document).on('change', 'input[name="items[][qty]"], input[name="items[][estimated_cost]"]', function () {
+    $(document).on('change', 'input[name$="[][qty]"], input[name$="[][estimated_cost]"]', function () {
         calculatePurchaseAmount(this);
         calculatePurchasableSubTotalAndTotal();
     });
@@ -97,10 +97,12 @@ $(document).ready(function() {
         if ($(this).is(":checked")) {
             toggleItemInputs(this, true);
             calculatePurchaseAmount(this);
+            $(this).closest("tr").find('input[name$="[][_destroy]"]').val("false");
         } else {
             toggleItemInputs(this, false);
             $(this).closest("tr").find(".actual-amount-placeholder").text("");
-            $(this).closest("tr").find('input[name="items[][actual_cost]"]').val("");
+            $(this).closest("tr").find('input[name$="[][actual_cost]"]').val("");
+            $(this).closest("tr").find('input[name$="[][_destroy]"]').val("true");
         }
         calculatePurchasableSubTotalAndTotal();
     });

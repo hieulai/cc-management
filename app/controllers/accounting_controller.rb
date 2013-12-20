@@ -2,7 +2,7 @@ class AccountingController < ApplicationController
   before_filter :authenticate_user!
   
   def index
-    redirect_to(:action => 'receivables')
+    redirect_to(:action => 'payables')
   end
 
   def receivables
@@ -202,6 +202,7 @@ class AccountingController < ApplicationController
 
   def edit_purchase_order
     @purchasable = PurchaseOrder.find(params[:id])
+    @purchasable.amount
   end
 
   def update_purchase_order
@@ -427,8 +428,6 @@ class AccountingController < ApplicationController
     @type = type.to_s.underscore
     @purchasable = klass.new(params[@type.to_sym])
     purchased_items = params[:items].present? ? params[:items].select { |i| i[:id].nil? } : []
-    amount_items = params[:items].present? ? params[:items].select { |i| i[:actual_cost].present? && i[:id].present? } : []
-    @purchasable.amount = amount_items
     @purchasable.builder_id = session[:builder_id]
     # Checking for valid payment
     if @purchasable.instance_of? Bill
@@ -452,7 +451,7 @@ class AccountingController < ApplicationController
       @purchasable.items = Item.create(purchased_items)
       # Create payment simultaneously for bills
       if @purchasable.instance_of?(Bill) && payment && payment.save
-        payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
+        payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.amount)
       end
       respond_to do |format|
         format.html {redirect_to(:action => "payables")}
@@ -460,6 +459,7 @@ class AccountingController < ApplicationController
       end
     else
       @bill = @purchase_order = @purchasable
+      handle_purchasable_errors
       respond_to do |format|
         format.html { render("new_#{@type}") }
         format.js { render "purchasable_response" }
@@ -472,8 +472,6 @@ class AccountingController < ApplicationController
     @type = type.to_s.underscore
     @purchasable = klass.find(params[:id])
     purchased_items = params[:items].present? ? params[:items].select { |i| i[:id].nil? } : []
-    amount_items = params[:items].present? ? params[:items].select { |i| i[:actual_cost].present? && i[:id].present? } : []
-    @purchasable.amount = amount_items
     assign_categories_template
     if @purchasable.update_attributes(params[@type.to_sym])
       Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
@@ -484,6 +482,7 @@ class AccountingController < ApplicationController
       end
     else
       @bill = @purchase_order = @purchasable
+      handle_purchasable_errors
       respond_to do |format|
         format.html { render("edit_#{@type}") }
         format.js { render "purchasable_response" }
@@ -491,7 +490,6 @@ class AccountingController < ApplicationController
     end
   end
 
-  private
   def assign_categories_template
     if params[@type.to_sym][:category_id].present? && params[@type.to_sym][:project_id].present?
       project = Project.find(params[@type.to_sym][:project_id])
@@ -505,7 +503,31 @@ class AccountingController < ApplicationController
           category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.estimates.first.template.id, :purchased => true)
         end
       end
+      # Destroy all old purchasable_items if category template changed
+      if @purchasable.categories_template_id != category_template.id
+        @purchasable.purchasable_items.each do |pi|
+          params[@type.to_sym]["#{@type.pluralize}_items_attributes"] << {id: pi.id, _destroy: true}.with_indifferent_access
+        end
+      end
       @purchasable.categories_template_id = category_template.id
+    end
+  end
+
+  def handle_purchasable_errors
+    if @purchasable.purchasable_items.select { |pi| pi.errors.any? }.any?
+      msg = "Entering this payment will cause you to overpay the bid for following items:"
+      msg << "<br/><ul>"
+      @purchasable.purchasable_items.map(&:errors).each do |ie|
+        msg << "<li>#{ie.full_messages.join(".")}</li>" if ie.full_messages.present?
+      end
+      msg << "</ul>"
+      msg << "You can remedy the issue in one of the following ways:"
+      msg << "<ol>"
+      msg << "<li>If a change order billed to the client is needed, create a change order with the client for the amount over the bid.</li>"
+      msg << "<li>If a change order with the subcontractor is needed and will be expensed to the company, then create a new bill for the amount that is over the original bid amount.</li>"
+      msg << "<li> If the bid was renegotiated from the original agreement, then change the bid amount.</li>"
+      msg << "</ol>"
+      @purchasable.errors[:base] << msg
     end
   end
 end

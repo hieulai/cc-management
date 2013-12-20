@@ -14,6 +14,8 @@ class Item < ActiveRecord::Base
   has_many :invoices_items, :dependent => :destroy
   has_many :invoices, :through => :invoices_items
   has_and_belongs_to_many :categories_templates
+  has_many :bills_items, :dependent => :destroy
+  has_many :purchase_orders_items, :dependent => :destroy
 
   attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :purchase_order_id, :bill_id
   validates :name, presence: true
