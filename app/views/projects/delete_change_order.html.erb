@@ -5,6 +5,11 @@
     <%= form_for(:change_order, :url => {:action => 'destroy_change_order', :id => @change_order.id}) do |f| %>
 
       <p>Are you sure you want to delete this change order?</p>
+      <% if @change_order.has_paid_item?  %>
+          <p>This change order has 1 or more corresponding bills or payments associated with it.</p>
+          <p>Deleting this change order will permanently destroy all of its related bills and payments.</p>
+          <p>Do you want to continue?</p>
+      <% end %>
       <% if @change_order.errors.any? %>
         <div id="errorExplanation">
             <h2><%= pluralize(@change_order.errors.count, "Error") %> prohibited

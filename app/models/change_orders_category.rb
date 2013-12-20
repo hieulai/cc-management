@@ -15,6 +15,10 @@ class ChangeOrdersCategory < ActiveRecord::Base
     items.select { |i| i.billed? }.any?
   end
 
+  def has_paid_item?
+    items.select { |i| i.bills_items.any? || i.purchase_orders_items.any? }.any?
+  end
+
   private
   def check_destroyable
     if self.undestroyable?

@@ -23,6 +23,10 @@ class ChangeOrder < ActiveRecord::Base
     change_orders_categories.select { |ct| ct.undestroyable? }.any?
   end
 
+  def has_paid_item?
+    change_orders_categories.select { |ct| ct.has_paid_item? }.any?
+  end
+
   private
   def check_destroyable
     if  undestroyable?
