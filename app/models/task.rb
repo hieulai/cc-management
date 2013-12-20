@@ -12,7 +12,7 @@ class Task < ActiveRecord::Base
 
   private
   def convert_project
-    if self.tasklist.project.status != "Past Project" && self.tasklist.project.incomplete_tasks.empty?
+    if self.tasklist.project && self.tasklist.project.status != "Past Project" && self.tasklist.project.incomplete_tasks.empty?
       self.tasklist.project.update_attribute(:status, "Past Project")
       self.tasklist.project.estimates.first.update_attribute(:status, "Past Estimate")
     end
