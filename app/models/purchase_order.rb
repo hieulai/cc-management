@@ -9,7 +9,6 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :items, :dependent => :destroy
   has_one :bill, :dependent => :destroy
   has_many :purchase_orders_items, :dependent => :destroy
-  serialize :amount
 
   default_scope order("date DESC")
 

@@ -496,10 +496,11 @@ class AccountingController < ApplicationController
       category_template = CategoriesTemplate.where(:category_id => params[@type.to_sym][:category_id], :template_id => project.estimates.first.template.id).first
       unless category_template
         category = Category.find params[@type.to_sym][:category_id]
-        dup_c = Category.joins(:categories_templates).where(:name => category.name).first
-        if dup_c
-          category_template = dup_c.categories_templates.where(:template_id => project.estimates.first.template.id).first
-        else
+        category = Category.joins(:categories_templates).where(:name => category.name).first
+        if category
+          category_template = category.categories_templates.where(:template_id => project.estimates.first.template.id).first
+        end
+        unless category_template
           category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.estimates.first.template.id, :purchased => true)
         end
       end

@@ -10,7 +10,6 @@ class Bill < ActiveRecord::Base
   has_many :payments_bills, :dependent => :destroy
   has_many :payments, :through => :payments_bills
   has_many :bills_items, :dependent => :destroy
-  serialize :amount
 
   attr_accessible :purchase_order_id, :remaining_amount, :create_payment, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date, :category_id, :bills_items_attributes
   accepts_nested_attributes_for :bills_items, :allow_destroy => true

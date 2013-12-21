@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131220183240) do
+ActiveRecord::Schema.define(:version => 20131221083937) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -73,7 +73,6 @@ ActiveRecord::Schema.define(:version => 20131220183240) do
     t.integer  "categories_template_id"
     t.date     "due_date"
     t.text     "notes"
-    t.text     "amount"
     t.datetime "created_at",                                            :null => false
     t.datetime "updated_at",                                            :null => false
     t.decimal  "remaining_amount",       :precision => 10, :scale => 2
@@ -445,7 +444,6 @@ ActiveRecord::Schema.define(:version => 20131220183240) do
     t.integer  "project_id"
     t.integer  "vendor_id"
     t.integer  "categories_template_id"
-    t.text     "amount"
     t.text     "notes"
     t.boolean  "chosen"
     t.datetime "created_at",                                            :null => false
