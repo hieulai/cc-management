@@ -404,8 +404,7 @@ class AccountingController < ApplicationController
     project = params[:project_id].present? ? Project.find(params[:project_id]) : nil
     category = params[@type.to_sym][:category_id].present? ? Category.find(params[@type.to_sym][:category_id]) : nil
     if project && category
-      @categories_template = CategoriesTemplate.where(:category_id => category.id, :template_id => project.estimates.first.template.id).first
-      @categories_template||= CategoriesTemplate.new
+      @categories_template = CategoriesTemplate.where(:category_id => category.id, :template_id => project.estimates.first.template.id).first_or_initialize
     else
       @categories_template = nil
     end
