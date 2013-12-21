@@ -1,30 +1,30 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h2>Edit Bid</h2>
-	
-	<%= form_for @bid, :url => {:action => 'update_bid', :id => @bid.id}, html: {class: 'edit_bid form-horizontal'} do |f| %>
-	
-	<% if @bid.errors.any? %>
-	  <div id="errorExplanation">
-	    <h2><%= pluralize(@bid.errors.count, "Error") %> prohibited
-	      this bid from being saved:</h2>
-	    <ul>
-	    <% @bid.errors.full_messages.each do |msg| %>
-	      <li><%= msg %></li>
-	    <% end %>
-	    </ul>
-	  </div>
-	  <% end %>
-	<%= render(:partial => "bid_form", :locals => {:f => f, :project => @bid.project })%>
-  <div id="item-placeholder">
-      <%= render(:partial => "bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
-  </div>
-	<% end %>
-
-    <div class="control-group">
-        <div class='controls'>
-            <%= submit_tag("Update", :data => {:form => ".edit_bid"}, class: 'btn') %>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Edit Bid</h2>
+            <%= form_for @bid, :url => {:action => 'update_bid', :id => @bid.id}, :html => {:class => 'edit_bid form-horizontal'} do |f| %>
+                <% if @bid.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@bid.errors.count, "Error") %> prohibited
+                            this bid from being saved:</h2>
+                        <ul>
+                            <% @bid.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                            <% end %>
+                        </ul>
+                    </div>
+                <% end %>
+                <%= render(:partial => "bid_form", :locals => {:f => f, :project => @bid.project}) %>
+                <div id="item-placeholder">
+                    <%= render(:partial => "bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
+                </div>
+            <% end %>
+            <div class="control-group">
+                <div class='controls'>
+                    <%= submit_tag("Update", :data => {:form => ".edit_bid"}, :class => 'btn') %>
+                </div>
+            </div>
         </div>
     </div>
-	
 </div>

@@ -1,19 +1,25 @@
 // Place all the styles related to the Estimates controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.item-list{
-  tr.add td{
-    text-align: center;
+.item-list {
+  tr.add {
+    background: none;
+    td {
+      text-align: center;
     }
   }
-td{
- div{
+}
+
+td {
+  div {
     display: inline-block;
-   }
- }
-th.amount, th.margin, th.price{
+  }
+}
+
+th.amount, th.margin, th.price {
   width: 100px;
 }
+
 tr.subtotal {
   td:first-child {
     font-weight: bold;
@@ -24,32 +30,34 @@ tr.total {
   height: 50px;
 }
 
-.large{
+.large {
   font-size: 16px;
   font-weight: bold;
 }
 
-.xlarge{
+.xlarge {
   font-size: 20px;
   font-weight: bold;
 }
 
-.highlight{
+.highlight {
   background-color: #f5f5f5
 }
 
-td.button-container{
-    width: 100px;
-    text-align: center;
-    form{
-      float: left;
-    }
+td.button-container {
+  width: 100px;
+  text-align: center;
+  form {
+    float: left;
   }
-#template-placeholder{
+}
+
+#template-placeholder {
   clear: both;
 }
-.edit_estimate{
+
+.edit_estimate {
   display: inline-block;
-  float:left;
+  float: left;
 }
 

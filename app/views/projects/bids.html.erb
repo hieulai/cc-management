@@ -1,49 +1,49 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h1>Bids for: <%= @project.name%></h1>
-	</br>
-	<p class="trigger">Instructions >></p>
-	<div class="instructions">
-		<p>Default paragraph. </p>
-	</div>
-	
-	</br>
-	</br>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h1>Bids for: <%= @project.name %></h1>
+            </br>
+            <p class="trigger">Instructions >></p>
 
-		<%= link_to("+ New Bid", {:action => 'new_bid', :id => @project.id}, :class => 'action vew btn') %>
-	</br>
-	</br>
-		<%@total_costs = 0 %>
-		<table class="grid-view" summary="Project List">
-			<tr class="header">
-				<th>Actions</th>
-				<th>Category</th>
-				<th>Vendor</th>
-				<th>Amount</th>
-				<th>Committed</th>
-        <th>Notes</th>
-				
-			</tr>
-			<% @bids.each do |bid| %>
-       <tr>
-				<td class="center">
-              <%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'action edit') %>
-              <%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'action edit') %>
-				</td>
-				<td><%= bid.category.name %></td>
-				<td><%= bid.vendor.try(:display_name) %></td>
-				<td class="right"><%= number_to_currency(bid.total_amount) %></td>
-				<td class="center"><%= bid.chosen %></td>
-        <td><%= bid.notes %></td>
-				
-				<% 
-					if bid.chosen == true
-						@total_costs = @total_costs + bid.total_amount
-					end
-				%>
-			</tr>
-			<% end %>
-		</table>
-		<h2 class="right">Total Committed Costs = <%= number_to_currency(@total_costs) %></h2>
-		
+            <div class="instructions">
+                <p>Default paragraph. </p>
+            </div>
+            </br>
+            </br>
+            <%= link_to("+ New Bid", {:action => 'new_bid', :id => @project.id}, :class => 'action vew btn') %>
+            </br>
+            </br>
+            <% @total_costs = 0 %>
+            <table class="grid-view" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Category</th>
+                    <th>Vendor</th>
+                    <th>Amount</th>
+                    <th>Committed</th>
+                    <th>Notes</th>
+                </tr>
+                <% @bids.each do |bid| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'edit table-action') %>
+                            <%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'delete table-action') %>
+                        </td>
+                        <td><%= bid.category.name %></td>
+                        <td><%= bid.vendor.try(:display_name) %></td>
+                        <td class="right"><%= number_to_currency(bid.total_amount) %></td>
+                        <td class="center"><%= bid.chosen %></td>
+                        <td><%= bid.notes %></td>
+                        <%
+                           if bid.chosen == true
+                             @total_costs = @total_costs + bid.total_amount
+                           end
+                        %>
+                    </tr>
+                <% end %>
+            </table>
+            <h2 class="right">Total Committed Costs = <%= number_to_currency(@total_costs) %></h2>
+        </div>
+    </div>
 </div>

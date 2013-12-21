@@ -1,19 +1,18 @@
 <div>
     <%= render(:partial => "layouts/leads_sub_menu") %>
-    <h2>New Project Lead</h2>
-    <%= form_for(:project, :url => {:action => 'create_from_new'}, html: {class: ' form-horizontal'}) do |p| %>
-
-      <%= fields_for @client do |c| %>
-
-        <%= render(:partial => "lead_form", :locals => {:c => c, :p => p}) %>
-
-        <div class="control-group">
-            <div class="controls">
-                <%= submit_tag("Create Lead", class: 'btn') %>
-            </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>New Project Lead</h2>
+            <%= form_for(:project, :url => {:action => 'create_from_new'}, :html => {:class => ' form-horizontal'}) do |p| %>
+                <%= fields_for @client do |c| %>
+                    <%= render(:partial => "lead_form", :locals => {:c => c, :p => p}) %>
+                    <div class="control-group">
+                        <div class="controls">
+                            <%= submit_tag("Create Lead", :class => 'btn') %>
+                        </div>
+                    </div>
+                <% end %>
+            <% end %>
         </div>
-
-      <% end %>
-    <% end %>
-
+    </div>
 </div>

@@ -1,19 +1,18 @@
 <div>
     <%= render(:partial => "layouts/estimating_sub_menu") %>
-    <h2>Edit Template</h2>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Edit Template</h2>
 
-    <h3><%= notice if notice %></h3>
-
-    <%= form_for @template, url: {action: 'update', id: @template.id}, html: {class: 'form-horizontal'} do |f| %>
-
-      <%= render(partial: "new_form", locals: {f: f}) %>
-
-      <div class="control-group">
-          <div class="controls">
-              <%= submit_tag("Update", class: 'btn') %>
-          </div>
-      </div>
-
-    <% end %>
-
+            <h3><%= notice if notice %></h3>
+            <%= form_for @template, :url => {:action => 'update', :id => @template.id}, :html => {:class => 'form-horizontal'} do |f| %>
+                <%= render(:partial => "new_form", :locals => {:f => f}) %>
+                <div class="control-group">
+                    <div class="controls">
+                        <%= submit_tag("Update", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

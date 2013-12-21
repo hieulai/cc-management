@@ -1,21 +1,21 @@
 <div>
     <%= render(:partial => "layouts/leads_sub_menu") %>
-    <h2>Convert Lead</h2>
-
-    <%= form_for @project, :url => {:action => 'conversion_lead', :id => @project.id}, html: {class: ' form-horizontal'} do |f| %>
-
-      <div class="control-group">
-          <%= f.label :status, 'Lead Status', class: 'col-lg-2 control-label' %>
-          <div class="controls">
-              <%= f.select(:status, ['Current Lead', 'Current Project', 'Past Lead']) %>
-          </div>
-      </div>
-
-      <div class="control-group">
-          <div class="controls">
-              <%= submit_tag("Convert Lead", class: 'btn') %>
-          </div>
-      </div>
-
-    <% end %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Convert Lead</h2>
+            <%= form_for @project, :url => {:action => 'conversion_lead', :id => @project.id}, :html => {:class => ' form-horizontal'} do |f| %>
+                <div class="control-group">
+                    <%= f.label :status, 'Lead Status', :class => 'col-lg-2 control-label' %>
+                    <div class="controls">
+                        <%= f.select(:status, ['Current Lead', 'Current Project', 'Past Lead']) %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <%= submit_tag("Convert Lead", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

@@ -1,50 +1,51 @@
 <div>
     <%= render(:partial => "layouts/leads_sub_menu") %>
-    <h2>New Project Lead</h2>
-    <%= form_for(:project, :url => {:action => 'create_from_existing'}, html: {class: ' form-horizontal'}) do |p| %>
-      <h3>Project Info</h3>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>New Project Lead</h2>
+            <%= form_for(:project, :url => {:action => 'create_from_existing'}, :html => {:class => ' form-horizontal'}) do |p| %>
+                <h3>Project Info</h3>
 
-      <div class="control-group">
-          <%= p.label :name, 'Project Name', class: 'col-lg-2 control-label' %>
-          <div class="controls">
-              <%= p.text_field(:name) %>
-          </div>
-      </div>
-      <div class="control-group">
-          <%= p.label :lead_stage, 'Lead Stage', class: 'col-lg-2 control-label' %>
-          <div class="controls">
-              <%= p.select(:lead_stage, ["1. New", "2. Made Contact", "3. Made Appointment", "4. Estimating", "5. Sent
-          </div>Estimate", "6. Sent Contract"]) %>
-          </div>
-      </div>
-      <div class="control-group">
-          <%= p.label :project_type, 'Project Type', class: 'col-lg-2 control-label' %>
-          <div class="controls">
-              <%= p.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel",
-                                           "Residential:  Addition", "Residential:  Design/Build ", "Residential:  New Construction ", "Residential:  Remodel "], {:include_blank => true}) %>
-          </div>
-      </div>
-      <div class="control-group">
-          <%= p.label :revenue, 'Anticipated Revenue', class: 'col-lg-2 control-label' %>
-          <div class="controls">
-              <%= p.text_field(:revenue) %>
-          </div>
-      </div>
+                <div class="control-group">
+                    <%= p.label :name, 'Project Name', :class => 'col-lg-2 control-label' %>
+                    <div class="controls">
+                        <%= p.text_field(:name) %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <%= p.label :lead_stage, 'Lead Stage', :class => 'col-lg-2 control-label' %>
+                    <div class="controls">
+                        <%= p.select(:lead_stage, ["1. New", "2. Made Contact", "3. Made Appointment", "4. Estimating", "5. Sent
+                  </div>Estimate", "6. Sent Contract"]) %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <%= p.label :project_type, 'Project Type', :class => 'col-lg-2 control-label' %>
+                    <div class="controls">
+                        <%= p.select(:project_type, ["Commercial: Addition", "Commercial: New Construction", "Commercial: Remodel",
+                                                     "Residential:  Addition", "Residential:  Design/Build ", "Residential:  New Construction ", "Residential:  Remodel "], {:include_blank => true}) %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <%= p.label :revenue, 'Anticipated Revenue', :class => 'col-lg-2 control-label' %>
+                    <div class="controls">
+                        <%= p.text_field(:revenue) %>
+                    </div>
+                </div>
+                <h3>Client Info</h3>
 
-      <h3>Client Info</h3>
-
-      <div class="control-group">
-          <%= label :client, :id, 'Client Name', class: 'col-lg-2 control-label' %>
-          <div class="controls">
-              <%= select(:client, :id, Client.where("builder_id = ?", session[:builder_id]).collect { |s| [s.full_name, s.id] }, {:include_blank => true}) %>
-           </div>
-      </div>
-      <div class="control-group">
-          <div class="controls">
-              <%= submit_tag("Create Lead", class: 'btn') %>
-          </div>
-      </div>
-
-    <% end %>
-
+                <div class="control-group">
+                    <%= label :client, :id, 'Client Name', :class => 'col-lg-2 control-label' %>
+                    <div class="controls">
+                        <%= select(:client, :id, Client.where("builder_id = ?", session[:builder_id]).collect { |s| [s.full_name, s.id] }, {:include_blank => true}) %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <%= submit_tag("Create Lead", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

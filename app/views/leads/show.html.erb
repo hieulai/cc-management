@@ -1,85 +1,107 @@
 <div>
-	<%= render(:partial => "layouts/leads_sub_menu")%>
-	<h2>Lead Details For: <%= @project.name%></h2>
-	
-	<h3>Project Info</h3>
-	<p>
-		<b><%= "Project Name:" %></b>
-		<%= @project.name %>
-	</p>
-	<p>
-		<b><%= "Project Type:" %></b>
-		<%= @project.project_type %>
-	</p>
-	<p>
-		<b><%= "Lead Stage:" %></b>
-		<%= @project.lead_stage %>
-	</p>
-	<p>
-		<b><%= "Lead Source:" %></b>
-		<%= @client.lead_source %>
-	</p>
-	<p>
-		<b><%= "Anticipated Revenue:" %></b>
-		<%= @project.revenue %>
-	</p>
-	<p>
-		<b><%= "Lead Notes:" %></b>
-		</br>
-		<%= @project.lead_notes %>
-		
-	</p>
-	<p>
-		<b><%= "Created At:" %></b>
-		<%= @project.created_at %>
-	</p>
-	<p>
-		<b><%= "Last Updated:" %></b>
-		<%= @project.updated_at %>
-	</p>
-	
-		
-	<h3>Client Info</h3>
-	<p>
-		<b><%= "Last Contaced:" %></b>
-		<%= @client.last_contacted %>
-	</p>
-	<p>
-		<b><%= "First Name:" %></b>
-		<%= @client.first_name %>
-	</p>
-	<p>
-		<b><%= "Last Name:" %></b>
-		<%= @client.last_name %>
-	</p>
-	<p>
-		<b><%= "Primary Phone:" %></b>
-		<%= number_to_phone(@client.primary_phone, area_code: true) %>
-		<%= @client.primary_phone_tag %>
-	</p>
-	<p>
-		<b><%= "Secondary Phone:" %></b>
-		<%= number_to_phone(@client.secondary_phone, area_code: true) %>
-		<%= @client.secondary_phone_tag %>
-	</p>
-	<p>
-		<b><%= "Email:" %></b>
-		<%= @client.email %>
-	</p>
-	<p>
-		<b><%= "Address:" %></b>
-		<%= @client.address %>
-	</p>
-	<p>
-		<b><%= "City:" %></b>
-		<%= @client.city %>
-	</p>
-	<p>
-		<b><%= "State:" %></b>
-		<%= @client.state %>
-	</p>
-	<p>
-		<b><%= "Zipcode:" %></b>
-		<%= @client.zipcode %>
-	</p>
+    <%= render(:partial => "layouts/leads_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Lead Details For: <%= @project.name %></h2>
+
+            <h3>Project Info</h3>
+
+            <p>
+                <b><%= "Project Name:" %></b>
+                <%= @project.name %>
+            </p>
+
+            <p>
+                <b><%= "Project Type:" %></b>
+                <%= @project.project_type %>
+            </p>
+
+            <p>
+                <b><%= "Lead Stage:" %></b>
+                <%= @project.lead_stage %>
+            </p>
+
+            <p>
+                <b><%= "Lead Source:" %></b>
+                <%= @client.lead_source %>
+            </p>
+
+            <p>
+                <b><%= "Anticipated Revenue:" %></b>
+                <%= @project.revenue %>
+            </p>
+
+            <p>
+                <b><%= "Lead Notes:" %></b>
+                </br>
+                <%= @project.lead_notes %>
+
+            </p>
+
+            <p>
+                <b><%= "Created At:" %></b>
+                <%= @project.created_at %>
+            </p>
+
+            <p>
+                <b><%= "Last Updated:" %></b>
+                <%= @project.updated_at %>
+            </p>
+
+
+            <h3>Client Info</h3>
+
+            <p>
+                <b><%= "Last Contaced:" %></b>
+                <%= @client.last_contacted %>
+            </p>
+
+            <p>
+                <b><%= "First Name:" %></b>
+                <%= @client.first_name %>
+            </p>
+
+            <p>
+                <b><%= "Last Name:" %></b>
+                <%= @client.last_name %>
+            </p>
+
+            <p>
+                <b><%= "Primary Phone:" %></b>
+                <%= number_to_phone(@client.primary_phone, :area_code => true) %>
+                <%= @client.primary_phone_tag %>
+            </p>
+
+            <p>
+                <b><%= "Secondary Phone:" %></b>
+                <%= number_to_phone(@client.secondary_phone, :area_code => true) %>
+                <%= @client.secondary_phone_tag %>
+            </p>
+
+            <p>
+                <b><%= "Email:" %></b>
+                <%= @client.email %>
+            </p>
+
+            <p>
+                <b><%= "Address:" %></b>
+                <%= @client.address %>
+            </p>
+
+            <p>
+                <b><%= "City:" %></b>
+                <%= @client.city %>
+            </p>
+
+            <p>
+                <b><%= "State:" %></b>
+                <%= @client.state %>
+            </p>
+
+            <p>
+                <b><%= "Zipcode:" %></b>
+                <%= @client.zipcode %>
+            </p>
+        </div>
+    </div>
 </div>

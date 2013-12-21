@@ -1,30 +1,33 @@
 <div>
-    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-    <h2>Delete Change Order</h2>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Delete Change Order</h2>
+            <%= form_for(:change_order, :url => {:action => 'destroy_change_order', :id => @change_order.id}) do |f| %>
+                <p>Are you sure you want to delete this change order?</p>
+                <% if @change_order.has_paid_item? %>
+                    <p>This change order has 1 or more corresponding bills or purchase orders associated with it.</p>
 
-    <%= form_for(:change_order, :url => {:action => 'destroy_change_order', :id => @change_order.id}) do |f| %>
+                    <p>Deleting this change order will permanently destroy all of its items in related bills and
+                        purchase orders.</p>
 
-      <p>Are you sure you want to delete this change order?</p>
-      <% if @change_order.has_paid_item?  %>
-          <p>This change order has 1 or more corresponding bills or purchase orders associated with it.</p>
-          <p>Deleting this change order will permanently destroy all of its items in related bills and purchase orders.</p>
-          <p>Do you want to continue?</p>
-      <% end %>
-      <% if @change_order.errors.any? %>
-        <div id="errorExplanation">
-            <h2><%= pluralize(@change_order.errors.count, "Error") %> prohibited
-                this change_order from being deleted:</h2>
-            <ul>
-                <% @change_order.errors.full_messages.each do |msg| %>
-                  <li><%= msg %></li>
+                    <p>Do you want to continue?</p>
                 <% end %>
-            </ul>
+                <% if @change_order.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@change_order.errors.count, "Error") %> prohibited this change_order from
+                            being deleted:</h2>
+                        <ul>
+                            <% @change_order.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                            <% end %>
+                        </ul>
+                    </div>
+                <% end %>
+                <div class="form-buttons">
+                    <%= submit_tag("Delete", :class => 'btn') %>
+                </div>
+            <% end %>
         </div>
-      <% end %>
-
-      <div class="form-buttons">
-          <%= submit_tag("Delete", class: 'btn') %>
-      </div>
-
-    <% end %>
+    </div>
 </div>

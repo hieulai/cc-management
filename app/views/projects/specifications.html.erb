@@ -1,37 +1,43 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h1>Specifications for: <%= @project.name%></h1>
-	</br>
-	<p class="trigger">Instructions >></p>
-	<div class="instructions">
-		<p>Default paragraph. </p>
-	</div>
-	
-	</br>
-	</br>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <span class="trigger help action-button">Instructions >></span>
 
-		<%= link_to("+ New Specification", {:action => 'new_specification', :id => @project.id}, :class => 'action vew btn') %>
-	</br>
-	</br>
-		<table class="grid-view" summary="Project List">
-			<tr class="header">
-				<th>Actions</th>
-				<th>Category</th>
-				<th>Name</th>
-				<th>Notes</th>
-			</tr>
-			<% @specifications.each do |spec| %>
-
-			<tr>
-				<td class="center">
-					<%= link_to("Edit", {:action => 'edit_specification', :id => spec.id}, :class => 'action edit') %>
-					<%= link_to("Delete", {:action => 'delete_specification', :id => spec.id}, :class => 'action edit') %>
-				</td>
-				<td><%= spec.category.name %></td>
-				<td><%= spec.name %></td>
-				<td><%= simple_format(spec.description) %></td>
-		
-			</tr>
-			<% end %>
-		</table>
+            <div class="instructions">
+                <p>Default paragraph. </p>
+            </div>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Specifications for: <%= @project.name %></h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <%= link_to("+ New Specification", {:action => 'new_specification', :id => @project.id}, :class => 'action vew btn') %>
+            </br>
+            </br>
+            <table class="grid-view" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th>Notes</th>
+                </tr>
+                <% @specifications.each do |spec| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Edit", {:action => 'edit_specification', :id => spec.id}, :class => 'action edit') %>
+                            <%= link_to("Delete", {:action => 'delete_specification', :id => spec.id}, :class => 'action edit') %>
+                        </td>
+                        <td><%= spec.category.name %></td>
+                        <td><%= spec.name %></td>
+                        <td><%= simple_format(spec.description) %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
+    </div>
 </div>

@@ -1,31 +1,30 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h2>Add New Bid</h2>
-	
-	<%= form_for @bid, :url => {:action => 'create_bid', :id => @project.id}, html: {class: 'new_bid form-horizontal'} do |f| %>
-	
-	<% if @bid.errors.any? %>
-	  <div id="errorExplanation">
-	    <h2><%= pluralize(@bid.errors.count, "Error") %> prohibited
-	      this bid from being saved:</h2>
-	    <ul>
-	    <% @bid.errors.full_messages.each do |msg| %>
-	      <li><%= msg %></li>
-	    <% end %>
-	    </ul>
-	  </div>
-	  <% end %>
-	<%= render(:partial => "bid_form", :locals => {:f => f, :project => @project})%>
-  <div id="item-placeholder">
-      <%= render(:partial => "bid_item", :locals => {:bid => @bid})%>
-  </div>
-	
-	<% end %>
-
-    <div class="control-group">
-        <div class='controls'>
-            <%= submit_tag("Create", :data => {:form => ".new_bid"}, class: 'btn') %>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Add New Bid</h2>
+            <%= form_for @bid, :url => {:action => 'create_bid', :id => @project.id}, :html => {:class => 'new_bid form-horizontal'} do |f| %>
+                <% if @bid.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@bid.errors.count, "Error") %> prohibited
+                            this bid from being saved:</h2>
+                        <ul>
+                            <% @bid.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                            <% end %>
+                        </ul>
+                    </div>
+                <% end %>
+                <%= render(:partial => "bid_form", :locals => {:f => f, :project => @project}) %>
+                <div id="item-placeholder">
+                    <%= render(:partial => "bid_item", :locals => {:bid => @bid}) %>
+                </div>
+            <% end %>
+            <div class="control-group">
+                <div class='controls'>
+                    <%= submit_tag("Create", :data => {:form => ".new_bid"}, :class => 'btn') %>
+                </div>
+            </div>
         </div>
     </div>
-	
 </div>

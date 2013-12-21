@@ -1,17 +1,16 @@
 <div>
     <%= render(:partial => "layouts/estimating_sub_menu") %>
-    <h2>Edit Item</h2>
-
-    <%= form_for @item, :url => {:action => 'update', :id => @item.id}, html: {id: 'items_form', class: 'form-horizontal'} do |f| %>
-
-      <%= render(:partial => "new_form", :locals => {:f => f}) %>
-
-      <div class="control-group">
-          <div class='controls'>
-              <%= submit_tag("Update", class: 'btn') %>
-          </div>
-      </div>
-
-    <% end %>
-
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Edit Item</h2>
+            <%= form_for @item, :url => {:action => 'update', :id => @item.id}, :html => {:id => 'items_form', :class => 'form-horizontal'} do |f| %>
+                <%= render(:partial => "new_form", :locals => {:f => f}) %>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= submit_tag("Update", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

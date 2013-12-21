@@ -1,34 +1,34 @@
 <div class="control-group">
-    <%= f.label :project_id ,'Project Name', class: 'col-lg-2 control-label' %>
+    <%= f.label :project_id, 'Project Name', :class => 'col-lg-2 control-label' %>
     <div class="controls"><%= f.select(:project_id, Project.where("builder_id = ? AND status in ('Current Lead', 'Current Project')", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :template_name ,'Template', class: 'col-lg-2 control-label' %> 
+    <%= f.label :template_name, 'Template', :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= @estimate.template.name %></div>
 </div>
 <div class="control-group">
-    <%= f.label :progress ,'Progress', class: 'col-lg-2 control-label' %> 
+    <%= f.label :progress, 'Progress', :class => 'col-lg-2 control-label' %>
     <div class="controls"><%= f.select(:progress, ["In Progress", "Awaiting Approval", "Completed & Sent"]) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :deadline ,'Due Date', class: 'col-lg-2 control-label' %>
+    <%= f.label :deadline, 'Due Date', :class => 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.text_field(:deadline, class: 'datepicker', :value => f.object.try(:deadline).try(:strftime, '%m-%d-%Y')) %>
-        <%= f.hidden_field(:deadline, id: 'estimate_deadline_hidden', :value => f.object.try(:deadline).try(:strftime, '%Y-%m-%d')) %>
+        <%= f.text_field(:deadline, :class => 'datepicker', :value => f.object.try(:deadline).try(:strftime, '%m-%d-%Y')) %>
+        <%= f.hidden_field(:deadline, :id => 'estimate_deadline_hidden', :value => f.object.try(:deadline).try(:strftime, '%Y-%m-%d')) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :revenue ,'Expected Revenue', class: 'col-lg-2 control-label' %> 
+    <%= f.label :revenue, 'Expected Revenue', :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <div class="total-price"></div>
         <%= f.hidden_field(:revenue, :class => "total-price") %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :profit ,'Expected Profit', class: 'col-lg-2 control-label' %> 
+    <%= f.label :profit, 'Expected Profit', :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <div class="total-margin"></div>
         <%= f.hidden_field(:profit, :class => "total-margin") %>

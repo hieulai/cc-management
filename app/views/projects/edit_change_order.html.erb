@@ -1,24 +1,28 @@
 <div>
-    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-    <h2>Edit Change Order</h2>
-    <%= form_for @change_order, :url => {:action => 'update_change_order', :id => @change_order.id}, html: {class: 'form-horizontal'} do |f| %>
-      <% if @change_order.errors.any? %>
-        <div id="errorExplanation">
-            <h2><%= pluralize(@change_order.errors.count, "Error") %> prohibited
-                this change order from being saved:</h2>
-            <ul>
-                <% @change_order.errors.full_messages.each do |msg| %>
-                  <li><%= msg.html_safe %></li>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Edit Change Order</h2>
+            <%= form_for @change_order, :url => {:action => 'update_change_order', :id => @change_order.id}, :html => {:class => 'form-horizontal'} do |f| %>
+                <% if @change_order.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@change_order.errors.count, "Error") %> prohibited
+                            this change order from being saved:</h2>
+                        <ul>
+                            <% @change_order.errors.full_messages.each do |msg| %>
+                                <li><%= msg.html_safe %></li>
+                            <% end %>
+                        </ul>
+                    </div>
                 <% end %>
-            </ul>
+                <div class="change-order-actions">
+                    <%= link_to "Print", {:controller => 'projects', :action => 'show_change_order', :id => @change_order.id, :format => :pdf}, :target => '_blank' %>
+                    <br/>
+                    <%= link_to "Email", {:controller => 'projects', :action => 'show_change_order_email', :id => @change_order.id}, :target => '_blank' %>
+                </div>
+                <%= render(:partial => "change_order_form", :locals => {:f => f}) %>
+                <%= submit_tag "Save", :class => 'btn' %>
+            <% end %>
         </div>
-      <% end %>
-      <div class="change-order-actions">
-          <%= link_to "Print", {:controller => 'projects', :action => 'show_change_order', :id => @change_order.id, :format => :pdf}, :target => '_blank' %>
-          <br/>
-          <%= link_to "Email", {:controller => 'projects', :action => 'show_change_order_email', :id => @change_order.id}, :target => '_blank' %>
-      </div>
-      <%= render(:partial => "change_order_form", :locals => {:f => f})%>
-      <%= submit_tag "Save", class: 'btn' %>
-    <% end %>
+    </div>
 </div>

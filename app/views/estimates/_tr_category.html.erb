@@ -6,29 +6,35 @@
     </td>
     <td>
         <%= link_to '+ Item', "#", :class => "trigger-add btn" %>
-        <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :data => { :title => "Confirmation" , :confirm => "Are you sure you want to delete category #{category_template.category.name} and all its associated items?", :remote => true }, :class => 'remove-category' %>
+        <%= link_to "Delete", {:controller => 'categories', :action => 'destroy', :id => category_template.category.id, :with_associations => true}, :data => {:title => "Confirmation", :confirm => "Are you sure you want to delete category #{category_template.category.name} and all its associated items?", :remote => true}, :class => 'remove-category' %>
     </td>
 </tr>
 <% category_template.items.each do |item| %>
-  <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
+    <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <tr style="display: none" class="add add-item item_category_<%= category_template.category.id %>">
-	<td colspan=11>
-        <%= form_for :item, :url => {:controller => 'estimates', :action => 'add_item', :category_template_id => category_template.id}, html: { class: "form-inline"}, :remote => true do |f| %>
-          Item:
-          <%= f.autocomplete_field :name, items_autocomplete_name_path, :id_element => "##{f.object_id}", :update_elements => {} %>
-          <%= f.hidden_field :id, id: f.object_id %>
-          <%= f.submit "Add", class: 'btn' %>
-          <%= link_to "Cancel", "#", :class => 'cancel-add' %>
+    <td colspan=11>
+        <%= form_for :item, :url => {:controller => 'estimates', :action => 'add_item', :category_template_id => category_template.id}, :html => {:class => "form-inline"}, :remote => true do |f| %>
+            Item:
+            <%= f.autocomplete_field :name, items_autocomplete_name_path, :id_element => "##{f.object_id}", :update_elements => {} %>
+            <%= f.hidden_field :id, :id => f.object_id %>
+            <%= f.submit "Add", :class => 'btn' %>
+            <%= link_to "Cancel", "#", :class => 'cancel-add' %>
         <% end %>
     </td>
 </tr>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
     <td colspan=5>
-        <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
+        <div class="category-name"><%= category_template.category.name + ' ' %>Subtotal</div>
     </td>
-    <td class="right" colspan="2"><div class="subtotal-amount"></div></td>
-    <td class="right" colspan="2"><div class="subtotal-margin"></div></td>
-    <td class="right"><div class="subtotal-price"></div></td>
+    <td class="right" colspan="2">
+        <div class="subtotal-amount"></div>
+    </td>
+    <td class="right" colspan="2">
+        <div class="subtotal-margin"></div>
+    </td>
+    <td class="right">
+        <div class="subtotal-price"></div>
+    </td>
     <td></td>
 </tr>

@@ -1,7 +1,11 @@
 <div>
-    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-    <h2>Budget for <%= @project.name  %> </h2>
-    <%- @project.estimates.each do |e| %>
-      <%= render :partial => 'template', :locals => {:template => e.template}  %>
-    <% end %>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Budget for <%= @project.name %> </h2>
+            <%- @project.estimates.each do |e| %>
+                <%= render :partial => 'template', :locals => {:template => e.template} %>
+            <% end %>
+        </div>
+    </div>
 </div>

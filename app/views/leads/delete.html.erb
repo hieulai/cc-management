@@ -1,17 +1,19 @@
 <div>
     <%= render(:partial => "layouts/leads_sub_menu") %>
-    <h2>Delete Lead</h2>
-    <%= form_for @project, :url => {:action => 'destroy', :id => @project.id} do |f| %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Delete Lead</h2>
+            <%= form_for @project, :url => {:action => 'destroy', :id => @project.id} do |f| %>
+                <p>Are you sure you want to delete this lead?</p>
 
-      <p>Are you sure you want to delete this lead?</p>
+                <p class="reference-name"><%= %></p>
 
-      <p class="reference-name"><%= %></p>
-
-      <div class="control-group">
-          <div class="controls">
-              <%= submit_tag("Delete Lead", class: 'btn') %>
-          </div>
-      </div>
-
-    <% end %>
+                <div class="control-group">
+                    <div class="controls">
+                        <%= submit_tag("Delete Lead", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

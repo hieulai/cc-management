@@ -1,29 +1,27 @@
 <div>
     <%= render(:partial => "layouts/estimating_sub_menu") %>
-    <h2>New Category</h2>
-
-    <%= form_for @category, :url => {:action => 'create'}, html: {class: 'form-horizontal'} do |f| %>
-
-      <% if @category.errors.any? %>
-        <div id="errorExplanation">
-            <h2><%= pluralize(@category.errors.count, "Error") %> prohibited
-                this category from being saved:</h2>
-            <ul>
-                <% @category.errors.full_messages.each do |msg| %>
-                  <li><%= msg %></li>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>New Category</h2>
+            <%= form_for @category, :url => {:action => 'create'}, :html => {:class => 'form-horizontal'} do |f| %>
+                <% if @category.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@category.errors.count, "Error") %> prohibited
+                            this category from being saved:</h2>
+                        <ul>
+                            <% @category.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                            <% end %>
+                        </ul>
+                    </div>
                 <% end %>
-            </ul>
+                <%= render(:partial => "new_form", :locals => {:f => f}) %>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= submit_tag("Create Category", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
         </div>
-      <% end %>
-
-      <%= render(:partial => "new_form", :locals => {:f => f}) %>
-
-      <div class="control-group">
-          <div class='controls'>
-              <%= submit_tag("Create Category", class: 'btn') %>
-          </div>
-      </div>
-
-    <% end %>
-
+    </div>
 </div>

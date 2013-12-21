@@ -1,41 +1,47 @@
 <div>
-    <%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-    <h1>Change Orders for: <%= @project.name%></h1>
-    </br>
-    <p class="trigger">Instructions >></p>
-    <div class="instructions">
-        <p>Default paragraph. </p>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <span class="trigger help action-button">Instructions >></span>
+
+            <div class="instructions">
+                <p>Default paragraph. </p>
+            </div>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Change Orders for: <%= @project.name %></h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
     </div>
-
-    </br>
-    </br>
-
-    <%= link_to("+ Change Order", {:action => 'new_change_order', :id => @project.id}, :class => 'action vew btn') %>
-    </br>
-    </br>
-    <table class="grid-view" summary="Project List">
-        <tr class="header">
-            <th>Actions</th>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Approved</th>
-            <th>Notes</th>
-        </tr>
-        <% @change_orders.each do |co| %>
-
-          <tr>
-              <td class="center">
-                  <%= link_to("Edit", {:action => 'edit_change_order', :id => co.id}, :class => 'action edit') %>
-                  <% unless co.undestroyable? %>
-                      <%= link_to("Delete", {:action => 'delete_change_order', :id => co.id}, :class => 'action edit') %>
-                  <% end %>
-              </td>
-              <td><%= co.name %></td>
-              <td class="right">$<%= co.amount %></td>
-              <td class="center"><%= co.approved %></td>
-              <td><%= co.notes %></td>
-          </tr>
-        <% end %>
-    </table>
-
+    <div class="zurb-row">
+        <div class="columns">
+            <%= link_to("+ Change Order", {:action => 'new_change_order', :id => @project.id}, :class => 'action vew btn') %>
+            </br>
+            </br>
+            <table class="grid-view margin-bottom responsive" summary="Project List">
+                <tr class="header">
+                    <th>Actions</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Approved</th>
+                    <th>Notes</th>
+                </tr>
+                <% @change_orders.each do |co| %>
+                    <tr>
+                        <td class="center">
+                            <%= link_to("Edit", {:action => 'edit_change_order', :id => co.id}, :class => 'edit table-action') %>
+                            <% unless co.undestroyable? %>
+                                <%= link_to("Delete", {:action => 'delete_change_order', :id => co.id}, :class => 'delete table-action') %>
+                            <% end %>
+                        </td>
+                        <td><%= co.name %></td>
+                        <td class="right">$<%= co.amount %></td>
+                        <td class="center"><%= co.approved %></td>
+                        <td><%= co.notes %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
+    </div>
 </div>

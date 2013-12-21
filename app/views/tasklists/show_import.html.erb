@@ -1,28 +1,28 @@
 <div>
     <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
-    <h1>Import Task List</h1>
-
-    <%= form_for @tasklist, :url => {:action => 'import'}, :html => {:class => 'tasklist form-horizontal'} do |f| %>
-
-      <div class="control-group">
-          <%= f.label :name, "Task List Name", class: 'col-lg-2 control-label' %>
-          <div class='controls'>
-              <%= f.text_field(:name) %>
-          </div>
-      </div>
-      <div class="control-group">
-          <%= f.label :name, "Tasks", class: 'col-lg-2 control-label' %>
-          <div class='controls'>
-              <%= f.file_field :data %>
-          </div>
-      </div>
-
-      <div class="control-group">
-          <div class='controls'>
-              <%= f.submit "Import", class: 'btn' %>
-          </div>
-      </div>
-
-    <% end %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h1>Import Task List</h1>
+            <%= form_for @tasklist, :url => {:action => 'import'}, :html => {:class => 'tasklist form-horizontal'} do |f| %>
+                <div class="control-group">
+                    <%= f.label :name, "Task List Name", :class => 'col-lg-2 control-label' %>
+                    <div class='controls'>
+                        <%= f.text_field(:name) %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <%= f.label :name, "Tasks", :class => 'col-lg-2 control-label' %>
+                    <div class='controls'>
+                        <%= f.file_field :data %>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= f.submit "Import", :class => 'btn' %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>
 

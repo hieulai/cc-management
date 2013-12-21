@@ -1,6 +1,13 @@
 <div>
-	<%= render(:partial => "layouts/leads_sub_menu")%>
-	<h2>Create Lead</h2>
-	<p>Is this lead for a new client or an existing client?</p>
-	<p><%= link_to("New Client", {:action => 'new_client'})%>   or   <%=link_to("Existing Client", {:action => 'existing_client'})%></p>
+    <%= render(:partial => "layouts/leads_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Create Lead</h2>
+
+            <p>Is this lead for a new client or an existing client?</p>
+
+            <p><%= link_to("New Client", {:action => 'new_client'}) %>
+                or   <%= link_to("Existing Client", {:action => 'existing_client'}) %></p>
+        </div>
+    </div>
 </div>

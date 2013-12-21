@@ -1,15 +1,17 @@
 <div>
-	<%= render(:partial => "layouts/estimating_sub_menu")%>
-	<h2>Delete Template</h2>
-	
-	<%= form_for(:template, :url => {:action => 'destroy', :id => @template.id}) do |f| %>
-	
-	<p>Are you sure you want to delete this template?</p>
-	
-	<p class="reference-name"><%= @template.name %></p>
-	<div class="form-buttons">
-		<%= submit_tag("Delete Template", class: 'btn') %>
-	</div>
-	
-	<% end %>
+    <%= render(:partial => "layouts/estimating_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Delete Template</h2>
+            <%= form_for(:template, :url => {:action => 'destroy', :id => @template.id}) do |f| %>
+                <p>Are you sure you want to delete this template?</p>
+
+                <p class="reference-name"><%= @template.name %></p>
+
+                <div class="form-buttons">
+                    <%= submit_tag("Delete Template", :class => 'btn') %>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>
