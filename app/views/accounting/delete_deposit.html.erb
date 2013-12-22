@@ -1,14 +1,15 @@
 <div>
-    <%= render(:partial => "layouts/accounting_sub_menu")%>
-    <h2>Delete Deposit</h2>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Delete Deposit</h2>
+            <%= form_for(:deposit, :url => {:action => 'destroy_deposit', :id => @deposit.id}) do |f| %>
+                <p>Are you sure you want to delete this deposit?</p>
 
-    <%= form_for(:deposit, :url => {:action => 'destroy_deposit', :id => @deposit.id}) do |f| %>
-
-      <p>Are you sure you want to delete this deposit?</p>
-
-      <div class="form-buttons">
-          <%= submit_tag("Delete", class: 'btn') %>
-      </div>
-
-    <% end %>
+                <div class="form-buttons">
+                    <%= submit_tag("Delete", :class => 'btn') %>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

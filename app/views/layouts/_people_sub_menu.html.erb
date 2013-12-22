@@ -1,9 +1,9 @@
 <div class='zurb-row' id='submenu'>
     <ul>
-        <li><%= link_to("All", {:controller => 'people', :action => 'all'}) %></li>
+        <li><%= link_to("All", {:controller => 'people', :action => 'all'}, :class => active_page('people', 'nav', 'all')) %></li>
         <li><%= link_to("Clients", {:controller => 'clients', :action => 'list'}) %></li>
-        <li><%= link_to("Vendors", {:controller => 'people', :action => 'list_vendors'}) %></li>
-        <li><%= link_to("Other Contacts", {:controller => 'people', :action => 'list_contacts'}) %></li>
-        <li><%= link_to("Import/Export", {:controller => 'people', :action => 'import_export'}) %></li>
+        <li><%= link_to("Vendors", {:controller => 'people', :action => 'list_vendors'}, :class => active_page('people', 'nav', 'list_vendors')) %></li>
+        <li><%= link_to("Other Contacts", {:controller => 'people', :action => 'list_contacts'}, :class => active_page('people', 'nav', 'list_contacts')) %></li>
+        <li><%= link_to("Import/Export", {:controller => 'people', :action => 'import_export'}, :class => active_page('people', 'nav', 'import_export')) %></li>
     </ul>
 </div>

@@ -1,28 +1,27 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h2>Create New Vendor</h2>
-	
-	<%= form_for @vendor, :url => {:action => 'create_vendor'}, html: {class: 'form-horizontal'}  do |f| %>
-	
-	<% if @vendor.errors.any? %>
-	  <div id="errorExplanation">
-	    <h2><%= pluralize(@vendor.errors.count, "Error") %> prohibited
-	      this vendor from being saved:</h2>
-	    <ul>
-	    <% @vendor.errors.full_messages.each do |msg| %>
-	      <li><%= msg %></li>
-	    <% end %>
-	    </ul>
-	  </div>
-	  <% end %>
-	<%= render(:partial => "vendor_form", :locals => {:f => f})%>
-
-      <div class="control-group">
-          <div class='controls'>
-              <%= submit_tag("Create", class: 'btn') %>
-          </div>
-      </div>
-	
-	<% end %>
-	
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Create New Vendor</h2>
+            <%= form_for @vendor, :url => {:action => 'create_vendor'}, :html => {:class => 'form-horizontal'} do |f| %>
+                <% if @vendor.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@vendor.errors.count, "Error") %> prohibited
+                            this vendor from being saved:</h2>
+                        <ul>
+                            <% @vendor.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                            <% end %>
+                        </ul>
+                    </div>
+                <% end %>
+                <%= render(:partial => "vendor_form", :locals => {:f => f}) %>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= submit_tag("Create", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

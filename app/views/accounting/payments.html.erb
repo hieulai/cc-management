@@ -1,9 +1,14 @@
 <div>
-  <%= render(:partial => "layouts/accounting_sub_menu")%>
-  <h3>Payments</h3>
-  <div class="button-group">
-      <%= link_to("+ Payment", {:action => 'new_payment'}, :id => 'add-payment', :class => 'action vew btn') %>
-  </div>
-  <%= render(:partial => "payments", :locals => {:payments => @payments}) %>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h3>Payments</h3>
+
+            <div class="button-group">
+                <%= link_to("+ Payment", {:action => 'new_payment'}, :id => 'add-payment', :class => 'action vew btn') %>
+            </div>
+            <%= render(:partial => "payments", :locals => {:payments => @payments}) %>
+        </div>
+    </div>
 </div>
 

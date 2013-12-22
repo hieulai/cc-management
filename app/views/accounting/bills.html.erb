@@ -1,16 +1,27 @@
 <div>
-    <%= render(:partial => "layouts/accounting_sub_menu")%>
-    <h1>Bills</h1>
-    <%= link_to("Instructions >>", {:action => 'show'}) %>
-    <br/>
-    <br/>
-    <div class="instructions">
-        <p>Default paragraph. </p>
-    </div>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
+            <br/>
+            <br/>
 
-    </br>
-    <div class="button-group">
-        <%= link_to("+ Bill", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew btn') %>
+            <div class="instructions">
+                <p>Default paragraph. </p>
+            </div>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Bills</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
     </div>
-    <%= render(:partial => "bills", :locals => {:bills => @bills}) %>
+    <div class="zurb-row">
+        <div class="columns margin-bottom">
+            <div class="button-group">
+                <%= link_to("+ Bill", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew btn') %>
+            </div>
+            <%= render(:partial => "bills", :locals => {:bills => @bills}) %>
+        </div>
+    </div>
 </div>

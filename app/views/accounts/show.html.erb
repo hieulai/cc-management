@@ -1,67 +1,74 @@
 <div>
-	<%= render(:partial => "layouts/accounting_sub_menu")%>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Account Details For: <%= @account.name %> </h2>
 
-	<h2>Account Details For: <%= @account.name %> </h2>
-	<h2>Company Info:</h2>
-	<p>
-		<%= "Account Name:" %>
-		<%= @account.name %>
-	</p>
-	<p>
-		<%= "Account Type:" %>
-		<%= @account.category %>
-	</p>
-	<p>
-		<%= "Account Sub Type:" %>
-		<%= @account.subcategory %>
-	</p>
-	<p>
-		<%= "Account Prefix:" %>
-		<%= @account.prefix %>
-	</p>
-	<div>
-		<%= "Balance:" %>
-		<%= price_tag(@account.balance,"inline-block") %>
-	</div>
-    <% if @account.transactions.any? %>
-      <h2>Payment history:</h2>
-      <table class="grid-view" summary="Payment List">
-          <tr class="header">
-              <th>Date</th>
-              <th>Type</th>
-              <th>Reference #</th>
-              <th>Payee</th>
-              <th>Memo</th>
-              <th>Amount</th>
-              <th>Balance</th>
-          </tr>
-          <% balance = @account.balance %>
-          <% @account.transactions.each_with_index do |t, index| %>
-            <tr>
-            <tr class="clickable">
-                <td class="center">
-                    <%= t.date %>
-                    <% if t.instance_of? Payment %>
-                      <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_payment', :id => t.id}, :class => 'action edit clickable-link', style: 'display: none') %>
-                    <% elsif t.instance_of? Deposit %>
-                      <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_deposit', :id => t.id}, :class => 'action edit clickable-link', style: 'display: none') %>
+            <h2>Company Info:</h2>
+
+            <p>
+                <%= "Account Name:" %>
+                <%= @account.name %>
+            </p>
+
+            <p>
+                <%= "Account Type:" %>
+                <%= @account.category %>
+            </p>
+
+            <p>
+                <%= "Account Sub Type:" %>
+                <%= @account.subcategory %>
+            </p>
+
+            <p>
+                <%= "Account Prefix:" %>
+                <%= @account.prefix %>
+            </p>
+
+            <div>
+                <%= "Balance:" %>
+                <%= price_tag(@account.balance, "inline-block") %>
+            </div>
+            <% if @account.transactions.any? %>
+                <h2>Payment history:</h2>
+                <table class="grid-view" summary="Payment List">
+                    <tr class="header">
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Reference #</th>
+                        <th>Payee</th>
+                        <th>Memo</th>
+                        <th>Amount</th>
+                        <th>Balance</th>
+                    </tr>
+                    <% balance = @account.balance %>
+                    <% @account.transactions.each_with_index do |t, index| %>
+                        <tr>
+                        <tr class="clickable">
+                            <td class="center">
+                                <%= t.date %>
+                                <% if t.instance_of? Payment %>
+                                    <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_payment', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+                                <% elsif t.instance_of? Deposit %>
+                                    <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_deposit', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+                                <% end %>
+                            </td>
+                            <td><%= t.method %></td>
+                            <td><%= t.reference %></td>
+                            <td><%= t.payee %></td>
+                            <td><%= t.memo %></td>
+                            <td class="right"><%= price_tag(t.amount) %></td>
+                            <td class="right"><%= price_tag(balance) %></td>
+                        </tr>
+                        <% if t.instance_of? Payment %>
+                            <% balance += t.amount.to_f %>
+                        <% elsif t.instance_of? Deposit %>
+                            <% balance -= t.amount.to_f %>
+                        <% end %>
                     <% end %>
-                </td>
-                <td><%= t.method %></td>
-                <td><%= t.reference %></td>
-                <td><%= t.payee %></td>
-                <td><%= t.memo %></td>
-                <td class="right"><%= price_tag(t.amount) %></td>
-                <td class="right"><%= price_tag(balance) %></td>
-            </tr>
-            <% if t.instance_of? Payment %>
-                <% balance += t.amount.to_f%>
-            <% elsif t.instance_of? Deposit %>
-                <% balance -= t.amount.to_f%>
+                </table>
             <% end %>
-          <% end %>
-
-      </table>
-    <% end %>
-
+        </div>
+    </div>
 </div>

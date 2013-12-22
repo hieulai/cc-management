@@ -1,18 +1,17 @@
 <div>
-	<%= render(:partial => "layouts/accounting_sub_menu")%>
-	<h2>Delete Account</h2>
-	
-	<%= form_for(:account, :url => {:action => 'destroy', :id => @account.id}) do |f| %>
-	
-	<p>Are you sure you want to delete this account?</p>
-	
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Delete Account</h2>
+            <%= form_for(:account, :url => {:action => 'destroy', :id => @account.id}) do |f| %>
+                <p>Are you sure you want to delete this account?</p>
 
-	<p class="reference-name"><%= @account.name %></p>
+                <p class="reference-name"><%= @account.name %></p>
 
-
-	<div class="form-buttons">
-		<%= submit_tag("Delete", class: 'btn') %>
-	</div>
-	
-	<% end %>
+                <div class="form-buttons">
+                    <%= submit_tag("Delete", :class => 'btn') %>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

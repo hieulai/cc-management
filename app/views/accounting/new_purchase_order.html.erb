@@ -1,30 +1,29 @@
 <div>
-    <%= render(:partial => "layouts/accounting_sub_menu")%>
-    <h2>Add Purchase Order</h2>
-
-    <%= form_for @purchase_order, :url => {:action => 'create_purchase_order'}, :remote => true, html: {class: 'new_purchase_order form-horizontal'}  do |f| %>
-
-      <% if @purchase_order.errors.any? %>
-        <div id="errorExplanation">
-            <h2><%= pluralize(@purchase_order.errors.count, "Error") %> prohibited
-                this purchase order from being saved:</h2>
-            <ul>
-                <% @purchase_order.errors.full_messages.each do |msg| %>
-                  <li><%= msg.html_safe %></li>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns margin-bottom">
+            <h2>Add Purchase Order</h2>
+            <%= form_for @purchase_order, :url => {:action => 'create_purchase_order'}, :remote => true, :html => {:class => 'new_purchase_order form-horizontal'} do |f| %>
+                <% if @purchase_order.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@purchase_order.errors.count, "Error") %> prohibited
+                            this purchase order from being saved:</h2>
+                        <ul>
+                            <% @purchase_order.errors.full_messages.each do |msg| %>
+                                <li><%= msg.html_safe %></li>
+                            <% end %>
+                        </ul>
+                    </div>
                 <% end %>
-            </ul>
+                <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @purchase_order}) %>
+                <div id="item-placeholder">
+                    <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @purchase_order, :categories_template => @purchase_order.categories_template}) %>
+                </div>
+            <% end %>
+            <div class="form-buttons">
+                <%= submit_tag("Create", :data => {:form => ".new_purchase_order"}, :class => 'btn') %>
+                <%= link_to("Cancel", :action => 'purchase_orders') %>
+            </div>
         </div>
-      <% end %>
-      <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @purchase_order}) %>
-      <div id="item-placeholder">
-          <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @purchase_order, :categories_template => @purchase_order.categories_template}) %>
-      </div>
-
-    <% end %>
-
-    <div class="form-buttons">
-        <%= submit_tag("Create", :data => {:form => ".new_purchase_order"}, class: 'btn') %>
-        <%= link_to("Cancel", :action => 'purchase_orders') %>
     </div>
-
 </div>

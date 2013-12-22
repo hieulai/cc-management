@@ -1,29 +1,27 @@
 <div>
     <%= render(:partial => "layouts/user_sub_menu") %>
-    <h2>Edit User Info</h2>
-
-    <%= form_for @user, :url => {:action => 'update', :id => @user.id}, html: {class: 'form-horizontal'} do |f| %>
-
-      <% if @user.errors.any? %>
-        <div id="errorExplanation">
-            <h2><%= pluralize(@user.errors.count, "Error") %> prohibited
-                this user from being saved:</h2>
-            <ul>
-                <% @user.errors.full_messages.each do |msg| %>
-                  <li><%= msg %></li>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Edit User Info</h2>
+            <%= form_for @user, :url => {:action => 'update', :id => @user.id}, :html => {:class => 'form-horizontal'} do |f| %>
+                <% if @user.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@user.errors.count, "Error") %> prohibited
+                            this user from being saved:</h2>
+                        <ul>
+                            <% @user.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                            <% end %>
+                        </ul>
+                    </div>
                 <% end %>
-            </ul>
+                <%= render(:partial => "edit_form", :locals => {:f => f}) %>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= submit_tag("Update", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
         </div>
-      <% end %>
-
-      <%= render(:partial => "edit_form", :locals => {:f => f}) %>
-
-      <div class="control-group">
-          <div class='controls'>
-              <%= submit_tag("Update", class: 'btn') %>
-          </div>
-      </div>
-
-    <% end %>
-
+    </div>
 </div>

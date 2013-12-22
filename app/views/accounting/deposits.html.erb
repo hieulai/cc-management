@@ -1,9 +1,14 @@
 <div>
-    <%= render(:partial => "layouts/accounting_sub_menu")%>
-    <h3>Deposits</h3>
-    <div class="button-group">
-        <%= link_to("+ Deposit", {:action => 'new_deposit'}, :id => 'add-deposit', :class => 'action vew btn') %>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns margin-bottom">
+            <h3>Deposits</h3>
+
+            <div class="button-group">
+                <%= link_to("+ Deposit", {:action => 'new_deposit'}, :id => 'add-deposit', :class => 'action vew btn') %>
+            </div>
+            <%= render(:partial => "deposits", :locals => {:deposits => @deposits}) %>
+        </div>
     </div>
-    <%= render(:partial => "deposits", :locals => {:deposits => @deposits}) %>
 </div>
 

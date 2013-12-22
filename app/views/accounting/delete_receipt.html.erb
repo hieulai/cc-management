@@ -1,25 +1,26 @@
 <div>
-    <%= render(:partial => "layouts/accounting_sub_menu")%>
-    <h2>Delete Receipt</h2>
-
-    <%= form_for(:receipt, :url => {:action => 'destroy_receipt', :id => @receipt.id}) do |f| %>
-      <% if @receipt.errors.any? %>
-        <div id="errorExplanation">
-            <h2><%= pluralize(@receipt.errors.count, "Error") %> prohibited
-                this receipt from being deleted:</h2>
-            <ul>
-                <% @receipt.errors.full_messages.each do |msg| %>
-                  <li><%= msg %></li>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Delete Receipt</h2>
+            <%= form_for(:receipt, :url => {:action => 'destroy_receipt', :id => @receipt.id}) do |f| %>
+                <% if @receipt.errors.any? %>
+                    <div id="errorExplanation">
+                        <h2><%= pluralize(@receipt.errors.count, "Error") %> prohibited
+                            this receipt from being deleted:</h2>
+                        <ul>
+                            <% @receipt.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                            <% end %>
+                        </ul>
+                    </div>
                 <% end %>
-            </ul>
+                <p>Are you sure you want to delete this receipt?</p>
+
+                <div class="form-buttons">
+                    <%= submit_tag("Delete", :class => 'btn') %>
+                </div>
+            <% end %>
         </div>
-      <% end %>
-
-      <p>Are you sure you want to delete this receipt?</p>
-
-      <div class="form-buttons">
-          <%= submit_tag("Delete", class: 'btn') %>
-      </div>
-
-    <% end %>
+    </div>
 </div>

@@ -1,83 +1,104 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h1 class="center">
-		<% if @client.company == '' %>
-			<%= @client.full_name %>
-		<% else %>
-			<%= @client.company %>
-		<% end %>
-	</h1>
-	
-	<%= link_to("Edit >>", {:action => 'edit', :id => @client.id}) %>
-	</br>
-	</br>
-	<%= link_to("Delete >>", {:action => 'delete', :id => @client.id}) %>
-		<p>
-			<b><%= "Company:" %></b>
-			<%= @client.company %>
-		</p>
-		<p>
-			<b><%= "First Name:" %></b>
-			<%= @client.first_name %>
-		</p>
-		<p>
-			<b><%= "Last Name:" %></b>
-			<%= @client.last_name %>
-		</p>
-		<p>
-			<b><%= "Primary Phone:" %></b>
-			<%= number_to_phone(@client.primary_phone, area_code: true) %>
-			<%= @client.primary_phone_tag %>
-		</p>
-		<p>
-			<b><%= "Secondary Phone:" %></b>
-			<%= number_to_phone(@client.secondary_phone, area_code: true) %>
-			<%= @client.secondary_phone_tag %>
-		</p>
-		<p>
-			<b><%= "Email:" %></b>
-			<%= @client.email %>
-		</p>
-		
-		<p>
-			<b><%= "Address:" %></b>
-			<%= @client.address %>
-		</p>
-		<p>
-			<b><%= "City:" %></b>
-			<%= @client.city %>
-		</p>
-		<p>
-			<b><%= "State:" %></b>
-			<%= @client.state %>
-		</p>
-		<p>
-			<b><%= "Zipcode:" %></b>
-			<%= @client.zipcode %>
-		</p>
-		<p>
-			<b><%= "Lead Source:" %></b>
-			<%= @client.lead_source %>
-		</p>
-		<p>
-			<b><%= "Associated Projects:" %></b>
-			<% @client.projects.each do |project| %>
-				</br>
-				<li><%= project.name %></li>
-			
-			<% end %>
-		</p>
-		<p>
-			<b><%= "Notes:" %></b>
-			</br>
-			<%= @client.notes %>
-		</p>
-		<p>
-			<b><%= "Created At:" %></b>
-			<%= @client.created_at %>
-		</p>
-		<p>
-			<b><%= "Last Updated:" %></b>
-			<%= @client.updated_at %>
-		</p>
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Edit >>", {:action => 'edit', :id => @client.id}, :title => 'Edit', :class => 'edit action-button') %>
+            <%= link_to("Delete >>", {:action => 'delete', :id => @client.id}, :title => 'Delete', :class => 'delete action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1 class="center">
+                <% if @client.company == '' %>
+                    <%= @client.full_name %>
+                <% else %>
+                    <%= @client.company %>
+                <% end %>
+            </h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <p>
+                <b><%= "Company:" %></b>
+                <%= @client.company %>
+            </p>
+
+            <p>
+                <b><%= "First Name:" %></b>
+                <%= @client.first_name %>
+            </p>
+
+            <p>
+                <b><%= "Last Name:" %></b>
+                <%= @client.last_name %>
+            </p>
+
+            <p>
+                <b><%= "Primary Phone:" %></b>
+                <%= number_to_phone(@client.primary_phone, :area_code => true) %>
+                <%= @client.primary_phone_tag %>
+            </p>
+
+            <p>
+                <b><%= "Secondary Phone:" %></b>
+                <%= number_to_phone(@client.secondary_phone, :area_code => true) %>
+                <%= @client.secondary_phone_tag %>
+            </p>
+
+            <p>
+                <b><%= "Email:" %></b>
+                <%= @client.email %>
+            </p>
+
+            <p>
+                <b><%= "Address:" %></b>
+                <%= @client.address %>
+            </p>
+
+            <p>
+                <b><%= "City:" %></b>
+                <%= @client.city %>
+            </p>
+
+            <p>
+                <b><%= "State:" %></b>
+                <%= @client.state %>
+            </p>
+
+            <p>
+                <b><%= "Zipcode:" %></b>
+                <%= @client.zipcode %>
+            </p>
+
+            <p>
+                <b><%= "Lead Source:" %></b>
+                <%= @client.lead_source %>
+            </p>
+
+            <p>
+                <b><%= "Associated Projects:" %></b>
+                <% @client.projects.each do |project| %>
+                    <br/>
+                    <li><%= project.name %></li>
+                <% end %>
+            </p>
+
+            <p>
+                <b><%= "Notes:" %></b>
+                </br>
+                <%= @client.notes %>
+            </p>
+
+            <p>
+                <b><%= "Created At:" %></b>
+                <%= @client.created_at %>
+            </p>
+
+            <p>
+                <b><%= "Last Updated:" %></b>
+                <%= @client.updated_at %>
+            </p>
+        </div>
+    </div>
 </div>
