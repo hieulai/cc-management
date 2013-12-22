@@ -1,0 +1,17 @@
+<tr class="tr-category category" id="category_<%= category.id %>">
+    <td class="td-category left-bold">
+        <%= category.name %>
+    </td>
+    <td></td><td></td><td></td>
+</tr>
+<% template.estimate.project.co_items(category).try(:each) do |item| %>
+  <%= render :partial => 'accounting/invoice_tr_item', :locals => {:item => item, :category => category} %>
+<% end %>
+<tr>
+    <td class="td-subtotal left-bold">
+        <%= category.name %> Subtotal
+    </td>
+    <td class="right-bold"><div class="subtotal-amount"></div></td>
+    <td class="right-bold"><div class="subtotal-prior-amount"></div></td>
+    <td class="right-bold"><div class="subtotal-invoice-amount"></div></td>
+</tr>

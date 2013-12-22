@@ -65,27 +65,11 @@
         </tr>
     </thead>
     <tbody>
-        <%- @invoice.estimate.template.categories_templates.each do |category_template| %>
-            <tr class="tr-category category" id="category_<%= category_template.category.id %>">
-                <td class="td-category left-bold">
-                    <%= category_template.category.name %>
-                </td>
-                <td></td><td></td><td></td>
-            </tr>
-            <% category_template.items.each do |item| %>
-              <%= render :partial => 'accounting/invoice_tr_item', :locals => {:item => item, :category_template => category_template} %>
-            <% end %>
-            <% category_template.co_items.try(:each) do |item| %>
-              <%= render :partial => 'accounting/invoice_tr_item', :locals => {:item => item, :category_template => category_template} %>
-            <% end %>
-            <tr>
-                <td class="td-subtotal left-bold">
-                    <%= category_template.category.name %> Subtotal
-                </td>
-                <td class="right-bold"><div class="subtotal-amount"></div></td>
-                <td class="right-bold"><div class="subtotal-prior-amount"></div></td>
-                <td class="right-bold"><div class="subtotal-invoice-amount"></div></td>
-            </tr>
+        <% @invoice.estimate.template.try(:categories_templates).try(:each) do |category_template| %>
+            <%= render :partial => 'accounting/invoice_tr_category', :locals => {:category_template => category_template} %>
+        <% end %>
+        <%- @invoice.estimate.template.try(:estimate).try(:project).try(:cos_categories).try(:each) do |category| %>
+            <%= render :partial => 'accounting/invoice_tr_co_category', :locals => {:template => @invoice.estimate.template, :category => category} %>
         <% end %>
         <tr class="tr-category large">
             <td class="left-bold">

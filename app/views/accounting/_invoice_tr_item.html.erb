@@ -1,6 +1,6 @@
 <% changed = item.change_orders_category.present? ? "change_order" : "" %>
 <% billable = item.billable?(@invoice.id) ? '' : 'unclickable'  %>
-<tr class="item item_category_<%= category_template.category.id %> <%= changed %> <%= billable %>" id="item_<%= item.id %>">
+<tr class="item item_category_<%= category.id %> <%= changed %> <%= billable %>" id="item_<%= item.id %>">
   <td>
       <% if item.billable?(@invoice.id) %>
         <%= check_box_tag 'item-chosen', item.invoice_item(@invoice.id).present? ? item.id : "", item.invoice_item(@invoice.id).present? %>

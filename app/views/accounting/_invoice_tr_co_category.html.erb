@@ -1,0 +1,18 @@
+<tr class="category change_order" id="category_<%= category.id %>">
+    <td colspan=7>
+        <h3>
+            <%= category.name %>
+        </h3>
+    </td>
+</tr>
+<% template.estimate.project.co_items(category).try(:each) do |item| %>
+  <%= render :partial => 'invoice_tr_item', :locals => {:item => item, :category => category} %>
+<% end %>
+<tr class="subtotal change_order item_category_<%= category.id %>">
+    <td colspan=4>
+        <div class="category-name"><%= category.name + ' '%>Subtotal</div>
+    </td>
+    <td class="right"><div class="subtotal-amount"></div></td>
+    <td class="right"><div class="subtotal-prior-amount"></div></td>
+    <td class="right"><div class="subtotal-invoice-amount"></div></td>
+</tr>

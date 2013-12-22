@@ -1,0 +1,20 @@
+<tr class="tr-category category" id="category_<%= category_template.category.id %>">
+    <td class="td-category left-bold">
+        <%= category_template.category.name %>
+    </td>
+    <td></td><td></td><td></td>
+</tr>
+<% category_template.items.each do |item| %>
+  <%= render :partial => 'accounting/invoice_tr_item', :locals => {:item => item, :category => category_template.category} %>
+<% end %>
+<% category_template.co_items.try(:each) do |item| %>
+  <%= render :partial => 'accounting/invoice_tr_item', :locals => {:item => item, :category => category_template.category} %>
+<% end %>
+<tr>
+    <td class="td-subtotal left-bold">
+        <%= category_template.category.name %> Subtotal
+    </td>
+    <td class="right-bold"><div class="subtotal-amount"></div></td>
+    <td class="right-bold"><div class="subtotal-prior-amount"></div></td>
+    <td class="right-bold"><div class="subtotal-invoice-amount"></div></td>
+</tr>

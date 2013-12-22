@@ -6,10 +6,10 @@
     </td>
 </tr>
 <% category_template.items.each do |item| %>
-  <%= render :partial => 'invoice_tr_item', :locals => {:item => item, :category_template => category_template} %>
+  <%= render :partial => 'invoice_tr_item', :locals => {:item => item, :category => category_template.category} %>
 <% end %>
 <% category_template.co_items.try(:each) do |item| %>
-  <%= render :partial => 'invoice_tr_item', :locals => {:item => item, :category_template => category_template} %>
+  <%= render :partial => 'invoice_tr_item', :locals => {:item => item, :category => category_template.category} %>
 <% end %>
 <tr class="subtotal item_category_<%= category_template.category.id %>">
     <td colspan=4>
