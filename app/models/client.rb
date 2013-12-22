@@ -6,7 +6,9 @@ class Client < ActiveRecord::Base
   
   attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone, 
       :address, :city, :state, :zipcode, :notes, :last_contacted, :lead_source, :primary_phone_tag, :secondary_phone_tag
-  
+
+  default_scope order("first_name ASC")
+
   scope :search, lambda{|query| where("company ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ? OR notes ILIKE ? OR lead_source ILIKE ?",
      "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")}
 
