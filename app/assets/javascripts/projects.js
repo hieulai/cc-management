@@ -80,10 +80,13 @@ $(document).ready(function () {
         calculateBidAmount();
     }
 
-    $("#item-lines").on("cocoon:after-remove", function(e, i) {
+    $("#item-lines").on("cocoon:before-remove", function(e, i) {
         if ($(i).hasClass("co-category")) {
             $(i).nextUntil(".co-category").remove();
         }
+    })
+
+    $("#item-lines").on("cocoon:after-remove", function(e, i) {
         calculateTotals();
     })
 
