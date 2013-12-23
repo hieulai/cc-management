@@ -202,7 +202,6 @@ class AccountingController < ApplicationController
 
   def edit_purchase_order
     @purchasable = PurchaseOrder.find(params[:id])
-    @purchasable.amount
   end
 
   def update_purchase_order
