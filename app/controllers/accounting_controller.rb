@@ -449,7 +449,7 @@ class AccountingController < ApplicationController
       @purchasable.items = Item.create(purchased_items)
       # Create payment simultaneously for bills
       if @purchasable.instance_of?(Bill) && payment && payment.save
-        payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.amount)
+        payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
       end
       respond_to do |format|
         format.html {redirect_to(:action => "payables")}
