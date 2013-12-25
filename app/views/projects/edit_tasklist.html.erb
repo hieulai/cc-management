@@ -1,20 +1,22 @@
 <div>
-	<%= render(:partial => "layouts/project_mgmt_sub_menu")%>
-	<h2>Update Task List</h2>
-	<%= link_to("Customize Task List >>", {:action => 'customize_tasklist', :id => @tasklist.id}) %>
-	</br>
-	</br>
-	<%= link_to("Change Task List >>", {:action => 'change_tasklist', :id => @tasklist.id}) %>
-	
-	<%= form_for @tasklist, :url => {:action => 'update_tasklist', :id => @tasklist.id} do |f| %>
-	
-		<%= f.fields_for :tasks do |builder| %>
-			<%= render "task_fields", :f => builder %>
-		<% end %>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Update", class: 'btn') %>
-	</div>
-	
-	<% end %>
+    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Update Task List</h2>
+            <%= link_to("Customize Task List >>", {:action => 'customize_tasklist', :id => @tasklist.id}) %>
+            </br>
+            </br>
+            <%= link_to("Change Task List >>", {:action => 'change_tasklist', :id => @tasklist.id}) %>
+            </br>
+            </br>
+            <%= form_for @tasklist, :url => {:action => 'update_tasklist', :id => @tasklist.id} do |f| %>
+                <%= f.fields_for :tasks do |builder| %>
+                    <%= render "task_fields", :f => builder %>
+                <% end %>
+                <div class="form-buttons">
+                    <%= submit_tag("Update", :class => 'btn') %>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>
