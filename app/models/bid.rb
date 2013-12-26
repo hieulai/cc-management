@@ -37,7 +37,7 @@ class Bid < ActiveRecord::Base
   def co_items
     if categories_template
       categories_template.co_items
-    else
+    elsif category
       project.co_items(category)
     end
   end

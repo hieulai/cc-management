@@ -1,0 +1,35 @@
+<table class="grid-view item-list" id="budget-form" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th>Category</th>
+		    <th>Item</th>
+        <th>Description</th>
+        <th class="amount">Estimated Costs</th>
+        <th class="amount">Actual Costs</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%- template.categories_templates.each do |category_template| %>
+      <%= render :partial => 'projects/cost_plus_bid/tr_category', :locals => {:category_template => category_template}  %>
+    <% end %>
+    <%- template.estimate.project.cos_categories.try(:each) do |category| %>
+      <%= render :partial => 'projects/cost_plus_bid/tr_co_category', :locals => {:template => template, :category => category} %>
+    <% end %>
+    <% if template.estimate.project.change_orders.approved.any? %>
+        <tr class="total-change-order change_order">
+            <td colspan=3>
+                CHANGE ORDERS
+            </td>
+            <td class="right co-budget-estimated-cost"></td>
+            <td class="right co-budget-actual-cost"></td>
+        </tr>
+    <% end %>
+    <tr class="total">
+        <td colspan=3>
+            GRAND TOTALS
+        </td>
+        <td class="right"><div class="total-budget-estimated-cost"></div></td>
+        <td class="right"><div class="total-budget-actual-cost"></div></td>
+    </tr>
+    </tbody>
+</table>

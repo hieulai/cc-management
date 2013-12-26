@@ -16,9 +16,6 @@
                     </div>
                 <% end %>
                 <%= render(:partial => "bid_form", :locals => {:f => f, :project => @bid.project}) %>
-                <div id="item-placeholder">
-                    <%= render(:partial => "bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
-                </div>
             <% end %>
             <div class="control-group">
                 <div class='controls'>

@@ -61,3 +61,12 @@ td.button-container {
   float: left;
 }
 
+.controls{
+  span{
+    display: block;
+    input[type="radio"] {
+      margin-right: 3px;
+    }
+  }
+}
+

@@ -1,0 +1,27 @@
+<% link_class = item.billed? ? 'uneditable' : ''  %>
+<tr class="item item_category_<%= category_template.category.id %> <% if item.change_order? %> change_order <% end%> <% unless item.billable? %> unclickable <% end %>" id="item_<%= item.id %>">
+    <td>
+	</td>	
+	<td>
+        <%= item.name %>
+    </td>
+    <td>
+        <%= link_to item.description, "#", :class => "editable #{link_class}", :data => {:type => 'textarea', :rows => 4, :resource => 'item', :name => 'description', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+    </td>
+    <td class="right">
+        <%= link_to item.qty, "#", :class => "editable #{link_class}", :data => {:type => 'text', :resource => 'item', :name => 'qty', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+    </td>
+    <td class="center"><%= item.unit %></td>
+    <td class="right">
+        $<%= link_to price(item.estimated_cost), "#", :class => "editable #{link_class} currency", :data => {:type => 'text', :resource => 'item', :name => 'estimated_cost', :pk => item.id, :url => url_for(:controller => 'items', :action => 'update', :id => item.id), :id => "item_#{item.id}"} %>
+    </td>
+    <td class="right">
+        <%= price_tag(item.amount, "amount") %>
+    </td>
+    <td class="button-container">
+        <% unless item.billed? %>
+            <%= link_to '+', "#" , :class => 'trigger-add btn'%>
+            <%= link_to '-', {:controller => 'items', :action => 'destroy', :id => item.id}, :remote => true, :class => 'remove-item btn' %>
+        <% end %>
+    </td>
+</tr>

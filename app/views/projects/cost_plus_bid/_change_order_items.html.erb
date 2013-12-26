@@ -1,0 +1,31 @@
+<tr class="nested-fields co-item <%= f.object.billable? ? '' : 'unclickable' %>">
+    <td></td>
+    <td>
+        <%= autocomplete_field :name, nil, items_autocomplete_name_path, :class => 'co-item-name', :value => f.object.name, disabled: f.object.billed? %>
+        <% if f.object.id %>
+          <%= f.hidden_field :id, :value => f.object.id %>
+        <% else %>
+          <%= f.hidden_field :id, :class => 'id' %>
+        <% end %>
+
+        <%= f.hidden_field :name, :class => 'name' %>
+        <%= f.hidden_field :unit, :class => 'unit' %>
+    </td>
+    <td>
+        <%= f.text_field :description, :class => 'description', disabled: f.object.billed? %>
+    </td>
+    <td>
+        <%= f.text_field :qty, :class => 'input-mini co-factor qty', disabled: f.object.billed? %>
+    </td>
+    <td>
+        $<%= f.text_field :estimated_cost, :class => 'input-mini co-factor estimated_cost', disabled: f.object.billed? %>
+    </td>
+    <td class="right">
+        <div class="co-amount"></div>
+    </td>
+    <td>
+        <% unless f.object.billed? %>
+          <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
+        <% end %>
+    </td>
+</tr>

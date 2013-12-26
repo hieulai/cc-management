@@ -202,7 +202,7 @@ class ProjectsController < ApplicationController
 
   def new_change_order
     @project = Project.find(params[:id])
-    @change_order = ChangeOrder.new
+    @change_order = @project.change_orders.build
     @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
     @items = Item.where("builder_id = ?", session[:builder_id])
   end
@@ -392,7 +392,7 @@ class ProjectsController < ApplicationController
   
   def new_bid
     @project = Project.find(params[:id])
-    @bid = Bid.new
+    @bid = @project.bids.build
   end
   
   def create_bid
@@ -452,13 +452,13 @@ class ProjectsController < ApplicationController
   end
 
   def show_project_items
-    project = Project.find(params[:project_id])
-    categories_template = CategoriesTemplate.where(:category_id => params[:bid][:category_id], :template_id => project.estimates.first.template.id).first
+    @project = Project.find(params[:project_id])
+    categories_template = CategoriesTemplate.where(:category_id => params[:bid][:category_id], :template_id => @project.estimates.first.template.id).first
     if categories_template
       @items = categories_template.items
-      @co_items = categories_template.template.estimate.project.co_items(categories_template.category)
+      @co_items = @project.co_items(categories_template.category)
     else
-      change_orders_categories = ChangeOrdersCategory.where('category_id = ? AND change_order_id in (?)', params[:bid][:category_id], project.change_orders.pluck(:id))
+      change_orders_categories = ChangeOrdersCategory.where('category_id = ? AND change_order_id in (?)', params[:bid][:category_id], @project.change_orders.pluck(:id))
       @co_items = change_orders_categories.map(&:items).flatten
     end
     respond_to do |format|

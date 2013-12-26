@@ -31,6 +31,14 @@
         <%= f.check_box(:chosen) %>
     </div>
 </div>
+<div id="item-placeholder">
+    <% estimate = @bid.project.estimates.first %>
+    <% if estimate.kind =="Cost Plus Bid" %>
+      <%= render(:partial => "projects/cost_plus_bid/bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
+    <% else %>
+      <%= render(:partial => "bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
+    <% end %>
+</div>
 
 
 

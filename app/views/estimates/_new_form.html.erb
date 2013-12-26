@@ -7,6 +7,12 @@
     <div class="controls"><%= select(:template, :id, ::Template.where("builder_id = ? AND estimate_id is NULL", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %></div>
 </div>
 <div class="control-group">
+    <%= f.label :type, 'Type', class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.collection_radio_buttons(:kind, [["Guaranteed Bid", "Guaranteed Bid"], ["Cost Plus Bid", "Cost Plus Bid"]], :first, :last) %>
+    </div>
+</div>
+<div class="control-group">
     <%= f.label :progress, 'Progress', class: 'col-lg-2 control-label' %>
     <div class="controls"><%= f.select(:progress, ["In Progress", "Awaiting Approval", "Completed & Sent"]) %></div>
 </div>

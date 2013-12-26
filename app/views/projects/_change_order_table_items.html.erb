@@ -1,0 +1,29 @@
+<table id="co-item-list" class="grid-view item-list" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th>Category</th>
+        <th>Item Name</th>
+        <th>Description</th>
+        <th>Qty</th>
+        <th>Rate</th>
+        <th>Margin</th>
+        <th>Total</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody id="item-lines">
+    <%= f.fields_for :change_orders_categories do |ct| %>
+      <%= render('change_order_categories', f: ct) %>
+    <% end %>
+    <tr id="tr-change_order-category-add"  class="co-category">
+        <td colspan="8">
+            <%= link_to_add_association 'Add Category', f, :change_orders_categories, partial: 'change_order_categories', "data-association-insertion-node" => "tr#tr-change_order-category-add", :"data-association-insertion-method" => "before"%>
+        </td>
+    </tr>
+    <tr class="total xlarge">
+        <td colspan="6">TOTALS</td>
+        <td class="right"><div class="total-co-amount"></div></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,57 @@
+<table class="grid-view item-list" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th>Category</th>
+        <th>Item</th>
+        <th>Description</th>
+        <th>Qty</th>
+        <th>Unit</th>
+        <th>Cost</th>
+        <th class="amount">Amount</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%-
+        amount = 0
+    %>
+    <%- @estimate.template.categories_templates.each do |category_template| %>
+        <%- subamount = category_template.items.map(&:amount).sum
+            amount+= subamount
+        %>
+        <%= render :partial => 'estimates/cost_plus_bid/tr_category', :locals => {:category_template => category_template} %>
+    <% end %>
+    <tr class="add add-category">
+        <td colspan=9>
+            <%= form_for :category, :url => {:controller => 'estimates', :action => 'add_category', :template_id => @estimate.template.id}, :html => {:class => "form-inline"}, :remote => true do |p| %>
+                Category:
+                <%= p.select :id, Category.where(:builder_id => session[:builder_id]).order(:name).map { |c| [c.name, c.id] } %>
+                <%= p.submit "Add", :class => 'btn' %>
+            <% end %>
+        </td>
+    </tr>
+    <tr>
+        <td class="left" colspan=5>
+            Gross Estimated Costs
+        </td>
+        <td class="right" colspan="2"><%= price_tag(amount, "total-amount") %></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td class="left" colspan=5>
+            Profit Margin
+        </td>
+        <td class="right" colspan="2">
+            $<%= text_field_tag(:estimate_profit, @estimate.profit, :class => "input-mini") %>
+        </td>
+        <td></td>
+    </tr>
+    <tr class="total xlarge">
+        <td class="left" colspan=5>
+            GRAND TOTALS
+        </td>
+        <td class="right" colspan="2"><div class="revenue"><%= price_tag(@estimate.revenue) %></div></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>

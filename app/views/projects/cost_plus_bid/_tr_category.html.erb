@@ -1,0 +1,27 @@
+<% purchased = category_template.purchased ? "purchased" : "" %>
+<tr class="category <%= purchased %>" id="category_<%= category_template.category.id %>">
+    <td colspan=5>
+        <h3>
+            <%= category_template.category.name %>
+        </h3>
+    </td>
+</tr>
+<% category_template.items.each do |item| %>
+  <%= render :partial => 'projects/cost_plus_bid/tr_item', :locals => {:item => item} %>
+<% end %>
+<% category_template.merged_purchasable_items.each do |item| %>
+  <%= render :partial => 'projects/cost_plus_bid/tr_item', :locals => {:item => item} %>
+<% end %>
+<% unless category_template.pos.try(:map, &:shipping).try(:compact).blank? %>
+  <%= render :partial => 'projects/cost_plus_bid/tr_shipping', :locals => {:shipping => category_template.pos.try(:map, &:shipping).try(:compact).sum} %>
+<% end %>
+<% category_template.co_items.try(:each) do |item| %>
+  <%= render :partial => 'projects/cost_plus_bid/tr_item', :locals => {:item => item} %>
+<% end %>
+<tr class="subtotal item_category_<%= category_template.category.id %> <%= purchased %>">
+    <td colspan=3>
+        <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div> 
+    </td>
+    <td class="right"><div class="subtotal-budget-estimated-cost"></div></td>
+    <td class="right"><div class="subtotal-budget-actual-cost"></div></td>
+</tr>

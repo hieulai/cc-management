@@ -344,6 +344,7 @@ class AccountingController < ApplicationController
     @invoice = params[:invoice_id].present? ? Invoice.find(params[:invoice_id]) : Invoice.new
     if params[:invoice].present? && params[:invoice][:estimate_id].present?
       @estimate = Estimate.find(params[:invoice][:estimate_id])
+      @invoice = @estimate.invoices.build if @invoice.new_record?
     end
     respond_to do |format|
       format.js {}

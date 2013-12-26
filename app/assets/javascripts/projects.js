@@ -14,7 +14,8 @@ function calculateCOAmount(coFactor){
     var tdQty = $(trItem).find("input.qty");
     var tdEstimatedCost = $(trItem).find("input.estimated_cost");
     var tdMargin = $(trItem).find("input.margin");
-    var total = text_to_number($(tdQty).val()) * text_to_number($(tdEstimatedCost).val()) + text_to_number($(tdMargin).val());
+    var margin = $(tdMargin).size() > 0 ? text_to_number($(tdMargin).val()) : 0;
+    var total = text_to_number($(tdQty).val()) * text_to_number($(tdEstimatedCost).val()) + margin;
     $(trItem).find("div.co-amount").text(number_to_currency_with_unit(total, 2, '.', ','))
 }
 

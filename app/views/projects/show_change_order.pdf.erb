@@ -78,7 +78,7 @@
                     </td>
                     <td class="unit"><%= item.unit %></td>
                     <td>
-                        <%= price_tag(item.price, "amount") %>
+                        <%= price_tag(@change_order.project.estimates.first.kind =="Cost Plus Bid" ? item.amount : item.price, "amount") %>
                     </td>
                 </tr>
             <% end %>

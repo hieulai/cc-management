@@ -78,7 +78,7 @@
                     </td>
                     <td class="unit"><%= item.unit %></td>
                     <td>
-                        <%= price_tag(item.price, "amount") %>
+                        <%= price_tag(@estimate.kind =="Cost Plus Bid" ? item.amount : item.price, "amount") %>
                     </td>
                 </tr>
             <% end %>
@@ -90,11 +90,27 @@
                 <td class="right-bold"><div class="subtotal-amount"></div></td>
             </tr>
         <% end %>
-            <tr class="tr-footer">
-                <td colspan="3" class="right-bold">
-                    TOTAL
-                </td>
-                <td class="right-bold"><div class="total-amount"></div></td>
+        <% if @estimate.kind == "Cost Plus Bid" %>
+          <tr class="tr-footer">
+            <td colspan="3" class="left-bold">
+                Gross Estimated Costs
+            </td>
+            <td class="right-bold">
+                <div class="total-amount"></div>
+            </td>
             </tr>
+              <tr class="tr-footer">
+                <td colspan="3" class="left-bold">
+                    Profit Margin
+                </td>
+                <td class="right-bold"><%= price_tag(@estimate.profit) %></td>
+            </tr>
+      <% end %>
+        <tr class="tr-footer">
+            <td colspan="3" class="left-bold">
+                TOTALS
+            </td>
+            <td class="right-bold"><%= price_tag(@estimate.revenue) %></td>
+        </tr>
     </tbody>
 </table>

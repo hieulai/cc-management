@@ -1,0 +1,17 @@
+<tr class="category change_order">
+    <td colspan=5>
+        <h3>
+            <%= category.name %>
+        </h3>
+    </td>
+</tr>
+<% template.estimate.project.co_items(category).try(:each) do |item| %>
+  <%= render :partial => 'projects/cost_plus_bid/tr_item', :locals => {:item => item} %>
+<% end %>
+<tr class="subtotal change_order">
+    <td colspan=3>
+        <div class="category-name"><%= category.name + ' '%>Subtotal</div>
+    </td>
+    <td class="right"><div class="subtotal-budget-estimated-cost"></div></td>
+    <td class="right"><div class="subtotal-budget-actual-cost"></div></td>
+</tr>

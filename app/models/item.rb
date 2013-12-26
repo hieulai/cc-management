@@ -86,12 +86,12 @@ class Item < ActiveRecord::Base
     self.invoices.any?
   end
 
-  def billable?(invoice_id =nil)
-    invoice_item(invoice_id).present? || invoice_amount.nil? || billable_amount > 0
+  def billable?(invoice_id =nil, net = false)
+    invoice_item(invoice_id).present? || invoice_amount.nil? || billable_amount(net) > 0
   end
 
-  def billable_amount
-    price.to_f - invoice_amount.to_f
+  def billable_amount(net = false)
+    (net ? amount.to_f : price.to_f) - invoice_amount.to_f
   end
 
   def self.to_csv(items, options = {})

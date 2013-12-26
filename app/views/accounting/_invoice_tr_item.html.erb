@@ -1,8 +1,10 @@
-<% changed = item.change_orders_category.present? ? "change_order" : "" %>
-<% billable = item.billable?(@invoice.id) ? '' : 'unclickable'  %>
+<% changed = item.change_orders_category.present? ? "change_order" : ""
+   cpb_estimate = @invoice.estimate.kind =="Cost Plus Bid"
+   billable = item.billable?(@invoice.id, cpb_estimate) ? '' : 'unclickable'
+ %>
 <tr class="item item_category_<%= category.id %> <%= changed %> <%= billable %>" id="item_<%= item.id %>">
   <td>
-      <% if item.billable?(@invoice.id) %>
+      <% if item.billable?(@invoice.id, cpb_estimate) %>
         <%= check_box_tag 'item-chosen', item.invoice_item(@invoice.id).present? ? item.id : "", item.invoice_item(@invoice.id).present? %>
         <% if item.invoice_item(@invoice.id).present? %>
           <%= hidden_field_tag "invoice[invoices_items_attributes][][id]", item.invoice_item(@invoice.id).id %>
@@ -19,15 +21,15 @@
         <%= item.description %>
     </td>
     <td class="right">
-        <%= price_tag(item.price, "amount") %>
+        <%= price_tag(@invoice.estimate.kind =="Cost Plus Bid" ? item.amount : item.price, "amount") %>
     </td>
     <td class="right">
         <%= price_tag(item.prior_amount(@invoice.id), "prior-amount") %>
     </td>
     <td class="right">
-        <% if item.billable?(@invoice.id) %>
+        <% if item.billable?(@invoice.id, cpb_estimate ) %>
             <div class="text-field" <% unless item.invoice_item(@invoice.id).present? %> style="display: none" <% end %>>
-                $<%= text_field_tag 'invoice[invoices_items_attributes][][amount]', item.invoice_item(@invoice.id).try(:amount) || item.billable_amount, :class => "input-mini invoice-amount" %>
+                $<%= text_field_tag 'invoice[invoices_items_attributes][][amount]', item.invoice_item(@invoice.id).try(:amount) || item.billable_amount(cpb_estimate), :class => "input-mini invoice-amount" %>
             </div>
         <% end %>
     </td>

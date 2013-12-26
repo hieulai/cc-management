@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131221083937) do
+ActiveRecord::Schema.define(:version => 20131224163841) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -263,14 +263,15 @@ ActiveRecord::Schema.define(:version => 20131221083937) do
     t.integer  "builder_id"
     t.integer  "project_id"
     t.string   "progress"
-    t.string   "status",     :default => "Current Estimate"
+    t.string   "status",                                    :default => "Current Estimate"
     t.date     "deadline"
-    t.integer  "revenue"
-    t.integer  "profit"
-    t.integer  "margin"
+    t.decimal  "revenue",    :precision => 10, :scale => 2
+    t.decimal  "profit",     :precision => 10, :scale => 2
+    t.decimal  "margin",     :precision => 10, :scale => 2
     t.text     "notes"
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
+    t.datetime "created_at",                                                                :null => false
+    t.datetime "updated_at",                                                                :null => false
+    t.string   "kind"
   end
 
   add_index "estimates", ["builder_id"], :name => "index_estimates_on_builder_id"

@@ -1,0 +1,40 @@
+<table class="grid-view item-list" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th>Item Name</th>
+        <th>Description</th>
+        <th class="amount">Estimated Costs</th>
+        <th>Bid Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if defined?(items) && items.present? %>
+      <% items.each do |item| %>
+        <tr>
+            <td><%= item.name %></td>
+            <td><%= item.description %></td>
+            <td>$<%= item.amount %></td>
+            <td>
+                $<%= text_field_tag 'item[][uncommitted_cost]', (bid.item_amount(item.id) if (defined? bid) && bid.present?), class: 'input-mini' %>
+                <%= hidden_field_tag 'item[][id]', item.id %>
+            </td>
+        </tr>
+
+      <% end %>
+    <% end %>
+    <% if defined?(co_items) && co_items.present? %>
+      <% co_items.each do |item| %>
+        <tr class="change_order">
+            <td><%= item.name %></td>
+            <td><%= item.description %></td>
+            <td>$<%= item.amount %></td>
+            <td>
+                $<%= text_field_tag 'item[][uncommitted_cost]', (bid.item_amount(item.id) if (defined? bid) && bid.present?), class: 'input-mini' %>
+                <%= hidden_field_tag 'item[][id]', item.id %>
+            </td>
+        </tr>
+
+      <% end %>
+    <% end %>
+    </tbody>
+</table>

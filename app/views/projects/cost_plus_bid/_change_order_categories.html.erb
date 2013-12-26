@@ -1,0 +1,20 @@
+<tr class="nested-fields co-category">
+    <td colspan="6">
+        <%= f.hidden_field :id %>
+        <%= f.select :category_id, @categories.map{ |category| [category.name, category.id]}, {prompt: "Select Category"}, class: "change_order_categories" %>
+    </td>
+    <td>
+        <% unless  f.object.undestroyable?  %>
+            <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
+        <% end %>
+    </td>
+</tr>
+<%= f.fields_for :items do |item| %>
+  <%= render('projects/cost_plus_bid/change_order_items', f: item) %>
+<% end %>
+<tr id="tr-change_order-item-add">
+    <td></td>
+    <td colspan="6">
+        <%= link_to_add_association 'Add Item', f, :items, partial: 'projects/cost_plus_bid/change_order_items', "data-association-insertion-traversal" => "closest", "data-association-insertion-node" => "tr#tr-change_order-item-add", :"data-association-insertion-method" => "before" %>
+    </td>
+</tr>

@@ -19,7 +19,7 @@ class EstimatesController < ApplicationController
         format.pdf do
           render :pdf => "Estimate-#{@estimate.project.name}",
                  :layout => 'pdf.html',
-                 #:show_as_html => true, // for debugging html & css
+                 #:show_as_html => true,
           :footer => {:center => 'Page [page]'}
         end
       end
