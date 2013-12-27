@@ -34,7 +34,11 @@
         <td class="left" colspan=5>
             Gross Estimated Costs
         </td>
-        <td class="right" colspan="2"><%= price_tag(amount, "total-amount") %></td>
+        <td class="right" colspan="2">
+            <div class="price">
+                <div class="total-amount"></div>
+            </div>
+        </td>
         <td></td>
     </tr>
     <tr>
@@ -42,7 +46,7 @@
             Profit Margin
         </td>
         <td class="right" colspan="2">
-            $<%= text_field_tag(:estimate_profit, @estimate.profit, :class => "input-mini") %>
+            $<%= text_field_tag(:estimate_profit, @estimate.profit, :class => "input-mini margin price") %>
         </td>
         <td></td>
     </tr>
@@ -50,7 +54,7 @@
         <td class="left" colspan=5>
             GRAND TOTALS
         </td>
-        <td class="right" colspan="2"><div class="revenue"><%= price_tag(@estimate.revenue) %></div></td>
+        <td class="right" colspan="2"><div class="total-price"></div></td>
         <td></td>
     </tr>
     </tbody>

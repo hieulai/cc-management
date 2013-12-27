@@ -44,7 +44,7 @@ function calculateTotals(s) {
             }
             amount += text_to_number(value);
         });
-        fillValue(this, amount, empty);
+        fillValue("div[class^='" + $(this).attr("class") + "']", amount, empty);
         $("input[class^='" + $(this).attr("class") + "']").val(amount.toFixed(2));
     })
 };

@@ -47,14 +47,8 @@ $(document).ready(function () {
 
     if ($("input#estimate_profit").size() > 0 ){
         $("input#estimate_profit").on('change', function(){
-            var profit = text_to_number($(this).val());
-            var total = text_to_number($(".total-amount").first().text());
-            $("input.profit").val(profit);
-            $("div.profit").text(number_to_currency_with_unit(profit, 2, '.', ','));
-            $("input.revenue").val(total + profit);
-            $("div.revenue").text(number_to_currency_with_unit(total + profit, 2, '.', ','));
+            calculateTotals("margin");
+            calculateTotals("price");
         });
-
-        $("input#estimate_profit").change();
     }
 })

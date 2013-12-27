@@ -29,15 +29,15 @@
 <div class="control-group">
     <%= f.label :revenue, 'Expected Revenue', :class => 'col-lg-2 control-label' %>
     <div class="controls">
-        <div class="revenue"><%= price_tag @estimate.revenue %></div>
-        <%= f.hidden_field(:revenue, :class => "revenue") %>
+        <div class="total-price"></div>
+        <%= f.hidden_field(:revenue, :class => "total-price") %>
     </div>
 </div>
 <div class="control-group">
     <%= f.label :profit, 'Expected Profit', :class => 'col-lg-2 control-label' %>
     <div class="controls">
-        <div class="profit"><%= price_tag @estimate.profit %></div>
-        <%= f.hidden_field(:profit, :class => "profit") %>
+        <div class="total-margin"></div>
+        <%= f.hidden_field(:profit, :class => "total-margin") %>
     </div>
 </div>
 	
