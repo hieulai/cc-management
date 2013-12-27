@@ -300,6 +300,46 @@ form {
   background-size: 2.7em 2.7em;
 }
 
+.import {
+  background-image: url(image_path('import.png'));
+  background-size: 2.7em 2.7em;
+}
+
+.edit-large {
+  background-image: url(image_path('edit-large.png'));
+  background-size: 2.7em 2.7em;
+}
+
+.delete-large {
+  background-image: url(image_path('delete-large.png'));
+  background-size: 2.7em 2.7em;
+}
+
+.view-large {
+  background-image: url(image_path('view-large.png'));
+  background-size: 2.7em 2.7em;
+}
+
+.transfer {
+  background-image: url(image_path('transfer.png'));
+  background-size: 2.7em 2.7em;
+}
+
+.reconcile {
+  background-image: url(image_path('reconcile.png'));
+  background-size: 2.7em 2.7em;
+}
+
+.profit-loss {
+  background-image: url(image_path('profit-loss.png'));
+  background-size: 2.7em 2.7em;
+}
+
+.balance {
+  background-image: url(image_path('balance.png'));
+  background-size: 2.7em 2.7em;
+}
+
 .action-button {
   background-position: 0 0;
   background-repeat: no-repeat;

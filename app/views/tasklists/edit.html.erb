@@ -1,7 +1,7 @@
 <div>
     <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
     <div class="zurb-row">
-        <div class="columns">
+        <div class="columns margin-bottom">
             <h2>Edit Task List</h2>
             <%= form_for @tasklist, :url => {:action => 'update', :id => @tasklist.id}, :html => {:class => 'tasklist form-horizontal'} do |f| %>
                 <%= render(:partial => "form", :locals => {:f => f}) %>

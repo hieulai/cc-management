@@ -2,8 +2,8 @@
     <%= render(:partial => "layouts/people_sub_menu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
-            <%= link_to("View >>", {:action => 'show', :id => @client.id}, :title => 'View', :class => 'view action-button') %>
-            <%= link_to("Delete >>", {:action => 'delete', :id => @client.id}, :title => 'Delete', :class => 'delete action-button') %>
+            <%= link_to("View >>", {:action => 'show', :id => @client.id}, :title => 'View', :class => 'view-large action-button') %>
+            <%= link_to("Delete >>", {:action => 'delete', :id => @client.id}, :title => 'Delete', :class => 'delete-large action-button') %>
         </div>
         <div class="large-6 medium-6 columns">
             <h1 class="center">
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="zurb-row">
-        <div class="columns">
+        <div class="columns margin-bottom">
             <%= form_for @client, :url => {:action => 'update', :id => @client.id}, :html => {:class => 'form-horizontal'} do |f| %>
                 <%= render(:partial => "form", :locals => {:f => f}) %>
                 <div class="control-group">

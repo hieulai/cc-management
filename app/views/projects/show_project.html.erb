@@ -1,7 +1,7 @@
 <div>
     <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
     <div class="zurb-row">
-        <div class="columns">
+        <div class="columns margin-bottom">
             <% @client.projects.each do |project| %>
                 <h2>Lead Details For: <%= project.name %></h2>
                 <table summary="Lead detail view">

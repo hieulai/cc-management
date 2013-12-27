@@ -1,11 +1,17 @@
 <div>
     <%= render(:partial => "layouts/company_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Update", {:action => 'edit', :id => @builder.id}, :title => 'Update', :class => 'edit-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h2 class="center">Company Details:</h2>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
     <div class="zurb-row">
         <div class="columns margin-bottom">
-            <h2 class="center">Company Details:</h2>
-            <%= link_to("Update", {:action => 'edit', :id => @builder.id}, :title => 'Update', :class => 'edit table-action') %>
-            <br/><br/>
-
             <p>
                 <%= "Company Name:" %>
                 <%= @builder.company_name %>

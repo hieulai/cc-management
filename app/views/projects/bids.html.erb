@@ -1,19 +1,22 @@
 <div>
     <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
-    <div class="zurb-row">
-        <div class="columns">
-            <h1>Bids for: <%= @project.name %></h1>
-            </br>
-            <p class="trigger">Instructions >></p>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("+ New Bid", {:action => 'new_bid', :id => @project.id}, :class => 'add action-button') %>
+            <span class="trigger help action-button">Instructions >></span>
 
             <div class="instructions">
                 <p>Default paragraph. </p>
             </div>
-            </br>
-            </br>
-            <%= link_to("+ New Bid", {:action => 'new_bid', :id => @project.id}, :class => 'action vew btn') %>
-            </br>
-            </br>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Bids for: <%= @project.name %></h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns">
             <% @total_costs = 0 %>
             <table class="grid-view" summary="Project List">
                 <tr class="header">

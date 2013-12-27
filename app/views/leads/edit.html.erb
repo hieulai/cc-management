@@ -1,7 +1,7 @@
 <div>
     <%= render(:partial => "layouts/leads_sub_menu") %>
     <div class="zurb-row">
-        <div class="columns">
+        <div class="columns margin-bottom">
             <h2>Update Lead</h2>
             <%= form_for @project, :url => {:action => 'update', :id => @project.id}, :html => {:class => ' form-horizontal'} do |p| %>
                 <%= fields_for @client do |c| %>

@@ -2,6 +2,7 @@
     <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
+            <%= link_to("+ Change Order", {:action => 'new_change_order', :id => @project.id}, :class => 'add action-button') %>
             <span class="trigger help action-button">Instructions >></span>
 
             <div class="instructions">
@@ -16,9 +17,6 @@
     </div>
     <div class="zurb-row">
         <div class="columns">
-            <%= link_to("+ Change Order", {:action => 'new_change_order', :id => @project.id}, :class => 'action vew btn') %>
-            </br>
-            </br>
             <table class="grid-view margin-bottom responsive" summary="Project List">
                 <tr class="header">
                     <th>Actions</th>
