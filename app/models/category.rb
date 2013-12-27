@@ -11,6 +11,7 @@ class Category < ActiveRecord::Base
 
   accepts_nested_attributes_for :items, reject_if: :all_blank, allow_destroy: true
 
+  default_scope order("name ASC")
   scope :raw, lambda { |builder_id| where("template_id IS NULL AND builder_id = ?", builder_id) }
 
   validates :name, presence: true
