@@ -20,6 +20,9 @@ class Bill < ActiveRecord::Base
   scope :paid, where('remaining_amount = 0')
 
   before_save :check_readonly
+  after_update :destroy_old_purchased_categories_template
+  after_destroy :destroy_purchased_categories_template
+
   validates_presence_of :vendor, :project, :categories_template
 
   def paid?
@@ -74,6 +77,15 @@ class Bill < ActiveRecord::Base
       errors[:base] << "This bill is already paid and can not be modified."
       false
     end
+  end
+
+  def destroy_old_purchased_categories_template
+    ct = CategoriesTemplate.find(categories_template_id_was)
+    ct.destroy if ct.purchased && ct.bills.empty?
+  end
+
+  def destroy_purchased_categories_template
+    categories_template.destroy if categories_template.purchased && categories_template.bills.empty?
   end
 
 end
