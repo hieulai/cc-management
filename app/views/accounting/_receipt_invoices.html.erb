@@ -25,9 +25,7 @@
       <tr>
           <td class="center">
               <%= check_box_tag 'invoice-chosen', i.receipt_invoice(@receipt.id).present? ? i.id : "", i.receipt_invoice(@receipt.id).present? %>
-              <% if i.receipt_invoice(@receipt.id).present? %>
-                <%= hidden_field_tag "receipt[receipts_invoices_attributes][][id]", i.receipt_invoice(@receipt.id).id %>
-              <% end %>
+                <%= hidden_field_tag "receipt[receipts_invoices_attributes][][id]", i.receipt_invoice(@receipt.id).try(:id) %>
               <%= hidden_field_tag "receipt[receipts_invoices_attributes][][invoice_id]", i.id %>
               <%= hidden_field_tag 'receipt[receipts_invoices_attributes][][_destroy]', !i.receipt_invoice(@receipt.id).present? %>
           </td>

@@ -8,9 +8,7 @@
 <tr class="item <%= change_order_item %>" id="item_<%= item.id %> ">
     <td class="center">
         <%= check_box_tag 'item-chosen', purchasable_object ? item.id : "", purchasable_object.present? %>
-        <% if purchasable_object %>
-          <%= hidden_field_tag "#{object_name}[#{object_name.pluralize}_items_attributes][][id]", purchasable_object.id %>
-        <% end %>
+        <%= hidden_field_tag "#{object_name}[#{object_name.pluralize}_items_attributes][][id]", purchasable_object.try(:id) %>
         <%= hidden_field_tag "#{object_name}[#{object_name.pluralize}_items_attributes][][item_id]", item.id %>
         <%= hidden_field_tag "#{object_name}[#{object_name.pluralize}_items_attributes][][_destroy]", !purchasable_object.present? %>
 

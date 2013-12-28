@@ -27,9 +27,7 @@
       <tr>
           <td class="center">
               <%= check_box_tag 'bill-chosen', b.payment_bill(@payment.id).present? ? b.id : "", b.payment_bill(@payment.id).present? %>
-              <% if b.payment_bill(@payment.id).present? %>
-                <%= hidden_field_tag "payment[payments_bills_attributes][][id]", b.payment_bill(@payment.id).id %>
-              <% end %>
+                <%= hidden_field_tag "payment[payments_bills_attributes][][id]", b.payment_bill(@payment.id).try(:id) %>
               <%= hidden_field_tag "payment[payments_bills_attributes][][bill_id]", b.id %>
               <%= hidden_field_tag 'payment[payments_bills_attributes][][_destroy]', !b.payment_bill(@payment.id).present? %>
           </td>

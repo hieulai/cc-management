@@ -10,7 +10,7 @@ module Purchasable
 
     def set_actual_costs
       updated_cost = self.item.actual_cost.to_f + self.actual_cost.to_f
-      unless self.item.update_column(:actual_cost, updated_cost)
+      unless self.item.update_attribute(:actual_cost, updated_cost)
         errors[:base] << item.errors.full_messages.join(".")
         return false
       end

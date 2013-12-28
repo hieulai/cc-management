@@ -22,9 +22,7 @@
       <tr>
           <td class="center">
               <%= check_box_tag 'receipt-chosen', receipt.deposit_receipt(@deposit.id).present? ? receipt.id : "", receipt.deposit_receipt(@deposit.id).present? %>
-              <% if receipt.deposit_receipt(@deposit.id).present? %>
-                <%= hidden_field_tag "deposit[deposits_receipts_attributes][][id]", receipt.deposit_receipt(@deposit.id).id %>
-              <% end %>
+                <%= hidden_field_tag "deposit[deposits_receipts_attributes][][id]", receipt.deposit_receipt(@deposit.id).try(:id) %>
               <%= hidden_field_tag "deposit[deposits_receipts_attributes][][receipt_id]", receipt.id %>
               <%= hidden_field_tag 'deposit[deposits_receipts_attributes][][_destroy]', !receipt.deposit_receipt(@deposit.id).present? %>
           </td>

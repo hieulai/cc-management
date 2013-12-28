@@ -6,9 +6,7 @@
   <td>
       <% if item.billable?(@invoice.id, cpb_estimate) %>
         <%= check_box_tag 'item-chosen', item.invoice_item(@invoice.id).present? ? item.id : "", item.invoice_item(@invoice.id).present? %>
-        <% if item.invoice_item(@invoice.id).present? %>
-          <%= hidden_field_tag "invoice[invoices_items_attributes][][id]", item.invoice_item(@invoice.id).id %>
-        <% end %>
+          <%= hidden_field_tag "invoice[invoices_items_attributes][][id]", item.invoice_item(@invoice.id).try(:id) %>
         <%= hidden_field_tag "invoice[invoices_items_attributes][][item_id]", item.id %>
         <%= hidden_field_tag 'invoice[invoices_items_attributes][][_destroy]', !item.invoice_item(@invoice.id).present? %>
       <% end %>
