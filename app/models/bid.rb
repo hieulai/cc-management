@@ -46,8 +46,8 @@ class Bid < ActiveRecord::Base
   def set_committed_costs
     if self.chosen
       self.amount.each do |i|
-        item = Item.find(i[:id])
-        if item.present?
+        if Item.exists?(i[:id])
+          item = Item.find(i[:id])
           updated_cost = item.committed_cost.to_f + i[:uncommitted_cost].to_f
           item.update_attribute(:committed_cost, updated_cost == 0 ? nil : updated_cost)
         end
@@ -58,8 +58,8 @@ class Bid < ActiveRecord::Base
   def unset_committed_costs
     if self.chosen_was
       self.amount_was.try(:each) do |i|
-        item = Item.find(i[:id])
-        if item.present?
+        if Item.exists?(i[:id])
+          item = Item.find(i[:id])
           updated_cost = item.committed_cost.to_f - i[:uncommitted_cost].to_f
           item.update_attribute(:committed_cost, updated_cost == 0 ? nil : updated_cost)
         end
