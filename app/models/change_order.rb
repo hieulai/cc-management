@@ -1,5 +1,4 @@
 class ChangeOrder < ActiveRecord::Base
-  before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :project
@@ -30,7 +29,7 @@ class ChangeOrder < ActiveRecord::Base
   private
   def check_destroyable
     if  undestroyable?
-      errors[:invoice] << "Change Order #{name} cannot be disapproved/deleted once containing items which are added to an invoice"
+      errors[:invoice] << "Change Order #{name} cannot be disapproved once containing items which are added to an invoice"
       false
     end
   end

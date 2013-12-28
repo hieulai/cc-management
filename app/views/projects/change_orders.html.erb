@@ -29,9 +29,7 @@
                     <tr>
                         <td class="center">
                             <%= link_to("Edit", {:action => 'edit_change_order', :id => co.id}, :class => 'edit table-action') %>
-                            <% unless co.undestroyable? %>
-                                <%= link_to("Delete", {:action => 'delete_change_order', :id => co.id}, :class => 'delete table-action') %>
-                            <% end %>
+                            <%= link_to("Delete", {:action => 'delete_change_order', :id => co.id}, :class => 'delete table-action') %>
                         </td>
                         <td><%= co.name %></td>
                         <td class="right">$<%= co.amount %></td>

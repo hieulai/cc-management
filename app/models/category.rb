@@ -4,6 +4,7 @@ class Category < ActiveRecord::Base
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :specifications
   has_many :categories_templates, :dependent => :destroy
+  has_many :change_orders_categories, :dependent => :destroy
   has_many :templates, through: :categories_templates
   has_many :items
   
