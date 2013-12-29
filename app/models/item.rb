@@ -50,7 +50,7 @@ class Item < ActiveRecord::Base
   def actual_cost
     if bills_items.any? || purchase_orders_items.any?
       bills_items.sum(&:actual_cost).to_f + purchase_orders_items.sum(&:actual_cost).to_f
-    else
+    elsif bill || purchase_order
       read_attribute(:actual_cost)
     end
   end
