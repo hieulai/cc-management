@@ -18,9 +18,7 @@
             <div id='username'>
                 <%= (session[:builder_name]) if session[:builder_name] %>
                 </br>
-                <%= (session[:username]) if session[:username] %>
-                </br>
-                <%= link_to("Logout", destroy_user_session_url, :method => :delete) %>
+                <%= (session[:username]) if session[:username] %> <%= link_to("Logout", destroy_user_session_url, :method => :delete, :class => "logout") %>
             </div>
         </div>
     </div>

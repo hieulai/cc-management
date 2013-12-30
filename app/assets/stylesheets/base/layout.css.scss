@@ -152,13 +152,13 @@ form {
 }
 
 #header {
-  padding-top: 0.8em;
-  padding-bottom: 0.45em;
+  padding-top: 0.6em;
+  padding-bottom: 0.2em;
 }
 
 #header h1 {
-  font-size: 4em;
-  line-height: 0.9em;
+  font-size: 3em;
+  line-height: 0.8em;
   margin: 0;
   text-align: left;
   font-weight: normal;
@@ -168,7 +168,7 @@ form {
 #content h1 {
   text-align: center;
   margin: 0;
-  font-size: 2.33em;
+  font-size: 2em;
   font-weight: normal;
   line-height: 0.9em;
   padding-top: 0.25em;
@@ -190,6 +190,21 @@ form {
   text-decoration: none;
 }
 
+.logout {
+  background-image: url(image_path('logout.png'));
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 1em 1em;
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  height: 1em;
+  text-align: left;
+  text-indent: -9000em;
+  width: 1em;
+}
+
 #footer {
   padding: 10px;
   margin: 10px 20px;
@@ -200,7 +215,7 @@ form {
 
 #mainmenu {
   background: url(image_path('menu-bg.png')) repeat left top;
-  background-size: 0.5em 2.8em;
+  background-size: 0.41em 2.3em;
   width: 100%;
 }
 
@@ -211,8 +226,8 @@ form {
 }
 
 #mainmenu li {
-  margin: 0 0 0 -6px;
-  line-height: 1.6em;
+  margin: 0 0 1px -6px;
+  line-height: 1.16em;
 }
 
 #mainmenu ul li {
@@ -222,7 +237,7 @@ form {
 }
 
 #mainmenu ul li a {
-  color: #ececec;
+  color: white;
   background-color: transparent;
   font-size: 1em;
   text-decoration: none;
@@ -236,7 +251,7 @@ form {
 }
 
 #mainmenu ul li.active {
-  background: url(image_path('menu-active.png')) repeat-x left top;
+  background: #808080;
 }
 
 #mainmenu ul li.active .arrow {
@@ -269,13 +284,13 @@ form {
   display: inline-block;
   text-align: center;
   position: relative;
-  line-height: 1.5em;
+  line-height: 1.3em;
   margin-left: -6px;
 }
 
 #submenu ul li a {
-  color: #fff;
-  font-size: 1em;
+  color: #ccc;
+  font-size: 0.9em;
   text-decoration: none;
   padding: 0.46em;
   border: none;
@@ -283,7 +298,7 @@ form {
 }
 
 #submenu ul li a:hover, #submenu ul li.active a, #submenu ul li a.active {
-  background-color: #414143;
+  color: white;
 }
 
 .main-action-bar {
@@ -410,7 +425,7 @@ form {
   height: 1.1em;
   text-align: left;
   text-indent: -9000em;
-  width: 1em;
+  width: 1.1em;
   margin-right: 0.4em;
 }
 
@@ -466,7 +481,7 @@ table.grid-view th {
   text-align: center;
   border: 1px solid #004899;
   padding: 0em 0.3em;
-  height: 3em;
+  height: 2.5em;
 }
 
 table.grid-view td {

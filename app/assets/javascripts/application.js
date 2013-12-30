@@ -120,7 +120,7 @@ $(document).ready(function() {
             "aaSorting": [[ 0, "desc" ]]
         }
         if ($(this).closest("#payables").size() > 0 ||  $(this).closest("#receivables").size()>0){
-            options.sScrollY = "7.8em";
+            options.sScrollY = "8.7em";
         }
         $(this).dataTable(options);
         $("#" + $(this).attr("id") + "_wrapper").prev(".button-group").appendTo("#" + $(this).attr("id") + "_filter");
