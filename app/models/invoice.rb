@@ -9,18 +9,26 @@ class Invoice < ActiveRecord::Base
   has_many :receipts, :through => :receipts_invoices
 
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
-  attr_accessible :reference, :sent_date, :estimate_id, :invoices_items_attributes, :remaining_amount
+  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount
 
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
 
-  before_save :check_readonly
+  before_save :check_readonly, :check_reference
 
   validates_presence_of :estimate, :builder
 
   def billed?
     self.receipts_invoices.any?
+  end
+
+  def reference
+    read_attribute(:reference) || id
+  end
+
+  def invoice_date
+    read_attribute(:invoice_date) || created_at
   end
 
   def amount
@@ -44,6 +52,17 @@ class Invoice < ActiveRecord::Base
     if billed?
       errors[:base] << "This record is readonly"
       false
+    end
+  end
+
+  def check_reference
+    if self.reference && self.class.where('id = ? or reference = (?)', reference, reference).any?
+      errors[:base] << "Invoice # #{reference} is already used"
+      return false
+    else
+      max_id = self.class.maximum(:id)
+      max_reference = self.class.maximum(:reference)
+      self.reference = max_id > max_reference ? max_id + 1 : max_reference + 1
     end
   end
 end

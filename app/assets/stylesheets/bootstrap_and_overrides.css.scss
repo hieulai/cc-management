@@ -318,3 +318,8 @@ label {
 td label{
   white-space: nowrap;
 }
+
+.form-horizontal .control-group:before,
+.form-horizontal .control-group:after{
+  display: inline;
+}

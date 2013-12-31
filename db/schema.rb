@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131224163841) do
+ActiveRecord::Schema.define(:version => 20131231003458) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -293,6 +293,7 @@ ActiveRecord::Schema.define(:version => 20131224163841) do
     t.datetime "created_at",                                      :null => false
     t.datetime "updated_at",                                      :null => false
     t.decimal  "remaining_amount", :precision => 10, :scale => 2
+    t.date     "invoice_date"
   end
 
   add_index "invoices", ["builder_id"], :name => "index_invoices_on_builder_id"
