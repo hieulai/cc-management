@@ -60,8 +60,8 @@ class Invoice < ActiveRecord::Base
       errors[:base] << "Invoice # #{reference} is already used"
       return false
     else
-      max_id = self.class.maximum(:id)
-      max_reference = self.class.maximum(:reference)
+      max_id = self.class.maximum(:id).to_f
+      max_reference = self.class.maximum(:reference).to_f
       self.reference = max_id > max_reference ? max_id + 1 : max_reference + 1
     end
   end
