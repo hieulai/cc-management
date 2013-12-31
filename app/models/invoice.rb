@@ -59,7 +59,7 @@ class Invoice < ActiveRecord::Base
         return false
       end
     else
-      self.reference = self.class.maximum(:reference).to_f
+      self.reference = self.class.maximum(:reference).to_f + 1
     end
   end
 end
