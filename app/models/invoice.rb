@@ -52,8 +52,8 @@ class Invoice < ActiveRecord::Base
   end
 
   def check_reference
-    return true unless reference_changed?
     if self.reference
+      return true unless reference_changed?
       if self.class.where('id != ? and reference = ?', id, reference).any?
         errors[:base] << "Invoice # #{reference} is already used"
         return false
