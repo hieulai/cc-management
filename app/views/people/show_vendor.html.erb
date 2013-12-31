@@ -1,108 +1,136 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h1 class="center">
-		<%= @vendor.vendor_type%> -
-		<% if @vendor.company == '' %>
-			<%= @vendor.full_name %>
-		<% else %>
-			<%= @vendor.company %>
-		<% end %>
-	</h1>
-	<%= link_to("Edit >>", {:action => 'edit_vendor', :id => @vendor.id}) %>
-	</br>
-	</br>
-	<%= link_to("Delete >>", {:action => 'delete_vendor', :id => @vendor.id}) %>
-	<h2>Company Info:</h2>
-	<p>
-		<% if @vendor.vendor_type == 'Subcontractor' %>
-			<b><%= "Trade:" %></b>
-			<%= @vendor.trade %>
-		<% end %>
-	</p>
-	<p>
-		<b><%= "Company Name:" %></b>
-		<%= @vendor.company %>
-	</p>
-	<p>
-		<b><%= "Website:" %></b>
-		<%= @vendor.website %>
-	</p>
-	<p>
-		<b><%= "Address:" %></b>
-		<%= @vendor.address %>
-	</p>
-	<p>
-		<b><%= "City:" %></b>
-		<%= @vendor.city %>
-	</p>
-	<p>
-		<b><%= "State:" %></b>
-		<%= @vendor.state %>
-	</p>
-	<p>
-		<b><%= "Zipcode:" %></b>
-		<%= @vendor.zipcode %>
-	</p>
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Edit >>", {:action => 'edit_vendor', :id => @vendor.id}, :title => 'Edit', :class => 'edit-large action-button') %>
+            <%= link_to("Delete >>", {:action => 'delete_vendor', :id => @vendor.id}, :title => 'Delete', :class => 'delete-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1 class="center">
+                <%= @vendor.vendor_type %> -
+                <% if @vendor.company == '' %>
+                    <%= @vendor.full_name %>
+                <% else %>
+                    <%= @vendor.company %>
+                <% end %>
+            </h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns margin-bottom">
+            <h2>Company Info:</h2>
 
-	<h2>Primary Contact's Info:</h2>
-	<p>
-		<b><%= "First Name:" %></b>
-		<%= @vendor.primary_first_name %>
-	</p>
-	<p>
-		<b><%= "Last Name:" %></b>
-		<%= @vendor.primary_last_name %>
-	</p>
-	<p>
-		<b><%= "Primary Phone:" %></b>
-		<%= number_to_phone(@vendor.primary_phone1, area_code: true) %>
-		- <%= @vendor.primary_phone1_tag %>
-	</p>
-	<p>
-		<b><%= "Secondary Phone:" %></b>
-		<%= number_to_phone(@vendor.primary_phone2, area_code: true) %>
-		- <%= @vendor.primary_phone2_tag %>
-	</p>
-	<p>
-		<b><%= "Email:" %></b>
-		<%= @vendor.primary_email %>
-	</p>
+            <p>
+                <% if @vendor.vendor_type == 'Subcontractor' %>
+                    <b><%= "Trade:" %></b>
+                    <%= @vendor.trade %>
+                <% end %>
+            </p>
 
-	<h2>Secondary Contact's Info:</h2>
-	<p>
-		<b><%= "First Name:" %></b>
-		<%= @vendor.secondary_first_name %>
-	</p>
-	<p>
-		<b><%= "Last Name:" %></b>
-		<%= @vendor.secondary_last_name %>
-	</p>
-	<p>
-		<b><%= "Primary Phone:" %></b>
-		<%= number_to_phone(@vendor.secondary_phone1, area_code: true) %>
-		- <%= @vendor.secondary_phone1_tag %>
-	</p>
-	<p>
-		<b><%= "Secondary Phone:" %></b>
-		<%= number_to_phone(@vendor.secondary_phone2, area_code: true) %>
-		- <%= @vendor.secondary_phone2_tag %>
-	</p>
-	<p>
-		<b><%= "Email:" %></b>
-		<%= @vendor.secondary_email %>
-	</p>
+            <p>
+                <b><%= "Company Name:" %></b>
+                <%= @vendor.company %>
+            </p>
 
-	<p>
-		<b><%= "Notes:" %></b>
-		<%= @vendor.notes %>
-	</p>
-	<p>
-		<b><%= "Created At:" %></b>
-		<%= @vendor.created_at %>
-	</p>
-	<p>
-		<b><%= "Last Updated:" %></b>
-		<%= @vendor.updated_at %>
-	</p>
+            <p>
+                <b><%= "Website:" %></b>
+                <%= @vendor.website %>
+            </p>
 
+            <p>
+                <b><%= "Address:" %></b>
+                <%= @vendor.address %>
+            </p>
+
+            <p>
+                <b><%= "City:" %></b>
+                <%= @vendor.city %>
+            </p>
+
+            <p>
+                <b><%= "State:" %></b>
+                <%= @vendor.state %>
+            </p>
+
+            <p>
+                <b><%= "Zipcode:" %></b>
+                <%= @vendor.zipcode %>
+            </p>
+
+            <h2>Primary Contact's Info:</h2>
+
+            <p>
+                <b><%= "First Name:" %></b>
+                <%= @vendor.primary_first_name %>
+            </p>
+
+            <p>
+                <b><%= "Last Name:" %></b>
+                <%= @vendor.primary_last_name %>
+            </p>
+
+            <p>
+                <b><%= "Primary Phone:" %></b>
+                <%= number_to_phone(@vendor.primary_phone1, :area_code => true) %>
+                - <%= @vendor.primary_phone1_tag %>
+            </p>
+
+            <p>
+                <b><%= "Secondary Phone:" %></b>
+                <%= number_to_phone(@vendor.primary_phone2, :area_code => true) %>
+                - <%= @vendor.primary_phone2_tag %>
+            </p>
+
+            <p>
+                <b><%= "Email:" %></b>
+                <%= @vendor.primary_email %>
+            </p>
+
+            <h2>Secondary Contact's Info:</h2>
+
+            <p>
+                <b><%= "First Name:" %></b>
+                <%= @vendor.secondary_first_name %>
+            </p>
+
+            <p>
+                <b><%= "Last Name:" %></b>
+                <%= @vendor.secondary_last_name %>
+            </p>
+
+            <p>
+                <b><%= "Primary Phone:" %></b>
+                <%= number_to_phone(@vendor.secondary_phone1, :area_code => true) %>
+                - <%= @vendor.secondary_phone1_tag %>
+            </p>
+
+            <p>
+                <b><%= "Secondary Phone:" %></b>
+                <%= number_to_phone(@vendor.secondary_phone2, :area_code => true) %>
+                - <%= @vendor.secondary_phone2_tag %>
+            </p>
+
+            <p>
+                <b><%= "Email:" %></b>
+                <%= @vendor.secondary_email %>
+            </p>
+
+            <p>
+                <b><%= "Notes:" %></b>
+                <%= @vendor.notes %>
+            </p>
+
+            <p>
+                <b><%= "Created At:" %></b>
+                <%= @vendor.created_at %>
+            </p>
+
+            <p>
+                <b><%= "Last Updated:" %></b>
+                <%= @vendor.updated_at %>
+            </p>
+        </div>
+    </div>
 </div>

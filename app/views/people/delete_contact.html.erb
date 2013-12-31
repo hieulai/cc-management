@@ -1,16 +1,19 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h2>Delete Contact</h2>
-	
-	<%= form_for(:contact, :url => {:action => 'destroy_contact', :id => @contact.id}) do |f| %>
-	
-	<p>Are you sure you want to delete this contact?</p>
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h2>Delete Contact</h2>
+            <%= form_for(:contact, :url => {:action => 'destroy_contact', :id => @contact.id}) do |f| %>
+                <p>Are you sure you want to delete this contact?</p>
 
-	<p class="reference-name"><%= @contact.full_name %></p>
+                <p class="reference-name"><%= @contact.full_name %></p>
 
-	<div class="form-buttons">
-		<%= submit_tag("Delete") %>
-	</div>
-	
-	<% end %>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= submit_tag("Delete", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

@@ -5,9 +5,7 @@
             <span class="trigger help action-button">Instructions >></span>
 
             <div class="instructions">
-                <p>Single-click on the row of the vendor you want for a detailed view. </p>
-
-                <p>Double-click on the row of the vendor you want to edit their information.</p>
+                <p>Click on the row of the people you want to edit their information.</p>
             </div>
         </div>
         <div class="large-6 medium-6 columns">
@@ -60,7 +58,7 @@
                     </tr>
                 <% end %>
                 <% @contacts.each do |x| %>
-                    <tr class="vendor-rows">
+                    <tr class="contact-rows">
                         <td><a href='<%= x.id %>'></a>Other</td>
                         <td></td>
                         <td><%= x.full_name %></td>
@@ -85,23 +83,22 @@
             $(".instructions").hide();
         }
     });
-
     $(".client-rows").click(function () {
-        window.location.href = '/clients/show/' + $(this).find("a").attr("href");
+        window.location.href = '/clients/edit/' + $(this).find("a").attr("href");
     });
     $(".client-rows").dblclick(function () {
         window.location.href = '/clients/edit/' + $(this).find("a").attr("href");
     });
     $(".vendor-rows").click(function () {
-        window.location.href = '/people/show_vendor/' + $(this).find("a").attr("href");
+        window.location.href = '/people/edit_vendor/' + $(this).find("a").attr("href");
     });
     $(".vendor-rows").dblclick(function () {
         window.location.href = '/people/edit_vendor/' + $(this).find("a").attr("href");
     });
-    $(".vendor-rows").click(function () {
-        window.location.href = '/people/show_contact/' + $(this).find("a").attr("href");
+    $(".contact-rows").click(function () {
+        window.location.href = '/people/edit_contact/' + $(this).find("a").attr("href");
     });
-    $(".vendor-rows").dblclick(function () {
+    $(".contact-rows").dblclick(function () {
         window.location.href = '/people/edit_contact/' + $(this).find("a").attr("href");
     });
 </script>

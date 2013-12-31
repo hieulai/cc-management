@@ -1,23 +1,28 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h1 class="center">
-		Edit - <%= @contact.full_name %>
-	</h1>
-	
-	<%= link_to("View >>", {:action => 'show_contact', :id => @contact.id}) %>
-	</br>
-	</br>
-	<%= link_to("Delete >>", {:action => 'delete_contact', :id => @contact.id}) %>
-	<%= form_for @contact, :url => {:action => 'update_contact', :id => @contact.id}, html: {class: 'form-horizontal'} do |f| %>
-	
-	<%= render(:partial => "contact_form", :locals => {:f => f})%>
-
-      <div class="control-group">
-          <div class='controls'>
-              <%= submit_tag("Update", class: 'btn') %>
-          </div>
-      </div>
-	
-	<% end %>
-	
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("View >>", {:action => 'show_contact', :id => @contact.id}, :title => 'View', :class => 'view-large action-button') %>
+            <%= link_to("Delete >>", {:action => 'delete_contact', :id => @contact.id}, :title => 'Delete', :class => 'delete-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1 class="center">
+                Edit - <%= @contact.full_name %>
+            </h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns margin-bottom">
+            <%= form_for @contact, :url => {:action => 'update_contact', :id => @contact.id}, :html => {:class => 'form-horizontal'} do |f| %>
+                <%= render(:partial => "contact_form", :locals => {:f => f}) %>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= submit_tag("Update", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

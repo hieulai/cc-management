@@ -2,7 +2,11 @@
     <%= render(:partial => "layouts/people_sub_menu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
-            <%= link_to("Instructions >>", {:action => 'show'}, :class => 'help action-button') %>
+            <span class="trigger help action-button">Instructions >></span>
+
+            <div class="instructions">
+                <p>Click on the row of the client you want to edit their information.</p>
+            </div>
         </div>
         <div class="large-6 medium-6 columns">
             <h1>Client List</h1>
@@ -32,7 +36,7 @@
                     <th>Notes</th>
                 </tr>
                 <% @clients.each do |client| %>
-                    <tr>
+                    <tr class="client-rows">
                         <td class="center">
                             <%= link_to("Show", {:action => 'show', :id => client.id}, :title => 'Show', :class => 'view table-action') %>
                             <%= link_to("Edit", {:action => 'edit', :id => client.id}, :title => 'Edit', :class => 'edit table-action') %>
@@ -57,3 +61,20 @@
     </div>
 </div>
 
+<script>
+    $(".instructions").hide();
+    $(".trigger").click(function () {
+        if ($(".instructions").is(":hidden")) {
+            $(".instructions").slideDown("slow");
+        }
+        else {
+            $(".instructions").hide();
+        }
+    });
+    $(".client-rows").click(function () {
+        window.location.href = $(this).find("a.edit").attr("href");
+    });
+    $(".client-rows").dblclick(function () {
+        window.location.href = $(this).find("a.edit").attr("href");
+    });
+</script>

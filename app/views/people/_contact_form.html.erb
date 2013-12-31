@@ -1,25 +1,25 @@
 <h2>Contact's Info:</h2>
 <div class="control-group">
-    <%= f.label :primary_first_name, "First Name", class: 'col-lg-2 control-label' %>
+    <%= f.label :primary_first_name, "First Name", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:primary_first_name) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :primary_last_name, "Last Name", class: 'col-lg-2 control-label' %>
+    <%= f.label :primary_last_name, "Last Name", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:primary_last_name) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :primary_phone1, "Primary Phone", class: 'col-lg-2 control-label' %>
+    <%= f.label :primary_phone1, "Primary Phone", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:primary_phone1) %>
         <%= f.select(:primary_phone1_tag, ["Cell", "Office", "Home", "Pager"]) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :primary_phone2, "Secondary Phone", class: 'col-lg-2 control-label' %>
+    <%= f.label :primary_phone2, "Secondary Phone", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:primary_phone2) %>
 
@@ -27,40 +27,39 @@
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :primary_email, "Email", class: 'col-lg-2 control-label' %>
+    <%= f.label :primary_email, "Email", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:primary_email) %>
     </div>
 </div>
-
 <div class="control-group">
-    <%= f.label :address, "Address", class: 'col-lg-2 control-label' %>
+    <%= f.label :address, "Address", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:address) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :city, "City", class: 'col-lg-2 control-label' %>
+    <%= f.label :city, "City", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:city) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :state, "State", class: 'col-lg-2 control-label' %>
+    <%= f.label :state, "State", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:state) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :zipcode, "Zipcode", class: 'col-lg-2 control-label' %>
+    <%= f.label :zipcode, "Zipcode", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:zipcode) %>
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
+    <%= f.label :notes, "Notes", :class => 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.text_area(:notes, size: '40x5') %>
+        <%= f.text_area(:notes, :size => '40x5') %>
     </div>
 </div>
 

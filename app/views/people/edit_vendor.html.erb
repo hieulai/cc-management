@@ -1,26 +1,33 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h1 class="center">
-		Edit -
-		<% if @vendor.company == '' %>
-			<%= @vendor.full_name %>
-		<% else %>
-			<%= @vendor.company %>
-		<% end %>
-	</h1>
-	
-	<%= link_to("View >>", {:action => 'show_vendor', :id => @vendor.id}) %>
-	</br>
-	</br>
-	<%= link_to("Delete >>", {:action => 'delete_vendor', :id => @vendor.id}) %>
-	<%= form_for @vendor, :url => {:action => 'update_vendor', :id => @vendor.id} do |f| %>
-	
-	<%= render(:partial => "vendor_form", :locals => {:f => f})%>
-	
-	<div class="form-buttons">
-		<%= submit_tag("Update") %>
-	</div>
-	
-	<% end %>
-	
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("View >>", {:action => 'show_vendor', :id => @vendor.id}, :title => 'View', :class => 'view-large action-button') %>
+            <%= link_to("Delete >>", {:action => 'delete_vendor', :id => @vendor.id}, :title => 'Delete', :class => 'delete-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1 class="center">
+                Edit -
+                <% if @vendor.company == '' %>
+                    <%= @vendor.full_name %>
+                <% else %>
+                    <%= @vendor.company %>
+                <% end %>
+            </h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns margin-bottom">
+            <%= form_for @vendor, :url => {:action => 'update_vendor', :id => @vendor.id}, :html => {:class => 'form-horizontal'} do |f| %>
+                <%= render(:partial => "vendor_form", :locals => {:f => f}) %>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= submit_tag("Update", :class => 'btn') %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </div>

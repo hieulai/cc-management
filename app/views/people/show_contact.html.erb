@@ -1,55 +1,73 @@
 <div>
-	<%= render(:partial => "layouts/people_sub_menu")%>
-	<h1 class="center">
-			<%= @contact.full_name %>
-	</h1>
-	<%= link_to("Edit >>", {:action => 'edit_contact', :id => @contact.id}) %>
-	</br>
-	</br>
-	<%= link_to("Delete >>", {:action => 'delete_contact', :id => @contact.id}) %>
-	<h2>Contact's Info:</h2>
-	<p>
-		<b><%= "First Name:" %></b>
-		<%= @contact.primary_first_name %>
-	</p>
-	<p>
-		<b><%= "Last Name:" %></b>
-		<%= @contact.primary_last_name %>
-	</p>
-	<p>
-		<b><%= "Primary Phone:" %></b>
-		<%= number_to_phone(@contact.primary_phone1, area_code: true) %>
-		- <%= @contact.primary_phone1_tag %>
-	</p>
-	<p>
-		<b><%= "Secondary Phone:" %></b>
-		<%= number_to_phone(@contact.primary_phone2, area_code: true) %>
-		- <%= @contact.primary_phone2_tag %>
-	</p>
-	<p>
-		<b><%= "Email:" %></b>
-		<%= @contact.primary_email %>
-	</p>
-	<p>
-		<b><%= "Address:" %></b>
-		<%= @contact.address %>
-	</p>
-	<p>
-		<b><%= "City:" %></b>
-		<%= @contact.city %>
-	</p>
-	<p>
-		<b><%= "State:" %></b>
-		<%= @contact.state %>
-	</p>
-	<p>
-		<b><%= "Zipcode:" %></b>
-		<%= @contact.zipcode %>
-	</p>
-	<p>
-		<b><%= "Notes:" %></b>
-		<%= @contact.notes %>
-	</p>
+    <%= render(:partial => "layouts/people_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Edit >>", {:action => 'edit_contact', :id => @contact.id}, :title => 'Edit', :class => 'edit-large action-button') %>
+            <%= link_to("Delete >>", {:action => 'delete_contact', :id => @contact.id}, :title => 'Delete', :class => 'delete-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1 class="center">
+                <%= @contact.full_name %>
+            </h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns margin-bottom">
+            <h2>Contact's Info:</h2>
 
+            <p>
+                <b><%= "First Name:" %></b>
+                <%= @contact.primary_first_name %>
+            </p>
 
+            <p>
+                <b><%= "Last Name:" %></b>
+                <%= @contact.primary_last_name %>
+            </p>
+
+            <p>
+                <b><%= "Primary Phone:" %></b>
+                <%= number_to_phone(@contact.primary_phone1, :area_code => true) %>
+                - <%= @contact.primary_phone1_tag %>
+            </p>
+
+            <p>
+                <b><%= "Secondary Phone:" %></b>
+                <%= number_to_phone(@contact.primary_phone2, :area_code => true) %>
+                - <%= @contact.primary_phone2_tag %>
+            </p>
+
+            <p>
+                <b><%= "Email:" %></b>
+                <%= @contact.primary_email %>
+            </p>
+
+            <p>
+                <b><%= "Address:" %></b>
+                <%= @contact.address %>
+            </p>
+
+            <p>
+                <b><%= "City:" %></b>
+                <%= @contact.city %>
+            </p>
+
+            <p>
+                <b><%= "State:" %></b>
+                <%= @contact.state %>
+            </p>
+
+            <p>
+                <b><%= "Zipcode:" %></b>
+                <%= @contact.zipcode %>
+            </p>
+
+            <p>
+                <b><%= "Notes:" %></b>
+                <%= @contact.notes %>
+            </p>
+        </div>
+    </div>
 </div>

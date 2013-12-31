@@ -5,9 +5,7 @@
             <span class="trigger help action-button">Instructions >></span>
 
             <div class="instructions">
-                <p>Single-click on the row of the vendor you want for a detailed view. </p>
-
-                <p>Double-click on the row of the vendor you want to edit their information.</p>
+                <p>Click on the row of the people you want to edit their information.</p>
             </div>
         </div>
         <div class="large-6 medium-6 columns">
@@ -73,15 +71,14 @@
             $(".instructions").hide();
         }
     });
-
     $(".client-rows").click(function () {
-        window.location.href = '/clients/show/' + $(this).find("a").attr("href");
+        window.location.href = '/clients/edit/' + $(this).find("a").attr("href");
     });
     $(".client-rows").dblclick(function () {
         window.location.href = '/clients/edit/' + $(this).find("a").attr("href");
     });
     $(".vendor-rows").click(function () {
-        window.location.href = '/vendors/show/' + $(this).find("a").attr("href");
+        window.location.href = '/vendors/edit/' + $(this).find("a").attr("href");
     });
     $(".vendor-rows").dblclick(function () {
         window.location.href = '/vendors/edit/' + $(this).find("a").attr("href");

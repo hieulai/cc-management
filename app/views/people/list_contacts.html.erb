@@ -6,9 +6,7 @@
             <span class="trigger help action-button" title="Instructions">Instructions >></span>
 
             <div class="instructions">
-                <p>Single-click on the row of the vendor you want for a detailed view. </p>
-
-                <p>Double-click on the row of the vendor you want to edit their information.</p>
+                <p>Click on the row of the contact you want to edit information.</p>
             </div>
         </div>
         <div class="large-6 medium-6 columns">
@@ -37,7 +35,7 @@
                     <th>Notes</th>
                 </tr>
                 <% @contacts.each do |c| %>
-                    <tr class="rows">
+                    <tr class="contact-rows">
                         <td><a href='<%= c.id %>'></a>Other</td>
                         <td><%= c.full_name %></td>
                         <td><%= number_to_phone(c.primary_phone1, :area_code => true) %></td>
@@ -61,11 +59,10 @@
             $(".instructions").hide();
         }
     });
-
-    $(".rows").click(function () {
-        window.location.href = '/people/show_contact/' + $(this).find("a").attr("href");
+    $(".contact-rows").click(function () {
+        window.location.href = '/people/edit_contact/' + $(this).find("a").attr("href");
     });
-    $(".rows").dblclick(function () {
+    $(".contact-rows").dblclick(function () {
         window.location.href = '/people/edit_contact/' + $(this).find("a").attr("href");
     });
 </script>
