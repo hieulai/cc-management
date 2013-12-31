@@ -53,13 +53,13 @@ class Invoice < ActiveRecord::Base
 
   def check_reference
     return true unless reference_changed?
-    if self.reference && self.class.where('id = ? or reference = (?)', reference, reference).any?
-      errors[:base] << "Invoice # #{reference} is already used"
-      return false
+    if self.reference
+      if self.class.where('id != ? and reference = ?', id, reference).any?
+        errors[:base] << "Invoice # #{reference} is already used"
+        return false
+      end
     else
-      max_id = self.class.maximum(:id).to_f
-      max_reference = self.class.maximum(:reference).to_f
-      self.reference = max_id > max_reference ? max_id + 1 : max_reference + 1
+      self.reference = self.class.maximum(:reference).to_f
     end
   end
 end
