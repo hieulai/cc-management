@@ -23,10 +23,6 @@ class Invoice < ActiveRecord::Base
     self.receipts_invoices.any?
   end
 
-  def reference
-    read_attribute(:reference) || id
-  end
-
   def invoice_date
     read_attribute(:invoice_date) || created_at
   end
@@ -56,6 +52,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def check_reference
+    return true unless reference_changed?
     if self.reference && self.class.where('id = ? or reference = (?)', reference, reference).any?
       errors[:base] << "Invoice # #{reference} is already used"
       return false
