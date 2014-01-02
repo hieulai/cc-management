@@ -30,7 +30,7 @@
 </div>
 <div class="control-group">
     <%= f.label :reference, "Invoice #", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.text_field(:reference, :value => f.object.try(:reference)) %></div>
+    <div class="controls"><%= f.text_field(:reference, :value => f.object.new_record? ? Invoice.maximum(:reference).to_i + 1 : f.object.try(:reference)) %></div>
 </div>
 
 <div id="invoice-items-placeholder">
