@@ -1,38 +1,39 @@
-<% if @invoice.errors.any? %>
-  <div id="errorExplanation">
-      <h2><%= pluralize(@invoice.errors.count, "Error") %> prohibited
-          this invoice from being saved:</h2>
-      <ul>
-          <% @invoice.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-      </ul>
-  </div>
-<% end %>
+<div class="f-left">
+    <% if @invoice.errors.any? %>
+      <div id="errorExplanation">
+          <h2><%= pluralize(@invoice.errors.count, "Error") %> prohibited
+              this invoice from being saved:</h2>
+          <ul>
+              <% @invoice.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+          </ul>
+      </div>
+    <% end %>
 
-<div class="control-group">
-    <%= f.label :estimate_id, "Estimate", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.select(:estimate_id, @estimates = Estimate.current(session[:builder_id]).collect { |s| [s.project.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_estimate_items", :invoice_id => @invoice.id)}) %></div>
-</div>
-<div class="control-group">
-    <%= f.label :invoice_date, "Invoice Date", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:invoice_date, class: 'datepicker', :value => f.object.try(:invoice_date).try(:strftime, '%m-%d-%Y')) %>
-        <%= f.hidden_field(:invoice_date, id: 'invoice_invoice_date_hidden', :value => f.object.try(:invoice_date).try(:strftime, '%Y-%m-%d')) %>
+    <divg class="control-group">
+        <%= f.label :estimate_id, "Estimate", class: 'col-lg-2 control-label' %>
+        <div class="controls"><%= f.select(:estimate_id, @estimates = Estimate.current(session[:builder_id]).collect { |s| [s.project.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_estimate_items", :invoice_id => @invoice.id)}) %></div>
+    </div>
+    <div class="control-group">
+        <%= f.label :invoice_date, "Invoice Date", class: 'col-lg-2 control-label' %>
+        <div class="controls">
+            <%= f.text_field(:invoice_date, class: 'datepicker', :value => f.object.try(:invoice_date).try(:strftime, '%m-%d-%Y')) %>
+            <%= f.hidden_field(:invoice_date, id: 'invoice_invoice_date_hidden', :value => f.object.try(:invoice_date).try(:strftime, '%Y-%m-%d')) %>
+        </div>
+    </div>
+    <div class="control-group">
+        <%= f.label :sent_date, "Sent Date", class: 'col-lg-2 control-label' %>
+        <div class="controls">
+            <%= f.text_field(:sent_date, class: 'datepicker', :value => f.object.try(:sent_date).try(:strftime, '%m-%d-%Y')) %>
+            <%= f.hidden_field(:sent_date, id: 'invoice_sent_date_hidden', :value => f.object.try(:sent_date).try(:strftime, '%Y-%m-%d')) %>
+        </div>
+    </div>
+    <div class="control-group">
+        <%= f.label :reference, "Invoice #", class: 'col-lg-2 control-label' %>
+        <div class="controls"><%= f.text_field(:reference, :value => f.object.new_record? ? Invoice.maximum(:reference).to_i + 1 : f.object.try(:reference)) %></div>
     </div>
 </div>
-<div class="control-group">
-    <%= f.label :sent_date, "Sent Date", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-      <%= f.text_field(:sent_date, class: 'datepicker', :value => f.object.try(:sent_date).try(:strftime, '%m-%d-%Y')) %>
-      <%= f.hidden_field(:sent_date, id: 'invoice_sent_date_hidden', :value => f.object.try(:sent_date).try(:strftime, '%Y-%m-%d')) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :reference, "Invoice #", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.text_field(:reference, :value => f.object.new_record? ? Invoice.maximum(:reference).to_i + 1 : f.object.try(:reference)) %></div>
-</div>
-
 <div id="invoice-items-placeholder">
     <%= render(:partial => "invoice_template", :locals => {:template => @invoice.try(:estimate).try(:template)}) %>
 </div>
