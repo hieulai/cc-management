@@ -16,7 +16,7 @@ class MigrateDupplicatedCategories < ActiveRecord::Migration
           puts "Updated purchase order #{po.id}"
         end
       end
-      ct.destroy
+      ct.delete
     end
   end
 
