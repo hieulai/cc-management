@@ -490,6 +490,7 @@ class AccountingController < ApplicationController
   end
 
   def assign_categories_template
+    category_template = CategoriesTemplate.new
     if params[@type.to_sym][:category_id].present? && params[@type.to_sym][:project_id].present?
       project = Project.find(params[@type.to_sym][:project_id])
       category_template = CategoriesTemplate.where(:category_id => params[@type.to_sym][:category_id], :template_id => project.estimates.first.template.id).first
@@ -509,8 +510,8 @@ class AccountingController < ApplicationController
           params[@type.to_sym]["#{@type.pluralize}_items_attributes"] << {id: pi.id, _destroy: true}.with_indifferent_access
         end
       end
-      @purchasable.categories_template_id = category_template.id
     end
+    @purchasable.categories_template_id = category_template.id
   end
 
   def handle_purchasable_errors
