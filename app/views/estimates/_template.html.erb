@@ -19,7 +19,7 @@
         amount = 0
         margin = 0
     %>
-    <%- @estimate.template.categories_templates.each do |category_template| %>
+    <%- @estimate.template.categories_templates.where(:purchased => nil).each do |category_template| %>
         <%- subtotal = category_template.items.map(&:price).sum
             subamount = category_template.items.map(&:amount).sum
             submargin = category_template.items.map(&:margin).sum
