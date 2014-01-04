@@ -30,7 +30,23 @@ class ProjectsController < ApplicationController
     @client = Client.find(@project.client_id)
     #Update subject
     if @client.update_attributes(params[:client]) & @project.update_attributes(params[:project])
-      #if save succeeds, redirect to list action
+      #if save succeeds, convert project and redirect to list action
+      if @project.status == 'Current Project'
+        @project.save
+        #Allows client to display in the People section if the project is won.
+        @client.status = "Active"
+        @client.save
+      elsif @project.status == "Past Project"
+        @project.save
+        #Prevents client from displaying in the People section if the project is not won yet.
+        @client.status = "Active"
+        @client.save
+      elsif @project.status == "Current Lead"
+        @project.save
+        #Prevents client from displaying in the People section if the project is not won yet.
+        @client.status = "Lead"
+        @client.save
+      end
       redirect_to(:action => 'list_current_projects')
     else
       #if save fails, redisplay form to user can fix problems

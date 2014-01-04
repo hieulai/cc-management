@@ -38,8 +38,7 @@
                 <% @clients.each do |client| %>
                     <tr class="client-rows">
                         <td class="center">
-                            <%= link_to("Show", {:action => 'show', :id => client.id}, :title => 'Show', :class => 'view table-action') %>
-                            <%= link_to("Edit", {:action => 'edit', :id => client.id}, :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => client.id}, :title => 'Edit', :class => 'edit table-action', :style => 'display: none;') %>
                             <%= link_to("Delete", {:action => 'delete', :id => client.id}, :title => 'Delete', :class => 'delete table-action') %>
                         </td>
                         <td><%= client.company %></td>

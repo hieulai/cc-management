@@ -1,5 +1,14 @@
 <div>
     <%= render(:partial => "layouts/leads_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Edit >>", {:action => 'edit', :id => @project.id}, :title => 'Edit', :class => 'edit-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
     <div class="zurb-row">
         <div class="columns margin-bottom">
             <h2>Lead Details For: <%= @project.name %></h2>

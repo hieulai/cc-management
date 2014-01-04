@@ -1,8 +1,17 @@
 <div>
     <%= render(:partial => "layouts/leads_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("View >>", {:action => 'show', :id => @project.id}, :title => 'View', :class => 'view-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Update Lead</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
     <div class="zurb-row">
         <div class="columns margin-bottom">
-            <h2>Update Lead</h2>
             <%= form_for @project, :url => {:action => 'update', :id => @project.id}, :html => {:class => ' form-horizontal'} do |p| %>
                 <%= fields_for @client do |c| %>
                     <%= render(:partial => "lead_form", :locals => {:c => c, :p => p}) %>

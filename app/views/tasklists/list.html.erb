@@ -23,7 +23,7 @@
                     <tr>
                         <td class="center">
                             <%= link_to("Show", {:action => 'show', :id => x.id}, :title => 'Show', :class => 'view table-action') %>
-                            <%= link_to("Export", {:action => 'show', :id => x.id, :format => 'xls'}, :title => 'Export', :class => 'convert table-action') %>
+                            <%= link_to("Export", {:action => 'show', :id => x.id, :format => 'xls'}, :title => 'Export', :class => 'export table-action') %>
                             <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
                             <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
                         </td>

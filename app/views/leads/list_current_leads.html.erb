@@ -3,7 +3,11 @@
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
             <%= link_to("+ New Lead", {:action => 'select_client'}, :title => 'New Lead', :class => 'add action-button') %>
-            <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
+            <span class="trigger help action-button">Instructions >></span>
+
+            <div class="instructions">
+                <p>Click on the row of the project you want to edit information.</p>
+            </div>
         </div>
         <div class="large-6 medium-6 columns">
             <h1>Current Leads</h1>
@@ -29,11 +33,9 @@
                 </tr>
                 <% @projects.each do |lead| %>
                     <% client = Client.find(lead.client_id) %>
-                    <tr>
+                    <tr class="project-rows">
                         <td class="center table-action-bar">
-                            <%= link_to("View", {:action => 'show', :id => lead.id}, :title => 'View', :class => 'view table-action') %>
-                            <%= link_to("Edit", {:action => 'edit', :id => lead.id}, :title => 'Edit', :class => 'edit table-action') %>
-                            <%= link_to("Convert", {:action => 'convert', :id => lead.id}, :title => 'Convert', :class => 'convert table-action') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => lead.id}, :title => 'Edit', :class => 'edit table-action', :style => 'display: none;') %>
                             <%= link_to("Delete", {:action => 'delete', :id => lead.id}, :title => 'Delete', :class => 'delete table-action') %>
                         </td>
                         <td><%= lead.lead_stage %></td>
@@ -52,3 +54,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(".instructions").hide();
+    $(".trigger").click(function () {
+        if ($(".instructions").is(":hidden")) {
+            $(".instructions").slideDown("slow");
+        }
+        else {
+            $(".instructions").hide();
+        }
+    });
+
+    $(".project-rows").click(function () {
+        window.location.href = $(this).find("a.edit").attr("href");
+    });
+    $(".project-rows").dblclick(function () {
+        window.location.href = $(this).find("a.edit").attr("href");
+    });
+</script>
