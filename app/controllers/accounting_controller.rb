@@ -495,7 +495,7 @@ class AccountingController < ApplicationController
       category_template = CategoriesTemplate.where(:category_id => params[@type.to_sym][:category_id], :template_id => project.estimates.first.template.id).first
       unless category_template
         category = Category.find params[@type.to_sym][:category_id]
-        category = Category.joins(:categories_templates).where(:name => category.name).first
+        category = Category.joins(:categories_templates).where(:name => category.name, :builder_id => session[:builder_id]).first
         if category
           category_template = category.categories_templates.where(:template_id => project.estimates.first.template.id).first
         end

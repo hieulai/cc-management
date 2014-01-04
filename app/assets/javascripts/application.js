@@ -133,5 +133,12 @@ $(document).ready(function() {
             dateFormat: "mm-dd-yy"
         });
     })
+    $(document).ajaxStart(function () {
+        $('input[type="submit"]').attr('disabled', true);
+    });
+
+    $(document).ajaxStop(function () {
+        $('input[type="submit"]').removeAttr('disabled');
+    });
 
 })
