@@ -431,7 +431,12 @@ class ProjectsController < ApplicationController
   def update_bid
     @bid = Bid.find(params[:id])
     @project = @bid.project
-    @bid.amount = params[:item]
+    # Destroy all old bids_items if category changed
+    if params[:bid][:category_id].present? && @bid.category_id.to_s != params[:bid][:category_id]
+      @bid.bids_items.each do |bi|
+        params[:bid][:bids_items_attributes] << {id: bi.id, _destroy: true}.with_indifferent_access
+      end
+    end
     if @bid.update_attributes(params[:bid])
       redirect_to(:action => 'bids', :id => @bid.project_id)
     else
@@ -469,6 +474,7 @@ class ProjectsController < ApplicationController
 
   def show_project_items
     @project = Project.find(params[:project_id])
+    @bid = params[:bid_id].present? ? Bid.find(params[:bid_id]) : Bid.new
     categories_template = CategoriesTemplate.where(:category_id => params[:bid][:category_id], :template_id => @project.estimates.first.template.id).first
     if categories_template
       @items = categories_template.items

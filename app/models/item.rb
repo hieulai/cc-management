@@ -16,6 +16,7 @@ class Item < ActiveRecord::Base
   has_and_belongs_to_many :categories_templates
   has_many :bills_items, :dependent => :destroy
   has_many :purchase_orders_items, :dependent => :destroy
+  has_many :bids_items, :dependent => :destroy
 
   attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :purchase_order_id, :bill_id
   validates :name, presence: true
@@ -55,6 +56,10 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def committed_cost
+    bids_items.map(&:amount).compact.sum if bids_items.any?
+  end
+
   def price
     self.amount +  self.margin
   end
@@ -80,6 +85,10 @@ class Item < ActiveRecord::Base
       end
     end
     previous_ii.map(&:amount).compact.sum if previous_ii.any?
+  end
+
+  def bid_item(bid_id)
+    self.bids_items.where(:bid_id => bid_id).first
   end
 
   def invoice_amount

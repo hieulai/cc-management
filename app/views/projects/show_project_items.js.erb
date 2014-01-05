@@ -1,6 +1,7 @@
 <% estimate = @project.estimates.first %>
 <% if estimate.kind =="Cost Plus Bid" %>
-    $('#item-placeholder').html('<%= escape_javascript(render :partial =>  'projects/cost_plus_bid/bid_item', :locals => {:items => @items, :co_items => @co_items}) %>');
+    $('#item-placeholder').html('<%= escape_javascript(render :partial =>  'projects/cost_plus_bid/bid_item', :locals => {:bid => @bid, :items => @items, :co_items => @co_items}) %>');
 <% else %>
-    $('#item-placeholder').html('<%= escape_javascript(render :partial =>  'bid_item', :locals => {:items => @items, :co_items => @co_items}) %>');
+    $('#item-placeholder').html('<%= escape_javascript(render :partial =>  'bid_item', :locals => {:bid => @bid, :items => @items, :co_items => @co_items}) %>');
 <% end %>
+calculateBidAmount();

@@ -1,33 +1,23 @@
 class Bid < ActiveRecord::Base
-  before_destroy :unset_committed_costs
 
   belongs_to :project
   belongs_to :vendor
   belongs_to :category
+  has_many :bids_items, :dependent => :destroy
 
   validates_presence_of :category
 
-  attr_accessible :amount, :notes, :chosen, :vendor_id, :category_id
+  attr_accessible :amount, :notes, :chosen, :vendor_id, :category_id, :bids_items_attributes
+  accepts_nested_attributes_for :bids_items, :allow_destroy => true
 
   serialize :amount
 
-  before_save :unset_committed_costs, :set_committed_costs
-
   def total_amount
-    t=0
-    amount.each do |i|
-      t+= i[:'uncommitted_cost'].to_f
-    end
-    t
+    bids_items.map(&:amount).compact.sum if bids_items.any?
   end
 
   def item_amount(item_id)
-    self.amount.each do |i|
-      if item_id.to_s == i[:id]
-        return i[:uncommitted_cost]
-      end
-    end
-    return nil
+    bids_items.where(:item_id => item_id).try(:amount)
   end
 
   def items
@@ -43,30 +33,6 @@ class Bid < ActiveRecord::Base
   end
 
   private
-  def set_committed_costs
-    if self.chosen
-      self.amount.each do |i|
-        if Item.exists?(i[:id])
-          item = Item.find(i[:id])
-          updated_cost = item.committed_cost.to_f + i[:uncommitted_cost].to_f
-          item.update_attribute(:committed_cost, updated_cost == 0 ? nil : updated_cost)
-        end
-      end
-    end
-  end
-
-  def unset_committed_costs
-    if self.chosen_was
-      self.amount_was.try(:each) do |i|
-        if Item.exists?(i[:id])
-          item = Item.find(i[:id])
-          updated_cost = item.committed_cost.to_f - i[:uncommitted_cost].to_f
-          item.update_attribute(:committed_cost, updated_cost == 0 ? nil : updated_cost)
-        end
-      end
-    end
-  end
-
   def categories_template
     CategoriesTemplate.where(:category_id => category_id, :template_id => project.estimates.first.template.id).first
   end

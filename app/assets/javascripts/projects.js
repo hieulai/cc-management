@@ -1,12 +1,14 @@
 function calculateBidAmount() {
-    var bidAmount = 0;
-    $('input[name="item[][uncommitted_cost]"]').each(function () {
-        var fVal = parseFloat($(this).val());
-        if (!isNaN(fVal)){
-            bidAmount += parseFloat($(this).val());
-        }
-    });
-    $('#bid-amount').text(number_to_currency_with_unit(bidAmount, 2, '.', ','));
+    if ($('input[name="bid[bids_items_attributes][][amount]"]').size() > 0) {
+        var bidAmount = 0;
+        $('input[name="bid[bids_items_attributes][][amount]"]').each(function () {
+            var fVal = parseFloat($(this).val());
+            if (!isNaN(fVal)) {
+                bidAmount += parseFloat($(this).val());
+            }
+        });
+        $('#bid-amount').text(number_to_currency_with_unit(bidAmount, 2, '.', ','));
+    }
 }
 
 function calculateCOAmount(coFactor){
@@ -73,13 +75,17 @@ function calculateBudgetSubtotalsAndTotals(){
 $(document).ready(function () {
     calculateBudgetSubtotalsAndTotals();
     calculateCOAmounts();
+    calculateBidAmount();
 
-    $(document).on('change', 'input[name="item[][uncommitted_cost]"]', function () {
+    $(document).on('change', 'input[name="bid[bids_items_attributes][][amount]"]', function () {
+        var fVal = parseFloat($(this).val());
+        if (!isNaN(fVal)) {
+            $(this).closest("tr").find('input[name="bid[bids_items_attributes][][_destroy]"]').val("false");
+        } else {
+            $(this).closest("tr").find('input[name="bid[bids_items_attributes][][_destroy]"]').val("true");
+        }
         calculateBidAmount();
     });
-    if ($('input[name="item[][uncommitted_cost]"]').size() >0) {
-        calculateBidAmount();
-    }
 
     $("#item-lines").on("cocoon:before-remove", function(e, i) {
         if ($(i).hasClass("co-category")) {
