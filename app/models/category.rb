@@ -6,6 +6,7 @@ class Category < ActiveRecord::Base
   has_many :categories_templates, :dependent => :destroy
   has_many :change_orders_categories, :dependent => :destroy
   has_many :templates, through: :categories_templates
+  has_many :bids, :dependent => :destroy
   has_many :items
   
   attr_accessible :name, :cost_total, :margin_total, :price_total, :default, :items_attributes
