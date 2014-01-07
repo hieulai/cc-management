@@ -33,6 +33,21 @@ class Bill < ActiveRecord::Base
      self.remaining_amount == 0
   end
 
+  def late?
+    !full_paid? && !source(:due_date).nil? && source(:due_date) < Date.today
+  end
+
+  def paid_status
+    case
+      when late?
+        'Late'
+      when full_paid?
+        'Paid'
+      else
+        'Unpaid'
+    end
+  end
+
   def generated?
     self.purchase_order.present?
   end

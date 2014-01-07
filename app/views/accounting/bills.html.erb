@@ -2,9 +2,7 @@
     <%= render(:partial => "layouts/accounting_sub_menu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
-            <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
-            <br/>
-            <br/>
+            <span class="trigger help action-button">Instructions >></span>
 
             <div class="instructions">
                 <p>Default paragraph. </p>
@@ -18,6 +16,16 @@
     </div>
     <div class="zurb-row">
         <div class="columns margin-bottom">
+            <div class="paid-status">
+                <input checked="checked" id="all_bills" name="bills_type" type="radio" value="All">
+                <label>All</label>
+                <input id="paid_bills" name="bills_type" type="radio" value="Paid">
+                <label>Paid</label>
+                <input id="unpaid_bills" name="bills_type" type="radio" value="Unpaid">
+                <label>Unpaid</label>
+                <input id="late_bills" name="bills_type" type="radio" value="Late">
+                <label>Late</label>
+            </div>
             <div class="button-group">
                 <%= link_to("+ Bill", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew btn') %>
             </div>
@@ -25,3 +33,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(".instructions").hide();
+    $(".trigger").click(function () {
+        if ($(".instructions").is(":hidden")) {
+            $(".instructions").slideDown("slow");
+        }
+        else {
+            $(".instructions").hide();
+        }
+    });
+</script>

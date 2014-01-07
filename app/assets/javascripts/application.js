@@ -109,7 +109,7 @@ $(document).ready(function() {
         $($(this).attr("target")).toggle();
     });
 
-    $(".data-tables").each(function(){
+    $(".data-tables").each(function () {
         var options = {
             "bPaginate": false,
             "bLengthChange": false,
@@ -117,13 +117,21 @@ $(document).ready(function() {
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": false,
-            "aaSorting": [[ 0, "desc" ]]
+            "aaSorting": [
+                [ 0, "desc" ]
+            ]
         }
-        if ($(this).closest("#payables").size() > 0 ||  $(this).closest("#receivables").size()>0){
+        if ($(this).closest("#payables").size() > 0 || $(this).closest("#receivables").size() > 0) {
             options.sScrollY = "8.7em";
         }
-        $(this).dataTable(options);
+        var oTable = $(this).dataTable(options);
         $("#" + $(this).attr("id") + "_wrapper").prev(".button-group").appendTo("#" + $(this).attr("id") + "_filter");
+        if ($(this).attr("id") == "bill-list") {
+            $('input[type="radio"][name="bills_type"]').change(function () {
+                var val = $(this).val() == "All" ? "" : $(this).val();
+                oTable.fnFilter(val, 8, false, true, true, false);
+            });
+        }
     });
 
     $(".datepicker").each(function(){

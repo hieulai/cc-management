@@ -67,7 +67,12 @@
             $(".instructions").hide();
         }
     });
-
+    $('.table-action, .task, .tasklist, input[type="checkbox"]').click(function (event) {
+        event.stopPropagation();
+    });
+    $('.table-action, .task, .tasklist, input[type="checkbox"]').dblclick(function (event) {
+        event.stopPropagation();
+    });
     $(".project-rows").click(function () {
         window.location.href = $(this).find("a.edit").attr("href");
     });

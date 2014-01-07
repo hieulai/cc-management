@@ -65,7 +65,12 @@
             $(".instructions").hide();
         }
     });
-
+    $('.table-action').click(function (event) {
+        event.stopPropagation();
+    });
+    $('.table-action').dblclick(function (event) {
+        event.stopPropagation();
+    });
     $(".project-rows").click(function () {
         window.location.href = $(this).find("a.edit").attr("href");
     });
