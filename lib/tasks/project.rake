@@ -1,6 +1,3 @@
-ENV['RAILS_ENV'] ||= 'development'
-require File.expand_path('../../../config/environment', __FILE__)
-
 namespace :project do
 
   #Clone whole estimate
@@ -35,7 +32,7 @@ namespace :project do
   #              | Receipt Deposit
   #                 | Deposit
   desc "Clone project's estimate to cost plus bid one"
-  task :cost_plus_bid, [:id] do |t, args|
+  task :clone_cost_plus_bid, [:id] => :environment do |t, args|
     puts "Project: Converting project Id: #{args[:id]} to cost plus bid one"
     if Project.exists?(args[:id])
       project = Project.find(args[:id])
