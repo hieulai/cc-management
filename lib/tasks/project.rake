@@ -88,13 +88,13 @@ namespace :project do
             cc_dup = cc.dup
             co_dup = cc.change_order.dup
             co_dup.save
-            cc_dup.update_attributes(:category_id => category_dup.i, :change_order_id => co_dup.id)
+            cc_dup.update_attributes(:category_id => category_dup.id, :change_order_id => co_dup.id)
             cc.items.each do |i|
               puts "          Cloning changed item Id: #{i.id}, item name #{i.name}"
               i_dup = i.dup
               i_dup.save
               cc_dup.items << i_dup
-              cloned_items.items << i_dup
+              cloned_items << i_dup
             end
           end
 
