@@ -38,10 +38,7 @@ class Template < ActiveRecord::Base
   def destroy_with_associations
     return false if check_destroyable == false
     categories_templates.each do |ct|
-      ct.items.each do |i|
-        i.destroy
-      end
-      ct.category.destroy if ct.category.present?
+        ct.destroy_with_associations
     end
     destroy
   end

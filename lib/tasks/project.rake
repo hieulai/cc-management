@@ -101,12 +101,9 @@ namespace :project do
           ct.purchase_orders.each do |po|
             puts "      Cloning purchase order Id: #{po.id}"
             po_dup = po.dup
-            po_dup.save
             ct_dup.purchase_orders << po_dup
-            if po.bill
-              puts "        Cloning bill of purchase order Id: #{po.bill.id}"
-              po_dup.bill = po.bill.dup
-              po_dup.bill.save
+            if po_dup.bill
+              puts "        Cloned bill Id: #{po_dup.bill.id}"
               po.bill.payments_bills.each do |pb|
                 puts "          Cloning payments bill Id: #{pb.id}"
                 pb_dup = pb.dup
@@ -141,10 +138,9 @@ namespace :project do
             end
           end
 
-          ct.bills.each do |b|
+          ct.bills.where(:purchase_order_id => nil).each do |b|
             puts "      Cloning bill Id: #{b.id}"
             b_dup = b.dup
-            b_dup.save
             ct_dup.bills << b_dup
             b.bills_items.each do |bi|
               puts "        Cloning bills item Id: #{bi.id}"

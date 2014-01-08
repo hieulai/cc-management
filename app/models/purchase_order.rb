@@ -55,7 +55,7 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def create_bill
-    unless bill.present?
+    unless PurchaseOrder.find(self.id).bill
       Bill.create!(:purchase_order_id => self.id,
                    :builder_id => self.builder_id,
                    :vendor_id => self.vendor_id,

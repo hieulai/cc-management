@@ -39,6 +39,24 @@ class CategoriesTemplate < ActiveRecord::Base
     items.select { |i| i.billed? }.any? || co_items.select { |i| i.billed? }.any?
   end
 
+  def destroy_with_associations
+    items.each do |i|
+      i.destroy
+    end
+    category.destroy if category.present?
+    purchase_orders.each do |po|
+      if po.bill
+        po.bill.payments_bills.destroy_all
+        po.bill.destroy
+      end
+      po.destroy
+    end
+    bills.each do |b|
+      b.payments_bills.destroy_all
+      b.destroy
+    end
+  end
+
   private
   def check_destroyable
     if self.undestroyable?
