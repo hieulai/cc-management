@@ -77,9 +77,8 @@ namespace :project do
             b.bids_items.each do |bi|
               puts "        Cloning bids item Id: #{bi.id}"
               bi_dup = bi.dup
-              bi_dup.save
               i_dup = cloned_items.select {|i| i.description == bi.item_id.to_s }.first
-              bi_dup.update_attributes(:bid_id => b_dup.id, :item_id => i_dup.id)
+              bi_dup.update_attributes(:bid_id => b_dup.id, :item_id => i_dup.id) if i_dup
             end
           end
 
@@ -123,9 +122,8 @@ namespace :project do
             po.purchase_orders_items.each do |poi|
               puts "          Cloning purchase orders item Id: #{poi.id}"
               poi_dup = poi.dup
-              poi_dup.save
               i_dup = cloned_items.select {|i| i.description == poi.item_id.to_s }.first
-              poi_dup.update_attributes(:purchase_order_id => po_dup.id, :item_id => i_dup.id)
+              poi_dup.update_attributes(:purchase_order_id => po_dup.id, :item_id => i_dup.id) if i_dup
             end
 
             po.items.each do |i|
@@ -145,9 +143,8 @@ namespace :project do
             b.bills_items.each do |bi|
               puts "        Cloning bills item Id: #{bi.id}"
               bi_dup = bi.dup
-              bi_dup.save
               i_dup = cloned_items.select {|i| i.description == bi.item_id.to_s }.first
-              bi_dup.update_attributes(:bill_id => b_dup.id, :item_id => i_dup.id)
+              bi_dup.update_attributes(:bill_id => b_dup.id, :item_id => i_dup.id) if i_dup
             end
 
             b.payments_bills.each do |pb|
@@ -184,9 +181,8 @@ namespace :project do
           invoice.invoices_items.each do |ii|
             puts "    Cloning invoice item Id: #{ii.id}"
             ii_dup = ii.dup
-            ii_dup.save
             i_dup = cloned_items.select {|i| i.description == ii.item_id.to_s }.first
-            ii_dup.update_attributes(:invoice_id => invoice_dup.id, :item_id => i_dup.id )
+            ii_dup.update_attributes(:invoice_id => invoice_dup.id, :item_id => i_dup.id ) if i_dup
           end
 
           invoice.receipts_invoices.each do |ri|
