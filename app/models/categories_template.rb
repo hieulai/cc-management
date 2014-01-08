@@ -32,7 +32,7 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def co_items
-    template.estimate.try(:project).try(:co_items, category) || Array.new
+    template.try(:estimate).try(:project).try(:co_items, category) || Array.new
   end
 
   def undestroyable?

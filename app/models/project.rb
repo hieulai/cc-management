@@ -34,7 +34,7 @@ class Project < ActiveRecord::Base
 
   def co_items(category)
     co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.approved.pluck(:id))
-    co_categories.reject! { |co_category| co_category.category.name != category.name }
+    co_categories.reject! { |co_category| co_category.category.try(:name) != category.name }
     co_categories.map(&:items).flatten
   end
 

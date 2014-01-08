@@ -22,7 +22,8 @@ class Template < ActiveRecord::Base
       dup_ct = ct.dup
       dup_c = ct.category.dup
       dup_c.builder_id = nil
-      dup_ct.category = dup_c
+      dup_c.save
+      dup_ct.update_attribute(:category_id, dup_c.id)
       dup_ct.items.destroy_all
       ct.items.each do |i|
         dup_i = i.dup
