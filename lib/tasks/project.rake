@@ -5,9 +5,6 @@ namespace :project do
   #  | Template
   #     |Category Template ()
   #        | Category (ignore purchased + changed)
-  #          | Change Order Category
-  #            | Change Order
-  #              | Item (change_order)
   #          | Bid
   #            | Bids Item
   #              | Item
@@ -80,21 +77,6 @@ namespace :project do
               bi_dup = bi.dup
               i_dup = cloned_items.select {|i| i.description == bi.item_id.to_s }.first
               bi_dup.update_attributes(:bid_id => b_dup.id, :item_id => i_dup.id) if i_dup
-            end
-          end
-
-          ct.category.change_orders_categories.select { |cc| cc.change_order.project_id == project.id }.each do |cc|
-            puts "        Cloning change_orders_categories Id: #{cc.id}, change order Id: #{cc.change_order.id}, change order name #{cc.change_order.name}"
-            cc_dup = cc.dup
-            co_dup = cc.change_order.dup
-            co_dup.save
-            cc_dup.update_attributes(:category_id => category_dup.id, :change_order_id => co_dup.id)
-            cc.items.each do |i|
-              puts "          Cloning changed item Id: #{i.id}, item name #{i.name}"
-              i_dup = i.dup
-              i_dup.save
-              cc_dup.items << i_dup
-              cloned_items << i_dup
             end
           end
 
