@@ -4,7 +4,7 @@ namespace :project do
   #Estimate (kind = "Cost Plus Bid")
   #  | Template
   #     |Category Template
-  #        | Category
+  #        | Category (purchased=false)
   #          | Change Order Category
   #            | Change Order
   #              | Item (change_order)
@@ -53,11 +53,12 @@ namespace :project do
           ct_dup = ct.dup
           ct_dup.save
           estimate_dup.template.categories_templates << ct_dup
-
-          puts "      Cloning category Id: #{ct.category.id}, category name #{ct.category.name}"
-          category_dup = ct.category.dup
-          category_dup.save
-          ct_dup.update_attribute(:category_id, category_dup.id)
+          unless ct.purchased
+            puts "      Cloning category Id: #{ct.category.id}, category name #{ct.category.name}"
+            category_dup = ct.category.dup
+            category_dup.save
+            ct_dup.update_attribute(:category_id, category_dup.id)
+          end
 
           ct.items.each do |i|
             puts "      Cloning item Id: #{i.id}, item name #{i.name}"
