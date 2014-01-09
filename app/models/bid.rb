@@ -34,6 +34,6 @@ class Bid < ActiveRecord::Base
 
   private
   def categories_template
-    CategoriesTemplate.where(:category_id => category_id, :template_id => project.estimates.first.template.id).first
+    category.categories_templates.first
   end
 end
