@@ -3,8 +3,8 @@ namespace :project do
   #Clone whole estimate
   #Estimate (kind = "Cost Plus Bid")
   #  | Template
-  #     |Category Template
-  #        | Category (purchased=false)
+  #     |Category Template ()
+  #        | Category (ignore purchased + changed)
   #          | Change Order Category
   #            | Change Order
   #              | Item (change_order)
@@ -83,7 +83,7 @@ namespace :project do
             end
           end
 
-          ct.category.change_orders_categories.each do |cc|
+          ct.category.change_orders_categories.select { |cc| cc.change_order.project_id == project.id }.each do |cc|
             puts "        Cloning change_orders_categories Id: #{cc.id}, change order Id: #{cc.change_order.id}, change order name #{cc.change_order.name}"
             cc_dup = cc.dup
             co_dup = cc.change_order.dup
