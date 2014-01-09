@@ -21,9 +21,9 @@
                 <% end %>
                 <div class="form-buttons">
                     <%= submit_tag("Delete", :class => 'btn',
-                                   :data => {:title => "Confirmation", :confirm => "This change order has 1 or more corresponding bills or payments associated with it.
+                                   :data => @change_order.has_paid_item? ? {:title => "Confirmation", :confirm => "This change order has 1 or more corresponding bills or payments associated with it.
                                    Deleting this change order will permanently destroy all of its related bills and payments. <br/>
-                                   Do you want to continue?"}) %>
+                                   Do you want to continue?"} : {}) %>
                 </div>
             <% end %>
         </div>

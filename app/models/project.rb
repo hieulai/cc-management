@@ -6,6 +6,7 @@ class Project < ActiveRecord::Base
   has_many :change_orders, :dependent => :destroy
   has_many :specifications, :dependent => :destroy
   has_many :purchase_orders, :dependent => :destroy
+  has_many :bills, :dependent => :destroy
   has_one :tasklist, :dependent => :destroy
   has_many :invoices, :through => :estimates
 
