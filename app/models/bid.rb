@@ -17,7 +17,7 @@ class Bid < ActiveRecord::Base
   end
 
   def item_amount(item_id)
-    bids_items.where(:item_id => item_id).try(:amount)
+    bids_items.where(:item_id => item_id).first.try(:amount)
   end
 
   def items
