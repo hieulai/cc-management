@@ -78,6 +78,7 @@ class Bill < ActiveRecord::Base
   end
 
   def total_amount
+    return purchase_order.total_amount if generated?
     if bills_items.any? || items.any?
       t=0
       t+= bills_items.map(&:actual_cost).compact.sum if bills_items.any?
