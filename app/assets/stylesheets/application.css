@@ -52,7 +52,7 @@ ul#tasksContainer li label:hover{
 }
 
 .unclickable{
-    background-color: #f5f5f5;
+    background-color: #d3d3d3;
 }
 
 .unclickable.change_order{
