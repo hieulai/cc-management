@@ -4,6 +4,7 @@
         <div class="columns margin-bottom">
             <h1 class="center">New Deposit</h1>
             <%= form_for(@deposit, :url => {:action => 'create_deposit'}, :html => {:class => 'form-horizontal'}) do |f| %>
+                <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
                 <%= render(:partial => "deposit_form", :locals => {:f => f}) %>
                 <div class="form-buttons">
                     <%= submit_tag("Create", :class => 'btn') %>

@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
 
   before_filter :find_builder
+  after_filter :put_params
 
   protect_from_forgery
 
@@ -23,6 +24,10 @@ class ApplicationController < ActionController::Base
 
   def find_builder
     @builder = Base::Builder.find(session[:builder_id]) if session[:builder_id]
+  end
+
+  def put_params
+    @original_url = params[:original_url]
   end
 
 end

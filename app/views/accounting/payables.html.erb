@@ -5,36 +5,36 @@
             <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
         </div>
         <div class="large-6 medium-6 columns">
-            <h1>Accounts Payable</h1>
+            <h1>Accounts Payables</h1>
         </div>
         <div class="large-3 medium-2 columns">
         </div>
     </div>
     <div class="zurb-row">
         <div class="columns">
-            <h3>Recent Payments</h3>
-
-            <div class="button-group">
-                <%= link_to("All Payments >>", {:action => 'payments'}, :class => 'btn') %>
-                <%= link_to("+ Payment", {:action => 'new_payment'}, :id => 'add-payment', :class => 'action vew btn') %>
+            <div class="zurb-row">
+                <h3>Payments</h3>
+                <div class="button-group">
+                    <%= link_to("All Payments >>", {:action => 'payments'}, :class => 'btn') %>
+                    <%= link_to("+ Payment", {:action => 'new_payment'}, :id => 'add-payment', :class => 'action vew btn') %>
+                </div>
             </div>
-            <%= render(:partial => "payments", :locals => {:payments => @payments}) %>
 
-            <h3>Recent Bills</h3>
-
-            <div class="button-group">
-                <%= link_to("All Bills >>", {:action => 'bills'}, :class => 'btn') %>
-                <%= link_to("+ Bill", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew btn') %>
+            <div class="zurb-row">
+                <h3>Bills</h3>
+                <div class="button-group">
+                    <%= link_to("All Bills >>", {:action => 'bills'}, :class => 'btn') %>
+                    <%= link_to("+ Bill", {:action => 'new_bill'}, :id => 'add-bill', :class => 'action vew btn') %>
+                </div>
             </div>
-            <%= render(:partial => "bills", :locals => {:bills => @bills}) %>
 
-            <h3>Recent POs</h3>
-
-            <div class="button-group">
-                <%= link_to("All POs >>", {:action => 'purchase_orders'}, :class => 'btn') %>
-                <%= link_to("+ Purchase Order", {:action => 'new_purchase_order'}, :id => 'add-purchase-order', :class => 'action vew btn') %>
+            <div class="zurb-row">
+                <h3>POs</h3>
+                <div class="button-group">
+                    <%= link_to("All POs >>", {:action => 'purchase_orders'}, :class => 'btn') %>
+                    <%= link_to("+ Purchase Order", {:action => 'new_purchase_order'}, :id => 'add-purchase-order', :class => 'action vew btn') %>
+                </div>
             </div>
-            <%= render(:partial => "purchase_orders", :locals => {:purchase_orders => @purchase_orders}) %>
         </div>
         <div class="columns margin-bottom">
         </div>

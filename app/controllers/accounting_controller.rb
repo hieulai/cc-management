@@ -6,9 +6,6 @@ class AccountingController < ApplicationController
   end
 
   def receivables
-    @invoices = Invoice.where("builder_id = ?", session[:builder_id]).limit(50)
-    @receipts = Receipt.where("builder_id = ?", session[:builder_id]).limit(50)
-    @deposits = Deposit.where("builder_id = ?", session[:builder_id]).limit(50)
   end
 
   def deposits
@@ -24,7 +21,7 @@ class AccountingController < ApplicationController
     @deposit = Deposit.new(params[:deposit])
     @deposit.builder_id = session[:builder_id]
     if @deposit.save
-      redirect_to(:action => 'receivables')
+      redirect_to(params[:original_url].presence ||url_for(:action => 'receivables'))
     else
       @receipts = Receipt.unbilled
       render('new_deposit')
@@ -75,7 +72,7 @@ class AccountingController < ApplicationController
     @receipt = Receipt.new(params[:receipt])
     @receipt.builder_id = session[:builder_id]
     if @receipt.save
-      redirect_to(:action => 'receivables')
+      redirect_to(params[:original_url].presence ||url_for(:action => 'receivables'))
     else
       @invoices = Array.new
       render('new_receipt')
@@ -150,7 +147,7 @@ class AccountingController < ApplicationController
     @invoice = Invoice.new(params[:invoice])
     @invoice.builder_id = session[:builder_id]
     if @invoice.save
-      redirect_to(:action => 'receivables')
+      redirect_to(params[:original_url].presence ||url_for(:action => 'receivables'))
     else
       render('new_invoice')
     end
@@ -275,7 +272,7 @@ class AccountingController < ApplicationController
     @payment = Payment.new(params[:payment])
     @payment.builder_id = session[:builder_id]
     if @payment.save
-      redirect_to(:action => "payables")
+      redirect_to(params[:original_url].presence ||url_for(:action => "payables"))
     else
       @bills = Array.new
       render('new_payment')
@@ -319,9 +316,6 @@ class AccountingController < ApplicationController
     
 
   def payables
-    @payments = Payment.where("builder_id = ?", session[:builder_id]).limit(50)
-    @bills = Bill.where("builder_id = ?", session[:builder_id]).limit(50)
-    @purchase_orders = PurchaseOrder.where("builder_id = ?", session[:builder_id]).limit(50)
   end
 
   def payroll
@@ -453,8 +447,8 @@ class AccountingController < ApplicationController
         payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
       end
       respond_to do |format|
-        format.html {redirect_to(:action => "payables")}
-        format.js {render :js => "window.location = '#{url_for(:action => "payables")}'"}
+        format.html { redirect_to(params[:original_url].presence ||url_for(:action => "payables")) }
+        format.js { render :js => "window.location = '#{ params[:original_url].presence ||url_for(:action => "payables")}'" }
       end
     else
       @bill = @purchase_order = @purchasable

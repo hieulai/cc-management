@@ -15,6 +15,7 @@
                         </ul>
                     </div>
                 <% end %>
+                <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
                 <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @purchase_order}) %>
                 <div id="item-placeholder">
                     <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @purchase_order, :categories_template => @purchase_order.categories_template}) %>

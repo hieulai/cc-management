@@ -101,6 +101,11 @@ a.uneditable, a.uneditable:hover{
     display: inline-block;
 }
 
+.button-group{
+    line-height: 40px;
+    margin: 10px 0;
+}
+
 ul.ui-autocomplete {
   position: absolute;
   list-style: none;

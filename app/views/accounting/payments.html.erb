@@ -5,7 +5,7 @@
             <h3>Payments</h3>
 
             <div class="button-group">
-                <%= link_to("+ Payment", {:action => 'new_payment'}, :id => 'add-payment', :class => 'action vew btn') %>
+                <%= link_to("+ Payment", {:action => 'new_payment', :original_url => url_for(:action => "payments") }, :id => 'add-payment', :class => 'action vew btn') %>
             </div>
             <%= render(:partial => "payments", :locals => {:payments => @payments}) %>
         </div>
