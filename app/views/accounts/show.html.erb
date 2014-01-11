@@ -40,6 +40,7 @@
                         <th>Payee</th>
                         <th>Memo</th>
                         <th>Amount</th>
+                        <th>R</th>
                         <th>Balance</th>
                     </tr>
                     <% balance = @account.balance %>
@@ -59,6 +60,9 @@
                             <td><%= t.payee %></td>
                             <td><%= t.memo %></td>
                             <td class="right"><%= price_tag(t.amount) %></td>
+                            <td class="center action-container">
+                                <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :type => t.class.name, :id => t.id)}) %>
+                            </td>
                             <td class="right"><%= price_tag(balance) %></td>
                         </tr>
                         <% if t.instance_of? Payment %>

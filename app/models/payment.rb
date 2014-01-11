@@ -11,7 +11,7 @@ class Payment < ActiveRecord::Base
 
   accepts_nested_attributes_for :payments_bills, :allow_destroy => true
   
-  attr_accessible :date, :memo, :method, :reference , :builder_id, :account_id, :vendor_id, :payments_bills_attributes
+  attr_accessible :date, :memo, :method, :reference, :reconciled , :builder_id, :account_id, :vendor_id, :payments_bills_attributes
 
   validates_presence_of :vendor, :account, :builder, :method, :date
 

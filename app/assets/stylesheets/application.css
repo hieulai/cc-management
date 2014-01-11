@@ -76,6 +76,12 @@ a.uneditable, a.uneditable:hover{
     cursor: pointer;
 }
 
+.loader{
+    background: url('/assets/ajax-loader.gif') no-repeat;
+    width: 32px;
+    height: 32px;
+}
+
 .sorting {
     background: url('/assets/sort_both.gif') no-repeat center right;
 }

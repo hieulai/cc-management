@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140109095640) do
+ActiveRecord::Schema.define(:version => 20140111041010) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -251,9 +251,10 @@ ActiveRecord::Schema.define(:version => 20140109095640) do
     t.integer  "account_id"
     t.date     "date"
     t.text     "notes"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "reference"
+    t.boolean  "reconciled", :default => false
   end
 
   create_table "deposits_receipts", :force => true do |t|
@@ -381,12 +382,13 @@ ActiveRecord::Schema.define(:version => 20140109095640) do
     t.integer  "account_id"
     t.date     "date"
     t.string   "memo"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.integer  "vendor_id"
     t.string   "method"
     t.integer  "reference"
     t.integer  "builder_id"
+    t.boolean  "reconciled", :default => false
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"

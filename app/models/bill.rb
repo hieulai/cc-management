@@ -16,6 +16,7 @@ class Bill < ActiveRecord::Base
   attr_accessor :create_payment, :category_id
 
   default_scope order("due_date DESC")
+  scope :raw, lambda { |builder_id| where("builder_id = ?", builder_id) }
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :paid, where('remaining_amount = 0')
 
@@ -27,6 +28,14 @@ class Bill < ActiveRecord::Base
 
   def paid?
     self.payments_bills.any?
+  end
+
+  def remaining_amount
+    unless paid?
+      total_amount
+    else
+      read_attribute(:remaining_amount)
+    end
   end
 
   def full_paid?

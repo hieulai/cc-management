@@ -12,6 +12,7 @@ class Receipt < ActiveRecord::Base
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true
 
   default_scope order("received_at DESC")
+  scope :raw, lambda { |builder_id| where("builder_id = ?", builder_id) }
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
 

@@ -53,4 +53,15 @@ class AccountsController < ApplicationController
     Account.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
+
+  def reconcile
+    klass = params[:type].to_s.constantize
+    object = klass.find(params[:id])
+    if object
+      object.update_attribute(:reconciled, params["#{params[:type].to_s}_#{params[:id]}".to_sym].present?)
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
 end

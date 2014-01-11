@@ -105,6 +105,11 @@ $(document).ready(function() {
             window.location = href;
         }
     });
+
+    $(document).on('click', '.action-container, .action-container input[type="checkbox"]', function (e) {
+        e.stopPropagation();
+    });
+
     $(document).on('change', 'input[type="checkbox"].toggle', function () {
         $($(this).attr("target")).toggle();
     });
@@ -120,9 +125,6 @@ $(document).ready(function() {
             "aaSorting": [
                 [ 0, "desc" ]
             ]
-        }
-        if ($(this).closest("#payables").size() > 0 || $(this).closest("#receivables").size() > 0) {
-            options.sScrollY = "8.7em";
         }
         var oTable = $(this).dataTable(options);
         $("#" + $(this).attr("id") + "_wrapper").prev(".button-group").appendTo("#" + $(this).attr("id") + "_filter");
@@ -142,10 +144,12 @@ $(document).ready(function() {
         });
     })
     $(document).ajaxStart(function () {
+        $(".loader").show();
         $('input[type="submit"]').attr('disabled', true);
     });
 
     $(document).ajaxStop(function () {
+        $(".loader").hide();
         $('input[type="submit"]').removeAttr('disabled');
     });
 

@@ -415,6 +415,20 @@ class AccountingController < ApplicationController
     }.to_json
   end
 
+  def show_account_details_payables
+    @account = Account.raw(session[:builder_id]).find(params[:account_id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def show_account_details_receivables
+    @account = Account.raw(session[:builder_id]).find(params[:account_id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
   def create_purchasable(type)
     klass =  type.to_s.constantize
