@@ -503,9 +503,16 @@ class AccountingController < ApplicationController
     category_template = CategoriesTemplate.new
     if params[@type.to_sym][:category_id].present? && params[@type.to_sym][:project_id].present?
       project = Project.find(params[@type.to_sym][:project_id])
-      category_template = CategoriesTemplate.where(:category_id => params[@type.to_sym][:category_id],
-                                                   :template_id => project.estimates.first.template.id,
-                                                   :purchased => true).first_or_create
+      category_template = CategoriesTemplate.where(:category_id => params[@type.to_sym][:category_id], :template_id => project.estimates.first.template.id).first
+      unless category_template
+        category = Category.find params[@type.to_sym][:category_id]
+        if category
+          category_template = category.categories_templates.where(:template_id => project.estimates.first.template.id).first
+        end
+        unless category_template
+          category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.estimates.first.template.id, :purchased => true)
+        end
+      end
       # Destroy all old purchasable_items if category template changed
       if @purchasable.categories_template_id != category_template.id
         @purchasable.purchasable_items.each do |pi|
