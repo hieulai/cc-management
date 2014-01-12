@@ -515,6 +515,7 @@ class AccountingController < ApplicationController
       end
       # Destroy all old purchasable_items if category template changed
       if @purchasable.categories_template_id != category_template.id
+        params[@type.to_sym]["#{@type.pluralize}_items_attributes"]||= []
         @purchasable.purchasable_items.each do |pi|
           params[@type.to_sym]["#{@type.pluralize}_items_attributes"] << {id: pi.id, _destroy: true}.with_indifferent_access
         end
