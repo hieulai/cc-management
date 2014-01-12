@@ -1,10 +1,10 @@
 <% accounts = Account.raw(session[:builder_id]) %>
 <div class="zurb-row">
         Account
-    <%= select_tag(:account_id, options_from_collection_for_select(accounts, "id", "name"), {:data => {:remote => true, :url => url_for(:action => "show_account_details_receivables")}}) %>
+    <%= select_tag(:account_id, options_from_collection_for_select(accounts, "id", "name", session[:account_id].to_i), {:data => {:remote => true, :url => url_for(:action => "show_account_details_receivables")}}) %>
 </div>
 <div class="account-details">
-    <%= render(:partial => "account_details_receivables", :locals => {:account => accounts.first}) %>
+    <%= render(:partial => "account_details_receivables", :locals => {:account => session[:account_id].present? ? Account.find(session[:account_id].to_i) : accounts.first}) %>
 </div>
 <div class="zurb-row">
     Payables Balance =

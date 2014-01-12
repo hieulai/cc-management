@@ -55,10 +55,10 @@ class AccountsController < ApplicationController
   end
 
   def reconcile
-    klass = params[:type].to_s.constantize
-    object = klass.find(params[:id])
-    if object
-      object.update_attribute(:reconciled, params["#{params[:type].to_s}_#{params[:id]}".to_sym].present?)
+    @type = params[:type].to_s
+    @object = @type.constantize.find(params[:id])
+    if @object
+      @object.update_attribute(:reconciled, params["#{params[:type].to_s}_#{params[:id]}".to_sym].present?)
     end
     respond_to do |format|
       format.js

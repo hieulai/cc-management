@@ -45,8 +45,7 @@
                     </tr>
                     <% balance = @account.balance %>
                     <% @account.transactions.each_with_index do |t, index| %>
-                        <tr>
-                        <tr class="clickable">
+                        <tr class="clickable <% if t.reconciled%> unclickable <% end %>">
                             <td class="center">
                                 <%= t.date %>
                                 <% if t.instance_of? Payment %>

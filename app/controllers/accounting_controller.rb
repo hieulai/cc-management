@@ -21,7 +21,7 @@ class AccountingController < ApplicationController
     @deposit = Deposit.new(params[:deposit])
     @deposit.builder_id = session[:builder_id]
     if @deposit.save
-      redirect_to(params[:original_url].presence ||url_for(:action => 'receivables'))
+      redirect_to(params[:original_url].presence ||url_for(:action => 'deposits'))
     else
       @receipts = Receipt.unbilled
       render('new_deposit')
@@ -42,7 +42,7 @@ class AccountingController < ApplicationController
       end
     end
     if @deposit.update_attributes(params[:deposit])
-      redirect_to(:action => 'receivables')
+      redirect_to(:action => 'deposits')
     else
       @receipts = (@deposit.receipts + @deposit.account.receipts.unbilled).uniq
       render('edit_deposit')
@@ -56,7 +56,7 @@ class AccountingController < ApplicationController
   def destroy_deposit
     @deposit = Deposit.find(params[:id])
     @deposit.destroy
-    redirect_to(:action => "receivables")
+    redirect_to(:action => "deposits")
   end
 
   def receipts
@@ -72,7 +72,7 @@ class AccountingController < ApplicationController
     @receipt = Receipt.new(params[:receipt])
     @receipt.builder_id = session[:builder_id]
     if @receipt.save
-      redirect_to(params[:original_url].presence ||url_for(:action => 'receivables'))
+      redirect_to(params[:original_url].presence ||url_for(:action => 'receipts'))
     else
       @invoices = Array.new
       render('new_receipt')
@@ -93,7 +93,7 @@ class AccountingController < ApplicationController
       end
     end
     if @receipt.update_attributes(params[:receipt])
-      redirect_to(:action => 'receivables')
+      redirect_to(:action => 'receipts')
     else
       @invoices = (@receipt.invoices + @receipt.client.invoices.unbilled).uniq
       render('edit_receipt')
@@ -107,7 +107,7 @@ class AccountingController < ApplicationController
   def destroy_receipt
     @receipt = Receipt.find(params[:id])
     if @receipt.destroy
-      redirect_to(:action => "receivables")
+      redirect_to(:action => "receipts")
     else
       render :delete_receipt
     end
@@ -147,7 +147,7 @@ class AccountingController < ApplicationController
     @invoice = Invoice.new(params[:invoice])
     @invoice.builder_id = session[:builder_id]
     if @invoice.save
-      redirect_to(params[:original_url].presence ||url_for(:action => 'receivables'))
+      redirect_to(params[:original_url].presence ||url_for(:action => 'invoices'))
     else
       render('new_invoice')
     end
@@ -166,7 +166,7 @@ class AccountingController < ApplicationController
       end
     end
     if @invoice.update_attributes(params[:invoice])
-      redirect_to(:action => 'receivables')
+      redirect_to(:action => 'invoices')
     else
       render('edit_invoice')
     end
@@ -179,7 +179,7 @@ class AccountingController < ApplicationController
   def destroy_invoice
     @invoice = Invoice.find(params[:id])
     if @invoice.destroy
-      redirect_to(:action => "receivables")
+      redirect_to(:action => "invoices")
     else
       render :delete_invoice
     end
@@ -212,7 +212,7 @@ class AccountingController < ApplicationController
   def destroy_purchase_order
     @purchase_order = PurchaseOrder.find(params[:id])
     if @purchase_order.destroy
-      redirect_to(:action => "payables")
+      redirect_to(:action => "purchase_orders")
     else
       render :delete_purchase_order
     end
@@ -253,7 +253,7 @@ class AccountingController < ApplicationController
   def destroy_bill
     @bill = Bill.find(params[:id])
     if @bill.destroy
-      redirect_to(:action => "payables")
+      redirect_to(:action => "bills")
     else
       render :delete_bill
     end
@@ -272,7 +272,7 @@ class AccountingController < ApplicationController
     @payment = Payment.new(params[:payment])
     @payment.builder_id = session[:builder_id]
     if @payment.save
-      redirect_to(params[:original_url].presence ||url_for(:action => "payables"))
+      redirect_to(params[:original_url].presence ||url_for(:action => "payments"))
     else
       @bills = Array.new
       render('new_payment')
@@ -293,7 +293,7 @@ class AccountingController < ApplicationController
       end
     end
     if @payment.update_attributes(params[:payment])
-      redirect_to(:action => "payables")
+      redirect_to(:action => "payments")
     else
       @bills = (@payment.bills + @payment.vendor.bills.unpaid).uniq
       render('edit_payment')
@@ -307,7 +307,7 @@ class AccountingController < ApplicationController
   def destroy_payment
     @payment = Payment.find(params[:id])
     @payment.destroy
-    redirect_to(:action => "payables")
+    redirect_to(:action => "payments")
   end
   
   def show
@@ -417,6 +417,7 @@ class AccountingController < ApplicationController
 
   def show_account_details_payables
     @account = Account.raw(session[:builder_id]).find(params[:account_id])
+    session[:account_id] = @account.id
     respond_to do |format|
       format.js
     end
@@ -424,6 +425,7 @@ class AccountingController < ApplicationController
 
   def show_account_details_receivables
     @account = Account.raw(session[:builder_id]).find(params[:account_id])
+    session[:account_id] = @account.id
     respond_to do |format|
       format.js
     end
@@ -461,8 +463,8 @@ class AccountingController < ApplicationController
         payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
       end
       respond_to do |format|
-        format.html { redirect_to(params[:original_url].presence ||url_for(:action => "payables")) }
-        format.js { render :js => "window.location = '#{ params[:original_url].presence ||url_for(:action => "payables")}'" }
+        format.html { redirect_to(params[:original_url].presence ||url_for(:action => @type.pluralize)) }
+        format.js { render :js => "window.location = '#{ params[:original_url].presence ||url_for(:action => @type.pluralize)}'" }
       end
     else
       @bill = @purchase_order = @purchasable
@@ -484,8 +486,8 @@ class AccountingController < ApplicationController
       Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
       @purchasable.items = Item.create(purchased_items)
       respond_to do |format|
-        format.html {redirect_to(:action => "payables")}
-        format.js {render :js => "window.location = '#{url_for(:action => "payables")}'"}
+        format.html {redirect_to(:action => @type.pluralize)}
+        format.js {render :js => "window.location = '#{url_for(:action => @type.pluralize)}'"}
       end
     else
       @bill = @purchase_order = @purchasable

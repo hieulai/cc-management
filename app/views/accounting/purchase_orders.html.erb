@@ -19,7 +19,7 @@
     <div class="zurb-row">
         <div class="columns margin-bottom">
             <div class="button-group">
-                <%= link_to("+ Purchase Order", {:action => 'new_purchase_order', :original_url => url_for(:action => "purchase_orders")}, :id => 'add-purchase-order', :class => 'action vew btn') %>
+                <%= link_to("+ Purchase Order", {:action => 'new_purchase_order'}, :id => 'add-purchase-order', :class => 'action vew btn') %>
             </div>
             <%= render(:partial => "purchase_orders", :locals => {:purchase_orders => @purchase_orders}) %>
         </div>
