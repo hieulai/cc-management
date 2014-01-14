@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
   end
 
   def bank_balance
-    balance + payments.where(:reconciled => true).map(&:amount).compact.sum - deposits.where(:reconciled => true).map(&:amount).compact.sum
+    balance.to_f + payments.where(:reconciled => true).map(&:amount).compact.sum - deposits.where(:reconciled => true).map(&:amount).compact.sum
   end
 
   def book_balance
