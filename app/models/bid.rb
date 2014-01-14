@@ -34,6 +34,6 @@ class Bid < ActiveRecord::Base
 
   private
   def categories_template
-    category.categories_templates.first
+    category.try(:categories_templates).try(:first)
   end
 end
