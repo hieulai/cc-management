@@ -1,24 +1,26 @@
-var calculatePurchaseAmount = function (obj, f){
+var calculatePurchaseAmount = function (obj, f) {
     var estimateCost = $(obj).closest("tr").find('input[name$="[][estimated_cost]"]');
     var qty = $(obj).closest("tr").find('input[name$="[][qty]"]');
-    var eValue = text_to_number($(estimateCost).val());
-    var qValue = text_to_number(qty.val());
-    var pValue = eValue * qValue;
-    var placeHolder = $(obj).closest("tr").find(".actual-amount-placeholder");
-    if (placeHolder.find(".actual-amount").size() > 0) {
-        placeHolder.find(".actual-amount").text(number_to_currency_with_unit(pValue, 2, '.', ','));
-    } else {
-        placeHolder.prepend('<div class="actual-amount">' + number_to_currency_with_unit(pValue, 2, '.', ',') + '</div>');
+    if (estimateCost.size() > 0 && qty.size() > 0) {
+        var eValue = text_to_number($(estimateCost).val());
+        var qValue = text_to_number(qty.val());
+        var pValue = eValue * qValue;
+        var placeHolder = $(obj).closest("tr").find(".actual-amount-placeholder");
+        if (placeHolder.find(".actual-amount").size() > 0) {
+            placeHolder.find(".actual-amount").text(number_to_currency_with_unit(pValue, 2, '.', ','));
+        } else {
+            placeHolder.prepend('<div class="actual-amount">' + number_to_currency_with_unit(pValue, 2, '.', ',') + '</div>');
+        }
+        calculatePostTaxAmount($(placeHolder).find(".actual-amount"));
     }
-    calculatePostTaxAmount($(placeHolder).find(".actual-amount"));
 };
 
 var calculatePurchasableSubTotalAndTotal = function () {
     if ($("#total").size() > 0) {
         var subtotal = 0;
         var empty = true;
-        $('.actual-amount').each(function () {
-            var value = $(this).text();
+        $('.actual-amount:visible').each(function () {
+            var value = $(this).is("input") ? $(this).val() : $(this).text();
             if (value.trim() != "" && empty) {
                 empty = false;
             }
@@ -76,7 +78,7 @@ var calculatePostTaxAmount = function (i) {
 };
 
 var calculatePostTaxAmounts = function () {
-    $('.actual-amount').each(function () {
+    $('.purchasable-items-list div.actual-amount').each(function () {
         calculatePostTaxAmount(this);
     });
 };
@@ -89,10 +91,11 @@ $(document).ready(function() {
     initAccounting("receipt", "invoice");
     initAccounting("deposit", "receipt");
 
-    $(document).on('change', 'input[name$="[][qty]"], input[name$="[][estimated_cost]"]', function () {
+    $(document).on('change', 'input[name$="[][qty]"], input[name$="[][estimated_cost]"], input[name$="[][actual_cost]"]', function () {
         calculatePurchaseAmount(this);
         calculatePurchasableSubTotalAndTotal();
     });
+
     $(document).on('change', '.purchasable-items-list input[name="item-chosen"]', function () {
         if ($(this).is(":checked")) {
             toggleItemInputs(this, true);

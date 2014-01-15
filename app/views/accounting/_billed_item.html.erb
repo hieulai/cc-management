@@ -1,0 +1,19 @@
+<tr class="purchased">
+    <td class="center"><%= link_to "x", "#", :class => 'remove-item btn' %></td>
+    <td>
+        <%= item.name %>
+        <%= hidden_field_tag 'items[][name]', item.name %>
+    </td>
+    <td>
+        <%= text_field_tag 'items[][description]', item.description, :class => "text-field"%>
+    </td>
+    <td>
+        <%= text_area_tag 'items[][bill_memo]', item.bill_memo, {:size => '10x2'} %>
+    </td>
+    <td class="right light-blue">
+        $<%= text_field_tag "items[][actual_cost]", item.actual_cost || item.amount(true), :class => "actual-amount input-mini", :size => 10 %>
+    </td>
+    <td class="right">
+        <%= price_tag(0, "amount") %>
+    </td>
+</tr>

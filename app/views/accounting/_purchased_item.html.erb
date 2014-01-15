@@ -5,16 +5,16 @@
         <%= hidden_field_tag 'items[][name]', item.name %>
     </td>
     <td>
-        <%= text_field_tag 'items[][description]', item.description, :class => "text-field"%>
+        <%= text_field_tag 'items[][description]', item.description, :class => "text-field" %>
     </td>
     <td>
         <%= text_area_tag 'items[][bill_memo]', item.bill_memo, {:size => '10x2'} %>
     </td>
     <td class="right">
-        <%= text_field_tag 'items[][qty]', item.qty, :class => "text-field input-mini"%>
+        <%= text_field_tag 'items[][qty]', item.qty, :class => "text-field input-mini" %>
     </td>
     <td class="right">
-        $<%= text_field_tag 'items[][estimated_cost]', item.estimated_cost(true), :class => "text-field input-mini"%>
+        $<%= text_field_tag 'items[][estimated_cost]', item.estimated_cost(true), :class => "text-field input-mini" %>
     </td>
     <td class="right light-blue">
         <div class="actual-amount-placeholder">
@@ -22,11 +22,9 @@
             <%= hidden_field_tag 'items[][actual_cost]', item.actual_cost %>
         </div>
     </td>
-    <% if type == PurchaseOrder.name %>
-      <td class="right">
-          <div class="post-tax-actual-amount"></div>
-      </td>
-    <% end %>
+    <td class="right">
+        <div class="post-tax-actual-amount"></div>
+    </td>
     <td class="right">
         <%= price_tag(0, "amount") %>
     </td>

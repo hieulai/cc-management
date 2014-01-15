@@ -27,28 +27,51 @@
               <div class="controls"><%= purchasable.id %></div>
           </div>
         <% end %>
-
-        <div class="control-group">
-            <%= f.label :date, "Order Date", class: 'col-lg-2 control-label' %>
-            <div class="controls">
-                <%= f.text_field(:date, class: 'datepicker', :value => f.object.try(:date).try(:strftime, '%m-%d-%Y')) %>
-                <%= f.hidden_field(:date, id: 'purchasable_date_hidden', :value => f.object.try(:date).try(:strftime, '%Y-%m-%d')) %>
-            </div>
-        </div>
         <div class="control-group">
             <%= f.label :due_date, "Due Date", class: 'col-lg-2 control-label' %>
             <div class="controls">
-                <%= f.text_field(:due_date, class: 'datepicker', :value => f.object.try(:due_date).try(:strftime, '%m-%d-%Y')) %>
-                <%= f.hidden_field(:due_date, id: 'purchasable_date_hidden', :value => f.object.try(:due_date).try(:strftime, '%Y-%m-%d')) %>
+              <%= f.text_field(:due_date, class: 'datepicker', :value => f.object.try(:due_date).try(:strftime, '%m-%d-%Y')) %>
+              <%= f.hidden_field(:due_date, id: 'purchasable_date_hidden', :value => f.object.try(:due_date).try(:strftime, '%Y-%m-%d')) %>
             </div>
-        </div>
-        <div class="control-group">
-            <%= f.label :sales_tax_rate, "Sales Tax Rate", class: 'col-lg-2 control-label' %>
-            <div class="controls"><%= f.text_field :sales_tax_rate %>(%)</div>
         </div>
         <div class="control-group">
             <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
             <div class="controls"><%= f.text_area(:notes, size: '40x5') %></div>
         </div>
     </div>
+    <% if purchasable.new_record? %>
+      <div class="span6">
+          <div class="control-group">
+              <%= f.label :create_payment, "Create Payment for Bill Simultaneously", class: 'col-lg-2 control-label' %>
+              <div class="controls">
+                  <%= f.check_box :create_payment, :class => 'toggle', :target => '#payment-from-bill' %>
+              </div>
+          </div>
+          <div id="payment-from-bill" style="<% unless purchasable.create_payment == "1" %> display: none <% end %>">
+              <div class="control-group">
+                  <%= label_tag 'payment[account_id]', "Account", class: 'col-lg-2 control-label' %>
+                  <div class="controls"><%= select_tag('payment[account_id]', options_for_select(Account.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }), {:include_blank => true}) %></div>
+              </div>
+              <div class="control-group">
+                  <%= label_tag 'payment[method]', "Type", class: 'col-lg-2 control-label' %>
+                  <div class="controls"><%= select_tag('payment[method]', options_for_select(Payment::METHODS), {:include_blank => true}) %></div>
+              </div>
+              <div class="control-group">
+                  <%= label_tag 'payment[date]', "Payment Date", class: 'col-lg-2 control-label' %>
+                  <div class="controls">
+                    <%= text_field_tag('payment[date]', nil, class: 'datepicker') %>
+                    <%= hidden_field_tag('payment[date]', nil, id: 'payment_due_date_hidden') %>
+                  </div>
+              </div>
+              <div class="control-group">
+                  <%= label_tag 'payment[reference]', "Reference #", class: 'col-lg-2 control-label' %>
+                  <div class="controls"><%= text_field_tag 'payment[reference]' %></div>
+              </div>
+              <div class="control-group">
+                  <%= label_tag 'payment[memo]', "Payment Memo", class: 'col-lg-2 control-label' %>
+                  <div class="controls"><%= text_area_tag('payment[memo]') %></div>
+              </div>
+          </div>
+      </div>
+    <% end %>
 </div>

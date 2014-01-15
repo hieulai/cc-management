@@ -98,7 +98,7 @@ $(document).ready(function() {
     $(document).on('click', 'input[type="submit"]', function(){
         var $form = $($(this).data("form"));
         if ($(this).data("original-url")) {
-            $form.attr("action", setURLParameter($form.attr("action"), "original_url", $(this).data("original-url")));
+            $form.attr("action", updateQueryStringParameter($form.attr("action"), "original_url", $(this).data("original-url")));
         }
         $form.submit();
     })

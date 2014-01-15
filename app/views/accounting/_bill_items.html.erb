@@ -5,64 +5,44 @@
         <th>Item</th>
         <th>Estimate Description</th>
         <th>Bill Memo</th>
-        <th class="cell-price">Qty</th>
-        <th class="cell-price">Rate</th>
-        <th class="cell-price">Pre-Tax Amount</th>
-        <th class="cell-price">Post-Tax Amount</th>
+        <th class="cell-price">Amount</th>
         <th class="cell-price">Estimated Costs</th>
     </tr>
     </thead>
     <tbody>
     <% if defined?(categories_template) && categories_template.present? %>
       <% categories_template.try(:items).try(:each) do |i| %>
-        <%= render :partial => 'purchasable_item', :locals => {:item => i, :purchasable => purchasable} %>
+        <%= render :partial => 'bill_item', :locals => {:item => i, :purchasable => purchasable} %>
       <% end %>
 
       <% if categories_template.template %>
         <% categories_template.template.estimate.project.co_items(categories_template.category).try(:each) do |i| %>
-          <%= render :partial => 'purchasable_item', :locals => {:item => i, :purchasable => purchasable} %>
+          <%= render :partial => 'bill_item', :locals => {:item => i, :purchasable => purchasable} %>
         <% end %>
       <% end %>
 
       <% if categories_template == purchasable.categories_template %>
         <% purchasable.items.try(:each) do |i| %>
-          <%= render :partial => 'purchased_item', :locals => {:item => i, :type => purchasable.class.name} %>
+          <%= render :partial => 'billed_item', :locals => {:item => i, :type => purchasable.class.name} %>
         <% end %>
       <% end %>
       <tr class="add add-item" id="add-item">
-          <td colspan=12>
+          <td colspan=6>
               <%= autocomplete_field :name, nil, items_autocomplete_name_path, :id_element => "#purchased_item_id", :update_elements => {} %>
               <%= hidden_field :purchased_item, :id %>
               <%= link_to "+ Item", {:action => 'add_item_to_purchasable', :item_id => "", :type => purchasable.class.name}, :remote => true, :id => "add-purchased-item", :class => 'btn' %>
           </td>
       </tr>
       <tr>
-          <td colspan="6">Subtotal</td>
+          <td colspan="4">Subtotal</td>
           <td id="subtotal" class="right light-blue"></td>
-          <% if purchasable.instance_of? PurchaseOrder %>
-            <td></td>
-          <% end %>
           <td class="right">
               <div class="total-amount"></div>
           </td>
       </tr>
-
       <tr>
-          <td colspan="6">Sales Tax</td>
-          <td id="sales_tax" class="right light-blue"></td>
-          <td></td>
-          <td></td>
-      </tr>
-      <tr>
-          <td colspan="6">Shipping</td>
-          <td class="right light-blue">$<%= text_field_tag("#{purchasable.class.name.underscore.to_sym}[shipping]", purchasable.shipping, class: 'input-mini') %></td>
-          <td></td>
-          <td></td>
-      </tr>
-      <tr>
-          <td colspan="6" class="strong">TOTAL</td>
+          <td colspan="4" class="strong">TOTAL</td>
           <td id="total" class="right light-blue strong"></td>
-          <td></td>
           <td class="right strong">
               <div class="total-amount"></div>
           </td>
@@ -70,4 +50,4 @@
       </tbody>
 
     <% end %>
-    </table>
+</table>

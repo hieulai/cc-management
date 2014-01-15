@@ -1,10 +1,10 @@
 <% if @item.present? %>
-    $('tr#add-item').before('<%= escape_javascript(render :partial =>  'purchased_item', :locals => {:item => @item, :type => @type}) %>')
-    calculatePostTaxAmount($('tr#add-item').prev().find('.actual-amount'));
-    calculatePurchasableSubTotalAndTotal();
-    calculateTotals();
+$('tr#add-item').before('<%= escape_javascript(render :partial => @type == Bill.name ? 'billed_item' : 'purchased_item', :locals => {:item => @item, :type => @type}) %>')
+calculatePostTaxAmount($('tr#add-item').prev().find('div.actual-amount'));
+calculatePurchasableSubTotalAndTotal();
+calculateTotals();
 
-    $('tr#add-item input[name="name[]"]').val("");
-    var link = $("a#add-purchased-item").attr("href");
-    $("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", ""));
+$('tr#add-item input[name="name[]"]').val("");
+var link = $("a#add-purchased-item").attr("href");
+$("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", ""));
 <% end %>

@@ -16,9 +16,9 @@
                     </div>
                 <% end %>
                 <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
-                <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @bill}) %>
+                <%= render(:partial => "bill_form", :locals => {:f => f, :purchasable => @bill}) %>
                 <div id="item-placeholder">
-                    <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @bill, :categories_template => @bill.categories_template}) %>
+                    <%= render(:partial => "bill_items", :locals => {:f => f, :purchasable => @bill, :categories_template => @bill.categories_template}) %>
                 </div>
             <% end %>
             <div class="form-buttons">
