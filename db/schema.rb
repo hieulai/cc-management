@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140111041010) do
+ActiveRecord::Schema.define(:version => 20140112155407) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(:version => 20140111041010) do
     t.decimal  "actual_cost",    :precision => 10, :scale => 2
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
+    t.text     "memo"
   end
 
   create_table "builders", :force => true do |t|
@@ -340,6 +341,7 @@ ActiveRecord::Schema.define(:version => 20140111041010) do
     t.integer  "purchase_order_id"
     t.integer  "change_orders_category_id"
     t.integer  "bill_id"
+    t.text     "bill_memo"
   end
 
   add_index "items", ["bill_id"], :name => "index_items_on_bill_id"
@@ -482,6 +484,7 @@ ActiveRecord::Schema.define(:version => 20140111041010) do
     t.decimal  "actual_cost",       :precision => 10, :scale => 2
     t.datetime "created_at",                                       :null => false
     t.datetime "updated_at",                                       :null => false
+    t.text     "memo"
   end
 
   create_table "receipts", :force => true do |t|

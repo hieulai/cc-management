@@ -4,7 +4,7 @@ module Purchasable
   included do
     belongs_to :item
 
-    attr_accessible :description, :qty, :estimated_cost, :actual_cost, :item_id
+    attr_accessible :description, :qty, :estimated_cost, :actual_cost, :memo, :item_id
     before_save :compare_item_costs
 
     def compare_item_costs

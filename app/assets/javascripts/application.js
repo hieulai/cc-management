@@ -96,7 +96,11 @@ $(document).ready(function() {
       })
     });
     $(document).on('click', 'input[type="submit"]', function(){
-        $($(this).data("form")).submit();
+        var $form = $($(this).data("form"));
+        if ($(this).data("original-url")) {
+            $form.attr("action", setURLParameter($form.attr("action"), "original_url", $(this).data("original-url")));
+        }
+        $form.submit();
     })
 
     $(document).on('click', 'tr.clickable', function () {

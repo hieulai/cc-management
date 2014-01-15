@@ -22,8 +22,9 @@
                 </div>
             <% end %>
             <div class="form-buttons">
-                <%= submit_tag("Save", :data => {:form => ".edit_bill"}, :class => 'btn') %>
-                <%= link_to("Cancel", :action => 'bills') %>
+                <%= submit_tag("Save & New", :data => {:form => ".edit_bill", :original_url => "#{url_for(:action => "new_bill")}"}, :class => 'btn') %>
+                <%= link_to("Cancel", {:action => 'bills'}, :class => 'btn') %>
+                <%= submit_tag("Save & Close", :data => {:form => ".edit_bill"}, :class => 'btn') %>
             </div>
         </div>
     </div>

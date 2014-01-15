@@ -17,10 +17,10 @@
         <%= item.name %>
     </td>
     <td>
-        <%= text_field_tag "#{object_name}[#{object_name.pluralize}_items_attributes][][description]", purchasable_object.try(:description) || item.description, :class => "text-field", :style => "display: #{text_field_display}", :size => 10 %>
-        <div class="value-field" style="display: <%= value_display %>">
-            <%= item.description %>
-        </div>
+        <%= item.description %>
+    </td>
+    <td>
+        <%= text_area_tag "#{object_name}[#{object_name.pluralize}_items_attributes][][memo]", purchasable_object.try(:memo), {:class => "text-field", :style => "display: #{text_field_display}", :size => '10x2'} %>
     </td>
     <td class="right">
         <%= text_field_tag "#{object_name}[#{object_name.pluralize}_items_attributes][][qty]", purchasable_object.try(:qty) || item.qty, :class => "text-field input-mini", :style => "display: #{text_field_display}", :size => 10 %>

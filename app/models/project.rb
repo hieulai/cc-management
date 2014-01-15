@@ -12,6 +12,7 @@ class Project < ActiveRecord::Base
 
   attr_accessible :name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
   :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes
+  default_scope order("name desc")
 
   def next_tasks n
     incomplete_tasks[0..n-1]

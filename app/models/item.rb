@@ -18,7 +18,7 @@ class Item < ActiveRecord::Base
   has_many :purchase_orders_items, :dependent => :destroy
   has_many :bids_items, :dependent => :destroy
 
-  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :purchase_order_id, :bill_id
+  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :bill_memo, :purchase_order_id, :bill_id
   validates :name, presence: true
 
   before_save :check_readonly, :if => :changed? , :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }

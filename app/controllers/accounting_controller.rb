@@ -486,8 +486,8 @@ class AccountingController < ApplicationController
       Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
       @purchasable.items = Item.create(purchased_items)
       respond_to do |format|
-        format.html {redirect_to(:action => @type.pluralize)}
-        format.js {render :js => "window.location = '#{url_for(:action => @type.pluralize)}'"}
+        format.html { redirect_to(params[:original_url].presence ||url_for(:action => @type.pluralize)) }
+        format.js { render :js => "window.location = '#{ params[:original_url].presence ||url_for(:action => @type.pluralize)}'" }
       end
     else
       @bill = @purchase_order = @purchasable

@@ -2,8 +2,9 @@
     <thead>
     <tr class="header">
         <th></th>
-        <th>Item Name</th>
-        <th>Description</th>
+        <th>Item</th>
+        <th>Estimate Description</th>
+        <th>Bill Memo</th>
         <th class="cell-price">Qty</th>
         <th class="cell-price">Rate</th>
         <% if purchasable.instance_of? PurchaseOrder %>
@@ -40,7 +41,7 @@
           </td>
       </tr>
       <tr>
-          <td colspan="5">Subtotal</td>
+          <td colspan="6">Subtotal</td>
           <td id="subtotal" class="right light-blue"></td>
           <% if purchasable.instance_of? PurchaseOrder %>
             <td></td>
@@ -51,7 +52,7 @@
       </tr>
       <% if purchasable.instance_of? PurchaseOrder %>
         <tr>
-            <td colspan="5">Sales Tax</td>
+            <td colspan="6">Sales Tax</td>
             <td id="sales_tax" class="right light-blue"></td>
             <% if purchasable.instance_of? PurchaseOrder %>
               <td></td>
@@ -59,7 +60,7 @@
             <td></td>
         </tr>
         <tr>
-            <td colspan="5">Shipping</td>
+            <td colspan="6">Shipping</td>
             <td class="right light-blue">$<%= text_field_tag("#{purchasable.class.name.underscore.to_sym}[shipping]", purchasable.shipping, class: 'input-mini') %></td>
             <% if purchasable.instance_of? PurchaseOrder %>
               <td></td>
@@ -68,7 +69,7 @@
         </tr>
       <% end %>
       <tr>
-          <td colspan="5" class="strong">TOTAL</td>
+          <td colspan="6" class="strong">TOTAL</td>
           <td id="total" class="right light-blue strong"></td>
           <% if purchasable.instance_of? PurchaseOrder %>
             <td></td>

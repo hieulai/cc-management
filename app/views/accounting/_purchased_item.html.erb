@@ -7,6 +7,9 @@
     <td>
         <%= text_field_tag 'items[][description]', item.description, :class => "text-field"%>
     </td>
+    <td>
+        <%= text_area_tag 'items[][bill_memo]', item.bill_memo, {:size => '10x2'} %>
+    </td>
     <td class="right">
         <%= text_field_tag 'items[][qty]', item.qty, :class => "text-field input-mini"%>
     </td>
