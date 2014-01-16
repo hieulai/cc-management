@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140112155407) do
+ActiveRecord::Schema.define(:version => 20140116151301) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -426,6 +426,8 @@ ActiveRecord::Schema.define(:version => 20140112155407) do
     t.datetime "created_at",                                                                   :null => false
     t.datetime "updated_at",                                                                   :null => false
     t.integer  "builder_id"
+    t.integer  "first_name"
+    t.string   "last_name"
   end
 
   add_index "projects", ["builder_id"], :name => "index_projects_on_builder_id"

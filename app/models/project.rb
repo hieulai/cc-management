@@ -10,12 +10,28 @@ class Project < ActiveRecord::Base
   has_one :tasklist, :dependent => :destroy
   has_many :invoices, :through => :estimates
 
-  attr_accessible :name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
+  attr_accessible :name, :first_name, :last_name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
   :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes
-  default_scope order("name desc")
+  default_scope order("first_name asc, last_name asc")
 
   def next_tasks n
     incomplete_tasks[0..n-1]
+  end
+
+  def name
+    "#{self.first_name} #{self.last_name}".strip
+  end
+
+  alias name_before_type_cast name
+
+  def name=(n)
+    if /\d+\s\w+/.match(n)
+      split = n.split(' ', 2)
+      self.first_name = split.first.to_i
+      self.last_name = split.last
+    else
+      self.last_name= n
+    end
   end
 
   def current_progress
