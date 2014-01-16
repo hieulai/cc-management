@@ -9,7 +9,7 @@ class PaymentsBill < ActiveRecord::Base
 
   private
   def charge_account_and_update_bill
-    self.payment.account.update_attribute(:balance, self.payment.account.balance - self.amount)
+    self.payment.account.update_attribute(:balance, self.payment.account.balance.to_f - self.amount)
     # Avoid overpaid
     remaining_amount = self.bill.remaining_amount.presence||self.bill.source(:total_amount)
     self.amount = remaining_amount if self.amount > remaining_amount
@@ -17,7 +17,7 @@ class PaymentsBill < ActiveRecord::Base
   end
 
   def refund_account_and_update_bill
-    self.payment.account.update_attribute(:balance, self.payment.account.balance + self.amount_was.to_f)
+    self.payment.account.update_attribute(:balance, self.payment.account.balance.to_f + self.amount_was.to_f)
     remaining_amount = self.bill.paid? ? self.bill.remaining_amount + self.amount_was.to_f : nil
     self.bill.update_column(:remaining_amount, remaining_amount)
   end
