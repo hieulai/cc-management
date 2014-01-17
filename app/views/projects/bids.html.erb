@@ -40,7 +40,7 @@
                         <td><%= bid.notes %></td>
                         <%
                            if bid.chosen == true
-                             @total_costs = @total_costs + bid.total_amount
+                             @total_costs = @total_costs + bid.total_amount.to_f
                            end
                         %>
                     </tr>
