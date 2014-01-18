@@ -29,7 +29,7 @@ class Account < ActiveRecord::Base
   end
 
   def book_balance
-     balance
+    balance.to_f
   end
 
   def outstanding_checks_balance
