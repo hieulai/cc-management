@@ -12,6 +12,7 @@
  *= require jquery.ui.all
  *= require bootstrap_and_overrides
  *= require responsive-tables
+ *= require select2
  *= require_tree ./base
  */
 

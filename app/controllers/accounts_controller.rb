@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   before_filter :authenticate_user!
   
   def list
-    @accounts = Account.where("builder_id = ?", session[:builder_id])
+    @accounts = Account.raw(session[:builder_id])
   end
   
   def show
@@ -14,16 +14,12 @@ class AccountsController < ApplicationController
   end
   
   def create
-    #Instantiate a new object using form parameters
     @builder = Base::Builder.find(session[:builder_id])
     @account = Account.new(params[:account])
-    #save subject
+    @account.builder = @builder
     if @account.save
-      @builder.accounts << @account
-      #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
-      #if save fails, redisplay form to user can fix problems
       render('new')
     end
   end
@@ -33,14 +29,10 @@ class AccountsController < ApplicationController
   end
   
   def update
-    #Find object using form parameters
     @account = Account.find(params[:id])
-    #Update subject
     if @account.update_attributes(params[:account])
-      #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
-      #if save fails, redisplay form to user can fix problems
       render('edit')
     end
   end
@@ -50,8 +42,12 @@ class AccountsController < ApplicationController
   end
 
   def destroy
-    Account.find(params[:id]).destroy
-    redirect_to(:action => 'list')
+    @account = Account.find(params[:id])
+    if @account.destroy
+      redirect_to(:action => 'list')
+    else
+      render('delete')
+    end
   end
 
   def reconcile

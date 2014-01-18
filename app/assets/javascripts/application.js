@@ -20,6 +20,7 @@
 //= require jquery.dataTables.extends
 //= require shared
 //= require responsive-tables
+//= require select2
 //= require_tree .
 //= stub wkhtmltopdf_tableSplitHack
 
@@ -70,6 +71,11 @@ var toggleItemInputs = function (checbox, s) {
 
 $(document).ready(function() {
     load_add_link();
+    $("select").select2({
+        width: "220px",
+        placeholder: "",
+        allowClear: true
+    });
 
     $(document).on('click', '.trigger_add', function(){
         var container = $(this).closest(".cocoon-container");
@@ -155,6 +161,11 @@ $(document).ready(function() {
     $(document).ajaxStop(function () {
         $(".loader").hide();
         $('input[type="submit"]').removeAttr('disabled');
+        $("select").select2({
+            width: "220px",
+            placeholder: "",
+            allowClear: true
+        });
     });
 
 })

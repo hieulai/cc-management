@@ -4,6 +4,17 @@
         <div class="columns">
             <h2>Edit Account Info</h2>
             <%= form_for @account, :url => {:action => 'update', :id => @account.id}, :html => {:class => 'form-horizontal'} do |f| %>
+              <% if @account.errors.any? %>
+                <div id="errorExplanation">
+                    <h2><%= pluralize(@account.errors.count, "Error") %> prohibited
+                        this account from being saved:</h2>
+                    <ul>
+                        <% @account.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                        <% end %>
+                    </ul>
+                </div>
+              <% end %>
                 <%= render(:partial => "edit_form", :locals => {:f => f}) %>
                 <div class="control-group">
                     <div class='controls'>

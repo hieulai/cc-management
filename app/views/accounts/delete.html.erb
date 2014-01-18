@@ -4,13 +4,24 @@
         <div class="columns">
             <h2>Delete Account</h2>
             <%= form_for(:account, :url => {:action => 'destroy', :id => @account.id}) do |f| %>
-                <p>Are you sure you want to delete this account?</p>
-
-                <p class="reference-name"><%= @account.name %></p>
-
-                <div class="form-buttons">
-                    <%= submit_tag("Delete", :class => 'btn') %>
+              <p>Are you sure you want to delete this account?</p>
+              <% if @account.errors.any? %>
+                <div id="errorExplanation">
+                    <h2><%= pluralize(@account.errors.count, "Error") %> prohibited
+                        this account from being deleted:</h2>
+                    <ul>
+                        <% @account.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                        <% end %>
+                    </ul>
                 </div>
+              <% end %>
+
+              <p class="reference-name"><%= @account.name %></p>
+
+              <div class="form-buttons">
+                  <%= submit_tag("Delete", :class => 'btn') %>
+              </div>
             <% end %>
         </div>
     </div>

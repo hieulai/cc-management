@@ -6,17 +6,12 @@
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :category, "Account Type", class: 'col-lg-2 control-label' %>
+    <%= f.label :category, "Sub-Account Of", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.select(:category, ["Asset", "Liability", "Expense", "Equity", "Cost of Goods Sold"], {:include_blank => true}) %>
+        <%= f.hidden_field(:parent_id, :data => select2_account_json ) %>
     </div>
 </div>
-<div class="control-group">
-    <%= f.label :subcategory, "Account Sub Type", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:subcategory) %>
-    </div>
-</div>
+
 <div class="control-group">
     <%= f.label :prefix, "Account Prefix", class: 'col-lg-2 control-label' %>
     <div class="controls">

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140116151301) do
+ActiveRecord::Schema.define(:version => 20140118022232) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20140116151301) do
     t.string   "prefix"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+    t.integer  "parent_id"
   end
 
   add_index "accounts", ["builder_id"], :name => "index_accounts_on_builder_id"
