@@ -60,4 +60,17 @@ class AccountsController < ApplicationController
       format.js
     end
   end
+
+  def show_transfer
+    @transfer = Transfer.new
+  end
+
+  def transfer
+    @transfer = Transfer.new(params[:transfer])
+    if @transfer.save
+      redirect_to(params[:original_url].presence ||url_for(:action => 'list'))
+    else
+      render('show_transfer')
+    end
+  end
 end

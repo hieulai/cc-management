@@ -3,7 +3,7 @@
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
             <%= link_to("Add New Accounts >>", {:controller => 'accounts', :action => 'new'}, :title => 'Add New Accounts', :class => 'add action-button') %>
-            <%= link_to("Make Transfers >>", {:action => 'show'}, :title => 'Make Transfers', :class => 'transfer action-button') %>
+            <%= link_to("Make Transfers >>", {:action => 'show_transfer'}, :title => 'Make Transfers', :class => 'transfer action-button') %>
             <%= link_to("Reconcile >>", {:action => 'show'}, :title => 'Reconcile', :class => 'reconcile action-button') %>
             <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
         </div>

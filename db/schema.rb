@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140118022232) do
+ActiveRecord::Schema.define(:version => 20140119030039) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -613,6 +613,18 @@ ActiveRecord::Schema.define(:version => 20140118022232) do
 
   add_index "templates", ["builder_id"], :name => "index_templates_on_builder_id"
   add_index "templates", ["estimate_id"], :name => "index_templates_on_estimate_id"
+
+  create_table "transfers", :force => true do |t|
+    t.integer  "from_account_id"
+    t.integer  "to_account_id"
+    t.date     "date"
+    t.decimal  "amount",          :precision => 10, :scale => 2
+    t.string   "reference"
+    t.text     "memo"
+    t.boolean  "reconciled",                                     :default => false
+    t.datetime "created_at",                                                        :null => false
+    t.datetime "updated_at",                                                        :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.integer  "builder_id"

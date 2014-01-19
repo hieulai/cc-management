@@ -3,6 +3,8 @@ class Account < ActiveRecord::Base
   has_many :payments
   has_many :deposits
   has_many :children, class_name: "Account", foreign_key: "parent_id"
+  has_many :sent_transfers, class_name: Transfer.name, foreign_key: "from_account_id"
+  has_many :received_transfers, class_name: Transfer.name, foreign_key: "to_account_id"
 
   belongs_to :parent, class_name: "Account"
 
@@ -20,12 +22,12 @@ class Account < ActiveRecord::Base
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id ]
 
   def transactions
-    r = payments + deposits
+    r = payments + deposits + sent_transfers + received_transfers
     r.sort! { |x, y| y.date <=> x.date }
   end
 
   def bank_balance
-    balance.to_f + payments.where(:reconciled => true).map(&:amount).compact.sum - deposits.where(:reconciled => true).map(&:amount).compact.sum
+    balance.to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum - received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum
   end
 
   def book_balance

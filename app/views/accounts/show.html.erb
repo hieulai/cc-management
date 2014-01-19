@@ -43,7 +43,7 @@
                         <th>R</th>
                         <th>Balance</th>
                     </tr>
-                    <% balance = @account.balance %>
+                    <% balance = @account.balance.to_f %>
                     <% @account.transactions.each_with_index do |t, index| %>
                         <tr class="clickable <% if t.reconciled%> unclickable <% end %>">
                             <td class="center">
@@ -56,9 +56,25 @@
                             </td>
                             <td><%= t.method %></td>
                             <td><%= t.reference %></td>
-                            <td><%= t.payee %></td>
+                            <td>
+                                <% if t.instance_of? Transfer %>
+                                  <% if t.from_account_id == @account.id %>
+                                    <%= t.to_account.name %>
+                                  <% else %>
+                                    <%= t.from_account.name %>
+                                  <% end %>
+                                <% else %>
+                                  <%= t.payee %>
+                                <% end %>
+                            </td>
                             <td><%= t.memo %></td>
-                            <td class="right"><%= price_tag(t.amount) %></td>
+                            <td class="right">
+                                <% if t.instance_of?(Transfer) && t.from_account_id == @account.id %>
+                                  <%= price_tag(t.amount * -1) %>
+                                <% else %>
+                                  <%= price_tag(t.amount) %>
+                                <% end %>
+                            </td>
                             <td class="center action-container">
                                 <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :type => t.class.name, :id => t.id)}) %>
                             </td>
@@ -68,6 +84,12 @@
                             <% balance += t.amount.to_f %>
                         <% elsif t.instance_of? Deposit %>
                             <% balance -= t.amount.to_f %>
+                        <% elsif t.instance_of? Transfer %>
+                          <% if t.from_account_id ==  @account.id %>
+                            <% balance += t.amount.to_f %>
+                          <% else %>
+                            <% balance -= t.amount.to_f %>
+                          <% end %>
                         <% end %>
                     <% end %>
                 </table>

@@ -1,0 +1,79 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h1>Make Transfers</h1>
+        </div>
+    </div>
+    <div class="zurb-row">
+        <div class="columns">
+            <%= form_for @transfer, :url => {:action => 'transfer'}, :html => {:class => 'form-horizontal'} do |f| %>
+              <% if @transfer.errors.any? %>
+                <div id="errorExplanation">
+                    <h2><%= pluralize(@transfer.errors.count, "Error") %> prohibited
+                        this transfer from being saved:</h2>
+                    <ul>
+                        <% @transfer.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                        <% end %>
+                    </ul>
+                </div>
+              <% end %>
+
+              <div class="control-group">
+                  <%= f.label :date, "Date", class: 'col-lg-2 control-label' %>
+                  <div class="controls">
+                      <%= f.text_field(:date, class: 'datepicker') %>
+                      <%= f.hidden_field(:date, id: 'date_hidden') %>
+                  </div>
+              </div>
+
+              <div class="control-group">
+                  <%= f.label :from_account_id, "From Account", class: 'col-lg-2 control-label' %>
+                  <div class="controls">
+                      <%= f.select(:from_account_id, Account.raw(session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+                  </div>
+              </div>
+
+              <div class="control-group">
+                  <%= f.label :to_account_id, "To account", class: 'col-lg-2 control-label' %>
+                  <div class="controls">
+                      <%= f.select(:to_account_id, Account.raw(session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+                  </div>
+              </div>
+
+              <div class="control-group">
+                  <%= f.label :amount, "Amount", class: 'col-lg-2 control-label' %>
+                  <div class="controls">
+                      <%= f.text_field(:amount) %>
+                  </div>
+              </div>
+
+              <div class="control-group">
+                  <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>
+                  <div class="controls">
+                      <%= f.text_field(:reference) %>
+                  </div>
+              </div>
+
+              <div class="control-group">
+                  <%= f.label :memo, "Memo", class: 'col-lg-2 control-label' %>
+                  <div class="controls">
+                      <%= f.text_area(:memo, :size => '10x3') %>
+                  </div>
+              </div>
+
+              <div class="control-group">
+                  <div class='controls'>
+                      <div class="form-buttons">
+                          <%= f.submit("Save & New", :data => {:form => "#new_transfer", :original_url => "#{url_for(:action => "show_transfer")}"}, :class => 'btn') %>
+                          <%= link_to("Cancel", {:action => 'list'}, :class => 'btn') %>
+                          <%= f.submit("Save & Close", :class => 'btn') %>
+                      </div>
+                  </div>
+              </div>
+            <% end %>
+        </div>
+    </div>
+</div>
+
