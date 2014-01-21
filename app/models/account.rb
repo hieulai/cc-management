@@ -20,6 +20,7 @@ class Account < ActiveRecord::Base
   before_destroy :check_if_default
 
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id ]
+  validate :disallow_self_reference
 
   def transactions
     r = payments + deposits + sent_transfers + received_transfers
@@ -51,6 +52,12 @@ class Account < ActiveRecord::Base
     if DEFAULTS.include? self.name
       errors[:base] << "Default account is can not be destroyed"
       false
+    end
+  end
+
+  def disallow_self_reference
+    if self.parent_id == self.id
+      errors.add(:base, 'Cannot set current account as sub account of it')
     end
   end
 end

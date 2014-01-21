@@ -52,6 +52,8 @@
                                     <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_payment', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
                                 <% elsif t.instance_of? Deposit %>
                                     <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_deposit', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+                                <% elsif t.instance_of? Transfer %>
+                                  <%= link_to("Edit", {:controller => 'accounts', :action => 'edit_transfer', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
                                 <% end %>
                             </td>
                             <td><%= t.method %></td>

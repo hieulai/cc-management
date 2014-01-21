@@ -61,16 +61,42 @@ class AccountsController < ApplicationController
     end
   end
 
-  def show_transfer
+  def new_transfer
     @transfer = Transfer.new
   end
 
-  def transfer
+  def create_transfer
     @transfer = Transfer.new(params[:transfer])
     if @transfer.save
       redirect_to(params[:original_url].presence ||url_for(:action => 'list'))
     else
-      render('show_transfer')
+      render('new_transfer')
+    end
+  end
+
+  def edit_transfer
+    @transfer = Transfer.find(params[:id])
+  end
+
+  def update_transfer
+    @transfer = Transfer.find(params[:id])
+    if @transfer.update_attributes(params[:transfer])
+      redirect_to(params[:original_url].presence ||url_for(:action => 'list'))
+    else
+      render('edit_transfer')
+    end
+  end
+
+  def delete_transfer
+    @transfer = Transfer.find(params[:id])
+  end
+
+  def destroy_transfer
+    @transfer = Transfer.find(params[:id])
+    if @transfer.destroy
+      redirect_to(:action => 'list')
+    else
+      render('delete_transfer')
     end
   end
 end
