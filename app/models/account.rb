@@ -18,6 +18,7 @@ class Account < ActiveRecord::Base
   scope :undefault, where('name not in (?)', DEFAULTS)
 
   before_destroy :check_if_default
+  before_update :check_if_default
 
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id ]
   validate :disallow_self_reference
@@ -50,7 +51,7 @@ class Account < ActiveRecord::Base
   private
   def check_if_default
     if DEFAULTS.include? self.name
-      errors[:base] << "Default account is can not be destroyed"
+      errors[:base] << "Default account is can not be destroyed or modified"
       false
     end
   end
