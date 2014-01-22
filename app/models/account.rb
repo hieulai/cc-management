@@ -41,7 +41,8 @@ class Account < ActiveRecord::Base
   end
 
   def opening_balance
-    balance.to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum + sent_transfers.map(&:amount).compact.sum
+    ob = balance.to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum + sent_transfers.map(&:amount).compact.sum
+    ob.round(2)
   end
 
   def opening_balance=(b)
