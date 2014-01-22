@@ -8,7 +8,7 @@ class Account < ActiveRecord::Base
 
   belongs_to :parent, class_name: "Account"
 
-  attr_accessible :name, :balance, :number, :category, :subcategory, :prefix, :parent_id
+  attr_accessible :name, :balance, :opening_balance , :number, :category, :subcategory, :prefix, :parent_id
 
   DEFAULTS = ["Revenue", "Cost of Goods Sold", "Expenses", "Assets", "Liabilities", "Equity", "Accounts Payable", "Accounts Receivable", "Bank Accounts"]
 
@@ -38,6 +38,14 @@ class Account < ActiveRecord::Base
 
   def outstanding_checks_balance
     payments.where(:reconciled => false).map(&:amount).compact.sum
+  end
+
+  def opening_balance
+    balance.to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum + sent_transfers.map(&:amount).compact.sum
+  end
+
+  def opening_balance=(b)
+    self.balance = self.balance.to_f + b.to_f - self.opening_balance
   end
 
   def as_select2_json

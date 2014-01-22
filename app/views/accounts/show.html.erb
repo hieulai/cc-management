@@ -30,7 +30,6 @@
                 <%= "Balance:" %>
                 <%= price_tag(@account.balance, "inline-block") %>
             </div>
-            <% if @account.transactions.any? %>
                 <h2>Payment history:</h2>
                 <table class="grid-view" summary="Payment List">
                     <tr class="header">
@@ -44,58 +43,24 @@
                         <th>Balance</th>
                     </tr>
                     <% balance = @account.balance.to_f %>
-                    <% @account.transactions.each_with_index do |t, index| %>
-                        <tr class="clickable <% if t.reconciled%> unclickable <% end %>">
-                            <td class="center">
-                                <%= t.date %>
-                                <% if t.instance_of? Payment %>
-                                    <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_payment', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
-                                <% elsif t.instance_of? Deposit %>
-                                    <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_deposit', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
-                                <% elsif t.instance_of? Transfer %>
-                                  <%= link_to("Edit", {:controller => 'accounts', :action => 'edit_transfer', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
-                                <% end %>
-                            </td>
-                            <td><%= t.method %></td>
-                            <td><%= t.reference %></td>
-                            <td>
-                                <% if t.instance_of? Transfer %>
-                                  <% if t.from_account_id == @account.id %>
-                                    <%= t.to_account.name %>
-                                  <% else %>
-                                    <%= t.from_account.name %>
-                                  <% end %>
-                                <% else %>
-                                  <%= t.payee %>
-                                <% end %>
-                            </td>
-                            <td><%= t.memo %></td>
-                            <td class="right">
-                                <% if t.instance_of?(Transfer) && t.from_account_id == @account.id %>
-                                  <%= price_tag(t.amount * -1) %>
-                                <% else %>
-                                  <%= price_tag(t.amount) %>
-                                <% end %>
-                            </td>
-                            <td class="center action-container">
-                                <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :type => t.class.name, :id => t.id)}) %>
-                            </td>
-                            <td class="right"><%= price_tag(balance) %></td>
-                        </tr>
-                        <% if t.instance_of? Payment %>
-                            <% balance += t.amount.to_f %>
-                        <% elsif t.instance_of? Deposit %>
-                            <% balance -= t.amount.to_f %>
-                        <% elsif t.instance_of? Transfer %>
-                          <% if t.from_account_id ==  @account.id %>
-                            <% balance += t.amount.to_f %>
-                          <% else %>
-                            <% balance -= t.amount.to_f %>
-                          <% end %>
+                    <% @account.transactions.each do |t| %>
+                      <% if t.instance_of? Payment %>
+                        <%= render(:partial => "tr_payment", :locals => {:t => t, :balance => balance}) %>
+                        <% balance += t.amount.to_f %>
+                      <% elsif t.instance_of? Deposit %>
+                        <%= render(:partial => "tr_deposit", :locals => {:t => t, :balance => balance}) %>
+                        <% balance -= t.amount.to_f %>
+                      <% elsif t.instance_of? Transfer %>
+                        <%= render(:partial => "tr_transfer", :locals => {:t => t, :balance => balance}) %>
+                        <% if t.from_account_id == @account.id %>
+                          <% balance += t.amount.to_f %>
+                        <% else %>
+                          <% balance -= t.amount.to_f %>
                         <% end %>
+                      <% end %>
                     <% end %>
+                    <%= render(:partial => "tr_balance", :locals => {:account => @account, :balance => balance}) %>
                 </table>
-            <% end %>
         </div>
     </div>
 </div>

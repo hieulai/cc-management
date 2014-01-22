@@ -1,0 +1,18 @@
+<tr class="clickable unclickable">
+    <td class="center">
+        <%= account.created_at %>
+        <%= link_to("Edit", {:controller => 'accounts', :action => 'edit', :id => account.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+    </td>
+    <td>Opening Balance</td>
+    <td></td>
+    <td>
+        Opening Balance
+    </td>
+    <td>Opening Balance</td>
+    <td class="right">
+        <%= price_tag(balance) %>
+    </td>
+    <td class="center action-container">
+    </td>
+    <td class="right"><%= price_tag(balance) %></td>
+</tr>

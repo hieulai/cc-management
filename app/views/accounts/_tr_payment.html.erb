@@ -1,0 +1,19 @@
+<tr class="clickable <% if t.reconciled %> unclickable <% end %>">
+    <td class="center">
+        <%= t.date %>
+        <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_payment', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+    </td>
+    <td><%= t.method %></td>
+    <td><%= t.reference %></td>
+    <td>
+        <%= t.payee %>
+    </td>
+    <td><%= t.memo %></td>
+    <td class="right">
+        <%= price_tag(t.amount) %>
+    </td>
+    <td class="center action-container">
+        <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :type => t.class.name, :id => t.id)}) %>
+    </td>
+    <td class="right"><%= price_tag(balance) %></td>
+</tr>
