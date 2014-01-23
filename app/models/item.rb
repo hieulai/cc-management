@@ -99,6 +99,10 @@ class Item < ActiveRecord::Base
     self.invoices_items.where(:invoice_id => invoice_id).first
   end
 
+  def purchased?
+    self.purchase_order_id.present? || self.bill_id.present?
+  end
+
   def billed?
     self.invoices.any?
   end

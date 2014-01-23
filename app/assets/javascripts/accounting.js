@@ -136,7 +136,8 @@ $(document).ready(function() {
 
     $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
         e.preventDefault();
-        $(this).closest("tr").remove();
+        $(this).closest("tr").hide();
+        $(this).closest("tr").find('input[name$="[][_destroy]"]').val("true");
         calculatePurchasableSubTotalAndTotal();
         return false;
     });

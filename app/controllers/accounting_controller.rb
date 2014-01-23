@@ -436,7 +436,6 @@ class AccountingController < ApplicationController
     klass =  type.to_s.constantize
     @type = type.to_s.underscore
     @purchasable = klass.new(params[@type.to_sym])
-    purchased_items = params[:items].present? ? params[:items].select { |i| i[:id].nil? } : []
     @purchasable.builder_id = session[:builder_id]
     # Checking for valid payment
     if @purchasable.instance_of? Bill
@@ -456,8 +455,6 @@ class AccountingController < ApplicationController
     end
     assign_categories_template
     if @purchasable.save
-      Item.where(:purchase_order_id => @purchasable.id).destroy_all
-      @purchasable.items = Item.create(purchased_items)
       # Create payment simultaneously for bills
       if @purchasable.instance_of?(Bill) && payment && payment.save
         payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
@@ -480,11 +477,8 @@ class AccountingController < ApplicationController
     klass = type.to_s.constantize
     @type = type.to_s.underscore
     @purchasable = klass.find(params[:id])
-    purchased_items = params[:items].present? ? params[:items].select { |i| i[:id].nil? } : []
     assign_categories_template
     if @purchasable.update_attributes(params[@type.to_sym])
-      Item.where("#{@type}_id".to_sym => @purchasable.id).destroy_all
-      @purchasable.items = Item.create(purchased_items)
       respond_to do |format|
         format.html { redirect_to(params[:original_url].presence ||url_for(:action => @type.pluralize)) }
         format.js { render :js => "window.location = '#{ params[:original_url].presence ||url_for(:action => @type.pluralize)}'" }

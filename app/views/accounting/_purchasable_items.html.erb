@@ -26,7 +26,7 @@
 
       <% if categories_template == purchasable.categories_template %>
         <% purchasable.items.try(:each) do |i| %>
-          <%= render :partial => 'purchased_item', :locals => {:item => i, :type => purchasable.class.name} %>
+          <%= render :partial => 'purchased_item', :locals => {:item => i} %>
         <% end %>
       <% end %>
       <tr class="add add-item" id="add-item">

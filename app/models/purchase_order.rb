@@ -12,8 +12,9 @@ class PurchaseOrder < ActiveRecord::Base
 
   default_scope order("date DESC")
 
-  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date, :category_id, :purchase_orders_items_attributes
+  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date, :category_id, :purchase_orders_items_attributes, :items_attributes
   accepts_nested_attributes_for :purchase_orders_items, :allow_destroy => true
+  accepts_nested_attributes_for :items, :allow_destroy => true
   attr_accessor :category_id
 
   after_initialize :default_values

@@ -2,24 +2,26 @@
     <td class="center"><%= link_to "x", "#", :class => 'remove-item btn' %></td>
     <td>
         <%= item.name %>
-        <%= hidden_field_tag 'items[][name]', item.name %>
+        <%= hidden_field_tag 'purchase_order[items_attributes][][name]', item.name %>
+        <%= hidden_field_tag "purchase_order[items_attributes][][id]", item.purchased? ? item.id : nil %>
+        <%= hidden_field_tag "purchase_order[items_attributes][][_destroy]", false %>
     </td>
     <td>
-        <%= text_field_tag 'items[][description]', item.description, :class => "text-field" %>
+        <%= text_field_tag 'purchase_order[items_attributes][][description]', item.description, :class => "text-field" %>
     </td>
     <td>
-        <%= text_area_tag 'items[][bill_memo]', item.bill_memo, {:size => '10x2'} %>
+        <%= text_area_tag 'purchase_order[items_attributes][][bill_memo]', item.bill_memo, {:size => '10x2'} %>
     </td>
     <td class="right">
-        <%= text_field_tag 'items[][qty]', item.qty, :class => "text-field input-mini" %>
+        <%= text_field_tag 'purchase_order[items_attributes][][qty]', item.qty, :class => "text-field input-mini" %>
     </td>
     <td class="right">
-        $<%= text_field_tag 'items[][estimated_cost]', item.estimated_cost(true), :class => "text-field input-mini" %>
+        $<%= text_field_tag 'purchase_order[items_attributes][][estimated_cost]', item.estimated_cost(true), :class => "text-field input-mini" %>
     </td>
     <td class="right light-blue">
         <div class="actual-amount-placeholder">
             <%= price_tag item.amount(true), 'actual-amount' %>
-            <%= hidden_field_tag 'items[][actual_cost]', item.actual_cost %>
+            <%= hidden_field_tag 'purchase_order[items_attributes][][actual_cost]', item.actual_cost %>
         </div>
     </td>
     <td class="right">
