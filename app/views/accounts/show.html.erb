@@ -28,7 +28,7 @@
 
             <div>
                 <%= "Balance:" %>
-                <%= price_tag(@account.balance, "inline-block") %>
+                <%= price_tag(@account.balance.to_f, "inline-block") %>
             </div>
                 <h2>Payment history:</h2>
                 <table class="grid-view" summary="Payment List">
