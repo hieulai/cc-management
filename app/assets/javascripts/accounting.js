@@ -32,10 +32,16 @@ var calculatePurchasableSubTotalAndTotal = function () {
             var salesTax = subtotal * text_to_number($('input[name$="[sales_tax_rate]"]').val()) / 100;
             $('#sales_tax').html(salesTax == 0 ? "" : number_to_currency_with_unit(salesTax, 2, '.', ','));
             total += salesTax;
+            if (salesTax) {
+                empty = false;
+            }
         }
         if ($('input[name$="[shipping]"]').size() > 0) {
             var shipping = text_to_number($('input[name$="[shipping]"]').val());
             total += shipping;
+            if (shipping) {
+                empty = false;
+            }
         }
         fillValue("#total", total, empty);
     }

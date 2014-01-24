@@ -14,12 +14,18 @@
         <%= price_tag(item.amount, "amount budget-estimated-cost") %>
     </td>
     <td class="right">
-        <%= price_tag(item.committed_cost || item.actual_cost, "budget-actual-cost") %>
+        <%= price_tag(item.actual_cost, "budget-actual-cost") %>
+    </td>
+    <td class="right">
+        <%= price_tag(item.committed_cost || item.actual_cost, "budget-committed-cost") %>
     </td>
     <td class="right">
         <%= price_tag(item.margin, "margin budget-estimated-profit") %>
     </td>
     <td class="right">
-        <%= price_tag(item.committed_profit || item.actual_profit, "budget-actual-profit") %>
+        <%= price_tag(item.actual_profit, "budget-actual-profit") %>
+    </td>
+    <td class="right">
+        <%= price_tag(item.committed_profit || item.actual_profit, "budget-committed-profit") %>
     </td>
 </tr>
