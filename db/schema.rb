@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140119030039) do
+ActiveRecord::Schema.define(:version => 20140125024214) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -52,7 +52,6 @@ ActiveRecord::Schema.define(:version => 20140119030039) do
 
   create_table "bids", :force => true do |t|
     t.integer  "project_id"
-    t.text     "amount"
     t.text     "notes"
     t.boolean  "chosen"
     t.datetime "created_at",  :null => false

@@ -7,10 +7,8 @@ class Bid < ActiveRecord::Base
 
   validates_presence_of :category
 
-  attr_accessible :amount, :notes, :chosen, :vendor_id, :category_id, :bids_items_attributes
-  accepts_nested_attributes_for :bids_items, :allow_destroy => true
-
-  serialize :amount
+  attr_accessible :notes, :chosen, :vendor_id, :category_id, :bids_items_attributes
+  accepts_nested_attributes_for :bids_items, :allow_destroy => true, :reject_if => lambda { |x| x[:amount].blank? }
 
   def total_amount
     bids_items.map(&:amount).compact.sum if bids_items.any?
