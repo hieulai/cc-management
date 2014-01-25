@@ -4,7 +4,7 @@
 </div>
 <div class="zurb-row">
     Book Balance =
-    <%= price_tag account.book_balance, "inline-block" %>
+    <%= link_to price_tag(account.book_balance, "inline-block"), {:controller => "accounts", :action => "show", :id => account.id} %>
 </div>
 <div class="zurb-row">
     Outstanding Checks Balance =

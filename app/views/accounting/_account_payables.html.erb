@@ -1,11 +1,10 @@
-<% accounts = Account.raw(session[:builder_id]) %>
-<% if accounts.any? %>
+<% if bank_accounts.any? %>
   <div class="zurb-row">
       Account
-      <%= hidden_field_tag(:account_id, session[:account_id], {:class => "to_select2", :data => {:source => select2_bank_accounts_json, :remote => true, :url => url_for(:action => "show_account_details_payables")}}) %>
+      <%= hidden_field_tag(:account_id, session[:account_id] || bank_accounts.first.id, {:class => "to_select2", :data => {:source => select2_bank_accounts_json, :remote => true, :url => url_for(:action => "show_account_details_payables")}}) %>
   </div>
   <div class="account-details">
-      <%= render(:partial => "account_details_payables", :locals => {:account => session[:account_id].present? ? Account.find(session[:account_id].to_i) : accounts.first}) %>
+      <%= render(:partial => "account_details_payables", :locals => {:account => session[:account_id].present? ? Account.find(session[:account_id].to_i) : bank_accounts.first}) %>
   </div>
 
   <div class="zurb-row">
