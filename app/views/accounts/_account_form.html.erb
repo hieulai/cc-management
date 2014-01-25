@@ -7,7 +7,7 @@
 <div class="control-group">
     <%= f.label :category, "Sub-Account Of", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.hidden_field(:parent_id, :data => select2_account_json ) %>
+        <%= f.hidden_field(:parent_id, :class => "to_select2", :data => {:source => select2_account_json}) %>
     </div>
 </div>
 

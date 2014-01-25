@@ -168,4 +168,19 @@ $(document).ready(function() {
         });
     });
 
+    $("input.to_select2").each(function () {
+        $(this).select2({
+            width: "220px",
+            data: {results: JSON.parse($(this).attr("data-source")), text: "name"},
+            placeholder: "",
+            allowClear: true,
+            formatSelection: function (item) {
+                return item.name
+            },
+            formatResult: function (item) {
+                return item.name
+            }
+        });
+    });
+
 })

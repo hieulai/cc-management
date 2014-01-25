@@ -13,4 +13,15 @@ module AccountingHelper
     result << ['New', raw_categories.map { |c| [c.name, c.id] }] if raw_categories.any?
     result
   end
+
+  def select2_bank_accounts_json
+    json = []
+    bank_account = Account.raw(session[:builder_id]).where(:name => "Bank Accounts").first
+    if bank_account
+      Account.raw(session[:builder_id]).where(:parent_id => bank_account.id).each do |a|
+        json << a.as_select2_json
+      end
+    end
+    json.to_json
+  end
 end
