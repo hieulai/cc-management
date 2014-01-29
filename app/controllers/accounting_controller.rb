@@ -81,6 +81,7 @@ class AccountingController < ApplicationController
         end
         return
       end
+      @receipt.received_at ||= deposit.date
     end
 
     if @receipt.save

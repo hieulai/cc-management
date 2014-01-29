@@ -18,7 +18,12 @@
               <%= f.collection_radio_buttons(:uninvoiced, [[false, "Receipt for Invoice"], [true, "Uninvoiced Receipt"]], :first, :last, {}, {:data => {:remote => true, :url => url_for(:action => "toggle_uninvoiced", :receipt_id => @receipt.id)}}) %>
           </div>
       </div>
-      <% unless @receipt.uninvoiced
+      <% if @receipt.uninvoiced %>
+        <div class="control-group" id="client-select">
+            <%= f.label :payor, "Payor", class: 'col-lg-2 control-label' %>
+            <div class="controls"><%= f.text_field(:payor) %></div>
+        </div>
+      <% else
            clients = Client.has_unbilled_invoices(session[:builder_id])
            clients << @receipt.client if @receipt.client
            clients.uniq!
@@ -76,6 +81,7 @@
             <div class="control-group">
                 <%= label_tag 'deposit[notes]', "Deposit Notes", class: 'col-lg-2 control-label' %>
                 <div class="controls"><%= text_area_tag('deposit[notes]') %></div>
+                <%= hidden_field_tag('deposit[from_receipt]') %>
             </div>
         </div>
     </div>

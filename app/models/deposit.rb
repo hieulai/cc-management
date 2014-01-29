@@ -4,14 +4,16 @@ class Deposit < ActiveRecord::Base
   has_many :deposits_receipts, :dependent => :destroy
   has_many :receipts, :through => :deposits_receipts
 
-  attr_accessible :date, :notes, :reconciled, :account_id, :builder_id, :deposits_receipts_attributes, :reference
+  attr_accessible :date, :notes, :reconciled, :from_receipt, :account_id, :builder_id, :deposits_receipts_attributes, :reference
   accepts_nested_attributes_for :deposits_receipts, :allow_destroy => true
+  attr_accessor :from_receipt
 
   default_scope order("date DESC")
 
   after_update :update_account_balance, :if => :account_id_changed?
 
   validates_presence_of :account, :builder
+  validates_presence_of :date, :if => Proc.new { |r| r.from_receipt }
 
   def amount
     deposits_receipts.map(&:amount).compact.sum if deposits_receipts.any?

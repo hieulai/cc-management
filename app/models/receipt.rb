@@ -9,7 +9,7 @@ class Receipt < ActiveRecord::Base
   has_many :deposits, :through => :deposits_receipts
   has_many :receipts_items, :dependent => :destroy
 
-  attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :client_id, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes
+  attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :payor, :client_id, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true
   accepts_nested_attributes_for :receipts_items, reject_if: :all_blank, allow_destroy: true
   attr_accessor :create_deposit
@@ -22,8 +22,9 @@ class Receipt < ActiveRecord::Base
   before_save :check_readonly
   after_save :clear_old_data
 
-  validates_presence_of :builder, :method
+  validates_presence_of :builder, :method, :received_at
   validates_presence_of :client, :if => Proc.new { |r| !r.uninvoiced? }
+  validates_presence_of :payor, :if => Proc.new { |r| r.uninvoiced? }
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 
@@ -45,6 +46,10 @@ class Receipt < ActiveRecord::Base
 
   def deposit_receipt(deposit_id)
     self.deposits_receipts.where(:deposit_id => deposit_id).first
+  end
+
+  def payer
+    uninvoiced ? payor : client.try(:full_name)
   end
 
   def check_readonly
