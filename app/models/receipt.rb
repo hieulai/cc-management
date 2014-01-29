@@ -7,9 +7,12 @@ class Receipt < ActiveRecord::Base
   has_many :invoices, :through => :receipts_invoices
   has_many :deposits_receipts, :dependent => :destroy
   has_many :deposits, :through => :deposits_receipts
+  has_many :receipts_items, :dependent => :destroy
 
-  attr_accessible :method, :notes, :received_at, :reference, :client_id, :receipts_invoices_attributes, :remaining_amount
+  attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :client_id, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true
+  accepts_nested_attributes_for :receipts_items, reject_if: :all_blank, allow_destroy: true
+  attr_accessor :create_deposit
 
   default_scope order("received_at DESC")
   scope :raw, lambda { |builder_id| where("builder_id = ?", builder_id) }
@@ -17,8 +20,10 @@ class Receipt < ActiveRecord::Base
   scope :billed, where('remaining_amount = 0')
 
   before_save :check_readonly
+  after_save :clear_old_data
 
-  validates_presence_of :client, :builder, :method
+  validates_presence_of :builder, :method
+  validates_presence_of :client, :if => Proc.new { |r| !r.uninvoiced? }
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 
@@ -27,7 +32,11 @@ class Receipt < ActiveRecord::Base
   end
 
   def amount
-    receipts_invoices.map(&:amount).compact.sum if receipts_invoices.any?
+    if self.uninvoiced
+      receipts_items.map(&:amount).compact.sum if receipts_items.any?
+    else
+      receipts_invoices.map(&:amount).compact.sum if receipts_invoices.any?
+    end
   end
 
   def billed_amount
@@ -42,6 +51,15 @@ class Receipt < ActiveRecord::Base
     if billed?
       errors[:base] << "This record is readonly"
       false
+    end
+  end
+
+  private
+  def clear_old_data
+    if self.uninvoiced
+      self.invoices.destroy_all
+    else
+      self.receipts_items.destroy_all
     end
   end
 end

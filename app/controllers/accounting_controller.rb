@@ -65,38 +65,60 @@ class AccountingController < ApplicationController
 
   def new_receipt
     @receipt = Receipt.new
-    @invoices = Array.new
   end
 
   def create_receipt
     @receipt = Receipt.new(params[:receipt])
     @receipt.builder_id = session[:builder_id]
+
+    if params[:receipt][:create_deposit] == "1"
+      deposit = Deposit.new(params[:deposit].merge(:builder_id => session[:builder_id]))
+      unless deposit.valid?
+        @receipt.errors[:base] << "Deposit information invalid: <br/> #{deposit.errors.full_messages.join("<br/>")}"
+        respond_to do |format|
+          format.html { render("new_receipt") }
+          format.js { render "receipt_response" }
+        end
+        return
+      end
+    end
+
     if @receipt.save
-      redirect_to(params[:original_url].presence ||url_for(:action => 'receipts'))
+      deposit.deposits_receipts.create(receipt_id: @receipt.id, amount: @receipt.amount) if deposit && deposit.save
+      respond_to do |format|
+        format.html { redirect_to(params[:original_url].presence ||url_for(:action => 'receipts')) }
+        format.js { render :js => "window.location = '#{ params[:original_url].presence ||url_for(:action => "receipts")}'" }
+      end
     else
-      @invoices = Array.new
-      render('new_receipt')
+      respond_to do |format|
+        format.html { render('new_receipt') }
+        format.js { render "receipt_response" }
+      end
     end
   end
 
   def edit_receipt
     @receipt = Receipt.find(params[:id])
-    @invoices = (@receipt.invoices + @receipt.client.invoices.unbilled).uniq
   end
 
   def update_receipt
     @receipt = Receipt.find(params[:id])
     # Destroy all old receipts_invoices_attributes if client changed
     if params[:receipt][:client_id].present? && params[:receipt][:client_id] != @receipt.client_id.to_s
-      @receipt.receipts_invoices.each do  |ri|
+      @receipt.receipts_invoices.each do |ri|
         params[:receipt][:receipts_invoices_attributes] << {id: ri.id, _destroy: true}.with_indifferent_access
       end
     end
     if @receipt.update_attributes(params[:receipt])
-      redirect_to(:action => 'receipts')
+      respond_to do |format|
+        format.html { redirect_to(:action => 'receipts') }
+        format.js { render :js => "window.location = '#{url_for(:action => "receipts")}'" }
+      end
     else
-      @invoices = (@receipt.invoices + @receipt.client.invoices.unbilled).uniq
-      render('edit_receipt')
+      respond_to do |format|
+        format.html { render('edit_receipt') }
+        format.js { render "receipt_response" }
+      end
     end
   end
 
@@ -110,6 +132,14 @@ class AccountingController < ApplicationController
       redirect_to(:action => "receipts")
     else
       render :delete_receipt
+    end
+  end
+
+  def toggle_uninvoiced
+    @receipt = params[:receipt_id].present? ? Receipt.find(params[:receipt_id]) : Receipt.new
+    @receipt.uninvoiced = params[:receipt].presence && params[:receipt][:uninvoiced].presence
+    respond_to do |format|
+      format.js { render "accounting/uninvoiced_receipts/show_receipts_items" }
     end
   end
 
@@ -313,7 +343,7 @@ class AccountingController < ApplicationController
   def show
     
   end
-    
+
 
   def payables
   end

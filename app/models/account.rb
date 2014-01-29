@@ -5,6 +5,7 @@ class Account < ActiveRecord::Base
   has_many :children, class_name: "Account", foreign_key: "parent_id"
   has_many :sent_transfers, class_name: Transfer.name, foreign_key: "from_account_id"
   has_many :received_transfers, class_name: Transfer.name, foreign_key: "to_account_id"
+  has_many :receipts_items, :dependent => :destroy
 
   belongs_to :parent, class_name: "Account"
 

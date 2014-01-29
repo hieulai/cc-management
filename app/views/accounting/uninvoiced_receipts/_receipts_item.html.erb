@@ -1,0 +1,20 @@
+<tr class="nested-fields receipt-item">
+    <td>
+        <%= link_to_remove_association("x", f, class: 'btn', style: "margin-left: 30px") %>
+        <input type="checkbox" name="item-chosen" checked="true" style="display: none">
+    </td>
+    <td>
+        <%= autocomplete_field :name, nil, items_autocomplete_name_path, :class => 'receipt-item-name', :value => f.object.name %>
+        <%= f.hidden_field :id, :class => 'id' %>
+        <%= f.hidden_field :name, :class => 'name' %>
+    </td>
+    <td>
+        <%= f.text_field :description, :class => 'description' %>
+    </td>
+    <td>
+        <%= f.hidden_field(:account_id, :class => "to_select2", :data => {:source => select2_account_json}) %>
+    </td>
+    <td>
+        $<%= f.text_field :amount, :class => 'input-mini amount' %>
+    </td>
+</tr>

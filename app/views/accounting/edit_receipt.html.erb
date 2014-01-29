@@ -4,12 +4,9 @@
         <div class="columns margin-bottom">
             <h1 class="center">Edit Receipt</h1>
             <%= link_to("Delete", {:action => 'delete_receipt', :id => @receipt.id}, :class => 'btn btn-danger f-right') %>
-            <%= form_for(@receipt, :url => {:action => 'update_receipt', :id => @receipt.id}, :html => {:class => 'form-horizontal'}) do |f| %>
-                <%= render(:partial => "receipt_form", :locals => {:f => f}) %>
-                <div class="form-buttons">
-                    <%= submit_tag("Save", :class => 'btn') %>
-                </div>
-            <% end %>
+            <div id="receipt-form">
+                <%= render(:partial => "receipt_form") %>
+            </div>
         </div>
     </div>
 </div>

@@ -1,0 +1,21 @@
+<table class="grid-view" summary="Bill List">
+    <tr class="header">
+        <th></th>
+        <th>Item</th>
+        <th>Item Description</th>
+        <th>Account</th>
+        <th>Amount</th>
+    </tr>
+    <%= f.fields_for :receipts_items do |ct| %>
+      <%= render('accounting/uninvoiced_receipts/receipts_item', f: ct) %>
+    <% end %>
+    <tr id="tr-receipt-item-add" class="receipt-item">
+        <td colspan="5">
+            <%= link_to_add_association 'Add Item', f, :receipts_items, partial: 'accounting/uninvoiced_receipts/receipts_item', "data-association-insertion-node" => "tr#tr-receipt-item-add", :"data-association-insertion-method" => "before" %>
+        </td>
+    </tr>
+    <tr class="total xlarge">
+        <td colspan="4">TOTALS</td>
+        <td class="right" id="receipt-amount"></td>
+    </tr>
+</table>

@@ -42,9 +42,11 @@
               </div>
           </td>
           <td class="right">
-              $<%= text_field_tag 'receipt[receipts_invoices_attributes][][amount]', billed_amount , :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10 %>
+              <div class="text-field " style="display: <%= text_field_display %>">
+                  $<%= text_field_tag 'receipt[receipts_invoices_attributes][][amount]', billed_amount, :class => "input-small", :size => 10 %>
+              </div>
               <div class="value-field" style="display: <%= value_display %>">
-                  <%= price(billed_amount) %>
+                  <%= price_tag(billed_amount) %>
               </div>
           </td>
       </tr>

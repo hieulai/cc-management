@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140125024214) do
+ActiveRecord::Schema.define(:version => 20140125164157) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -496,9 +496,10 @@ ActiveRecord::Schema.define(:version => 20140125024214) do
     t.date     "received_at"
     t.integer  "reference"
     t.text     "notes"
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
     t.decimal  "remaining_amount", :precision => 10, :scale => 2
+    t.boolean  "uninvoiced",                                      :default => false
   end
 
   create_table "receipts_invoices", :force => true do |t|
@@ -511,6 +512,19 @@ ActiveRecord::Schema.define(:version => 20140125024214) do
 
   add_index "receipts_invoices", ["invoice_id"], :name => "index_receipts_invoices_on_invoice_id"
   add_index "receipts_invoices", ["receipt_id"], :name => "index_receipts_invoices_on_receipt_id"
+
+  create_table "receipts_items", :force => true do |t|
+    t.integer  "receipt_id"
+    t.integer  "account_id"
+    t.string   "name"
+    t.string   "description"
+    t.decimal  "amount",      :precision => 10, :scale => 2
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+  end
+
+  add_index "receipts_items", ["account_id"], :name => "index_receipts_items_on_account_id"
+  add_index "receipts_items", ["receipt_id"], :name => "index_receipts_items_on_receipt_id"
 
   create_table "specifications", :force => true do |t|
     t.integer  "project_id"

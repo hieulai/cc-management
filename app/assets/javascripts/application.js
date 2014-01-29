@@ -69,6 +69,39 @@ var toggleItemInputs = function (checbox, s) {
     $(checbox).closest("tr").find('.value-field').toggle(!s);
 };
 
+var transformToSelect2For = function (element) {
+    if (!element) {
+        element = document;
+    }
+    $(element).find("input.to_select2").each(function () {
+        $(this).select2({
+            width: "220px",
+            data: {results: JSON.parse($(this).attr("data-source")), text: "name"},
+            placeholder: "",
+            allowClear: true,
+            formatSelection: function (item) {
+                return item.name
+            },
+            formatResult: function (item) {
+                return item.name
+            }
+        });
+    });
+};
+
+var transformToDatePickerFor = function (element) {
+    if (!element) {
+        element = document;
+    }
+    $(element).find(".datepicker").each(function () {
+        $(this).datepicker({
+            altField: "#" + $(this).closest(".controls").find('input[type="hidden"]').attr("id"),
+            altFormat: "yy-mm-dd",
+            dateFormat: "mm-dd-yy"
+        });
+    });
+};
+
 $(document).ready(function() {
     load_add_link();
     $("select").select2({
@@ -83,6 +116,11 @@ $(document).ready(function() {
             .data("association-insertion-method", 'after')
             .click();
     });
+
+    $(document).bind('cocoon:after-insert', function (e, added_object) {
+        transformToSelect2For(added_object);
+    });
+
     $('.cocoon-container').bind('cocoon:after-insert', function (e, task_to_be_added) {
         if (addTaskLink = $("#add_item:visible")){
             addTaskLink.hide()
@@ -146,13 +184,6 @@ $(document).ready(function() {
         }
     });
 
-    $(".datepicker").each(function(){
-        $(this).datepicker({
-            altField: "#" + $(this).closest(".controls").find('input[type="hidden"]').attr("id"),
-            altFormat: "yy-mm-dd",
-            dateFormat: "mm-dd-yy"
-        });
-    })
     $(document).ajaxStart(function () {
         $(".loader").show();
         $('input[type="submit"]').attr('disabled', true);
@@ -167,20 +198,7 @@ $(document).ready(function() {
             allowClear: true
         });
     });
-
-    $("input.to_select2").each(function () {
-        $(this).select2({
-            width: "220px",
-            data: {results: JSON.parse($(this).attr("data-source")), text: "name"},
-            placeholder: "",
-            allowClear: true,
-            formatSelection: function (item) {
-                return item.name
-            },
-            formatResult: function (item) {
-                return item.name
-            }
-        });
-    });
+    transformToDatePickerFor();
+    transformToSelect2For();
 
 })

@@ -7,7 +7,7 @@
         <th>Amount</th>
 
     </tr>
-    <% receipts.sort_by{ |x| x.received_at }.reverse.each do |receipt| %>
+    <% receipts.sort_by { |x| x.received_at || Date.new(0) }.reverse.each do |receipt| %>
       <%
          if receipt.deposit_receipt(@deposit.id).present?
            text_field_display = ""
@@ -28,11 +28,13 @@
           </td>
           <td class="center"><%= receipt.received_at %></td>
           <td class="center"><%= receipt.id %></td>
-          <td><%= receipt.client.full_name %></td>
+          <td><%= receipt.client.try(:full_name) %></td>
           <td class="right">
-              $<%= text_field_tag 'deposit[deposits_receipts_attributes][][amount]', billed_amount, :class => "text-field input-small", :style => "display: #{text_field_display}", :size => 10, :disabled => true %>
+              <div class="text-field " style="display: <%= text_field_display %>">
+                  $<%= text_field_tag 'deposit[deposits_receipts_attributes][][amount]', billed_amount, :class => "input-small", :size => 10, :disabled => true %>
+              </div>
               <div class="value-field" style="display: <%= value_display %>">
-                  <%= price(billed_amount) %>
+                  <%= price_tag(billed_amount) %>
               </div>
           </td>
       </tr>

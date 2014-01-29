@@ -1,43 +1,108 @@
-<% clients =  Client.has_unbilled_invoices(session[:builder_id])
-   (clients<< @receipt.client).uniq! unless @receipt.new_record?
-%>
+<%= form_for(@receipt, :url => {:action => @receipt.new_record? ? 'create_receipt' : 'update_receipt', :id => @receipt.id}, :remote => true, :html => {:class => 'form-horizontal'}) do |f| %>
+  <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
+  <% if @receipt.errors.any? %>
+    <div id="errorExplanation">
+        <h2><%= pluralize(@receipt.errors.count, "Error") %> prohibited
+            this receipt from being saved:</h2>
+        <ul>
+            <% @receipt.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+        </ul>
+    </div>
+  <% end %>
+  <div class="span6">
+      <div class="control-group">
+          <%= f.label :type, 'Type', class: 'col-lg-2 control-label' %>
+          <div class="controls">
+              <%= f.collection_radio_buttons(:uninvoiced, [[false, "Receipt for Invoice"], [true, "Uninvoiced Receipt"]], :first, :last, {}, {:data => {:remote => true, :url => url_for(:action => "toggle_uninvoiced", :receipt_id => @receipt.id)}}) %>
+          </div>
+      </div>
+      <% unless @receipt.uninvoiced
+           clients = Client.has_unbilled_invoices(session[:builder_id])
+           clients << @receipt.client if @receipt.client
+           clients.uniq!
+      %>
+        <div class="control-group" id="client-select">
+            <%= f.label :client_id, "Client", class: 'col-lg-2 control-label' %>
+            <div class="controls"><%= f.select(:client_id, clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %></div>
+        </div>
+      <% end %>
+      <div class="control-group">
+          <%= f.label :method, "Payment Type", class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= f.select(:method, Receipt::METHODS, {:include_blank => true}) %></div>
+      </div>
+      <div class="control-group">
+          <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= f.text_field(:reference) %></div>
+      </div>
+      <div class="control-group">
+          <%= f.label :received_at, "Date Received", class: 'col-lg-2 control-label' %>
+          <div class="controls">
+              <%= f.text_field(:received_at, class: 'datepicker', :value => f.object.try(:received_at).try(:strftime, '%m-%d-%Y')) %>
+              <%= f.hidden_field(:received_at, id: 'receipt_received_date_hidden', :value => f.object.try(:received_at).try(:strftime, '%Y-%m-%d')) %>
+          </div>
+      </div>
+      <div class="control-group">
+          <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= f.text_area(:notes, :size => '10x3') %></div>
+      </div>
+  </div>
 
-<% if @receipt.errors.any? %>
-  <div id="errorExplanation">
-      <h2><%= pluralize(@receipt.errors.count, "Error") %> prohibited
-          this receipt from being saved:</h2>
-      <ul>
-          <% @receipt.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-      </ul>
+  <% if @receipt.new_record? %>
+    <div class="span6">
+        <div class="control-group">
+            <%= f.label :create_deposit, "Create Deposit Simultaneously", class: 'col-lg-2 control-label' %>
+            <div class="controls">
+                <%= f.check_box :create_deposit, :class => 'toggle', :target => '#deposit-from-receipt' %>
+            </div>
+        </div>
+        <div id="deposit-from-receipt" style="<% unless @receipt.create_deposit == "1" %> display: none<% end %>">
+            <div class="control-group">
+                <%= label_tag 'deposit[account_id]', "Deposit To", class: 'col-lg-2 control-label' %>
+                <div class="controls"><%= select_tag('deposit[account_id]', options_for_select(Account.raw(session[:builder_id]).collect { |s| [s.name, s.id] }), {:include_blank => true}) %></div>
+            </div>
+            <div class="control-group">
+                <%= label_tag 'deposit[date]', "Deposit Date", class: 'col-lg-2 control-label' %>
+                <div class="controls">
+                    <%= text_field_tag('deposit[date]', nil, class: 'datepicker') %>
+                    <%= hidden_field_tag('deposit[date]', nil, id: 'deposit_date_hidden') %>
+                </div>
+            </div>
+            <div class="control-group">
+                <%= label_tag 'deposit[reference]', "Reference #", class: 'col-lg-2 control-label' %>
+                <div class="controls"><%= text_field_tag 'deposit[reference]' %></div>
+            </div>
+            <div class="control-group">
+                <%= label_tag 'deposit[notes]', "Deposit Notes", class: 'col-lg-2 control-label' %>
+                <div class="controls"><%= text_area_tag('deposit[notes]') %></div>
+            </div>
+        </div>
+    </div>
+  <% end %>
+
+  <div id="receipt-items-placeholder">
+      <% unless @receipt.uninvoiced %>
+        <% if @receipt.new_record?
+             invoices = []
+           else
+             invoices= @receipt.invoices
+             invoices+= @receipt.client.invoices.unbilled if @receipt.client
+             invoices.uniq!
+           end
+        %>
+        <%= render(:partial => "receipt_invoices", :locals => {:f => f, :invoices => invoices}) %>
+      <% else
+           if @receipt.receipts_items.empty? && @receipt.uninvoiced
+             5.times do |i|
+               @receipt.receipts_items << ReceiptsItem.new
+             end
+           end
+      %>
+        <%= render(:partial => 'accounting/uninvoiced_receipts/receipts_items', :locals => {:f => f}) %>
+      <% end %>
+  </div>
+  <div class="form-buttons">
+      <%= submit_tag( @receipt.new_record? ? "Create" : "Save", :class => 'btn') %>
   </div>
 <% end %>
-
-<div class="control-group">
-    <%= f.label :client_id, "Client", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.select(:client_id, clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %></div>
-</div>
-<div class="control-group">
-    <%= f.label :method, "Payment Type", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.select(:method, Receipt::METHODS, {:include_blank => true}) %></div>
-</div>
-<div class="control-group">
-    <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.text_field(:reference) %></div>
-</div>
-<div class="control-group">
-    <%= f.label :received_at, "Date Received", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-      <%= f.text_field(:received_at, class: 'datepicker', :value => f.object.try(:received_at).try(:strftime, '%m-%d-%Y')) %>
-      <%= f.hidden_field(:received_at, id: 'receipt_received_date_hidden', :value => f.object.try(:received_at).try(:strftime, '%Y-%m-%d')) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.text_area(:notes, :size => '10x3') %></div>
-</div>
-
-<div id="invoice-placeholder">
-    <%= render(:partial => "receipt_invoices", :locals => {:f => f, :invoices => @invoices}) %>
-</div>

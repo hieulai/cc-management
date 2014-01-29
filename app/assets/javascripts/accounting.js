@@ -47,31 +47,31 @@ var calculatePurchasableSubTotalAndTotal = function () {
     }
 };
 
-var calculateAccounting = function(parent, child) {
-    if ($("#" + parent + "-amount").size() > 0) {
-        var total = 0;
-        $('input[name="' + child + '-chosen"]:checked').each(function () {
-            total += text_to_number($(this).closest("tr").find('input[name="' + parent + '[' + parent + 's_' + child + 's_attributes][][amount]"]').val());
-        });
-        $("#" + parent + "-amount").html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
-    }
+var calculateAccounting = function (parent, child) {
+    var total = 0;
+    $('tr:visible input[name="' + child + '-chosen"]:checked').each(function () {
+        total += text_to_number($(this).closest("tr").find('input[name$="[amount]"]').val());
+    });
+    $("#" + parent + "-amount").html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
 };
 
 var initAccounting = function (parent, child) {
-    calculateAccounting(parent, child);
-    $(document).on('change', 'input[name="' + child + '-chosen"]', function () {
-        if ($(this).is(":checked")) {
-            toggleItemInputs(this, true);
-            $(this).closest("tr").find('input[name="' + parent + '[' + parent + 's_' + child + 's_attributes][][_destroy]"]').val("false");
-        } else {
-            toggleItemInputs(this, false);
-            $(this).closest("tr").find('input[name="' + parent + '[' + parent + 's_' + child + 's_attributes][][_destroy]"]').val("true");
-        }
+    if ($("#" + parent + "-amount").size() > 0) {
         calculateAccounting(parent, child);
-    });
-    $(document).on('change', 'input[name="' + parent + '[' + parent + 's_' + child + 's_attributes][][amount]"] ', function () {
-        calculateAccounting(parent, child);
-    });
+        $(document).on('change', 'input[name="' + child + '-chosen"]', function () {
+            if ($(this).is(":checked")) {
+                toggleItemInputs(this, true);
+                $(this).closest("tr").find('input[name$="[_destroy]"]').val("false");
+            } else {
+                toggleItemInputs(this, false);
+                $(this).closest("tr").find('input[name$="[_destroy]"]').val("true");
+            }
+            calculateAccounting(parent, child);
+        });
+        $(document).on('change', 'input[name$="[amount]"]', function () {
+            calculateAccounting(parent, child);
+        });
+    }
 };
 
 var calculatePostTaxAmount = function (i) {
@@ -96,6 +96,7 @@ $(document).ready(function() {
     initAccounting("payment", "bill");
     initAccounting("receipt", "invoice");
     initAccounting("deposit", "receipt");
+    initAccounting("receipt", "item");
 
     $(document).on('change', 'input[name$="[][qty]"], input[name$="[][estimated_cost]"], input[name$="[][actual_cost]"]', function () {
         calculatePurchaseAmount(this);
@@ -140,7 +141,16 @@ $(document).ready(function() {
         $("a#add-purchased-item").click();
     });
 
-    $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
+    $("#receipt-form").on('railsAutocomplete.select', '.receipt-item-name', function (event,data) {
+        $(this).closest("tr").find("input.name").val(data.item.label);
+        $(this).closest("tr").find("input.description").val(data.item.description);
+    });
+
+    $("#receipt-form").bind('cocoon:after-remove', function () {
+        calculateAccounting("receipt", "item");
+    });
+
+    $(document).on('click', '.purchgasable-items-list a.remove-item', function (e) {
         e.preventDefault();
         $(this).closest("tr").hide();
         $(this).closest("tr").find('input[name$="[][_destroy]"]').val("true");
