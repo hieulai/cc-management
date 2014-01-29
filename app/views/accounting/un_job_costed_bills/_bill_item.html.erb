@@ -1,0 +1,19 @@
+<tr class="nested-fields item" id="item_<%= f.object.id %> ">
+    <td>
+        <%= link_to_remove_association("x", f, class: 'btn') %>
+        <input type="checkbox" name="item-chosen" checked="true" style="display: none">
+    </td>
+    <td>
+        <%= f.autocomplete_field :name, items_autocomplete_name_path, :class => 'un-job-costed-item-name' %>
+        <%= f.hidden_field :id %>
+    </td>
+    <td>
+        <%= f.text_field :description, :class => "description text-field", :size => 10 %>
+    </td>
+    <td class="right">
+        <%= f.select(:account_id, Account.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+    </td>
+    <td class="right">
+        $<%= f.text_field :amount, :class => "text-field input-mini amount", :size => 10 %>
+    </td>
+</tr>

@@ -97,6 +97,7 @@ $(document).ready(function() {
     initAccounting("receipt", "invoice");
     initAccounting("deposit", "receipt");
     initAccounting("receipt", "item");
+    initAccounting("bill", "item");
 
     $(document).on('change', 'input[name$="[][qty]"], input[name$="[][estimated_cost]"], input[name$="[][actual_cost]"]', function () {
         calculatePurchaseAmount(this);
@@ -141,6 +142,14 @@ $(document).ready(function() {
         $("a#add-purchased-item").click();
     });
 
+    $("#bill-form").on('railsAutocomplete.select', '.un-job-costed-item-name', function (event, data) {
+        $(this).closest("tr").find("input.description").val(data.item.description);
+    });
+
+    $("#bill-form").bind('cocoon:after-remove', function () {
+        calculateAccounting("bill", "item");
+    });
+
     $("#receipt-form").on('railsAutocomplete.select', '.receipt-item-name', function (event,data) {
         $(this).closest("tr").find("input.name").val(data.item.label);
         $(this).closest("tr").find("input.description").val(data.item.description);
@@ -150,7 +159,7 @@ $(document).ready(function() {
         calculateAccounting("receipt", "item");
     });
 
-    $(document).on('click', '.purchgasable-items-list a.remove-item', function (e) {
+    $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
         e.preventDefault();
         $(this).closest("tr").hide();
         $(this).closest("tr").find('input[name$="[][_destroy]"]').val("true");

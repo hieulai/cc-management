@@ -31,8 +31,8 @@
                 <%= b.id %>
             </td>
             <td class="center"><%= link_to b.purchase_order_id, {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :target => "_blank" if b.purchase_order.present? %></td>
-            <td><%= b.source(:project).name %></td>
-            <td><%= b.source(:categories_template).category.name %></td>
+            <td><%= b.source(:project).try(:name) %></td>
+            <td><%= b.source(:categories_template).try(:category).try(:name) %></td>
             <td><%= b.source(:vendor).try(:display_name) %></td>
             <td class="right"><%= number_to_currency(b.source(:total_amount)) %></td>
             <td><%= b.source(:notes) %></td>

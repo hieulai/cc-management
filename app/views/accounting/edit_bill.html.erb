@@ -3,28 +3,14 @@
     <div class="zurb-row">
         <div class="columns margin-bottom">
             <h2>Edit Bill</h2>
-            <%= link_to("Delete", {:action => 'delete_bill', :id => @purchasable.id}, :class => 'btn btn-danger f-right') %>
-            <%= form_for @purchasable, :url => {:action => 'update_bill', :id => @purchasable.id}, :remote => true, :html => {:class => 'edit_bill form-horizontal'} do |f| %>
-                <% if @purchasable.errors.any? %>
-                    <div id="errorExplanation">
-                        <h2><%= pluralize(@purchasable.errors.count, "Error") %> prohibited
-                            this bill from being saved:</h2>
-                        <ul>
-                            <% @purchasable.errors.full_messages.each do |msg| %>
-                                <li><%= msg.html_safe %></li>
-                            <% end %>
-                        </ul>
-                    </div>
-                <% end %>
-                <%= render(:partial => "bill_form", :locals => {:f => f, :purchasable => @purchasable}) %>
-                <div id="item-placeholder">
-                    <%= render(:partial => "bill_items", :locals => {:f => f, :purchasable => @purchasable, :categories_template => @purchasable.categories_template}) %>
-                </div>
-            <% end %>
+            <%= link_to("Delete", {:action => 'delete_bill', :id => @bill.id}, :class => 'btn btn-danger f-right') %>
+            <div id="bill-form">
+                <%= render(:partial => "bill_form", :locals => {:purchasable => @bill}) %>
+            </div>
             <div class="form-buttons">
-                <%= submit_tag("Save & New", :data => {:form => ".edit_bill", :original_url => "#{url_for(:action => "new_bill")}"}, :class => 'btn') %>
+                <%= submit_tag("Save & New", :data => {:form => ".bill-form", :original_url => "#{url_for(:action => "new_bill")}"}, :class => 'btn') %>
                 <%= link_to("Cancel", {:action => 'bills'}, :class => 'btn') %>
-                <%= submit_tag("Save & Close", :data => {:form => ".edit_bill"}, :class => 'btn') %>
+                <%= submit_tag("Save & Close", :data => {:form => ".bill-form"}, :class => 'btn') %>
             </div>
         </div>
     </div>
