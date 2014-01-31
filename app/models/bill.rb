@@ -23,7 +23,7 @@ class Bill < ActiveRecord::Base
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :paid, where('remaining_amount = 0')
 
-  before_save :check_readonly, :check_zero_amount
+  before_save :check_readonly, :check_zero_amount, :if => :changed?
   after_update :destroy_old_purchased_categories_template
   after_save :clear_old_data
   after_destroy :destroy_purchased_categories_template

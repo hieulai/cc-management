@@ -17,7 +17,7 @@
               <%= link_to("Edit", {:action => 'edit_receipt', :id => receipt.id}, :class => 'action edit clickable-link', style: 'display: none') %>
           </td>
           <td class="center"><%= receipt.received_at %></td>
-          <td><%= receipt.payer %></td>
+          <td><%= receipt.payer_name %></td>
           <td><%= receipt.method %></td>
           <td class="right"><%= price_tag(receipt.amount) %></td>
           <td><%= receipt.notes %></td>

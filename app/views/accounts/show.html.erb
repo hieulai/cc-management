@@ -36,7 +36,7 @@
                         <th>Date</th>
                         <th>Type</th>
                         <th>Reference #</th>
-                        <th>Payee</th>
+                        <th>Payor/Payee</th>
                         <th>Memo</th>
                         <th>Amount</th>
                         <th>R</th>
@@ -56,6 +56,13 @@
                           <% balance += t.amount.to_f %>
                         <% else %>
                           <% balance -= t.amount.to_f %>
+                        <% end %>
+                      <% elsif t.instance_of? ReceiptsItem %>
+                        <%= render(:partial => "tr_receipts_item", :locals => {:t => t, :balance => balance}) %>
+                        <% if @account.kind_of? Account::POSITIVES %>
+                          <% balance -= t.amount.to_f %>
+                        <% elsif @account.kind_of? Account::NEGATIVES %>
+                          <% balance += t.amount.to_f %>
                         <% end %>
                       <% end %>
                     <% end %>

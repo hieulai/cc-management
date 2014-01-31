@@ -154,6 +154,10 @@ $(document).ready(function() {
         $(this).closest("tr").find("input.name").val(data.item.label);
         $(this).closest("tr").find("input.description").val(data.item.description);
     });
+    $("#receipt-form").on('railsAutocomplete.select', '.receipt-people-name', function (event,data) {
+        $(this).nextAll("input.payerId").val(data.item.id);
+        $(this).nextAll("input.payerType").val(data.item.type);
+    });
 
     $("#receipt-form").bind('cocoon:after-remove', function () {
         calculateAccounting("receipt", "item");

@@ -12,25 +12,34 @@ class Account < ActiveRecord::Base
   attr_accessible :name, :balance, :opening_balance , :number, :category, :subcategory, :prefix, :parent_id
 
   DEFAULTS = ["Revenue", "Cost of Goods Sold", "Expenses", "Assets", "Liabilities", "Equity", "Accounts Payable", "Accounts Receivable", "Bank Accounts"]
+  POSITIVES = ["Liabilities", "Revenue", "Equity"]
+  NEGATIVES = ["Assets"]
 
-  scope :has_unbilled_receipts, lambda { |builder_id| joins(:receipts).where("accounts.builder_id= ? AND (receipts.remaining_amount is NULL OR receipts.remaining_amount > 0)", builder_id).uniq.all }
   scope :raw, lambda { |builder_id| where("builder_id = ?", builder_id) }
   scope :top, where(:parent_id => nil)
   scope :undefault, where('name not in (?)', DEFAULTS)
 
   before_destroy :check_if_default
-  before_update :check_if_default
+  before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
 
-  validates_uniqueness_of :name, scope: [:builder_id, :parent_id ]
+  validates_uniqueness_of :name, scope: [:builder_id]
   validate :disallow_self_reference
 
   def transactions
-    r = payments + deposits + sent_transfers + received_transfers
-    r.sort! { |x, y| y.date <=> x.date }
+    r = payments + deposits + sent_transfers + received_transfers + billed_receipts_items
+    r.sort! { |x, y| y.date || Date.new(0) <=> x.date || Date.new(0) }
   end
 
   def bank_balance
-    balance.to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum - received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum
+    bb = balance.to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum - received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum
+    if self.billed_receipts_items.any?
+      if self.kind_of? POSITIVES
+        bb+= billed_receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
+      elsif self.kind_of? NEGATIVES
+        bb-= billed_receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
+      end
+    end
+    bb.round(2)
   end
 
   def book_balance
@@ -43,6 +52,13 @@ class Account < ActiveRecord::Base
 
   def opening_balance
     ob = balance.to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum + sent_transfers.map(&:amount).compact.sum
+    if self.billed_receipts_items.any?
+      if self.kind_of? POSITIVES
+        ob-= billed_receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
+      elsif self.kind_of? NEGATIVES
+        ob+= billed_receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
+      end
+    end
     ob.round(2)
   end
 
@@ -50,11 +66,25 @@ class Account < ActiveRecord::Base
     self.balance = self.balance.to_f + b.to_f - self.opening_balance
   end
 
-  def as_select2_json
+  def kind_of?(names)
+    if names.include? self.name
+      true
+    elsif parent
+      parent.kind_of? names
+    else
+      false
+    end
+  end
+
+  def billed_receipts_items
+    self.receipts_items.select { |ri| ri.billed? }
+  end
+
+  def as_select2_json(filters = [])
     {
         :id => self.id,
         :name => self.name,
-        :children => self.children.collect { |a| a.as_select2_json }
+        :children => self.children.reject { |a| filters.include? a.name }.collect { |a| a.as_select2_json }
     }
   end
 
@@ -67,7 +97,7 @@ class Account < ActiveRecord::Base
   end
 
   def disallow_self_reference
-    if self.parent_id == self.id
+    if self.id && self.parent_id == self.id
       errors.add(:base, 'Cannot set current account as sub account of it')
     end
   end

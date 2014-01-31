@@ -29,9 +29,9 @@ module AccountingHelper
 
   def select2_gl_accounts_json
     json = []
-    gl_accounts = Account.raw(session[:builder_id]).where(:name => ["Revenue","Liabilities","Equity"])
+    gl_accounts = Account.raw(session[:builder_id]).where(:name => ["Revenue","Liabilities","Equity", "Assets"])
     gl_accounts.each do |a|
-      json << a.as_select2_json
+      json << a.as_select2_json(["Bank Accounts"])
     end
     json.to_json
   end

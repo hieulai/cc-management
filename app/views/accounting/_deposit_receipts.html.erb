@@ -28,7 +28,7 @@
           </td>
           <td class="center"><%= receipt.received_at %></td>
           <td class="center"><%= receipt.id %></td>
-          <td><%= receipt.client.try(:full_name) %></td>
+          <td><%= receipt.payer_name %></td>
           <td class="right">
               <div class="text-field " style="display: <%= text_field_display %>">
                   $<%= text_field_tag 'deposit[deposits_receipts_attributes][][amount]', billed_amount, :class => "input-small", :size => 10, :disabled => true %>

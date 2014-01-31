@@ -3,6 +3,7 @@ class Vendor < ActiveRecord::Base
   has_many :bid, :dependent => :destroy
   has_many :payments
   has_many :bills
+  has_many :receipts, as: :payer
   
   attr_accessible :company,:vendor_type,:trade,:primary_first_name,:primary_last_name,:primary_email,:primary_phone1,:primary_phone2,:secondary_first_name,:secondary_last_name,:secondary_email,
   :secondary_phone1,:secondary_phone2,:website,:address,:city,:state,:zipcode,:notes, :primary_phone1_tag,:primary_phone2_tag, :secondary_phone1_tag, :secondary_phone2_tag

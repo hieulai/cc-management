@@ -3,14 +3,14 @@ class PeopleController < ApplicationController
     
     def all
       @query = params[:query]
-      @clients = Client.where("builder_id = ? AND status = ?", session[:builder_id], "Active").search(@query)
-      @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search(@query)
-      @contacts = Contact.where("builder_id = ?", session[:builder_id]).search(@query)
+      @clients = @builder.clients.where(status: "Active").search(@query)
+      @vendors = @builder.vendors.search(@query)
+      @contacts = @builder.contacts.search(@query)
     end
     
     def list_vendors
       @query = params[:query]
-      @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search(@query)
+      @vendors = @builder.vendors.search(@query)
       respond_to do |format|
         format.html
         format.csv {send_data Vendor.to_csv(@vendors)}
@@ -22,110 +22,90 @@ class PeopleController < ApplicationController
     end
   
     def show_vendor
-      @vendor = Vendor.find(params[:id])
+      @vendor = @builder.vendors.find(params[:id])
     end
   
     def new_vendor
-      @vendor = Vendor.new
+      @vendor = @builder.vendors.new
     end
   
     def create_vendor
-      #Instantiate a new object using form parameters
-      @builder = Base::Builder.find(session[:builder_id])
-      @vendor = Vendor.new(params[:vendor])
-      #save subject
+      @vendor = @builder.vendors.new(params[:vendor])
       if @vendor.save
-        @builder.vendors << @vendor
-        #if save succeeds, redirect to list action
         redirect_to(:action => 'list_vendors')
       else
-        #if save fails, redisplay form to user can fix problems
         render('new_vendor')
       end
     end
   
     def edit_vendor
-      @vendor = Vendor.find(params[:id])
+      @vendor = @builder.vendors.find(params[:id])
     end
   
     def update_vendor
-      #Find object using form parameters
-      @vendor = Vendor.find(params[:id])
-      #Update subject
+      @vendor = @builder.vendors.find(params[:id])
       if @vendor.update_attributes(params[:vendor])
-        #if save succeeds, redirect to list action
         redirect_to(:action => 'list_vendors')
       else
-        #if save fails, redisplay form to user can fix problems
         render('edit_vendor')
       end
     end
   
     def delete_vendor
-      @vendor = Vendor.find(params[:id])
+      @vendor = @builder.vendors.find(params[:id])
     end
 
     def destroy_vendor
-      Vendor.find(params[:id]).destroy
+      @builder.vendors.find(params[:id]).destroy
       redirect_to(:action => 'list_vendors')
     end
     
     def list_contacts
       @query = params[:query]
-      @contacts = Contact.where("builder_id = ?", session[:builder_id]).search(@query)
+      @contacts = @builder.contacts.search(@query)
     end
   
     def show_contact
-      @contact = Contact.find(params[:id])
+      @contact = @builder.contacts.find(params[:id])
     end
   
     def new_contact
-      @contact = Contact.new
+      @contact = @builder.contacts.new
     end
   
     def create_contact
-      #Instantiate a new object using form parameters
-      @builder = Base::Builder.find(session[:builder_id])
-      @contact = Contact.new(params[:contact])
-      #save subject
+      @contact = @builder.contacts.new(params[:contact])
       if @contact.save
-        @builder.contacts << @contact
-        #if save succeeds, redirect to list action
         redirect_to(:action => 'list_contacts')
       else
-        #if save fails, redisplay form to user can fix problems
         render('new_contact')
       end
     end
   
     def edit_contact
-      @contact = Contact.find(params[:id])
+      @contact = @builder.contacts.find(params[:id])
     end
   
     def update_contact
-      #Find object using form parameters
-      @contact = Contact.find(params[:id])
-      #Update subject
+      @contact = @builder.contacts.find(params[:id])
       if @contact.update_attributes(params[:contact])
-        #if save succeeds, redirect to list action
         redirect_to(:action => 'list_contacts')
       else
-        #if save fails, redisplay form to user can fix problems
         render('edit_contact')
       end
     end
   
     def delete_contact
-      @contact = Contact.find(params[:id])
+      @builder.contacts.find(params[:id])
     end
 
     def destroy_contact
-      Contact.find(params[:id]).destroy
+      @builder.contacts.find(params[:id]).destroy
       redirect_to(:action => 'list_contacts')
     end
     
     def import_export
-      @vendor = Vendor.new
+      @vendor = @builder.vendors.new
     end
   
     def import
@@ -143,6 +123,17 @@ class PeopleController < ApplicationController
           redirect_to action: 'import_export', notice: e
         end
       end
+    end
+
+    def autocomplete_name
+      @peoples = []
+      @peoples << @builder.clients.where(status: "Active").search_by_name(params[:term]).all
+      @peoples << @builder.vendors.search_by_name(params[:term]).all
+      @peoples << @builder.contacts.search_by_name(params[:term]).all
+      render :json => @peoples.flatten.map { |p| {:id => p.id,
+                                                  :label => p.full_name,
+                                                  :value => p.full_name,
+                                                  :type => p.class.name} }.to_json
     end
   
   end

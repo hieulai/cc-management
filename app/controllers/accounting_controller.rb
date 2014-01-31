@@ -14,7 +14,6 @@ class AccountingController < ApplicationController
 
   def new_deposit
     @deposit = Deposit.new
-    @receipts = Receipt.unbilled
   end
 
   def create_deposit
@@ -23,14 +22,12 @@ class AccountingController < ApplicationController
     if @deposit.save
       redirect_to(params[:original_url].presence ||url_for(:action => 'deposits'))
     else
-      @receipts = Receipt.unbilled
       render('new_deposit')
     end
   end
 
   def edit_deposit
     @deposit = Deposit.find(params[:id])
-    @receipts = (@deposit.receipts + Receipt.unbilled).uniq
   end
 
   def update_deposit
@@ -44,7 +41,6 @@ class AccountingController < ApplicationController
     if @deposit.update_attributes(params[:deposit])
       redirect_to(:action => 'deposits')
     else
-      @receipts = (@deposit.receipts + @deposit.account.receipts.unbilled).uniq
       render('edit_deposit')
     end
   end
@@ -391,18 +387,6 @@ class AccountingController < ApplicationController
     if params[:payment].present? && params[:payment][:vendor_id].present?
       @vendor = Vendor.find params[:payment][:vendor_id]
       @bills = @vendor == @payment.vendor ? @vendor.bills : @vendor.bills.unpaid
-    end
-    respond_to do |format|
-      format.js {}
-    end
-  end
-
-  def show_account_receipts
-    @receipts = Array.new
-    @deposit = params[:deposit_id].present? ? Deposit.find(params[:deposit_id]) : Deposit.new
-    if params[:deposit].present? && params[:deposit][:account_id].present?
-      @account = Account.find params[:deposit][:account_id]
-      @receipts = @account == @deposit.account ? @account.receipts : @account.receipts.unbilled
     end
     respond_to do |format|
       format.js {}

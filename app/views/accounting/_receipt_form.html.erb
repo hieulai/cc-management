@@ -15,13 +15,17 @@
       <div class="control-group">
           <%= f.label :type, 'Type', class: 'col-lg-2 control-label' %>
           <div class="controls">
-              <%= f.collection_radio_buttons(:uninvoiced, [[false, "Receipt for Invoice"], [true, "Uninvoiced Receipt"]], :first, :last, {}, {:data => {:remote => true, :url => url_for(:action => "toggle_uninvoiced", :receipt_id => @receipt.id)}}) %>
+              <%= f.collection_radio_buttons(:uninvoiced, [[false, "Receipt for Invoice"], [true, "Uninvoiced Receipt"]], :first, :last, {}, {:data => {:remote => true, :url => url_for(:action => "toggle_uninvoiced", :receipt_id => @receipt.id, :original_url => params[:original_url] || @original_url)}}) %>
           </div>
       </div>
       <% if @receipt.uninvoiced %>
         <div class="control-group" id="client-select">
             <%= f.label :payor, "Payor", class: 'col-lg-2 control-label' %>
-            <div class="controls"><%= f.text_field(:payor) %></div>
+            <div class="controls">
+                <%= autocomplete_field :receipt, :payor, people_autocomplete_name_path, :class => 'receipt-people-name', :value => @receipt.payer.try(:full_name) || @receipt.payor %>
+                <%= f.hidden_field :payer_id, :class => 'payerId' %>
+                <%= f.hidden_field :payer_type, :class => 'payerType' %>
+            </div>
         </div>
       <% else
            clients = Client.has_unbilled_invoices(session[:builder_id])
@@ -65,7 +69,9 @@
         <div id="deposit-from-receipt" style="<% unless @receipt.create_deposit == "1" %> display: none<% end %>">
             <div class="control-group">
                 <%= label_tag 'deposit[account_id]', "Deposit To", class: 'col-lg-2 control-label' %>
-                <div class="controls"><%= select_tag('deposit[account_id]', options_for_select(Account.raw(session[:builder_id]).collect { |s| [s.name, s.id] }), {:include_blank => true}) %></div>
+                <div class="controls">
+                    <%= hidden_field_tag('deposit[account_id]', nil, :class => "to_select2", :data => {:source => select2_bank_accounts_json}) %>
+                </div>
             </div>
             <div class="control-group">
                 <%= label_tag 'deposit[date]', "Deposit Date", class: 'col-lg-2 control-label' %>
@@ -81,7 +87,6 @@
             <div class="control-group">
                 <%= label_tag 'deposit[notes]', "Deposit Notes", class: 'col-lg-2 control-label' %>
                 <div class="controls"><%= text_area_tag('deposit[notes]') %></div>
-                <%= hidden_field_tag('deposit[from_receipt]') %>
             </div>
         </div>
     </div>

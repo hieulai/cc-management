@@ -64,5 +64,6 @@ Cc::Application.routes.draw do
   end
 
   get 'items/autocomplete_name', to: 'items#autocomplete_name'
+  get 'people/autocomplete_name', to: 'people#autocomplete_name'
 
 end

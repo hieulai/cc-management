@@ -3,13 +3,14 @@ class Receipt < ActiveRecord::Base
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :client
+  belongs_to :payer, polymorphic: true
   has_many :receipts_invoices, :dependent => :destroy
   has_many :invoices, :through => :receipts_invoices
   has_many :deposits_receipts, :dependent => :destroy
   has_many :deposits, :through => :deposits_receipts
   has_many :receipts_items, :dependent => :destroy
 
-  attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :payor, :client_id, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes
+  attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :payer_id, :payer_type, :payor, :client_id, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true
   accepts_nested_attributes_for :receipts_items, reject_if: :all_blank, allow_destroy: true
   attr_accessor :create_deposit
@@ -19,7 +20,7 @@ class Receipt < ActiveRecord::Base
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
 
-  before_save :check_readonly
+  before_save :check_readonly, :if => :changed?
   after_save :clear_old_data
 
   validates_presence_of :builder, :method, :received_at
@@ -48,13 +49,13 @@ class Receipt < ActiveRecord::Base
     self.deposits_receipts.where(:deposit_id => deposit_id).first
   end
 
-  def payer
+  def payer_name
     uninvoiced ? payor : client.try(:full_name)
   end
 
   def check_readonly
     if billed?
-      errors[:base] << "This record is readonly"
+      errors[:base] << "This receipt is already paid and can not be modified."
       false
     end
   end
