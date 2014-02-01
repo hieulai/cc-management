@@ -12,7 +12,7 @@
         <%= f.text_field :description, :class => 'description' %>
     </td>
     <td>
-        <%= f.hidden_field(:account_id, :class => "to_select2", :data => {:source => select2_gl_accounts_json}) %>
+        <%= f.hidden_field(:account_id, :class => "to_select2", :data => {:source => select2_receipt_gl_accounts_json}) %>
     </td>
     <td>
         $<%= f.text_field :amount, :class => 'input-mini amount' %>

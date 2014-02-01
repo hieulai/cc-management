@@ -10,8 +10,8 @@
     <td>
         <%= f.text_field :description, :class => "description text-field", :size => 10 %>
     </td>
-    <td class="right">
-        <%= f.select(:account_id, Account.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+    <td>
+        <%= f.hidden_field(:account_id, :class => "to_select2", :data => {:source => select2_bill_gl_accounts_json}) %>
     </td>
     <td class="right">
         $<%= f.text_field :amount, :class => "text-field input-mini amount", :size => 10 %>

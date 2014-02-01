@@ -59,9 +59,16 @@
                         <% end %>
                       <% elsif t.instance_of? ReceiptsItem %>
                         <%= render(:partial => "tr_receipts_item", :locals => {:t => t, :balance => balance}) %>
-                        <% if @account.kind_of? Account::POSITIVES %>
+                        <% if @account.kind_of? ReceiptsItem::POSITIVES %>
                           <% balance -= t.amount.to_f %>
-                        <% elsif @account.kind_of? Account::NEGATIVES %>
+                        <% elsif @account.kind_of? ReceiptsItem::NEGATIVES %>
+                          <% balance += t.amount.to_f %>
+                        <% end %>
+                      <% elsif t.instance_of? UnJobCostedItem %>
+                        <%= render(:partial => "tr_un_job_costed_item", :locals => {:t => t, :balance => balance}) %>
+                        <% if @account.kind_of? UnJobCostedItem::POSITIVES %>
+                          <% balance -= t.amount.to_f %>
+                        <% elsif @account.kind_of? UnJobCostedItem::NEGATIVES %>
                           <% balance += t.amount.to_f %>
                         <% end %>
                       <% end %>

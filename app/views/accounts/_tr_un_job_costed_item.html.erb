@@ -1,16 +1,16 @@
 <tr class="clickable <% if t.reconciled%> unclickable <% end %>">
     <td class="center">
         <%= t.date %>
-        <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_receipt', :id => t.receipt.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+        <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_bill', :id => t.bill.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
     </td>
     <td><%= t.method %></td>
     <td><%= t.reference %></td>
     <td><%= t.payee %></td>
     <td><%= t.memo %></td>
     <td class="right">
-        <% if @account.kind_of? ReceiptsItem::POSITIVES %>
+        <% if @account.kind_of? UnJobCostedItem::POSITIVES %>
           <%= price_tag(t.amount) %>
-        <% elsif @account.kind_of? ReceiptsItem::NEGATIVES %>
+        <% elsif @account.kind_of? UnJobCostedItem::NEGATIVES %>
           <%= price_tag(t.amount ? (t.amount * -1) : t.amount) %>
         <% end %>
     </td>

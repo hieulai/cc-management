@@ -63,7 +63,7 @@
         <% if purchasable.new_record? %>
             <div class="span6">
                 <div class="control-group">
-                    <%= f.label :create_payment, "Create Payment for Bill Simultaneously", class: 'col-lg-2 control-label' %>
+                    <%= f.label :create_payment, "Create Payment Simultaneously", class: 'col-lg-2 control-label' %>
                     <div class="controls">
                         <%= f.check_box :create_payment, :class => 'toggle', :target => '#payment-from-bill' %>
                     </div>
@@ -72,7 +72,9 @@
                     <% end %>">
                     <div class="control-group">
                         <%= label_tag 'payment[account_id]', "Account", class: 'col-lg-2 control-label' %>
-                        <div class="controls"><%= select_tag('payment[account_id]', options_for_select(Account.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }), {:include_blank => true}) %></div>
+                        <div class="controls">
+                            <%= hidden_field_tag('payment[account_id]', nil, :class => "to_select2", :data => {:source => select2_bank_accounts_json}) %>
+                        </div>
                     </div>
                     <div class="control-group">
                         <%= label_tag 'payment[method]', "Type", class: 'col-lg-2 control-label' %>

@@ -13,7 +13,8 @@ var payment_reference = $('#payment_reference').val();
 var payment_memo = $('#payment_memo').val();
 
 $('#bill-form').html('<%= escape_javascript(render(:partial => "bill_form", :locals => {:purchasable => @bill})) %>');
-
+transformToSelect2For($('#bill-form'));
+transformToDatePickerFor($('#bill-form'));
 $('#original_url').val(original_url);
 $('#vendor_name').val(vendor_name);
 $('#bill_vendor_id').val(bill_vendor_id);
@@ -33,6 +34,5 @@ $('#payment_memo').val(payment_memo);
 
 <% if @bill.job_costed %>
 <% else %>
-transformToDatePickerFor();
 initAccounting("bill", "item");
 <% end %>
