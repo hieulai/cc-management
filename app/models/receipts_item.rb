@@ -34,25 +34,22 @@ class ReceiptsItem < ActiveRecord::Base
   end
 
   def charge_account
-    if account_id.present? && billed?
-      account = Account.find(self.account_id)
-      if account.kind_of? POSITIVES
-        account.update_attribute(:balance, account.balance.to_f + self.amount.to_f)
-      elsif account.kind_of? NEGATIVES
-        account.update_attribute(:balance, account.balance.to_f - self.amount.to_f)
-      end
+    return true unless account_id
+    account = Account.find(account_id)
+    if account.kind_of? POSITIVES
+      account.update_attribute(:balance, account.balance.to_f + self.amount.to_f)
+    elsif account.kind_of? NEGATIVES
+      account.update_attribute(:balance, account.balance.to_f - self.amount.to_f)
     end
   end
 
   def refund_account
-    if account_id_was.present? && billed?
-      account_was = Account.find(self.account_id_was)
-      if account_was.kind_of? POSITIVES
-        account_was.update_attribute(:balance, account_was.balance.to_f - self.amount_was.to_f)
-      elsif account.kind_of? NEGATIVES
-        account_was.update_attribute(:balance, account_was.balance.to_f + self.amount_was.to_f)
-      end
+    return true unless account_id_was
+    account_was = Account.find(account_id_was)
+    if account_was.kind_of? POSITIVES
+      account_was.update_attribute(:balance, account_was.balance.to_f - self.amount_was.to_f)
+    elsif account.kind_of? NEGATIVES
+      account_was.update_attribute(:balance, account_was.balance.to_f + self.amount_was.to_f)
     end
   end
-
 end

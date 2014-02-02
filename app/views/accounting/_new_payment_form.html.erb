@@ -20,7 +20,9 @@
 </div>
 <div class="control-group">
     <%= f.label :account_id, "Account", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.select(:account_id, Account.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %></div>
+    <div class="controls">
+        <%= f.hidden_field(:account_id, :include_blank => true, :class => "to_select2", :data => {:source => select2_bank_accounts_json}) %>
+    </div>
 </div>
 <div class="control-group">
     <%= f.label :method, "Type", class: 'col-lg-2 control-label' %>
