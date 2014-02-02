@@ -163,6 +163,16 @@ $(document).ready(function() {
         calculateAccounting("receipt", "item");
     });
 
+    $("#receipt-form").on('change', 'input[name="receipt[uninvoiced]"]', function () {
+        if ($(this).val() == "true") {
+            $(".invoiced").hide();
+            $(".uninvoiced").show();
+        } else {
+            $(".uninvoiced").hide();
+            $(".invoiced").show();
+        }
+    });
+
     $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
         e.preventDefault();
         $(this).closest("tr").hide();

@@ -132,14 +132,6 @@ class AccountingController < ApplicationController
     end
   end
 
-  def toggle_uninvoiced
-    @receipt = params[:receipt_id].present? ? Receipt.find(params[:receipt_id]) : Receipt.new
-    @receipt.uninvoiced = params[:receipt].presence && params[:receipt][:uninvoiced].presence
-    respond_to do |format|
-      format.js { render "accounting/uninvoiced_receipts/show_receipts_items" }
-    end
-  end
-
   def invoices
     @invoices = Invoice.where("builder_id = ?", session[:builder_id])
   end

@@ -1,2 +1,2 @@
-$('#receipt-items-placeholder').html('<%= escape_javascript(render :partial =>  'receipt_invoices', :locals => {:invoices => @invoices}) %>');
+$('#receipt-invoices-placeholder').html('<%= escape_javascript(render :partial =>  'receipt_invoices', :locals => {:invoices => @invoices}) %>');
 calculateAccounting("receipt", "invoice");

@@ -6,7 +6,7 @@
         <th>GL Account</th>
         <th>Amount</th>
     </tr>
-    <%= f.fields_for :receipts_items do |ct| %>
+    <%= f.fields_for :receipts_items, @receipt.receipts_items.any? ? @receipt.receipts_items : Array.new(5) { ReceiptsItem.new } do |ct| %>
       <%= render('accounting/uninvoiced_receipts/receipts_item', f: ct) %>
     <% end %>
     <tr id="tr-receipt-item-add" class="receipt-item">

@@ -9,6 +9,7 @@ group :development do
   gem 'mysql2'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'quiet_assets'
 end
 
 # Gems used only for assets and not required

@@ -1,7 +1,0 @@
-$('#receipt-form').html('<%= escape_javascript(render(:partial => "receipt_form")) %>');
-transformToSelect2For($('#receipt-form'));
-transformToDatePickerFor($('#receipt-form'));
-<% if @uninvoiced %>
-<% else %>
-calculateAccounting("receipt", "invoice");
-<% end %>

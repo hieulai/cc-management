@@ -20,8 +20,7 @@ class Receipt < ActiveRecord::Base
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
 
-  before_save :check_readonly, :if => :changed?
-  after_save :clear_old_data
+  before_save :check_readonly, :clear_old_data, :if => :changed?
 
   validates_presence_of :builder, :method, :received_at
   validates_presence_of :client, :if => Proc.new { |r| !r.uninvoiced? }
@@ -64,8 +63,11 @@ class Receipt < ActiveRecord::Base
   def clear_old_data
     if self.uninvoiced
       self.invoices.destroy_all
+      self.client = nil
     else
       self.receipts_items.destroy_all
+      self.payer = nil
+      self.payor = nil
     end
   end
 end
