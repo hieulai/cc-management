@@ -48,30 +48,30 @@ var calculatePurchasableSubTotalAndTotal = function () {
 };
 
 var calculateAccounting = function (parent, child) {
-    var total = 0;
-    $('tr:visible input[name="' + child + '-chosen"]:checked').each(function () {
-        total += text_to_number($(this).closest("tr").find('input[name$="[amount]"]').val());
-    });
-    $("#" + parent + "-amount").html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
+    if ($("#" + parent + "-amount:visible").size()) {
+        var total = 0;
+        $('tr:visible input[name="' + child + '-chosen"]:checked').each(function () {
+            total += text_to_number($(this).closest("tr").find('input[name$="[amount]"]').val());
+        });
+        $("#" + parent + "-amount").html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
+    }
 };
 
 var initAccounting = function (parent, child) {
-    if ($("#" + parent + "-amount").size() > 0) {
+    calculateAccounting(parent, child);
+    $(document).on('change', 'input[name="' + child + '-chosen"]', function () {
+        if ($(this).is(":checked")) {
+            toggleItemInputs(this, true);
+            $(this).closest("tr").find('input[name$="[_destroy]"]').val("false");
+        } else {
+            toggleItemInputs(this, false);
+            $(this).closest("tr").find('input[name$="[_destroy]"]').val("true");
+        }
         calculateAccounting(parent, child);
-        $(document).on('change', 'input[name="' + child + '-chosen"]', function () {
-            if ($(this).is(":checked")) {
-                toggleItemInputs(this, true);
-                $(this).closest("tr").find('input[name$="[_destroy]"]').val("false");
-            } else {
-                toggleItemInputs(this, false);
-                $(this).closest("tr").find('input[name$="[_destroy]"]').val("true");
-            }
-            calculateAccounting(parent, child);
-        });
-        $(document).on('change', 'input[name$="[amount]"]', function () {
-            calculateAccounting(parent, child);
-        });
-    }
+    });
+    $(document).on('change', 'input[name$="[amount]"]', function () {
+        calculateAccounting(parent, child);
+    });
 };
 
 var calculatePostTaxAmount = function (i) {
@@ -150,6 +150,11 @@ $(document).ready(function() {
         calculateAccounting("bill", "item");
     });
 
+    $("#bill-form").on('change', 'input[name="bill[job_costed]"]', function () {
+        $(".job_costed").toggle();
+        $(".un_job_costed").toggle();
+    });
+
     $("#receipt-form").on('railsAutocomplete.select', '.receipt-item-name', function (event,data) {
         $(this).closest("tr").find("input.name").val(data.item.label);
         $(this).closest("tr").find("input.description").val(data.item.description);
@@ -164,13 +169,8 @@ $(document).ready(function() {
     });
 
     $("#receipt-form").on('change', 'input[name="receipt[uninvoiced]"]', function () {
-        if ($(this).val() == "true") {
-            $(".invoiced").hide();
-            $(".uninvoiced").show();
-        } else {
-            $(".uninvoiced").hide();
-            $(".invoiced").show();
-        }
+        $(".invoiced").toggle();
+        $(".uninvoiced").toggle();
     });
 
     $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {

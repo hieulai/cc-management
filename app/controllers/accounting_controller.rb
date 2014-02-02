@@ -254,14 +254,6 @@ class AccountingController < ApplicationController
     @bill.job_costed = true
   end
 
-  def toggle_jobcosted
-    @bill = params[:bill_id].present? ? Bill.find(params[:bill_id]) : Bill.new
-    @bill.job_costed = params[:bill].present? && params[:bill][:job_costed].present?
-    respond_to do |format|
-      format.js { render "accounting/un_job_costed_bills/show_bill_items" }
-    end
-  end
-
   def create_bill
     create_purchasable(Bill.name)
   end

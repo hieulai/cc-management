@@ -5,7 +5,7 @@
             <h2>Edit Bill</h2>
             <%= link_to("Delete", {:action => 'delete_bill', :id => @bill.id}, :class => 'btn btn-danger f-right') %>
             <div id="bill-form">
-                <%= render(:partial => "bill_form", :locals => {:purchasable => @bill}) %>
+                <%= render(:partial => "bill_form") %>
             </div>
             <div class="form-buttons">
                 <%= submit_tag("Save & New", :data => {:form => ".bill-form", :original_url => "#{url_for(:action => "new_bill")}"}, :class => 'btn') %>

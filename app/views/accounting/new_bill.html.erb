@@ -4,7 +4,7 @@
         <div class="columns margin-bottom">
             <h2>Add Bill</h2>
             <div id="bill-form">
-                <%= render(:partial => "bill_form", :locals => {:purchasable => @bill}) %>
+                <%= render(:partial => "bill_form") %>
             </div>
             <div class="form-buttons">
                 <%= submit_tag("Save & New", :data => {:form => ".bill-form", :original_url => "#{url_for(:action => "new_bill")}"}, :class => 'btn') %>

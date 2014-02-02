@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    <%= f.fields_for :un_job_costed_items do |i| %>
+    <%= f.fields_for :un_job_costed_items, @bill.un_job_costed_items.any? ? @bill.un_job_costed_items : Array.new(5) { UnJobCostedItem.new } do |i| %>
         <%= render(:partial => 'accounting/un_job_costed_bills/bill_item', :locals => {:f => i}) %>
     <% end %>
     <tr class="add-item" id="add-item">

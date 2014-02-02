@@ -23,9 +23,8 @@ class Bill < ActiveRecord::Base
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :paid, where('remaining_amount = 0')
 
-  before_save :check_readonly, :check_zero_amount, :if => :changed?
+  before_save :check_readonly, :check_zero_amount, :clear_old_data, :if => :changed?
   after_update :destroy_old_purchased_categories_template
-  after_save :clear_old_data
   after_destroy :destroy_purchased_categories_template
 
   validates_presence_of :vendor
@@ -137,6 +136,8 @@ class Bill < ActiveRecord::Base
     else
       self.items.destroy_all
       self.bills_items.destroy_all
+      self.project_id = nil
+      self.categories_template_id = nil
     end
   end
 end

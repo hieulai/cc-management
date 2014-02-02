@@ -11,41 +11,42 @@
         </div>
     <% end %>
     <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
+    <% job_costed_display = @bill.job_costed ? "" : "none"
+       un_job_costed_display = @bill.job_costed ? "none" : ""
+    %>
     <div class="row">
         <div class="span6">
             <div class="control-group">
                 <%= f.label :vendor_id, "Vendor", class: 'col-lg-2 control-label' %>
                 <div class="controls">
-                    <%= autocomplete_field :vendor, :name, autocomplete_vendor_name_accounting_index_path, :value => purchasable.vendor.try(:display_name), :id_element => "##{purchasable.class.name.underscore}_vendor_id", :update_elements => {} %>
-                    <%= f.hidden_field :vendor_id, :value => purchasable.vendor.try(:id) %>
+                    <%= autocomplete_field :vendor, :name, autocomplete_vendor_name_accounting_index_path, :value => @bill.vendor.try(:display_name), :id_element => "##{@bill.class.name.underscore}_vendor_id", :update_elements => {} %>
+                    <%= f.hidden_field :vendor_id, :value => @bill.vendor.try(:id) %>
                 </div>
             </div>
             <div class="control-group">
                 <%= f.label :job_costed, "Job Costed", class: 'col-lg-2 control-label' %>
                 <div class="controls">
-                    <%= f.check_box :job_costed, :data => {:remote => true, :url => url_for(:action => "toggle_jobcosted", :bill_id => purchasable.try(:id))} %>
+                    <%= f.check_box :job_costed %>
                 </div>
             </div>
-            <% if purchasable.job_costed %>
-                <div class="control-group">
-                    <%= f.label :project_id, "Project", class: 'col-lg-2 control-label' %>
-                    <div class="controls"><%= f.select(:project_id, Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => purchasable.id, :type => purchasable.class.name)}) %></div>
-                </div>
-                <div class="control-group">
-                    <%= f.label :category_id, "Category", class: 'col-lg-2 control-label' %>
-                    <div class="controls">
-                        <div id="categories_template-placeholder">
-                            <% categories_template = purchasable.categories_template_id.present? ? CategoriesTemplate.find(purchasable.categories_template_id) : CategoriesTemplate.new %>
-                            <%= f.select(:category_id, grouped_category_options(purchasable.project), {:selected => categories_template.category_id, :include_blank => true},
-                                         :data => {:remote => true, :url => url_for(:action => "show_category_items", :id => purchasable.id, :type => purchasable.class.name, :project_id => purchasable.project.try(:id))}) %>
-                        </div>
+            <div class="control-group job_costed" style="display: <%= job_costed_display %>">
+                <%= f.label :project_id, "Project", class: 'col-lg-2 control-label' %>
+                <div class="controls"><%= f.select(:project_id, Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => @bill.id, :type => @bill.class.name)}) %></div>
+            </div>
+            <div class="control-group job_costed" style="display: <%= job_costed_display %>">
+                <%= f.label :category_id, "Category", class: 'col-lg-2 control-label' %>
+                <div class="controls">
+                    <div id="categories_template-placeholder">
+                        <% categories_template = @bill.categories_template_id.present? ? CategoriesTemplate.find(@bill.categories_template_id) : CategoriesTemplate.new %>
+                        <%= f.select(:category_id, grouped_category_options(@bill.project), {:selected => categories_template.category_id, :include_blank => true},
+                                     :data => {:remote => true, :url => url_for(:action => "show_category_items", :id => @bill.id, :type => @bill.class.name, :project_id => @bill.project.try(:id))}) %>
                     </div>
                 </div>
-            <% end %>
-            <% unless purchasable.new_record? %>
+            </div>
+            <% unless @bill.new_record? %>
                 <div class="control-group">
-                    <%= f.label :purchasable_id, "#{purchasable.class.name.underscore.humanize} #", class: 'col-lg-2 control-label' %>
-                    <div class="controls"><%= purchasable.id %></div>
+                    <%= f.label :purchasable_id, "#{@bill.class.name.underscore.humanize} #", class: 'col-lg-2 control-label' %>
+                    <div class="controls"><%= @bill.id %></div>
                 </div>
             <% end %>
             <div class="control-group">
@@ -60,7 +61,7 @@
                 <div class="controls"><%= f.text_area(:notes, size: '40x5') %></div>
             </div>
         </div>
-        <% if purchasable.new_record? %>
+        <% if @bill.new_record? %>
             <div class="span6">
                 <div class="control-group">
                     <%= f.label :create_payment, "Create Payment Simultaneously", class: 'col-lg-2 control-label' %>
@@ -68,8 +69,7 @@
                         <%= f.check_box :create_payment, :class => 'toggle', :target => '#payment-from-bill' %>
                     </div>
                 </div>
-                <div id="payment-from-bill" style="<% unless purchasable.create_payment == "1" %> display: none
-                    <% end %>">
+                <div id="payment-from-bill" style="<% unless @bill.create_payment == "1" %> display: none <% end %>">
                     <div class="control-group">
                         <%= label_tag 'payment[account_id]', "Account", class: 'col-lg-2 control-label' %>
                         <div class="controls">
@@ -99,17 +99,11 @@
             </div>
         <% end %>
     </div>
-    <div id="item-placeholder">
-        <% if @bill.job_costed %>
-            <%= render(:partial => "bill_items", :locals => {:f => f, :purchasable => @bill, :categories_template => @bill.categories_template}) %>
-        <% else
-             if !@bill.job_costed && !@bill.paid? && @bill.un_job_costed_items.size < 5
-               (5 - @bill.un_job_costed_items.size).times do |i|
-                 @bill.un_job_costed_items << UnJobCostedItem.new
-               end
-             end
-        %>
-            <%= render(:partial => "accounting/un_job_costed_bills/bill_items", :locals => {:f => f}) %>
-        <% end %>
-    </div>
+
+  <div class="job_costed" id="item-placeholder" style="display: <%= job_costed_display %>">
+      <%= render(:partial => "bill_items", :locals => {:f => f, :purchasable => @bill, :categories_template => @bill.categories_template}) %>
+  </div>
+  <div class="un_job_costed" style="display: <%= un_job_costed_display %>">
+      <%= render(:partial => "accounting/un_job_costed_bills/bill_items", :locals => {:f => f}) %>
+  </div>
 <% end %>
