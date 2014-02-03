@@ -25,7 +25,7 @@ class Account < ActiveRecord::Base
 
   def transactions
     r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items
-    r.sort! { |x, y| y.date || Date.new(0) <=> x.date || Date.new(0) }
+    r.sort! { |x, y| (y.date || Date.new(0)) <=> (x.date || Date.new(0)) }
   end
 
   def bank_balance
