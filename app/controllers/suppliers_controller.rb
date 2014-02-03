@@ -4,7 +4,7 @@ class SuppliersController < ApplicationController
   
   def list
     @query = params[:query]
-    @suppliers = Supplier.where("builder_id = ?", session[:builder_id]).search(@query)
+    @suppliers = @builder.suppliers.search(@query)
     respond_to do |format|
       format.html
       format.csv {send_data Supplier.to_csv(@suppliers)}

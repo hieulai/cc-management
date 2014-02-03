@@ -13,7 +13,7 @@
   <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
 
   <%
-     clients = Client.has_unbilled_invoices(session[:builder_id])
+     clients = @builder.clients.active.has_unbilled_invoices
      clients << @receipt.client if @receipt.client
      clients.uniq!
      invoices= @receipt.invoices

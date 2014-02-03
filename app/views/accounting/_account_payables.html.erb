@@ -9,6 +9,6 @@
 
   <div class="zurb-row">
       Payables Balance =
-      <%= price_tag Bill.raw(session[:builder_id]).unpaid.map(&:remaining_amount).compact.sum, "inline-block" %>
+      <%= price_tag @builder.bills.unpaid.map(&:remaining_amount).compact.sum, "inline-block" %>
   </div>
 <% end %>

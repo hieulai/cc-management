@@ -14,7 +14,6 @@ class Account < ActiveRecord::Base
 
   DEFAULTS = ["Revenue", "Cost of Goods Sold", "Expenses", "Assets", "Liabilities", "Equity", "Accounts Payable", "Accounts Receivable", "Bank Accounts"]
 
-  scope :raw, lambda { |builder_id| where("builder_id = ?", builder_id) }
   scope :top, where(:parent_id => nil)
   scope :undefault, where('name not in (?)', DEFAULTS)
 

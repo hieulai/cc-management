@@ -3,7 +3,7 @@ class ArchitectsController < ApplicationController
   
   def list
     @query = params[:query]
-    @architects = Architect.where("builder_id = ?", session[:builder_id]).search(@query)
+    @architects = @builder.architects.search(@query)
     respond_to do |format|
       format.html
       format.csv {send_data Architect.to_csv(@architects)}

@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   before_filter :authenticate_user!
   
   def list
-    @accounts = Account.raw(session[:builder_id])
+    @accounts = @builder.accounts
   end
   
   def show

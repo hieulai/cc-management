@@ -1,7 +1,7 @@
 class ProspectingController < ApplicationController
   def list
     @query = params[:query]
-    @prospects = Prospect.where("builder_id = ?", session[:builder_id]).search(@query)
+    @prospects = @builder.prospects.search(@query)
   end
 
   def show

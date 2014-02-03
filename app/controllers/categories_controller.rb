@@ -2,7 +2,7 @@ class CategoriesController < ApplicationController
   before_filter :authenticate_user!
   
   def list
-    @categories = Category.where("builder_id = ?", session[:builder_id])
+    @categories = @builder.categories
   end
 
   def new

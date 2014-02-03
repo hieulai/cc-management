@@ -4,13 +4,12 @@ class LeadsController < ApplicationController
   
   def list_current_leads
     #Finds all projects for every Client that have a "Current Lead"" status
-    #@clients = Client.where("builder_id = ?", session[:builder_id]).joins(:projects).where(:projects => {:status => "Current Lead"})
-    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Lead").order("lead_stage ASC")
+    @projects = @builder.projects.current_lead.order("lead_stage ASC")
   end
   
   def list_past_leads
     #Finds all projects for every Client that have a "Past Lead" status
-    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Past Lead")
+    @projects = @builder.projects.past_lead
   end
   
   def new_client

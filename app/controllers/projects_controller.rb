@@ -4,13 +4,13 @@ class ProjectsController < ApplicationController
   
   def list_current_projects
     #Finds all projects for every Client that have a "Current Project" status
-    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Current Project").sort_by {|p| p.current_progress}
+    @projects = @builder.projects.current_project.sort_by { |p| p.current_progress }
     @next_tasks = params[:next_tasks]
   end
   
   def list_past_projects
     #Finds all projects for every Client that have a "Current Project" status
-    @projects = Project.where("builder_id = ? AND status = ?", session[:builder_id], "Past Project")
+    @projects = @builder.projects.past_project
   end
   
   def show_project
@@ -219,8 +219,8 @@ class ProjectsController < ApplicationController
   def new_change_order
     @project = Project.find(params[:id])
     @change_order = @project.change_orders.build
-    @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
-    @items = Item.where("builder_id = ?", session[:builder_id])
+    @categories = @builder.categories.raw
+    @items = @builder.items
   end
 
   def create_change_order
@@ -246,8 +246,8 @@ class ProjectsController < ApplicationController
       end
       redirect_to action: 'change_orders', :id => @project.id
     else
-      @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
-      @items = Item.where("builder_id = ?", session[:builder_id])
+      @categories = @builder.categories.raw
+      @items = @builder.items
       flash.now[:alert] = "please enter the data correctly."
       render :action => :new_change_order
     end
@@ -256,8 +256,8 @@ class ProjectsController < ApplicationController
   def edit_change_order
     @change_order = ChangeOrder.find(params[:id])
     @project = @change_order.project
-    @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
-    @items = Item.where("builder_id = ?", session[:builder_id])
+    @categories = @builder.categories.raw
+    @items = @builder.items
   end
 
   def update_change_order
@@ -325,16 +325,16 @@ class ProjectsController < ApplicationController
 
       if @change_order.errors.any?
         @project = @change_order.project
-        @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
-        @items = Item.where("builder_id = ?", session[:builder_id])
+        @categories = @builder.categories.raw
+        @items = @builder.items
         return render :edit_change_order
       else
         redirect_to(:action => 'change_orders', :id => @change_order.project_id)
       end
     else
       @project = @change_order.project
-      @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
-      @items = Item.where("builder_id = ?", session[:builder_id])
+      @categories = @builder.categories.raw
+      @items = @builder.items
       render :edit_change_order
     end
   end
@@ -489,7 +489,7 @@ class ProjectsController < ApplicationController
   end
 
   def autocomplete_vendor_name
-    @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search_by_name(params[:term]).order(:company)
+    @vendors = @builder.vendors.search_by_name(params[:term]).order(:company)
     render :json => @vendors.map { |v|
       label = v.company.present? ? "#{v.company} <br/> <span class=\"autocomplete-sublabel\">#{v.full_name}</span>" : v.full_name
       {:id => v.id, :label => label, :value => v.display_name}

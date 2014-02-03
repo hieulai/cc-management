@@ -9,14 +9,14 @@
 <div class="control-group">
     <%= f.label :from_account_id, "From Account", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.select(:from_account_id, Account.raw(session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+        <%= f.select(:from_account_id, @builder.accounts.collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
     </div>
 </div>
 
 <div class="control-group">
     <%= f.label :to_account_id, "To account", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.select(:to_account_id, Account.raw(session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+        <%= f.select(:to_account_id, @builder.accounts.collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
     </div>
 </div>
 

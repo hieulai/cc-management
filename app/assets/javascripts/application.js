@@ -87,6 +87,9 @@ var transformToSelect2For = function (element) {
             }
         });
     });
+    $(element).find("select").each(function () {
+        $(this).select2({width: "220px"});
+    });
 };
 
 var transformToDatePickerFor = function (element) {

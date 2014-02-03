@@ -3,7 +3,7 @@ class TasklistsController < ApplicationController
   before_filter :authenticate_user!
 
   def list
-    @tasklists = Tasklist.where("builder_id = ?", session[:builder_id])
+    @tasklists = @builder.tasklists
   end
   
   def show

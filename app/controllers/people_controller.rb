@@ -3,7 +3,7 @@ class PeopleController < ApplicationController
     
     def all
       @query = params[:query]
-      @clients = @builder.clients.where(status: "Active").search(@query)
+      @clients = @builder.clients.active.search(@query)
       @vendors = @builder.vendors.search(@query)
       @contacts = @builder.contacts.search(@query)
     end
@@ -127,7 +127,7 @@ class PeopleController < ApplicationController
 
     def autocomplete_name
       @peoples = []
-      @peoples << @builder.clients.where(status: "Active").search_by_name(params[:term]).all
+      @peoples << @builder.clients.active.search_by_name(params[:term]).all
       @peoples << @builder.vendors.search_by_name(params[:term]).all
       @peoples << @builder.contacts.search_by_name(params[:term]).all
       render :json => @peoples.flatten.map { |p| {:id => p.id,

@@ -4,12 +4,12 @@ class EstimatesController < ApplicationController
     
     def list_current
       #add condition to filter leads by lead_status
-      @estimates = Estimate.current(session[:builder_id])
+      @estimates = @builder.estimates.current
     end
 
     def list_past
       #add condition to filter leads by lead_status
-      @estimates = Estimate.past(session[:builder_id])
+      @estimates = @builder.estimates.past
     end
 
     def show

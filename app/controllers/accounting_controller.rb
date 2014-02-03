@@ -9,7 +9,7 @@ class AccountingController < ApplicationController
   end
 
   def deposits
-    @deposits = Deposit.where("builder_id = ?", session[:builder_id])
+    @deposits = @builder.deposits
   end
 
   def new_deposit
@@ -56,7 +56,7 @@ class AccountingController < ApplicationController
   end
 
   def receipts
-    @receipts = Receipt.where("builder_id = ?", session[:builder_id])
+    @receipts = @builder.receipts
   end
 
   def new_receipt
@@ -133,7 +133,7 @@ class AccountingController < ApplicationController
   end
 
   def invoices
-    @invoices = Invoice.where("builder_id = ?", session[:builder_id])
+    @invoices = @builder.invoices
   end
 
   def invoice
@@ -205,7 +205,7 @@ class AccountingController < ApplicationController
   end
 
   def purchase_orders
-    @purchase_orders = PurchaseOrder.where("builder_id = ?", session[:builder_id])
+    @purchase_orders = @builder.purchase_orders
   end
 
   def new_purchase_order
@@ -246,7 +246,7 @@ class AccountingController < ApplicationController
   end
 
   def bills
-    @bills = Bill.where("builder_id = ?", session[:builder_id])
+    @bills = @builder.bills
   end
 
   def new_bill
@@ -280,7 +280,7 @@ class AccountingController < ApplicationController
   end
 
   def payments
-    @payments = Payment.where("builder_id = ?", session[:builder_id])
+    @payments = @builder.payments
   end
 
   def new_payment
@@ -416,7 +416,7 @@ class AccountingController < ApplicationController
   end
 
   def autocomplete_vendor_name
-    @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search_by_name(params[:term]).order(:company)
+    @vendors = @builder.vendors.search_by_name(params[:term]).order(:company)
     render :json => @vendors.map { |v|
       label = v.company.present? ? "#{v.company} <br/> <span class=\"autocomplete-sublabel\">#{v.full_name}</span>" : v.full_name
       {:id => v.id, :label => label, :value => v.display_name}
@@ -424,7 +424,7 @@ class AccountingController < ApplicationController
   end
 
   def show_account_details_payables
-    @account = Account.raw(session[:builder_id]).find(params[:account_id])
+    @account = @builder.accounts.find(params[:account_id])
     session[:account_id] = @account.id
     respond_to do |format|
       format.js
@@ -432,7 +432,7 @@ class AccountingController < ApplicationController
   end
 
   def show_account_details_receivables
-    @account = Account.raw(session[:builder_id]).find(params[:account_id])
+    @account = @builder.accounts.find(params[:account_id])
     session[:account_id] = @account.id
     respond_to do |format|
       format.js

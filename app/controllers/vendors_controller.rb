@@ -3,13 +3,13 @@ class VendorsController < ApplicationController
     
     def all
       @query = params[:query]
-      @clients = Client.where("builder_id = ? AND status = ?", session[:builder_id], "Active").search(@query)
-      @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search(@query)
+      @clients = @builder.clients.active.search(@query)
+      @vendors = @builder.vendors.search(@query)
     end
     
     def list
       @query = params[:query]
-      @vendors = Vendor.where("builder_id = ?", session[:builder_id]).search(@query)
+      @vendors = @builder.vendors.search(@query)
       respond_to do |format|
         format.html
         format.csv {send_data Vendor.to_csv(@vendors)}

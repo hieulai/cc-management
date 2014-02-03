@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   layout 'application'
   
   def list
-    @user = User.where("builder_id = ?", session[:builder_id])
+    @user = @builder.users
   end
   
   def show

@@ -4,7 +4,7 @@ class SubcontractorsController < ApplicationController
   
   def list
     @query = params[:query]
-    @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id]).search(@query)
+    @subcontractors = @builder.subcontractors.search(@query)
     respond_to do |format|
       format.html
       format.csv {send_data Subcontractor.to_csv(@subcontractors)}
@@ -65,7 +65,7 @@ class SubcontractorsController < ApplicationController
   
   def import_export
     @subcontractor = Subcontractor.new
-    @subcontractors = Subcontractor.where("builder_id = ?", session[:builder_id])
+    @subcontractors = @builder.subcontractors
     respond_to do |format|
       format.html
       format.csv {render text: @subcontractors.to_csv}

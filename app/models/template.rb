@@ -13,6 +13,8 @@ class Template < ActiveRecord::Base
   accepts_nested_attributes_for :categories, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :categories_templates, reject_if: :all_blank, allow_destroy: true
 
+  scope :raw, where(estimate_id: nil)
+
   validates :name, presence: true
 
   def clone_with_associations

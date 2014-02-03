@@ -12,7 +12,6 @@ class Invoice < ActiveRecord::Base
   attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount
 
   default_scope order("created_at DESC")
-  scope :raw, lambda { |builder_id| where("builder_id = ?", builder_id) }
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
 

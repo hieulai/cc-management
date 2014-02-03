@@ -8,8 +8,8 @@ class Estimate < ActiveRecord::Base
   has_one :template, :dependent => :destroy
   has_many :invoices, :dependent => :destroy
 
-  scope :current, lambda { |builder_id| where("builder_id = ? AND status = ?", builder_id, "Current Estimate") }
-  scope :past, lambda { |builder_id| where("builder_id = ? AND status = ?", builder_id, "Past Estimate") }
+  scope :current, where(status: "Current Estimate")
+  scope :past, where(status: "Past Estimate")
 
   accepts_nested_attributes_for :measurements
 

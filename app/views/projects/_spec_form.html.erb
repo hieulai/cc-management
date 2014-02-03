@@ -3,7 +3,7 @@
 <div class="control-group">
     <%= f.label :category, "Category", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= select(:category, :id, Category.where("builder_id = ?", session[:builder_id]).order(:name).collect { |s| [s.name, s.id] }) %>
+        <%= select(:category, :id, @builder.categories.raw.order(:name).collect { |s| [s.name, s.id] }) %>
     </div>
 </div>
 <div class="control-group">

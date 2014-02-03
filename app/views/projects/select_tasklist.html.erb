@@ -7,7 +7,7 @@
                 <div class="control-group">
                     <%= f.label :tasklist_id, 'Choose a Task List for the Project:', :class => 'col-lg-2 control-label' %>
                     <div class='controls'>
-                        <%= select(:tasklist, :id, Tasklist.where("builder_id = ?", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
+                        <%= select(:tasklist, :id, @builder.tasklists.collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
                     </div>
                 </div>
                 <div class="control-group">

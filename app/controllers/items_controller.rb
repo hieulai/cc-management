@@ -102,7 +102,7 @@ class ItemsController < ApplicationController
   end
 
   def autocomplete_name
-    @items = Item.where("builder_id = ?", session[:builder_id]).search_by_name(params[:term])
+    @items = @builder.items.search_by_name(params[:term])
     render :json => @items.map { |i| {:id => i.id,
                                       :label => i.name,
                                       :value => i.name,

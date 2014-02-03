@@ -4,15 +4,15 @@ class TemplatesController < ApplicationController
   before_filter :find_template, only: [:edit, :update, :delete, :destroy]
 
   def list
-     @templates = Template.where("builder_id = ? AND estimate_id IS NULL", session[:builder_id])
+     @templates = @builder.templates.raw
   end
 
   def new
     @template = Template.new
     @template.categories.build
     # Category.all.each { |category| category.update_attribute(:template_id, nil) if category.template.nil? }
-    @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
-    @items = Item.where("builder_id = ?", session[:builder_id])
+    @categories = @builder.categories.raw
+    @items = @builder.items
   end
 
   def create
@@ -40,7 +40,7 @@ class TemplatesController < ApplicationController
 
       redirect_to action: 'list'
     else
-      @categories = Category.where("template_id IS NULL")
+      @categories = @builder.categories.raw
       @template.categories.build
       flash.now[:alert] = "please enter the data correctly."
       render action: :new
@@ -48,8 +48,8 @@ class TemplatesController < ApplicationController
   end
 
   def edit
-    @categories = Category.where("template_id IS NULL AND builder_id = ?", session[:builder_id])
-    @items = Item.where("builder_id = ?", session[:builder_id])
+    @categories = @builder.categories.raw
+    @items = @builder.items
     @t_categories = @template.categories.pluck(:id)
     @t_items = Item.all
   end
