@@ -12,13 +12,10 @@
     </thead>
     <tbody>
     <% purchase_orders.each do |po| %>
-
-      <tr <% unless po.has_bill_full_paid? %> class="clickable" <% else %> class="unclickable" <% end %>>
+      <tr class="clickable <%= po.has_bill_full_paid? ? "unclickable" : "" %>">
           <td class="center">
               <%= po.date %>
-              <% unless po.has_bill_full_paid? %>
-                <%= link_to("Edit", {:action => 'edit_purchase_order', :id => po.id}, :class => 'action edit clickable-link', style: 'display:none') %>
-              <% end %>
+              <%= link_to("Edit", {:action => 'edit_purchase_order', :id => po.id}, :class => 'action edit clickable-link', style: 'display:none') %>
           </td>
           <td class="center">
               <%= po.id %>

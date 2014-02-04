@@ -37,7 +37,7 @@
                 <%= f.label :category_id, "Category", class: 'col-lg-2 control-label' %>
                 <div class="controls">
                     <div id="categories_template-placeholder">
-                        <% categories_template = @bill.categories_template_id.present? ? CategoriesTemplate.find(@bill.categories_template_id) : CategoriesTemplate.new %>
+                        <% categories_template = @bill.categories_template.present? ? @bill.categories_template : CategoriesTemplate.new %>
                         <%= f.select(:category_id, grouped_category_options(@bill.project), {:selected => categories_template.category_id, :include_blank => true},
                                      :data => {:remote => true, :url => url_for(:action => "show_category_items", :id => @bill.id, :type => @bill.class.name, :project_id => @bill.project.try(:id))}) %>
                     </div>

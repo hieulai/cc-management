@@ -14,10 +14,9 @@
     </thead>
     <tbody>
     <% bills.each do |b| %>
-        <tr class="<%= b.full_paid? ? "unclickable" : "clickable" %>">
+        <tr class="clickable <%= b.full_paid? ? "unclickable" : "" %>">
             <td class="center">
                 <%= b.source(:due_date) %>
-                <% unless b.full_paid? %>
                     <% if b.generated? %>
                         <% if b.purchase_order_id %>
                             <%= link_to("Edit", {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :class => 'action edit clickable-link', :style => 'display: none') %>
@@ -25,7 +24,6 @@
                     <% else %>
                         <%= link_to("Edit", {:action => 'edit_bill', :id => b.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
                     <% end %>
-                <% end %>
             </td>
             <td class="center">
                 <%= b.id %>
