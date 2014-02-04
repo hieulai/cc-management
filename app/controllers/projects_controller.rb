@@ -414,7 +414,6 @@ class ProjectsController < ApplicationController
   def create_bid
     @project = Project.find(params[:id])
     @bid = Bid.new(params[:bid])
-    @bid.amount = params[:item]
     @bid.project = @project
     if @bid.save
       redirect_to(:action => 'bids', :id => @bid.project_id)
