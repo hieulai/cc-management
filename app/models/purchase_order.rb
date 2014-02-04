@@ -12,13 +12,13 @@ class PurchaseOrder < ActiveRecord::Base
 
   default_scope order("date DESC")
 
-  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date, :category_id, :purchase_orders_items_attributes, :items_attributes
+  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :cached_total_amount , :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date, :category_id, :purchase_orders_items_attributes, :items_attributes
   accepts_nested_attributes_for :purchase_orders_items, :allow_destroy => true
   accepts_nested_attributes_for :items, :allow_destroy => true
   attr_accessor :category_id
 
   after_initialize :default_values
-  before_save :check_readonly
+  before_save :check_zero_amount, :check_total_amount_changed
   after_save :create_bill
 
   validates_presence_of :vendor, :project, :categories_template
@@ -32,11 +32,13 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def total_amount
-    if self.shipping || purchase_orders_items.any? || items.any?
+    c_po_items = purchase_orders_items.reject(&:marked_for_destruction?)
+    c_items = items.reject(&:marked_for_destruction?)
+    if self.shipping || c_po_items.any? || c_items.any?
       t =0
       t+= self.shipping||0
-      t+= purchase_orders_items.map(&:actual_cost).compact.sum if purchase_orders_items.any?
-      t+= items.map(&:actual_cost).compact.sum if items.any?
+      t+= c_po_items.map(&:actual_cost).compact.sum if c_po_items.any?
+      t+= c_items.map(&:actual_cost).compact.sum if c_items.any?
       t.round(2)
     end
   end
@@ -67,8 +69,23 @@ class PurchaseOrder < ActiveRecord::Base
 
   def check_readonly
     if has_bill_paid?
-      errors[:base] << "This purchase order is already paid and can not be modified."
+      errors[:base] << "This purchase order is already paid and can not be deleted."
       false
     end
+  end
+
+  def check_zero_amount
+    if total_amount.to_f == 0
+      errors[:base] << "Can not save a $0 Purchase order"
+      false
+    end
+  end
+
+  def check_total_amount_changed
+    if !self.new_record? && self.has_bill_paid? && self.total_amount!= self.cached_total_amount
+      errors[:base] << "This purchase order is already paid and Total amount: $#{cached_total_amount} can not be modified."
+      return false
+    end
+    self.cached_total_amount = self.total_amount
   end
 end

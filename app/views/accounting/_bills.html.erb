@@ -34,7 +34,7 @@
             <td><%= b.source(:project).try(:name) %></td>
             <td><%= b.source(:categories_template).try(:category).try(:name) %></td>
             <td><%= b.source(:vendor).try(:display_name) %></td>
-            <td class="right"><%= number_to_currency(b.source(:total_amount)) %></td>
+            <td class="right"><%= number_to_currency(b.cached_total_amount) %></td>
             <td><%= b.source(:notes) %></td>
             <td style="display: none;"><%= b.paid_status %></td>
         </tr>

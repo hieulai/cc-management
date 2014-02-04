@@ -521,6 +521,10 @@ class AccountingController < ApplicationController
         @purchasable.purchasable_items.each do |pi|
           params[@type.to_sym]["#{@type.pluralize}_items_attributes"] << {id: pi.id, _destroy: true}.with_indifferent_access
         end
+        params[@type.to_sym]["items_attributes"]||=[]
+        @purchasable.items.each do |i|
+          params[@type.to_sym]["items_attributes"] << {id: i.id, _destroy: true}.with_indifferent_access
+        end
       end
     end
     @purchasable.categories_template_id = category_template.id
