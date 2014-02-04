@@ -21,7 +21,7 @@ class Account < ActiveRecord::Base
 
   before_destroy :check_if_default
   before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
-  before_update :check_opening_balance_updated_at
+  before_save :check_opening_balance_updated_at
 
   validates_uniqueness_of :name, scope: [:builder_id]
   validate :disallow_self_reference
