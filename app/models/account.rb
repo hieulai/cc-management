@@ -1,3 +1,4 @@
+require 'ostruct'
 class Account < ActiveRecord::Base
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :payments
@@ -10,7 +11,8 @@ class Account < ActiveRecord::Base
 
   belongs_to :parent, class_name: "Account"
 
-  attr_accessible :name, :balance, :opening_balance , :number, :category, :subcategory, :prefix, :parent_id
+  attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id
+  attr_accessor :opening_balance_changed
 
   DEFAULTS = ["Revenue", "Cost of Goods Sold", "Expenses", "Assets", "Liabilities", "Equity", "Accounts Payable", "Accounts Receivable", "Bank Accounts"]
 
@@ -19,13 +21,21 @@ class Account < ActiveRecord::Base
 
   before_destroy :check_if_default
   before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
+  before_update :check_opening_balance_updated_at
 
   validates_uniqueness_of :name, scope: [:builder_id]
   validate :disallow_self_reference
 
   def transactions
-    r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items
-    r.sort! { |x, y| (y.date || Date.new(0)) <=> (x.date || Date.new(0)) }
+    opening_balance_item = [OpenStruct.new(date: self.opening_balance_updated_at,
+                                           kind: "Opening Balance",
+                                           reference: nil,
+                                           payee: "Opening Balance",
+                                           memo: "Opening Balance",
+                                           amount: self.opening_balance,
+                                           display_priority: 0)]
+    r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + opening_balance_item
+    r.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
   end
 
   def bank_balance
@@ -78,6 +88,8 @@ class Account < ActiveRecord::Base
   end
 
   def opening_balance=(b)
+    return if b.to_f == self.opening_balance
+    self.opening_balance_changed = true
     self.balance = self.balance.to_f + b.to_f - self.opening_balance
   end
 
@@ -110,6 +122,17 @@ class Account < ActiveRecord::Base
   def disallow_self_reference
     if self.id && self.parent_id == self.id
       errors.add(:base, 'Cannot set current account as sub account of it')
+    end
+  end
+
+  def check_opening_balance_updated_at
+    if self.opening_balance_changed
+      if self.opening_balance_updated_at.nil?
+        errors.add(:base, 'Opening balance updated date is required')
+        return false
+      end
+    else
+      self.opening_balance_updated_at = self.opening_balance_updated_at_was
     end
   end
 end

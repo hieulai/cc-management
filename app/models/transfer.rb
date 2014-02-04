@@ -12,6 +12,10 @@ class Transfer < ActiveRecord::Base
     "Transfer"
   end
 
+  def display_priority
+    1
+  end
+
   private
   def transfer_amount
     from_account_new = Account.find(self.from_account_id)

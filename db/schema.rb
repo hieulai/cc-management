@@ -11,19 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140201120103) do
+ActiveRecord::Schema.define(:version => 20140204022639) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
     t.string   "name"
-    t.decimal  "balance",     :precision => 10, :scale => 2
+    t.decimal  "balance",                    :precision => 10, :scale => 2
     t.integer  "number"
     t.string   "category"
     t.string   "subcategory"
     t.string   "prefix"
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
+    t.datetime "created_at",                                                :null => false
+    t.datetime "updated_at",                                                :null => false
     t.integer  "parent_id"
+    t.datetime "opening_balance_updated_at"
   end
 
   add_index "accounts", ["builder_id"], :name => "index_accounts_on_builder_id"

@@ -34,6 +34,10 @@ class UnJobCostedItem < ActiveRecord::Base
     bill.notes
   end
 
+  def display_priority
+    1
+  end
+
   def charge_account
     return true unless account_id
     account = Account.find(account_id)

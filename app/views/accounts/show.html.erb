@@ -71,9 +71,11 @@
                         <% elsif @account.kind_of? UnJobCostedItem::NEGATIVES %>
                           <% balance += t.amount.to_f %>
                         <% end %>
+                      <% else %>
+                        <%= render(:partial => "tr_opening_balance", :locals => {:t => t, :account => @account, :balance => balance}) %>
                       <% end %>
                     <% end %>
-                    <%= render(:partial => "tr_balance", :locals => {:account => @account, :balance => balance}) %>
+
                 </table>
         </div>
     </div>
