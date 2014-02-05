@@ -1,0 +1,16 @@
+<%
+  accounts = select2_bank_transfer_accounts_json
+  accounts = select2_gl_transfer_accounts_json if transfer.kind == "GL Transfer"
+%>
+<div class="control-group">
+    <%= label_tag "transfer[from_account_id]", "From Account", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= hidden_field_tag("transfer[from_account_id]", transfer.from_account_id , :class => "to_select2", :data => {:source => accounts}) %>
+    </div>
+</div>
+<div class="control-group">
+    <%= label_tag "transfer[to_account_id]", "From Account", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= hidden_field_tag("transfer[to_account_id]", transfer.to_account_id , :class => "to_select2", :data => {:source => accounts}) %>
+    </div>
+</div>

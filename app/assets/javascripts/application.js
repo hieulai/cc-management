@@ -88,7 +88,11 @@ var transformToSelect2For = function (element) {
         });
     });
     $(element).find("select").each(function () {
-        $(this).select2({width: "220px"});
+        $("select").select2({
+            width: "220px",
+            placeholder: "",
+            allowClear: true
+        });
     });
 };
 
@@ -195,11 +199,8 @@ $(document).ready(function() {
     $(document).ajaxStop(function () {
         $(".loader").hide();
         $('input[type="submit"]').removeAttr('disabled');
-        $("select").select2({
-            width: "220px",
-            placeholder: "",
-            allowClear: true
-        });
+        transformToDatePickerFor();
+        transformToSelect2For();
     });
     transformToDatePickerFor();
     transformToSelect2For();

@@ -99,4 +99,10 @@ class AccountsController < ApplicationController
       render('delete_transfer')
     end
   end
+
+  def show_transfer_accounts
+    @transfer = params[:id].present? ? Transfer.find(params[:id]) : Transfer.new
+    @transfer.kind = params[:transfer][:kind]
+
+  end
 end

@@ -1,23 +1,18 @@
 <div class="control-group">
+    <%= f.label :kind, "Type", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.collection_radio_buttons(:kind, [["Bank Transfer", "Bank Transfer"], ["GL Transfer", "GL Transfer"]], :first, :last, {}, {:data => {:remote => true, :url => url_for(:action => "show_transfer_accounts", :id => @transfer.id)}}) %>
+    </div>
+</div>
+<div class="control-group">
     <%= f.label :date, "Date", class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:date, class: 'datepicker') %>
         <%= f.hidden_field(:date, id: 'date_hidden') %>
     </div>
 </div>
-
-<div class="control-group">
-    <%= f.label :from_account_id, "From Account", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.select(:from_account_id, @builder.accounts.collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
-    </div>
-</div>
-
-<div class="control-group">
-    <%= f.label :to_account_id, "To account", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.select(:to_account_id, @builder.accounts.collect { |s| [s.name, s.id] }, {:include_blank => true}) %>
-    </div>
+<div class="accounts-select">
+    <%= render(:partial => "accounts_select", :locals => {:transfer => @transfer}) %>
 </div>
 
 <div class="control-group">

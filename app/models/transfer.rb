@@ -1,12 +1,16 @@
 class Transfer < ActiveRecord::Base
   belongs_to :from_account, :foreign_key => "from_account_id", :class_name => Account.name
   belongs_to :to_account, :foreign_key => "to_account_id", :class_name => Account.name
-  attr_accessible :date, :amount, :reference, :memo, :reconciled, :from_account_id, :to_account_id
+  attr_accessible :date, :amount, :reference, :memo, :reconciled, :kind, :from_account_id, :to_account_id
 
   before_save :rollback_amount, :transfer_amount
   after_destroy :rollback_amount
+  after_initialize :default_values
 
   validates_presence_of :from_account, :to_account, :date, :amount
+
+  BANK_TRANSFERS = ["Bank Accounts"]
+  GL_TRANSFERS = ["Accounts Payable", "Accounts Receivable", "Bank Accounts"]
 
   def method
     "Transfer"
@@ -31,5 +35,9 @@ class Transfer < ActiveRecord::Base
       from_account_was.update_attribute(:balance, from_account_was.balance.to_f + self.amount_was.to_f)
       to_account_was.update_attribute(:balance, to_account_was.balance.to_f - self.amount_was.to_f)
     end
+  end
+
+  def default_values
+    self.kind ||= "Bank Transfer"
   end
 end
