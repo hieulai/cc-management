@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Construction Central</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= stylesheet_link_tag "application", :media => "all" %>
+    <%= stylesheet_link_tag "homepage", :media => "all" %>
+    <%= javascript_include_tag :application %>
+    <%= csrf_meta_tags %>
+</head>
+<body>
+<div class='zurb-row' id="page">
+    <div class='zurb-row' id="header">
+        <div class="top-login">
+            <%= link_to("Login", new_user_session_path) %>
+            <span>&nbsp;|&nbsp; </span>
+            <%= link_to("Register", new_user_registration_path) %>
+        </div>
+        <div style="clear: right;"></div>
+    </div>
+    <div class='zurb-row' id='content'>
+        <%= yield %>
+    </div>
+</div>
+</body>
+</html>
+

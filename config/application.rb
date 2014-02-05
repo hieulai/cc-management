@@ -60,7 +60,8 @@ module Cc
     config.active_record.whitelist_attributes = true
 
     # Enable the asset pipeline
-    config.assets.precompile += ['public.css', 'private.css', 'pdf.css', 'wkhtmltopdf_tableSplitHack.js', 'shared.js']
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
+    config.assets.precompile += ['public.css', 'homepage.css', 'private.css', 'pdf.css', 'wkhtmltopdf_tableSplitHack.js', 'shared.js']
     config.assets.initialize_on_precompile = false
     config.assets.enabled = true
 

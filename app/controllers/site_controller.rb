@@ -1,4 +1,4 @@
 class SiteController < ApplicationController
-  layout 'public'
+  layout 'homepage'
   
 end
