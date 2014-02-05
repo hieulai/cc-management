@@ -16,6 +16,7 @@ class Account < ActiveRecord::Base
 
   DEFAULTS = ["Revenue", "Cost of Goods Sold", "Expenses", "Assets", "Liabilities", "Equity", "Accounts Payable", "Accounts Receivable", "Bank Accounts"]
 
+  default_scope order("name ASC")
   scope :top, where(:parent_id => nil)
   scope :undefault, where('name not in (?)', DEFAULTS)
 

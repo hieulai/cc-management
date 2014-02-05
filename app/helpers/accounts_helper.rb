@@ -13,7 +13,7 @@ module AccountsHelper
     gl_transfer_names = Account::DEFAULTS - Transfer::GL_TRANSFERS
     gl_transfer_accounts = @builder.accounts.where(:name => gl_transfer_names)
     gl_transfer_accounts.each do |a|
-      json << a.as_select2_json
+      json << a.as_select2_json(["Bank Accounts"])
     end
     json.to_json
   end
