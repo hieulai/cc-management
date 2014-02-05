@@ -9,7 +9,7 @@
     </div>
 </div>
 <div class="control-group">
-    <%= label_tag "transfer[to_account_id]", "From Account", class: 'col-lg-2 control-label' %>
+    <%= label_tag "transfer[to_account_id]", "To Account", class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= hidden_field_tag("transfer[to_account_id]", transfer.to_account_id , :class => "to_select2", :data => {:source => accounts}) %>
     </div>
