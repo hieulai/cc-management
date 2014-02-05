@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   before_filter :authenticate_user!
   
   def list
-    @accounts = @builder.accounts
+    @accounts = @builder.accounts.top
   end
   
   def show

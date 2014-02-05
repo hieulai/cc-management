@@ -1,0 +1,20 @@
+<tr>
+    <td class="center">
+        <%= link_to("Ledger", {:action => 'show', :id => account.id}, :title => 'Ledger', :class => 'view table-action') %>
+        <%= link_to("Edit", {:action => 'edit', :id => account.id}, :title => 'Edit', :class => 'edit table-action') %>
+        <%= link_to("Delete", {:action => 'delete', :id => account.id}, :title => 'Delete', :class => 'delete table-action') %>
+    </td>
+    <td>
+        <div class="<% unless account.parent %> strong <% end %>">
+            <% depth.times do %>
+              <div class="indent">&nbsp;</div>
+            <% end %>
+            <%= account.name %>
+        </div>
+    </td>
+    <td><%= price_tag(account.balance.to_f) %></td>
+</tr>
+<% depth+= 1
+   account.children.each do |a| %>
+  <%= render(:partial => "tr_account", :locals => {:account => a, :depth => depth}) %>
+<% end %>

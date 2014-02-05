@@ -19,20 +19,10 @@
                 <tr class="header">
                     <th>Actions</th>
                     <th>Name</th>
-                    <th>Sub-Account Of</th>
                     <th>Balance</th>
                 </tr>
-                <% @accounts.each do |x| %>
-                    <tr>
-                        <td class="center">
-                            <%= link_to("Ledger", {:action => 'show', :id => x.id}, :title => 'Ledger', :class => 'view table-action') %>
-                            <%= link_to("Edit", {:action => 'edit', :id => x.id}, :title => 'Edit', :class => 'edit table-action') %>
-                            <%= link_to("Delete", {:action => 'delete', :id => x.id}, :title => 'Delete', :class => 'delete table-action') %>
-                        </td>
-                        <td><%= x.name %></td>
-                        <td><%= x.parent.try(:name) %></td>
-                        <td><%= price_tag(x.balance.to_f) %></td>
-                    </tr>
+                <% @accounts.each do |a| %>
+                    <%= render(:partial => "tr_account", :locals => {:account => a, :depth => 0}) %>
                 <% end %>
             </table>
         </div>
