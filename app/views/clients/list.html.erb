@@ -2,6 +2,7 @@
     <%= render(:partial => "layouts/people_sub_menu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
+            <%= link_to("+ New Client", {:action => 'new'}, :class => 'add action-button') %>
             <span class="trigger help action-button">Instructions >></span>
 
             <div class="instructions">

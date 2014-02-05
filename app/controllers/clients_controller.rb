@@ -3,7 +3,7 @@ class ClientsController < ApplicationController
 
   def list
     @query = params[:query]
-    @clients = Client.where("builder_id = ? AND status = ?", session[:builder_id], "Active").search(@query)
+    @clients = @builder.clients.active.search(@query)
   end
 
   def show
@@ -15,16 +15,10 @@ class ClientsController < ApplicationController
   end
 
   def create
-    #Instantiate a new object using form parameters
-    @builder = Base::Builder.find(session[:builder_id])
-    @client = Client.new(params[:client])
-    #save subject
+    @client = @builder.clients.new(params[:client].merge(:status => "Active"))
     if @client.save
-      @builder.clients << @client
-      #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
-      #if save fails, redisplay form to user can fix problems
       render('new')
     end
   end
@@ -34,14 +28,10 @@ class ClientsController < ApplicationController
   end
 
   def update
-    #Find object using form parameters
     @client = Client.find(params[:id])
-    #Update subject
     if @client.update_attributes(params[:client])
-      #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
-      #if save fails, redisplay form to user can fix problems
       render('edit')
     end
   end

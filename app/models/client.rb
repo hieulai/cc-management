@@ -4,9 +4,9 @@ class Client < ActiveRecord::Base
   has_many :projects, dependent: :destroy
   has_many :invoices, :through => :projects
   has_many :receipts, as: :payer
-  
-  attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone, 
-      :address, :city, :state, :zipcode, :notes, :last_contacted, :lead_source, :primary_phone_tag, :secondary_phone_tag
+
+  attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone,
+                  :address, :city, :state, :zipcode, :status, :notes, :last_contacted, :lead_source, :primary_phone_tag, :secondary_phone_tag
 
   default_scope order("first_name ASC")
   scope :active, where(status: "Active")
