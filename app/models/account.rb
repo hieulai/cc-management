@@ -128,7 +128,7 @@ class Account < ActiveRecord::Base
 
   def check_opening_balance_updated_at
     if self.opening_balance_changed
-      if self.opening_balance_updated_at.nil?
+      if self.opening_balance_updated_at.nil? && self.opening_balance.to_f != 0
         errors.add(:base, 'Opening balance updated date is required')
         return false
       end
