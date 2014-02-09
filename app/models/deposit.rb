@@ -8,6 +8,7 @@ class Deposit < ActiveRecord::Base
   accepts_nested_attributes_for :deposits_receipts, :allow_destroy => true
 
   default_scope order("date DESC")
+  scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
 
   after_update :update_account_balance, :if => :account_id_changed?
 

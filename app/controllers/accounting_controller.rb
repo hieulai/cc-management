@@ -439,6 +439,26 @@ class AccountingController < ApplicationController
     end
   end
 
+  def profit_loss_report
+
+  end
+
+  def export_profit_loss_report
+    if params[:from_date].present? && params[:to_date].present?
+      @from_date = Date.parse(params[:from_date])
+      @to_date = Date.parse(params[:to_date])
+      if @from_date <= @to_date
+        redirect_to controller: "reports", action: "pl_report", from_date: params[:from_date], to_date: params[:to_date], format: "pdf"
+      else
+        flash[:notice] = "From Date has to before To Date"
+        render("profit_loss_report")
+      end
+    else
+      flash[:notice] = "From Date and To Date are required"
+      render "profit_loss_report"
+    end
+  end
+
   private
   def create_purchasable(type)
     klass =  type.to_s.constantize

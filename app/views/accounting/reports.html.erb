@@ -2,14 +2,18 @@
     <%= render(:partial => "layouts/accounting_sub_menu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
-            <%= link_to("Profit & Loss >>", {:action => 'show'}, :title => 'Profit & Loss', :class => 'profit-loss action-button') %>
-            <%= link_to("Balance Sheet >>", {:action => 'show'}, :title => 'Balance Sheet', :class => 'balance action-button') %>
-            <%= link_to("Instructions >>", {:action => 'show'}, :title => 'Instructions', :class => 'help action-button') %>
+            &nbsp;
         </div>
         <div class="large-6 medium-6 columns">
             <h1>Accounting Reports</h1>
         </div>
         <div class="large-3 medium-2 columns">
+        </div>
+        <div class="zurb-row">
+            <div class="columns button-group">
+                <%= link_to("Profit & Loss", {:action => 'profit_loss_report'}, :class => 'btn') %>
+                <!-- <%= link_to("Profit & Loss by Project", {:action => 'profit_loss_report', :project => true}, :class => 'btn') %> -->
+            </div>
         </div>
     </div>
 </div>

@@ -109,6 +109,58 @@ var transformToDatePickerFor = function (element) {
     });
 };
 
+var transformToDateRangePickerFor = function (element) {
+    if (!element) {
+        element = document;
+    }
+    $(element).find(".daterangepicker").each(function () {
+        var $fromDate = $(this).find(".from_date");
+        var $toDate = $(this).find(".to_date");
+        $fromDate.datepicker({
+            altField: "#" + $fromDate.closest(".controls").find('input[type="hidden"]').attr("id"),
+            altFormat: "yy-mm-dd",
+            dateFormat: "mm-dd-yy",
+            onClose: function (selectedDate) {
+                $(this).closest(".daterangepicker").find(".to_date").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $toDate.datepicker({
+            altField: "#" + $toDate.closest(".controls").find('input[type="hidden"]').attr("id"),
+            altFormat: "yy-mm-dd",
+            dateFormat: "mm-dd-yy",
+            onClose: function (selectedDate) {
+                $(this).closest(".daterangepicker").find(".from_date").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+
+        $(this).on('change', '.range-picker', function () {
+            var $fromDate = $(this).closest(".daterangepicker").find(".from_date");
+            var $toDate = $(this).closest(".daterangepicker").find(".to_date");
+            switch ($(this).val()) {
+                case "current_month":
+                    $fromDate.datepicker("setDate", moment().startOf('month').toDate());
+                    $toDate.datepicker("setDate", moment().endOf('month').toDate());
+                    break;
+                case "current_quarter":
+                    var quarterAdjustment = moment().month() % 3;
+                    var quarterStartDate = moment().subtract({ months: quarterAdjustment }).startOf('month');
+                    var quarterEndDate = quarterStartDate.clone().add({ months: 2 }).endOf('month');
+                    $fromDate.datepicker("setDate", quarterStartDate.toDate());
+                    $toDate.datepicker("setDate", quarterEndDate.toDate());
+                    break;
+                case "current_year":
+                    $fromDate.datepicker("setDate", moment().startOf('year').toDate());
+                    $toDate.datepicker("setDate", moment().endOf('year').toDate());
+                    break;
+                default :
+                    $fromDate.datepicker("setDate", null);
+                    $toDate.datepicker("setDate", null);
+            }
+        });
+
+    });
+};
+
 $(document).ready(function() {
     load_add_link();
     $("select").select2({
@@ -201,8 +253,10 @@ $(document).ready(function() {
         $('input[type="submit"]').removeAttr('disabled');
         transformToDatePickerFor();
         transformToSelect2For();
+        transformToDateRangePickerFor();
     });
     transformToDatePickerFor();
     transformToSelect2For();
+    transformToDateRangePickerFor();
 
 })

@@ -8,6 +8,7 @@ class Payment < ActiveRecord::Base
   has_many :bills, :through => :payments_bills
 
   default_scope order("date DESC")
+  scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
 
   accepts_nested_attributes_for :payments_bills, :allow_destroy => true
   

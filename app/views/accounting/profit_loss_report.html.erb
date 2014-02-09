@@ -1,0 +1,64 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            &nbsp;
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Profit & Loss Report</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+        <div class="zurb-row">
+            <div class="columns">
+                <%= form_tag({:action => 'export_profit_loss_report'}, class: 'form-horizontal') do |f| %>
+                  <% if flash[:notice].present? %>
+                    <h2>1 error prohibited this report from being created:</h2>
+                    <ul>
+                        <li><%= flash[:notice] %></li>
+                    </ul>
+                  <% end %>
+                  <% if params[:project] == true.to_s %>
+                    <div class="control-group">
+                        <%= label_tag :project_id, 'Project', class: 'col-lg-2 control-label' %>
+                        <div class="controls">
+                            <%= select_tag(:project_id, options_for_select(@builder.projects.collect { |p| [p.name, p.id] }), :include_blank => true, class: "range-picker") %>
+                        </div>
+                    </div>
+                  <% end %>
+                  <div class="daterangepicker">
+                      <div class="control-group">
+                          <%= label_tag :date_range, 'Date Range', class: 'col-lg-2 control-label' %>
+                          <div class="controls">
+                              <%= select_tag(:date_range, options_for_select([["Current Month", "current_month"], ["Current Quarter", "current_quarter"], ["Current Year", "current_year"]]), :include_blank => true, class: "range-picker") %>
+                          </div>
+                      </div>
+
+                      <div class="control-group">
+                          <%= label_tag :from_date, 'From Date', class: 'col-lg-2 control-label' %>
+                          <div class="controls">
+                              <%= text_field_tag(:from_date, nil, class: 'from_date') %>
+                              <%= hidden_field_tag(:from_date, nil, id: 'from_date_hidden') %>
+                          </div>
+                      </div>
+                      <div class="control-group">
+                          <%= label_tag :to_date, 'To Date', class: 'col-lg-2 control-label' %>
+                          <div class="controls">
+                              <%= text_field_tag(:to_date, nil, class: 'to_date') %>
+                              <%= hidden_field_tag(:to_date, nil, id: 'to_date_hidden') %>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="control-group">
+                      <div class="controls">
+                          <%= submit_tag "Create", class: 'btn' %>
+                      </div>
+                  </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

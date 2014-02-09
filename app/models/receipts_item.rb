@@ -6,6 +6,8 @@ class ReceiptsItem < ActiveRecord::Base
   before_save :refund_account, :charge_account
   after_destroy :refund_account
 
+  scope :date_range, lambda { |from_date, to_date| joins(:receipt).where("receipts.received_at >= ? and receipts.received_at <= ? ", from_date, to_date) }
+
   POSITIVES = ["Liabilities", "Revenue", "Equity"]
   NEGATIVES = ["Assets"]
 

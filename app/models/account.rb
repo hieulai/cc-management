@@ -39,6 +39,38 @@ class Account < ActiveRecord::Base
     r.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
   end
 
+  def balance(from_date = nil, to_date =nil)
+    b = read_attribute(:balance)
+    if from_date && to_date
+      p_amount = payments.date_range(from_date, to_date).map(&:amount).compact.sum
+      d_amount = deposits.date_range(from_date, to_date).map(&:amount).compact.sum
+      st_amount = sent_transfers.date_range(from_date, to_date).map(&:amount).compact.sum
+      rt_amount = received_transfers.date_range(from_date, to_date).map(&:amount).compact.sum
+      ri_amount = 0
+      ujci_amount= 0
+      ob_amount = 0
+      if self.kind_of? ReceiptsItem::POSITIVES
+        ri_amount = receipts_items.date_range(from_date, to_date).map(&:amount).compact.sum
+      elsif self.kind_of? ReceiptsItem::NEGATIVES
+        ri_amount -= receipts_items.date_range(from_date, to_date).map(&:amount).compact.sum
+      end
+      if self.kind_of? UnJobCostedItem::POSITIVES
+        ujci_amount += un_job_costed_items.date_range(from_date, to_date).map(&:amount).compact.sum
+      elsif self.kind_of? UnJobCostedItem::NEGATIVES
+        ujci_amount -= un_job_costed_items.date_range(from_date, to_date).map(&:amount).compact.sum
+      end
+      if self.opening_balance_updated_at
+        if (self.opening_balance_updated_at >= from_date) && (self.opening_balance_updated_at <= to_date)
+          ob_amount = opening_balance
+        end
+      else
+        ob_amount = opening_balance
+      end
+      b= -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + ob_amount
+    end
+    b
+  end
+
   def bank_balance
     bb = balance.to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum - received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum
     if self.receipts_items.any?

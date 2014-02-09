@@ -7,6 +7,7 @@ class UnJobCostedItem < ActiveRecord::Base
   after_destroy :refund_account
 
   default_scope { order(:created_at) }
+  scope :date_range, lambda { |from_date, to_date| joins(:bill).where("bills.due_date >= ? and bills.due_date <= ? ", from_date, to_date) }
 
   POSITIVES = ["Assets", "Expenses"]
   NEGATIVES = ["Liabilities", "Equity"]

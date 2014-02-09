@@ -7,6 +7,8 @@ class Transfer < ActiveRecord::Base
   after_destroy :rollback_amount
   after_initialize :default_values
 
+  scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
+
   validates_presence_of :from_account, :to_account, :date, :amount
 
   BANK_TRANSFERS = ["Bank Accounts"]
