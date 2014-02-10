@@ -12,7 +12,7 @@ class Bill < ActiveRecord::Base
   has_many :bills_items, :dependent => :destroy
   has_many :un_job_costed_items, :dependent => :destroy
 
-  attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :category_id, :bills_items_attributes, :items_attributes, :un_job_costed_items_attributes
+  attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :billed_date, :category_id, :bills_items_attributes, :items_attributes, :un_job_costed_items_attributes
   accepts_nested_attributes_for :bills_items, :allow_destroy => true
   accepts_nested_attributes_for :items, :allow_destroy => true
   accepts_nested_attributes_for :un_job_costed_items, :reject_if => :all_blank, :allow_destroy => true
@@ -26,8 +26,9 @@ class Bill < ActiveRecord::Base
   before_update :clear_old_data
   after_update :destroy_old_purchased_categories_template
   after_destroy :destroy_purchased_categories_template
+  after_initialize :default_values
 
-  validates_presence_of :vendor
+  validates_presence_of :vendor, :billed_date
   validates_presence_of :project, :categories_template, :if => Proc.new{|b| b.job_costed? }
 
   def paid?
@@ -158,4 +159,9 @@ class Bill < ActiveRecord::Base
       self.categories_template_id = nil
     end
   end
+
+  def default_values
+    self.billed_date ||= Date.today
+  end
+
 end

@@ -17,7 +17,7 @@ class UnJobCostedItem < ActiveRecord::Base
   end
 
   def date
-    bill.due_date
+    bill.billed_date
   end
 
   def method
