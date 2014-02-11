@@ -1,9 +1,12 @@
 class UnJobCostedItem < ActiveRecord::Base
+  acts_as_paranoid
+
   belongs_to :bill
   belongs_to :account
   attr_accessible :account_id, :amount, :bill_id, :description, :name, :reconciled
 
-  before_save :refund_account, :charge_account
+  before_save :refund_account, :unless => :deleted_at_changed?
+  before_save :charge_account
   after_destroy :refund_account
 
   default_scope { order(:created_at) }

@@ -1,4 +1,5 @@
 class CategoriesTemplate < ActiveRecord::Base
+  acts_as_paranoid
   before_destroy :check_destroyable, :destroy_items
 
   attr_accessible :category_id, :template_id, :items_attributes, :purchased

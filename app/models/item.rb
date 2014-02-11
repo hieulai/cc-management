@@ -1,4 +1,5 @@
 class Item < ActiveRecord::Base
+  acts_as_paranoid
   include Importable
 
   before_destroy :check_readonly

@@ -1,9 +1,12 @@
 class PaymentsBill < ActiveRecord::Base
+  acts_as_paranoid
+
   belongs_to :payment
   belongs_to :bill
   attr_accessible :amount, :bill_id, :payment_id
 
-  before_save :refund_account_and_update_bill, :charge_account_and_update_bill
+  before_save :refund_account_and_update_bill, :unless => :deleted_at_changed?
+  before_save :charge_account_and_update_bill
   after_destroy :refund_account_and_update_bill
 
   private

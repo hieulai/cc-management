@@ -1,4 +1,5 @@
 class Bill < ActiveRecord::Base
+  acts_as_paranoid
   before_destroy :check_readonly
 
   belongs_to :project
@@ -83,11 +84,12 @@ class Bill < ActiveRecord::Base
   end
 
   def cached_total_amount
-     if generated?
-       purchase_order.cached_total_amount
-     else
-       read_attribute(:cached_total_amount)
-     end
+    if generated?
+      purchase_order.cached_total_amount
+    else
+      update_column(:cached_total_amount, total_amount) if read_attribute(:cached_total_amount) != total_amount
+      total_amount
+    end
   end
 
   def total_amount
@@ -125,7 +127,7 @@ class Bill < ActiveRecord::Base
   end
 
   def check_total_amount_changed
-    if !self.new_record? && self.paid? && self.total_amount!= self.cached_total_amount
+    if !self.new_record? && self.paid? && self.total_amount!= self.read_attribute(:cached_total_amount)
       errors[:base] << "This bill has already been paid in the amount of $#{cached_total_amount}. Editing a paid bill requires that all item amounts continue to add up to the original payment amount. If the original payment was made for the wrong amount, correct the payment first and then come back and edit the bill."
       return false
     end

@@ -1,4 +1,5 @@
 class BillsItem < ActiveRecord::Base
+  acts_as_paranoid
   include Purchasable
 
   belongs_to :bill

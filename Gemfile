@@ -27,6 +27,8 @@ group :production do
   gem 'pg'
 end
 
+gem "acts_as_paranoid"
+
 gem 'roo'
 gem 'to_xls', '~> 1.0.0'
 gem 'carrierwave'
