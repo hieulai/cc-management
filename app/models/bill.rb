@@ -128,7 +128,7 @@ class Bill < ActiveRecord::Base
 
   def check_total_amount_changed
     if !self.new_record? && self.paid? && self.total_amount!= self.read_attribute(:cached_total_amount)
-      errors[:base] << "This bill has already been paid in the amount of $#{cached_total_amount}. Editing a paid bill requires that all item amounts continue to add up to the original payment amount. If the original payment was made for the wrong amount, correct the payment first and then come back and edit the bill."
+      errors[:base] << "This bill has already been paid in the amount of $#{self.read_attribute(:cached_total_amount)}. Editing a paid bill requires that all item amounts continue to add up to the original payment amount. If the original payment was made for the wrong amount, correct the payment first and then come back and edit the bill."
       return false
     end
     self.cached_total_amount = self.total_amount
