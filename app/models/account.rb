@@ -155,7 +155,7 @@ class Account < ActiveRecord::Base
 
   private
   def check_if_default
-    if DEFAULTS.include? self.name
+    if (DEFAULTS.include? self.name) && (parent.nil? || (parent.name == ASSETS && self.name == BANK_ACCOUNTS))
       errors[:base] << "Default account is can not be destroyed or modified"
       false
     end
