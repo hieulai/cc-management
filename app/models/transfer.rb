@@ -11,8 +11,8 @@ class Transfer < ActiveRecord::Base
 
   validates_presence_of :from_account, :to_account, :date, :amount
 
-  BANK_TRANSFERS = ["Bank Accounts"]
-  GL_TRANSFERS = ["Accounts Payable", "Accounts Receivable", "Bank Accounts"]
+  BANK_TRANSFERS = [Account::BANK_ACCOUNTS]
+  GL_TRANSFERS = [Account::ACCOUNTS_PAYABLE, Account::ACCOUNTS_RECEIVABLE]
 
   def method
     "Transfer"

@@ -12,8 +12,8 @@ class UnJobCostedItem < ActiveRecord::Base
   default_scope { order(:created_at) }
   scope :date_range, lambda { |from_date, to_date| joins(:bill).where("bills.due_date >= ? and bills.due_date <= ? ", from_date, to_date) }
 
-  POSITIVES = ["Assets", "Expenses"]
-  NEGATIVES = ["Liabilities", "Equity"]
+  POSITIVES = [Account::ASSETS, Account::EXPENSES]
+  NEGATIVES = [Account::LIABILITIES, Account::EQUITY]
 
   def paid?
     bill.paid?

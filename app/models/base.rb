@@ -32,11 +32,11 @@ module Base
 
     def create_default_accounts
       Account::DEFAULTS.each do |name|
-        if name == "Bank Accounts"
-          assets_account = self.accounts.where(:name => "Assets").first
+        if name == Account::BANK_ACCOUNTS
+          parent_account = self.accounts.top.where(:name => Account::ASSETS).first
         end
-        if self.accounts.where(:name => name, :parent_id => assets_account.try(:id)).empty?
-          self.accounts.create(:name => name, :parent_id => assets_account.try(:id))
+        if self.accounts.where(:name => name, :parent_id => parent_account.try(:id)).empty?
+          self.accounts.create(:name => name, :parent_id => parent_account.try(:id))
         end
       end
     end

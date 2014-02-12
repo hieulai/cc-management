@@ -15,7 +15,8 @@ module AccountingHelper
   end
 
   def bank_accounts
-    bank_account = @builder.accounts.where(:name => "Bank Accounts").first
+    asset_account = @builder.accounts.top.where(:name => Account::ASSETS).first
+    bank_account = asset_account.children.where(:name => Account::BANK_ACCOUNTS).first
     @builder.accounts.where(:parent_id => bank_account.id)
   end
 
@@ -29,18 +30,20 @@ module AccountingHelper
 
   def select2_receipt_gl_accounts_json
     json = []
-    gl_accounts = @builder.accounts.where(:name => ["Revenue", "Liabilities", "Equity", "Assets"])
+    gl_accounts = @builder.accounts.top.where(:name => [Account::REVENUE, Account::LIABILITIES, Account::EQUITY, Account::ASSETS])
     gl_accounts.each do |a|
-      json << a.as_select2_json(["Bank Accounts"])
+      filters = a.name == Account::ASSETS ? [Account::BANK_ACCOUNTS] : []
+      json << a.as_select2_json(filters)
     end
     json.to_json
   end
 
   def select2_bill_gl_accounts_json
     json = []
-    gl_accounts = @builder.accounts.where(:name => ["Assets", "Expenses", "Liabilities", "Equity"])
+    gl_accounts = @builder.accounts.top.where(:name => [Account::ASSETS, Account::EXPENSES, Account::LIABILITIES, Account::EQUITY])
     gl_accounts.each do |a|
-      json << a.as_select2_json(["Bank Accounts"])
+      filters = a.name == Account::ASSETS ? [Account::BANK_ACCOUNTS] : []
+      json << a.as_select2_json(filters)
     end
     json.to_json
   end

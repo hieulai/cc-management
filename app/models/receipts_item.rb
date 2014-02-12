@@ -8,8 +8,8 @@ class ReceiptsItem < ActiveRecord::Base
 
   scope :date_range, lambda { |from_date, to_date| joins(:receipt).where("receipts.received_at >= ? and receipts.received_at <= ? ", from_date, to_date) }
 
-  POSITIVES = ["Liabilities", "Revenue", "Equity"]
-  NEGATIVES = ["Assets"]
+  POSITIVES = [Account::LIABILITIES, Account::REVENUE, Account::EQUITY]
+  NEGATIVES = [Account::ASSETS]
 
   def billed?
     receipt.billed?

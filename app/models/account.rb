@@ -1,5 +1,16 @@
 require 'ostruct'
 class Account < ActiveRecord::Base
+  REVENUE = "Revenue"
+  COST_OF_GOODS_SOLD = "Cost of Goods Sold"
+  EXPENSES = "Expenses"
+  ASSETS = "Assets"
+  LIABILITIES = "Liabilities"
+  EQUITY = "Equity"
+  ACCOUNTS_PAYABLE = "Accounts Payable"
+  ACCOUNTS_RECEIVABLE = "Accounts Receivable"
+  BANK_ACCOUNTS = 'Bank Accounts'
+  DEFAULTS = [REVENUE, COST_OF_GOODS_SOLD, EXPENSES, ASSETS, LIABILITIES, EQUITY, ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS]
+
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :payments
   has_many :deposits
@@ -14,8 +25,6 @@ class Account < ActiveRecord::Base
   attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id
   attr_accessor :opening_balance_changed
 
-  DEFAULTS = ["Revenue", "Cost of Goods Sold", "Expenses", "Assets", "Liabilities", "Equity", "Accounts Payable", "Accounts Receivable", "Bank Accounts"]
-
   default_scope order("name ASC")
   scope :top, where(:parent_id => nil)
   scope :undefault, where('name not in (?)', DEFAULTS)
@@ -24,7 +33,7 @@ class Account < ActiveRecord::Base
   before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
   before_save :check_opening_balance_updated_at
 
-  validates_uniqueness_of :name, scope: [:builder_id]
+  validates_uniqueness_of :name, scope: [:builder_id, :parent_id]
   validate :disallow_self_reference
 
   def transactions

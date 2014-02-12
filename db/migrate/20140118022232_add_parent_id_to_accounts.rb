@@ -5,7 +5,8 @@ class AddParentIdToAccounts < ActiveRecord::Migration
     Base::Builder.all.each do |b|
       b.create_default_accounts
       b.accounts.undefault.each do |a|
-        bank_account = b.accounts.where(:name => "Bank Accounts").first
+        asset_account = b.accounts.top.where(:name => Account::ASSETS).first
+        bank_account = asset_account.children.where(:name => Account::BANK_ACCOUNTS).first
         a.update_attribute(:parent_id, bank_account.id)
       end
     end
