@@ -9,22 +9,20 @@ class Invoice < ActiveRecord::Base
   has_many :receipts, :through => :receipts_invoices
 
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
-  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount
+  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount, :category_amount, :reconciled
+  attr_accessor :category_amount
 
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
 
+  after_initialize :default_values
   before_save :check_readonly, :check_reference
 
   validates_presence_of :estimate, :builder
 
   def billed?
     self.receipts_invoices.any?
-  end
-
-  def invoice_date
-    read_attribute(:invoice_date) || created_at
   end
 
   def amount
@@ -37,6 +35,14 @@ class Invoice < ActiveRecord::Base
 
   def receipt_invoice(receipt_id)
     self.receipts_invoices.where(:receipt_id => receipt_id).first
+  end
+
+  def date
+    invoice_date
+  end
+
+  def display_priority
+    1
   end
 
   private
@@ -61,5 +67,9 @@ class Invoice < ActiveRecord::Base
     else
       self.reference = self.class.maximum(:reference).to_f + 1
     end
+  end
+
+  def default_values
+    self.invoice_date ||= Date.today
   end
 end

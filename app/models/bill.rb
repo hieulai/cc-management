@@ -13,7 +13,9 @@ class Bill < ActiveRecord::Base
   has_many :bills_items, :dependent => :destroy
   has_many :un_job_costed_items, :dependent => :destroy
 
-  attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id, :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :billed_date, :category_id, :bills_items_attributes, :items_attributes, :un_job_costed_items_attributes
+  attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id,
+                  :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :billed_date, :reconciled,
+                  :category_id, :bills_items_attributes, :items_attributes, :un_job_costed_items_attributes
   accepts_nested_attributes_for :bills_items, :allow_destroy => true
   accepts_nested_attributes_for :items, :allow_destroy => true
   accepts_nested_attributes_for :un_job_costed_items, :reject_if => :all_blank, :allow_destroy => true
@@ -22,14 +24,16 @@ class Bill < ActiveRecord::Base
   default_scope order("due_date DESC")
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :paid, where('remaining_amount = 0')
+  scope :date_range, lambda { |from_date, to_date| where('billed_date >= ? AND billed_date <= ?', from_date, to_date) }
 
-  before_save :check_zero_amount, :check_total_amount_changed
-  before_update :clear_old_data
-  after_update :destroy_old_purchased_categories_template
-  after_destroy :destroy_purchased_categories_template
   after_initialize :default_values
+  before_save :check_zero_amount, :check_total_amount_changed, :decrease_account, :increase_account
+  before_update :clear_old_data
+  after_save :set_cached_total_amount
+  after_update :destroy_old_purchased_categories_template
+  after_destroy :decrease_account, :destroy_purchased_categories_template
 
-  validates_presence_of :vendor, :billed_date
+  validates_presence_of :vendor, :billed_date, :builder
   validates_presence_of :project, :categories_template, :if => Proc.new{|b| b.job_costed? }
 
   def paid?
@@ -87,8 +91,7 @@ class Bill < ActiveRecord::Base
     if generated?
       purchase_order.cached_total_amount
     else
-      update_column(:cached_total_amount, total_amount) if read_attribute(:cached_total_amount) != total_amount
-      total_amount
+      read_attribute(:cached_total_amount)
     end
   end
 
@@ -118,6 +121,28 @@ class Bill < ActiveRecord::Base
     bills_items
   end
 
+  def increase_account
+    return true unless categories_template_id
+    category_template = CategoriesTemplate.find(categories_template_id)
+    category_template.revenue_account.update_attribute(:balance, category_template.revenue_account.balance.to_f + self.total_amount.to_f)
+    category_template.cogs_account.update_attribute(:balance, category_template.cogs_account.balance.to_f + self.total_amount.to_f)
+  end
+
+  def decrease_account
+    return true unless categories_template_id_was
+    category_template_was = CategoriesTemplate.find(categories_template_id_was)
+    category_template_was.revenue_account.update_attribute(:balance, category_template_was.revenue_account.balance.to_f - self.cached_total_amount.to_f)
+    category_template_was.cogs_account.update_attribute(:balance, category_template_was.cogs_account.balance.to_f - self.cached_total_amount.to_f)
+  end
+
+  def date
+    billed_date
+  end
+
+  def display_priority
+    1
+  end
+
   private
   def check_readonly
     if self.paid?
@@ -127,11 +152,10 @@ class Bill < ActiveRecord::Base
   end
 
   def check_total_amount_changed
-    if !self.new_record? && self.paid? && self.total_amount!= self.read_attribute(:cached_total_amount)
-      errors[:base] << "This bill has already been paid in the amount of $#{self.read_attribute(:cached_total_amount)}. Editing a paid bill requires that all item amounts continue to add up to the original payment amount. If the original payment was made for the wrong amount, correct the payment first and then come back and edit the bill."
+    if !self.new_record? && self.paid? && self.total_amount!= self.cached_total_amount
+      errors[:base] << "This bill has already been paid in the amount of $#{self.cached_total_amount}. Editing a paid bill requires that all item amounts continue to add up to the original payment amount. If the original payment was made for the wrong amount, correct the payment first and then come back and edit the bill."
       return false
     end
-    self.cached_total_amount = self.total_amount
   end
 
   def check_zero_amount
@@ -149,6 +173,10 @@ class Bill < ActiveRecord::Base
 
   def destroy_purchased_categories_template
     categories_template.destroy if categories_template && categories_template.purchased && categories_template.bills.empty?
+  end
+
+  def set_cached_total_amount
+    update_column(:cached_total_amount, total_amount) if cached_total_amount != total_amount
   end
 
   def clear_old_data

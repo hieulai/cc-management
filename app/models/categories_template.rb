@@ -1,6 +1,7 @@
 class CategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
   before_destroy :check_destroyable, :destroy_items
+  after_destroy :destroy_accounts, :if => Proc.new{|ct| ct.template.estimate.present? }
 
   attr_accessible :category_id, :template_id, :items_attributes, :purchased
 
@@ -9,7 +10,12 @@ class CategoriesTemplate < ActiveRecord::Base
   has_many :purchase_orders, :dependent => :destroy
   has_many :bills, :dependent => :destroy
   has_and_belongs_to_many :items
+  has_and_belongs_to_many :accounts
   accepts_nested_attributes_for :items, allow_destroy: true
+
+  after_create :create_accounts, :if => Proc.new{|ct| ct.template.estimate.present? }
+
+  validates_presence_of :template, :category
 
   def category_name
     self.category.name
@@ -58,6 +64,40 @@ class CategoriesTemplate < ActiveRecord::Base
     end
   end
 
+  def estimated_amount
+    p = self.template.estimate.cost_plus_bid? ? :amount : :price
+    items.map(&p).compact.sum
+  end
+
+  def revenue_account
+    return nil unless self.template.estimate
+    builder = self.template.estimate.builder
+    r_account = builder.accounts.top.where(:name => Account::REVENUE).first
+    ct_account = r_account.children.where(:name => self.category.name).first
+    unless ct_account
+      ct_account = r_account.children.create(:name => self.category.name)
+    end
+    unless self.accounts.include? ct_account
+      self.accounts << ct_account
+    end
+
+    ct_account
+  end
+
+  def cogs_account
+    return nil unless self.template.estimate
+    builder = self.template.estimate.builder
+    cogs_account = builder.accounts.top.where(:name => Account::COST_OF_GOODS_SOLD).first
+    ct_account = cogs_account.children.where(:name => self.category.name).first
+    unless ct_account
+      ct_account = cogs_account.children.create(:name => self.category.name)
+    end
+    unless self.accounts.include? ct_account
+      self.accounts << ct_account
+    end
+    ct_account
+  end
+
   private
   def check_destroyable
     if self.undestroyable?
@@ -68,5 +108,15 @@ class CategoriesTemplate < ActiveRecord::Base
 
   def destroy_items
     items.destroy_all
+  end
+
+  def create_accounts
+    revenue_account
+    cogs_account
+  end
+
+  def destroy_accounts
+    revenue_account.destroy if revenue_account.categories_templates.empty?
+    cogs_account.destroy if cogs_account.categories_templates.empty?
   end
 end

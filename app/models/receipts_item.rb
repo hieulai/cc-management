@@ -19,22 +19,6 @@ class ReceiptsItem < ActiveRecord::Base
     receipt.received_at
   end
 
-  def method
-    'Receipt'
-  end
-
-  def payee
-    receipt.payer_name
-  end
-
-  def reference
-    receipt.reference
-  end
-
-  def memo
-    receipt.notes
-  end
-
   def display_priority
     1
   end

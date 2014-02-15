@@ -12,6 +12,7 @@ class Account < ActiveRecord::Base
   DEFAULTS = [REVENUE, COST_OF_GOODS_SOLD, EXPENSES, ASSETS, LIABILITIES, EQUITY, ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS]
 
   belongs_to :builder, :class_name => "Base::Builder"
+  belongs_to :parent, class_name: "Account"
   has_many :payments
   has_many :deposits
   has_many :children, class_name: "Account", foreign_key: "parent_id"
@@ -19,8 +20,9 @@ class Account < ActiveRecord::Base
   has_many :received_transfers, class_name: Transfer.name, foreign_key: "to_account_id"
   has_many :receipts_items, :dependent => :destroy
   has_many :un_job_costed_items, :dependent => :destroy
-
-  belongs_to :parent, class_name: "Account"
+  has_and_belongs_to_many :categories_templates
+  has_many :bills, :through => :categories_templates
+  has_and_belongs_to_many :invoices_items
 
   attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id
   attr_accessor :opening_balance_changed
@@ -29,7 +31,7 @@ class Account < ActiveRecord::Base
   scope :top, where(:parent_id => nil)
   scope :undefault, where('name not in (?)', DEFAULTS)
 
-  before_destroy :check_if_default
+  before_destroy :check_if_default, :check_if_has_categories_templates
   before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
   before_save :check_opening_balance_updated_at
 
@@ -38,13 +40,9 @@ class Account < ActiveRecord::Base
 
   def transactions
     opening_balance_item = [OpenStruct.new(date: self.opening_balance_updated_at,
-                                           kind: "Opening Balance",
-                                           reference: nil,
-                                           payee: "Opening Balance",
-                                           memo: "Opening Balance",
                                            amount: self.opening_balance,
                                            display_priority: 0)]
-    r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + opening_balance_item
+    r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + bills + invoices + opening_balance_item
     r.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
   end
 
@@ -56,7 +54,7 @@ class Account < ActiveRecord::Base
       st_amount = sent_transfers.date_range(from_date, to_date).map(&:amount).compact.sum
       rt_amount = received_transfers.date_range(from_date, to_date).map(&:amount).compact.sum
       ri_amount = 0
-      ujci_amount= 0
+      ujci_amount = 0
       ob_amount = 0
       if self.kind_of? ReceiptsItem::POSITIVES
         ri_amount = receipts_items.date_range(from_date, to_date).map(&:amount).compact.sum
@@ -68,6 +66,8 @@ class Account < ActiveRecord::Base
       elsif self.kind_of? UnJobCostedItem::NEGATIVES
         ujci_amount -= un_job_costed_items.date_range(from_date, to_date).map(&:amount).compact.sum
       end
+      b_amount = bills.date_range(from_date, to_date).map(&:cached_total_amount).compact.sum
+      ii_amount = invoices_items.date_range(from_date, to_date).map(&:amount).compact.sum
       if self.opening_balance_updated_at
         if (self.opening_balance_updated_at >= from_date) && (self.opening_balance_updated_at <= to_date)
           ob_amount = opening_balance
@@ -75,13 +75,15 @@ class Account < ActiveRecord::Base
       else
         ob_amount = opening_balance
       end
-      b= -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + ob_amount
+      b= -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + b_amount + ii_amount + ob_amount
     end
     b
   end
 
   def bank_balance
-    bb = balance.to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum - received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum
+    bb = balance.to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum -
+        received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum -
+        bills.where(:reconciled => false).map(&:cached_total_amount).compact.sum - invoices_items.joins(:invoice).where('invoices.reconciled = false').map(&:amount).compact.sum
     if self.receipts_items.any?
       if self.kind_of? ReceiptsItem::POSITIVES
         bb-= receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
@@ -110,7 +112,8 @@ class Account < ActiveRecord::Base
   end
 
   def opening_balance
-    ob = balance.to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum + sent_transfers.map(&:amount).compact.sum
+    ob = balance.to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum +
+        sent_transfers.map(&:amount).compact.sum - bills.map(&:cached_total_amount).compact.sum - invoices_items.map(&:amount).compact.sum
     if self.receipts_items.any?
       if self.kind_of? ReceiptsItem::POSITIVES
         ob-= receipts_items.map(&:amount).compact.sum
@@ -153,6 +156,16 @@ class Account < ActiveRecord::Base
     }
   end
 
+  def invoices
+    r = []
+    invoices_items.group_by(&:invoice_id).each do |k, v|
+      i = Invoice.find(k)
+      i.category_amount = v.map(&:amount).compact.sum
+      r << i
+    end
+    r
+  end
+
   private
   def check_if_default
     if (DEFAULTS.include? self.name) && (parent.nil? || (parent.name == ASSETS && self.name == BANK_ACCOUNTS))
@@ -175,6 +188,13 @@ class Account < ActiveRecord::Base
       end
     else
       self.opening_balance_updated_at = self.opening_balance_updated_at_was
+    end
+  end
+
+  def check_if_has_categories_templates
+    if categories_templates.any?
+      errors.add(:base, 'Cannot delete an account has categories')
+      return false
     end
   end
 end

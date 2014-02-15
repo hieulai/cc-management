@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140211145919) do
+ActiveRecord::Schema.define(:version => 20140215105212) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -28,6 +28,16 @@ ActiveRecord::Schema.define(:version => 20140211145919) do
   end
 
   add_index "accounts", ["builder_id"], :name => "index_accounts_on_builder_id"
+
+  create_table "accounts_categories_templates", :force => true do |t|
+    t.integer "account_id"
+    t.integer "categories_template_id"
+  end
+
+  create_table "accounts_invoices_items", :force => true do |t|
+    t.integer "account_id"
+    t.integer "invoices_item_id"
+  end
 
   create_table "architects", :force => true do |t|
     t.integer  "builder_id"
@@ -82,13 +92,14 @@ ActiveRecord::Schema.define(:version => 20140211145919) do
     t.integer  "categories_template_id"
     t.date     "due_date"
     t.text     "notes"
-    t.datetime "created_at",                                                              :null => false
-    t.datetime "updated_at",                                                              :null => false
+    t.datetime "created_at",                                                               :null => false
+    t.datetime "updated_at",                                                               :null => false
     t.decimal  "remaining_amount",       :precision => 10, :scale => 2
     t.boolean  "job_costed",                                            :default => true
     t.decimal  "cached_total_amount",    :precision => 10, :scale => 2
     t.date     "billed_date"
     t.time     "deleted_at"
+    t.boolean  "reconciled",                                            :default => false
   end
 
   add_index "bills", ["builder_id"], :name => "index_bills_on_builder_id"
@@ -307,10 +318,11 @@ ActiveRecord::Schema.define(:version => 20140211145919) do
     t.integer  "estimate_id"
     t.date     "sent_date"
     t.integer  "reference"
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
     t.decimal  "remaining_amount", :precision => 10, :scale => 2
     t.date     "invoice_date"
+    t.boolean  "reconciled",                                      :default => false
   end
 
   add_index "invoices", ["builder_id"], :name => "index_invoices_on_builder_id"

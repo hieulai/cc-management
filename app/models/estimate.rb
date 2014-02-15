@@ -26,6 +26,10 @@ class Estimate < ActiveRecord::Base
     read_attribute(:kind) || "Guaranteed Bid"
   end
 
+  def cost_plus_bid?
+    kind == "Cost Plus Bid"
+  end
+
   private
   def check_destroyable
     if undestroyable?

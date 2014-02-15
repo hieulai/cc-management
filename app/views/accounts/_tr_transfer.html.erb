@@ -3,7 +3,7 @@
         <%= t.date %>
         <%= link_to("Edit", {:controller => 'accounts', :action => 'edit_transfer', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
     </td>
-    <td><%= t.method %></td>
+    <td>Transfer</td>
     <td><%= t.reference %></td>
     <td>
         <% if t.from_account_id == @account.id %>

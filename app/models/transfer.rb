@@ -14,10 +14,6 @@ class Transfer < ActiveRecord::Base
   BANK_TRANSFERS = [Account::BANK_ACCOUNTS]
   GL_TRANSFERS = [Account::ACCOUNTS_PAYABLE, Account::ACCOUNTS_RECEIVABLE]
 
-  def method
-    "Transfer"
-  end
-
   def display_priority
     1
   end

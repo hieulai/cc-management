@@ -71,6 +71,12 @@
                         <% elsif @account.kind_of? UnJobCostedItem::NEGATIVES %>
                           <% balance += t.amount.to_f %>
                         <% end %>
+                      <% elsif t.instance_of? Bill %>
+                        <%= render(:partial => "tr_bill", :locals => {:t => t, :balance => balance}) %>
+                        <% balance -= t.cached_total_amount.to_f %>
+                      <% elsif t.instance_of? Invoice %>
+                        <%= render(:partial => "tr_invoice", :locals => {:t => t, :balance => balance}) %>
+                          <% balance -= t.category_amount.to_f %>
                       <% else %>
                         <%= render(:partial => "tr_opening_balance", :locals => {:t => t, :account => @account, :balance => balance}) %>
                       <% end %>

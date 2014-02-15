@@ -5,9 +5,7 @@
     </td>
     <td><%= t.method %></td>
     <td><%= t.reference %></td>
-    <td>
-        <%= t.payee %>
-    </td>
+    <td><%= t.vendor.try(:display_name) %></td>
     <td><%= t.memo %></td>
     <td class="right">
         <%= price_tag(t.amount ? (t.amount * -1) : t.amount) %>

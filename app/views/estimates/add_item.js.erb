@@ -1,6 +1,6 @@
 var trCategory = $('tr#category_<%= @category_template.category.id %>');
 var addItem = trCategory.nextAll("tr.add-item").first();
-$('<%= escape_javascript(render :partial => 'tr_item', :locals => {:item => @item, :category_template => @category_template}) %>').insertBefore(addItem);
+$('<%= escape_javascript(render :partial => @category_template.template.estimate.cost_plus_bid? ? 'estimates/cost_plus_bid/tr_item' : 'tr_item', :locals => {:item => @item, :category_template => @category_template}) %>').insertBefore(addItem);
 if (addItem.hasClass("temp")) {
     addItem.remove();
 } else {

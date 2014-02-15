@@ -18,18 +18,6 @@ class Deposit < ActiveRecord::Base
     deposits_receipts.map(&:amount).compact.sum if deposits_receipts.any?
   end
 
-  def method
-      "Deposit"
-  end
-
-  def memo
-    notes
-  end
-
-  def payee
-
-  end
-
   def display_priority
     1
   end

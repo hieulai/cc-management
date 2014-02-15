@@ -23,21 +23,6 @@ class UnJobCostedItem < ActiveRecord::Base
     bill.billed_date
   end
 
-  def method
-    'Bill'
-  end
-
-  def payee
-    bill.vendor.full_name
-  end
-
-  def reference
-  end
-
-  def memo
-    bill.notes
-  end
-
   def display_priority
     1
   end
