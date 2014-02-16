@@ -104,6 +104,10 @@ class Item < ActiveRecord::Base
     self.purchase_order_id.present? || self.bill_id.present?
   end
 
+  def change_order?
+    self.change_orders_category.present?
+  end
+
   def billed?
     self.invoices.any?
   end
