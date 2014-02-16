@@ -113,18 +113,3 @@ table.item-list {
     }
   }
 }
-
-table.report {
-  border: none;
-  width: auto;
-  td.amount{
-    text-align: right;
-  }
-  td.name{
-    padding-right: 30px ;
-  }
-  td.calculate {
-    border-top: solid 1px #000000;
-  }
-
-}

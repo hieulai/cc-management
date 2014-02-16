@@ -1,0 +1,33 @@
+<% r_balance = @builder.accounts.where(:name => "Revenue").first.balance(from_date, to_date).to_f
+   c_balance = @builder.accounts.where(:name => "Cost of Goods Sold").first.balance(from_date, to_date).to_f
+   e_balance = @builder.accounts.where(:name => "Expenses").first.balance(from_date, to_date).to_f
+   gross_profit = r_balance - c_balance
+   net_profit = gross_profit - e_balance
+%>
+
+<table class="splitForPrint report">
+    <tbody>
+    <tr>
+        <td class="name">Revenue</td>
+        <td class="amount"><%= price_tag r_balance %></td>
+    </tr>
+    <tr>
+        <td class="name">Cost of Goods Sold</td>
+        <td class="amount"><%= price_tag c_balance %></td>
+    </tr>
+    <tr>
+        <td class="name">Gross Profit</td>
+        <td class="amount calculate"><%= price_tag gross_profit %></td>
+    </tr>
+    <tr>
+        <td class="name">Expenses</td>
+        <td class="amount"><%= price_tag e_balance %></td>
+    </tr>
+    <tr>
+        <td class="name">Net Profit</td>
+        <td class="amount calculate"><%= price_tag net_profit %></td>
+    </tr>
+    </tbody>
+</table>
+
+<%= link_to("Print", {:action => 'print_profit_loss_report', from_date: from_date.strftime("%Y-%m-%d"), to_date: to_date.strftime("%Y-%m-%d")}, :class => 'btn') %>

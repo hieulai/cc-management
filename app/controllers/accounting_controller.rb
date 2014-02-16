@@ -440,7 +440,6 @@ class AccountingController < ApplicationController
   end
 
   def profit_loss_report
-
   end
 
   def export_profit_loss_report
@@ -448,7 +447,9 @@ class AccountingController < ApplicationController
       @from_date = Date.parse(params[:from_date])
       @to_date = Date.parse(params[:to_date])
       if @from_date <= @to_date
-        redirect_to controller: "reports", action: "pl_report", from_date: params[:from_date], to_date: params[:to_date], format: "pdf"
+        respond_to do |format|
+          format.js
+        end
       else
         flash[:notice] = "From Date has to before To Date"
         render("profit_loss_report")
@@ -457,6 +458,10 @@ class AccountingController < ApplicationController
       flash[:notice] = "From Date and To Date are required"
       render "profit_loss_report"
     end
+  end
+
+  def print_profit_loss_report
+    redirect_to controller: "reports", action: "pl_report", from_date: params[:from_date], to_date: params[:to_date], format: "pdf"
   end
 
   private

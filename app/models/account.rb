@@ -56,7 +56,6 @@ class Account < ActiveRecord::Base
       rt_amount = received_transfers.date_range(from_date, to_date).map(&:amount).compact.sum
       ri_amount = 0
       ujci_amount = 0
-      ob_amount = 0
       if self.kind_of? ReceiptsItem::POSITIVES
         ri_amount = receipts_items.date_range(from_date, to_date).map(&:amount).compact.sum
       elsif self.kind_of? ReceiptsItem::NEGATIVES
@@ -69,14 +68,7 @@ class Account < ActiveRecord::Base
       end
       b_amount = bills.date_range(from_date, to_date).map(&:cached_total_amount).compact.sum
       ii_amount = invoices_items.date_range(from_date, to_date).map(&:amount).compact.sum
-      if self.opening_balance_updated_at
-        if (self.opening_balance_updated_at >= from_date) && (self.opening_balance_updated_at <= to_date)
-          ob_amount = opening_balance
-        end
-      else
-        ob_amount = opening_balance
-      end
-      b= -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + b_amount + ii_amount + ob_amount
+      b= -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + b_amount + ii_amount
     end
     b
   end
