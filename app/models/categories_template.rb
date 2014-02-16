@@ -116,7 +116,7 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def destroy_accounts
-    revenue_account.destroy if revenue_account.categories_templates.empty?
-    cogs_account.destroy if cogs_account.categories_templates.empty?
+    revenue_account.destroy if revenue_account.has_no_category?
+    cogs_account.destroy if cogs_account.has_no_category?
   end
 end

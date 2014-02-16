@@ -34,6 +34,11 @@ ActiveRecord::Schema.define(:version => 20140215105212) do
     t.integer "categories_template_id"
   end
 
+  create_table "accounts_change_orders_categories", :force => true do |t|
+    t.integer "account_id"
+    t.integer "change_orders_category_id"
+  end
+
   create_table "accounts_invoices_items", :force => true do |t|
     t.integer "account_id"
     t.integer "invoices_item_id"

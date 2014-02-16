@@ -11,45 +11,33 @@ class InvoicesItem < ActiveRecord::Base
   after_destroy :decrease_account
 
   def increase_account
-    change_account(true)
+    if item.change_order?
+      item.change_orders_category.revenue_account.update_attribute(:balance, item.change_orders_category.revenue_account.balance.to_f + amount.to_f)
+      item.change_orders_category.cogs_account.update_attribute(:balance, item.change_orders_category.cogs_account.balance.to_f + amount.to_f)
+      self.accounts << item.change_orders_category.revenue_account
+      self.accounts << item.change_orders_category.cogs_account
+    elsif item.categories_templates.any?
+      item.categories_templates.each do |ct|
+        ct.revenue_account.update_attribute(:balance, ct.revenue_account.balance.to_f + amount.to_f)
+        ct.cogs_account.update_attribute(:balance, ct.cogs_account.balance.to_f + amount.to_f)
+        self.accounts << ct.revenue_account
+        self.accounts << ct.cogs_account
+      end
+    end
   end
 
   def decrease_account
-    change_account(false)
-  end
-
-  private
-  def change_account(positive)
-    if item.change_order? || item.purchased?
-      if item.change_order?
-        category = item.change_orders_category.category
-      elsif item.purchased?
-        category = item.purchase_order.try(:categories_template).try(:category) || item.bill.try(:categories_template).try(:category)
-      end
-      r_account = category.builder.accounts.top.where(:name => Account::REVENUE).first
-      r_ct_account = r_account.children.where(:name => category.name).first
-      cogs_account = category.builder.accounts.top.where(:name => Account::COST_OF_GOODS_SOLD).first
-      cogs_ct_account = cogs_account.children.where(:name => category.name).first
-      r_ct_account.update_attribute(:balance, r_ct_account.balance.to_f + (positive ? amount.to_f : -1 * amount_was.to_f))
-      cogs_ct_account.update_attribute(:balance, cogs_ct_account.balance.to_f + (positive ? amount.to_f : -1 * amount_was.to_f))
-      if positive
-        self.accounts << r_ct_account
-        self.accounts << cogs_ct_account
-      else
-        self.accounts.delete r_ct_account
-        self.accounts.delete cogs_ct_account
-      end
+    if item.change_order?
+      item.change_orders_category.revenue_account.update_attribute(:balance, item.change_orders_category.revenue_account.balance.to_f - amount_was.to_f)
+      item.change_orders_category.cogs_account.update_attribute(:balance, item.change_orders_category.cogs_account.balance.to_f - amount_was.to_f)
+      self.accounts.delete item.change_orders_category.revenue_account
+      self.accounts.delete item.change_orders_category.cogs_account
     elsif item.categories_templates.any?
       item.categories_templates.each do |ct|
-        ct.revenue_account.update_attribute(:balance, ct.revenue_account.balance.to_f + (positive ? amount.to_f : -1 * amount_was.to_f))
-        ct.cogs_account.update_attribute(:balance, ct.cogs_account.balance.to_f + (positive ? amount.to_f : -1 * amount_was.to_f))
-        if positive
-          self.accounts << ct.revenue_account
-          self.accounts << ct.cogs_account
-        else
-          self.accounts.delete ct.revenue_account
-          self.accounts.delete ct.cogs_account
-        end
+        ct.revenue_account.update_attribute(:balance, ct.revenue_account.balance.to_f - amount_was.to_f)
+        ct.cogs_account.update_attribute(:balance, ct.cogs_account.balance.to_f - amount_was.to_f)
+        self.accounts.delete ct.revenue_account
+        self.accounts.delete ct.cogs_account
       end
     end
   end

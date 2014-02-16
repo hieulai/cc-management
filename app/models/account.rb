@@ -21,6 +21,7 @@ class Account < ActiveRecord::Base
   has_many :receipts_items, :dependent => :destroy
   has_many :un_job_costed_items, :dependent => :destroy
   has_and_belongs_to_many :categories_templates
+  has_and_belongs_to_many :change_orders_categories
   has_many :bills, :through => :categories_templates
   has_and_belongs_to_many :invoices_items
 
@@ -164,6 +165,10 @@ class Account < ActiveRecord::Base
       r << i
     end
     r
+  end
+
+  def has_no_category?
+    categories_templates.empty? && change_orders_categories.empty?
   end
 
   private
