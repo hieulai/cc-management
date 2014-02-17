@@ -11,11 +11,10 @@ module AccountsHelper
 
   def select2_gl_transfer_accounts_json
     json = []
-    gl_transfer_names = Transfer::GL_TRANSFERS
+    gl_transfer_names = Account::TOP
     gl_transfer_accounts = @builder.accounts.top.where(:name => gl_transfer_names)
     gl_transfer_accounts.each do |a|
-      filters = a.name == Account::ASSETS ? [Account::BANK_ACCOUNTS] : []
-      json << a.as_select2_json(filters, gl_transfer_names)
+      json << a.as_select2_json([], gl_transfer_names)
     end
     json.to_json
   end

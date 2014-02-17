@@ -3,7 +3,7 @@ class Transfer < ActiveRecord::Base
   belongs_to :to_account, :foreign_key => "to_account_id", :class_name => Account.name
   attr_accessible :date, :amount, :reference, :memo, :reconciled, :kind, :from_account_id, :to_account_id
 
-  before_save :check_top_accounts, :if => Proc.new { |i| GL_TRANSFERS.include?(i.from_account.name) || GL_TRANSFERS.include?(i.to_account.name) }
+  before_save :check_top_accounts, :if => Proc.new { |i| Account::TOP.include?(i.from_account.name) || Account::TOP.include?(i.to_account.name) }
   before_save  :rollback_amount, :transfer_amount
   after_destroy :rollback_amount
   after_initialize :default_values
@@ -13,7 +13,6 @@ class Transfer < ActiveRecord::Base
   validates_presence_of :from_account, :to_account, :date, :amount
 
   BANK_TRANSFERS = [Account::BANK_ACCOUNTS]
-  GL_TRANSFERS = Account::DEFAULTS - [Account::ACCOUNTS_PAYABLE, Account::ACCOUNTS_RECEIVABLE]
 
   def display_priority
     1

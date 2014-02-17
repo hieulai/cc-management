@@ -34,7 +34,12 @@ module Base
       Account::DEFAULTS.each do |name|
         if name == Account::BANK_ACCOUNTS
           parent_account = self.accounts.top.where(:name => Account::ASSETS).first
+        elsif name == Account::ACCOUNTS_PAYABLE
+          parent_account = self.accounts.top.where(:name => Account::LIABILITIES).first
+        elsif name == Account::ACCOUNTS_RECEIVABLE
+          parent_account = self.accounts.top.where(:name => Account::ASSETS).first
         end
+
         if self.accounts.where(:name => name, :parent_id => parent_account.try(:id)).empty?
           self.accounts.create(:name => name, :parent_id => parent_account.try(:id))
         end

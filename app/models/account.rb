@@ -9,6 +9,7 @@ class Account < ActiveRecord::Base
   ACCOUNTS_PAYABLE = "Accounts Payable"
   ACCOUNTS_RECEIVABLE = "Accounts Receivable"
   BANK_ACCOUNTS = 'Bank Accounts'
+  TOP = [REVENUE, COST_OF_GOODS_SOLD, EXPENSES, ASSETS, LIABILITIES, EQUITY]
   DEFAULTS = [REVENUE, COST_OF_GOODS_SOLD, EXPENSES, ASSETS, LIABILITIES, EQUITY, ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS]
 
   belongs_to :builder, :class_name => "Base::Builder"
@@ -166,7 +167,10 @@ class Account < ActiveRecord::Base
 
   private
   def check_if_default
-    if DEFAULTS.include? self.name_was
+    if (DEFAULTS.include? self.name_was) &&
+        (parent_id.nil? ||
+            parent.name == ASSETS && [BANK_ACCOUNTS, ACCOUNTS_RECEIVABLE].include?(self.name_was) ||
+            parent.name == LIABILITIES && [ACCOUNTS_PAYABLE].include?(self.name_was))
       errors[:base] << "Default account is can not be destroyed or modified"
       false
     end
