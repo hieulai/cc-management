@@ -3,7 +3,8 @@ class Transfer < ActiveRecord::Base
   belongs_to :to_account, :foreign_key => "to_account_id", :class_name => Account.name
   attr_accessible :date, :amount, :reference, :memo, :reconciled, :kind, :from_account_id, :to_account_id
 
-  before_save :rollback_amount, :transfer_amount
+  before_save :check_top_accounts, :if => Proc.new { |i| GL_TRANSFERS.include?(i.from_account.name) || GL_TRANSFERS.include?(i.to_account.name) }
+  before_save  :rollback_amount, :transfer_amount
   after_destroy :rollback_amount
   after_initialize :default_values
 
@@ -12,7 +13,7 @@ class Transfer < ActiveRecord::Base
   validates_presence_of :from_account, :to_account, :date, :amount
 
   BANK_TRANSFERS = [Account::BANK_ACCOUNTS]
-  GL_TRANSFERS = [Account::ACCOUNTS_PAYABLE, Account::ACCOUNTS_RECEIVABLE]
+  GL_TRANSFERS = Account::DEFAULTS - [Account::ACCOUNTS_PAYABLE, Account::ACCOUNTS_RECEIVABLE]
 
   def display_priority
     1
@@ -33,6 +34,11 @@ class Transfer < ActiveRecord::Base
       from_account_was.update_attribute(:balance, from_account_was.balance.to_f + self.amount_was.to_f)
       to_account_was.update_attribute(:balance, to_account_was.balance.to_f - self.amount_was.to_f)
     end
+  end
+
+  def check_top_accounts
+    errors[:base] << "GL Transfers can not be made from/to top-level GL Accounts (Assets, Cost of Goods Sold, Equity, Expenses, Liabilities, Revenue). Create sub-accounts under the main GL Accounts and make transfers between the sub-accounts instead."
+    false
   end
 
   def default_values

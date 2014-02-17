@@ -32,9 +32,9 @@ class Account < ActiveRecord::Base
   scope :top, where(:parent_id => nil)
   scope :undefault, where('name not in (?)', DEFAULTS)
 
-  before_destroy :check_if_default, :check_if_has_categories_templates
-  before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
   before_save :check_opening_balance_updated_at
+  before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? || i.opening_balance_changed }
+  before_destroy :check_if_default, :check_if_has_categories_templates
 
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id]
   validate :disallow_self_reference
@@ -141,10 +141,11 @@ class Account < ActiveRecord::Base
     end
   end
 
-  def as_select2_json(filters = [])
+  def as_select2_json(filters = [], disables =[])
     {
         :id => self.id,
         :name => self.name,
+        :disabled => disables.include?(self.name),
         :children => self.children.reject { |a| filters.include? a.name }.collect { |a| a.as_select2_json }
     }
   end
@@ -165,7 +166,7 @@ class Account < ActiveRecord::Base
 
   private
   def check_if_default
-    if (DEFAULTS.include? self.name) && (parent.nil? || (parent.name == ASSETS && self.name == BANK_ACCOUNTS))
+    if DEFAULTS.include? self.name_was
       errors[:base] << "Default account is can not be destroyed or modified"
       false
     end
