@@ -87,8 +87,12 @@ var transformToSelect2For = function (element) {
             }
         });
     });
+    var focusedElementParentId = $(':focus').parent().attr('id');
     $(element).find("select").each(function () {
-        $("select").select2({
+        if ($(this).attr('id') && focusedElementParentId == 's2id_' + $(this).attr('id')) {
+            return;
+        }
+        $(this).select2({
             width: "220px",
             placeholder: "",
             allowClear: true
