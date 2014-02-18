@@ -146,8 +146,8 @@ class Account < ActiveRecord::Base
     {
         :id => self.id,
         :name => self.name,
-        :disabled => disables.include?(self.name),
-        :children => self.children.reject { |a| filters.include? a.name }.collect { |a| a.as_select2_json }
+        :disabled => disables.include?(self.id),
+        :children => self.children.reject { |a| filters.include? a.name }.collect { |a| a.as_select2_json(filters, disables) }
     }
   end
 

@@ -134,6 +134,6 @@ td.calculate {
     border-top: solid 1px #000000;
 }
 
-.select2-disabled  > .select2-result-label {
-    color: #d3d3d3;
+.select2-results li.select2-result-unselectable.select2-disabled > .select2-result-label {
+    font-weight: bold;
 }

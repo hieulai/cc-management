@@ -14,7 +14,11 @@ module AccountsHelper
     gl_transfer_names = Account::TOP
     gl_transfer_accounts = @builder.accounts.top.where(:name => gl_transfer_names)
     gl_transfer_accounts.each do |a|
-      json << a.as_select2_json([], gl_transfer_names)
+      disables = [a.id]
+      if a.name == Account::ASSETS
+        disables << a.children.where(:name => Account::BANK_ACCOUNTS).first.id
+      end
+      json << a.as_select2_json([], disables)
     end
     json.to_json
   end
