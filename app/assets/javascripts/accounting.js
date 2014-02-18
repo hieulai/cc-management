@@ -173,6 +173,19 @@ $(document).ready(function() {
         $(".uninvoiced").toggle();
     });
 
+    $('#bill_project_id').on('ajax:complete', function (event, xhr, status) {
+        if ($(':focus').parent().attr('id') == 's2id_bill_project_id') {
+            return;
+        }
+        $('#bill_category_id').select2({
+            width: "220px",
+            placeholder: "",
+            allowClear: true
+        });
+        $('#bill_category_id').select2('focus');
+
+    });
+
     $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
         e.preventDefault();
         $(this).closest("tr").hide();

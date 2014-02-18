@@ -87,9 +87,8 @@ var transformToSelect2For = function (element) {
             }
         });
     });
-    var focusedElementParentId = $(':focus').parent().attr('id');
     $(element).find("select").each(function () {
-        if ($(this).attr('id') && focusedElementParentId == 's2id_' + $(this).attr('id')) {
+        if ($(this).attr('id') && $('#s2id_' + $(this).attr('id')).length > 0) {
             return;
         }
         $(this).select2({
