@@ -105,7 +105,7 @@ var transformToDatePickerFor = function (element) {
     }
     $(element).find(".datepicker").each(function () {
         $(this).datepicker({
-            altField: "#" + $(this).closest(".controls").find('input[type="hidden"]').attr("id"),
+            altField: "#" + $(this).next('input[type="hidden"]').attr("id"),
             altFormat: "yy-mm-dd",
             dateFormat: "mm-dd-yy"
         });
@@ -120,7 +120,7 @@ var transformToDateRangePickerFor = function (element) {
         var $fromDate = $(this).find(".from_date");
         var $toDate = $(this).find(".to_date");
         $fromDate.datepicker({
-            altField: "#" + $fromDate.closest(".controls").find('input[type="hidden"]').attr("id"),
+            altField: "#" + $fromDate.next('input[type="hidden"]').attr("id"),
             altFormat: "yy-mm-dd",
             dateFormat: "mm-dd-yy",
             onClose: function (selectedDate) {
@@ -128,7 +128,7 @@ var transformToDateRangePickerFor = function (element) {
             }
         });
         $toDate.datepicker({
-            altField: "#" + $toDate.closest(".controls").find('input[type="hidden"]').attr("id"),
+            altField: "#" + $toDate.next('input[type="hidden"]').attr("id"),
             altFormat: "yy-mm-dd",
             dateFormat: "mm-dd-yy",
             onClose: function (selectedDate) {

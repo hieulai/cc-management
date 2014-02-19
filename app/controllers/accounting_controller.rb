@@ -446,17 +446,14 @@ class AccountingController < ApplicationController
     if params[:from_date].present? && params[:to_date].present?
       @from_date = Date.parse(params[:from_date])
       @to_date = Date.parse(params[:to_date])
-      if @from_date <= @to_date
-        respond_to do |format|
-          format.js
-        end
-      else
+      if @from_date > @to_date
         flash[:notice] = "From Date has to before To Date"
-        render("profit_loss_report")
       end
     else
       flash[:notice] = "From Date and To Date are required"
-      render "profit_loss_report"
+    end
+    respond_to do |format|
+      format.js
     end
   end
 

@@ -6,19 +6,11 @@
     <td>Transfer</td>
     <td><%= t.reference %></td>
     <td>
-        <% if t.from_account_id == @account.id %>
-          <%= t.to_account.name %>
-        <% else %>
-          <%= t.from_account.name %>
-        <% end %>
+        <%= t.from_account.name %>
     </td>
     <td><%= t.memo %></td>
     <td class="right">
-        <% if t.from_account_id == @account.id %>
-          <%= price_tag(t.amount * -1) %>
-        <% else %>
-          <%= price_tag(t.amount) %>
-        <% end %>
+        <%= price_tag(t.amount) %>
     </td>
     <td class="center action-container">
         <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :type => t.class.name, :id => t.id)}) %>

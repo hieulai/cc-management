@@ -42,40 +42,48 @@ class Account < ActiveRecord::Base
 
   def transactions
     opening_balance_item = [OpenStruct.new(date: self.opening_balance_updated_at,
+                                           id: self.id,
+                                           name: self.name,
                                            amount: self.opening_balance,
                                            display_priority: 0)]
+    sent_transfers.each { |t| t.amount *= -1 }
     r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + bills + invoices + opening_balance_item
-    r.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
+    r << children.map {|a| a.transactions}
+    r.flatten.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
   end
 
-  def balance(from_date = nil, to_date =nil)
-    b = read_attribute(:balance)
-    if from_date && to_date
-      p_amount = payments.date_range(from_date, to_date).map(&:amount).compact.sum
-      d_amount = deposits.date_range(from_date, to_date).map(&:amount).compact.sum
-      st_amount = sent_transfers.date_range(from_date, to_date).map(&:amount).compact.sum
-      rt_amount = received_transfers.date_range(from_date, to_date).map(&:amount).compact.sum
+  def balance(options ={})
+    options ||= {}
+    options[:recursive] = true if options[:recursive].nil?
+    b = read_attribute(:balance) || 0
+    if options[:from_date] && options[:to_date]
+      p_amount = payments.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
+      d_amount = deposits.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
+      st_amount = sent_transfers.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
+      rt_amount = received_transfers.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       ri_amount = 0
       ujci_amount = 0
       if self.kind_of? ReceiptsItem::POSITIVES
-        ri_amount = receipts_items.date_range(from_date, to_date).map(&:amount).compact.sum
+        ri_amount = receipts_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       elsif self.kind_of? ReceiptsItem::NEGATIVES
-        ri_amount -= receipts_items.date_range(from_date, to_date).map(&:amount).compact.sum
+        ri_amount -= receipts_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       end
       if self.kind_of? UnJobCostedItem::POSITIVES
-        ujci_amount += un_job_costed_items.date_range(from_date, to_date).map(&:amount).compact.sum
+        ujci_amount += un_job_costed_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       elsif self.kind_of? UnJobCostedItem::NEGATIVES
-        ujci_amount -= un_job_costed_items.date_range(from_date, to_date).map(&:amount).compact.sum
+        ujci_amount -= un_job_costed_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       end
-      b_amount = bills.date_range(from_date, to_date).map(&:cached_total_amount).compact.sum
-      ii_amount = invoices_items.date_range(from_date, to_date).map(&:amount).compact.sum
+      b_amount = bills.date_range(options[:from_date], options[:to_date]).map(&:cached_total_amount).compact.sum
+      ii_amount = invoices_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       b= -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + b_amount + ii_amount
     end
+
+    b += (children.map { |a| a.balance(options) }).compact.sum if options[:recursive]
     b
   end
 
   def bank_balance
-    bb = balance.to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum -
+    bb = balance({recursive: false}).to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum -
         received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum -
         bills.where(:reconciled => false).map(&:cached_total_amount).compact.sum - invoices_items.joins(:invoice).where('invoices.reconciled = false').map(&:amount).compact.sum
     if self.receipts_items.any?
@@ -106,7 +114,7 @@ class Account < ActiveRecord::Base
   end
 
   def opening_balance
-    ob = balance.to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum +
+    ob = balance({recursive: false}).to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum +
         sent_transfers.map(&:amount).compact.sum - bills.map(&:cached_total_amount).compact.sum - invoices_items.map(&:amount).compact.sum
     if self.receipts_items.any?
       if self.kind_of? ReceiptsItem::POSITIVES

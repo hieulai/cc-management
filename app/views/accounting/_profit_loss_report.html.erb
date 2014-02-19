@@ -1,6 +1,6 @@
-<% r_balance = @builder.accounts.where(:name => "Revenue").first.balance(from_date, to_date).to_f
-   c_balance = @builder.accounts.where(:name => "Cost of Goods Sold").first.balance(from_date, to_date).to_f
-   e_balance = @builder.accounts.where(:name => "Expenses").first.balance(from_date, to_date).to_f
+<% r_balance = @builder.accounts.where(:name => Account::REVENUE).first.balance({from_date: from_date, to_date: to_date}).to_f
+   c_balance = @builder.accounts.where(:name => Account::COST_OF_GOODS_SOLD).first.balance({from_date: from_date, to_date: to_date}).to_f
+   e_balance = @builder.accounts.where(:name => Account::EXPENSES).first.balance({from_date: from_date, to_date: to_date}).to_f
    gross_profit = r_balance - c_balance
    net_profit = gross_profit - e_balance
 %>
