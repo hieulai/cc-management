@@ -52,7 +52,7 @@
                         <% balance -= t.amount.to_f %>
                       <% elsif t.instance_of? Transfer %>
                         <%= render(:partial => "tr_transfer", :locals => {:t => t, :balance => balance}) %>
-                          <% balance += t.amount.to_f %>
+                          <% balance -= t.amount.to_f %>
                       <% elsif t.instance_of? ReceiptsItem %>
                         <%= render(:partial => "tr_receipts_item", :locals => {:t => t, :balance => balance}) %>
                         <% if @account.kind_of? ReceiptsItem::POSITIVES %>
