@@ -246,7 +246,7 @@ class AccountingController < ApplicationController
   end
 
   def bills
-    @bills = @builder.bills
+    @bills = @builder.bills.paginate(:page => params[:page])
   end
 
   def new_bill
