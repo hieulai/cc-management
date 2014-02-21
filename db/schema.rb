@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140217153836) do
+ActiveRecord::Schema.define(:version => 20140221152643) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -105,8 +105,10 @@ ActiveRecord::Schema.define(:version => 20140217153836) do
     t.date     "billed_date"
     t.time     "deleted_at"
     t.boolean  "reconciled",                                            :default => false
+    t.integer  "account_id"
   end
 
+  add_index "bills", ["account_id"], :name => "index_bills_on_account_id"
   add_index "bills", ["builder_id"], :name => "index_bills_on_builder_id"
   add_index "bills", ["categories_template_id"], :name => "index_bills_on_categories_template_id"
   add_index "bills", ["project_id"], :name => "index_bills_on_project_id"
@@ -328,8 +330,10 @@ ActiveRecord::Schema.define(:version => 20140217153836) do
     t.decimal  "remaining_amount", :precision => 10, :scale => 2
     t.date     "invoice_date"
     t.boolean  "reconciled",                                      :default => false
+    t.integer  "account_id"
   end
 
+  add_index "invoices", ["account_id"], :name => "index_invoices_on_account_id"
   add_index "invoices", ["builder_id"], :name => "index_invoices_on_builder_id"
   add_index "invoices", ["estimate_id"], :name => "index_invoices_on_estimate_id"
 
@@ -430,8 +434,10 @@ ActiveRecord::Schema.define(:version => 20140217153836) do
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.time     "deleted_at"
+    t.integer  "account_id"
   end
 
+  add_index "payments_bills", ["account_id"], :name => "index_payments_bills_on_account_id"
   add_index "payments_bills", ["bill_id"], :name => "index_payments_bills_on_bill_id"
   add_index "payments_bills", ["payment_id"], :name => "index_payments_bills_on_payment_id"
 
@@ -539,8 +545,10 @@ ActiveRecord::Schema.define(:version => 20140217153836) do
     t.decimal  "amount",     :precision => 10, :scale => 2
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.integer  "account_id"
   end
 
+  add_index "receipts_invoices", ["account_id"], :name => "index_receipts_invoices_on_account_id"
   add_index "receipts_invoices", ["invoice_id"], :name => "index_receipts_invoices_on_invoice_id"
   add_index "receipts_invoices", ["receipt_id"], :name => "index_receipts_invoices_on_receipt_id"
 

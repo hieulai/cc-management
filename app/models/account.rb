@@ -33,22 +33,18 @@ class Account < ActiveRecord::Base
   scope :top, where(:parent_id => nil)
   scope :undefault, where('name not in (?)', DEFAULTS)
 
-  before_save :check_opening_balance_updated_at
-  before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? || i.opening_balance_changed }
+  before_save :check_opening_balance_changed
+  before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed?}
   before_destroy :check_if_default, :check_if_has_categories_templates
 
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id]
   validate :disallow_self_reference
 
   def transactions
-    opening_balance_item = [OpenStruct.new(date: self.opening_balance_updated_at,
-                                           id: self.id,
-                                           name: self.name,
-                                           amount: self.opening_balance,
-                                           display_priority: 0)]
     sent_transfers.each { |t| t.amount *= -1 }
-    r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + bills + invoices + opening_balance_item
-    r << children.map {|a| a.transactions}
+    r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + bills + invoices
+    r << [OpenStruct.new(date: self.opening_balance_updated_at, id: self.id, name: self.name, amount: self.opening_balance, display_priority: 0)] if self.bank_account?
+    r << children.map { |a| a.transactions }
     r.flatten.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
   end
 
@@ -139,7 +135,7 @@ class Account < ActiveRecord::Base
   def opening_balance=(b)
     return if b.to_f == self.opening_balance
     self.opening_balance_changed = true
-    self.balance = self.balance.to_f + b.to_f - self.opening_balance
+    self.balance = self.balance({recursive: false}).to_f + b.to_f - self.opening_balance
   end
 
   def kind_of?(names)
@@ -175,6 +171,15 @@ class Account < ActiveRecord::Base
     categories_templates.empty? && change_orders_categories.empty?
   end
 
+  def bank_account?
+    self == self.bank_account
+  end
+
+  def bank_account
+    asset_account = self.builder.accounts.top.where(:name => Account::ASSETS).first
+    asset_account.children.where(:name => Account::BANK_ACCOUNTS).first
+  end
+
   private
   def check_if_default
     if (DEFAULTS.include? self.name_was) &&
@@ -192,8 +197,13 @@ class Account < ActiveRecord::Base
     end
   end
 
-  def check_opening_balance_updated_at
+  def check_opening_balance_changed
     if self.opening_balance_changed
+      if self != self.bank_account
+        errors.add(:base, 'Can not update opening balance for this account')
+        return false
+      end
+
       if self.opening_balance_updated_at.nil? && self.opening_balance.to_f != 0
         errors.add(:base, 'Opening balance updated date is required')
         return false

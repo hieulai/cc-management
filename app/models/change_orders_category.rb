@@ -25,12 +25,12 @@ class ChangeOrdersCategory < ActiveRecord::Base
 
   def revenue_account
     r_account = self.category.builder.accounts.top.where(:name => Account::REVENUE).first
-    r_account.children.where(:name => self.category.name).first_or_create
+    r_account.children.where(:name => self.category.name, :builder_id => r_account.builder_id).first_or_create
   end
 
   def cogs_account
     cogs_account = category.builder.accounts.top.where(:name => Account::COST_OF_GOODS_SOLD).first
-    cogs_account.children.where(:name => category.name).first_or_create
+    cogs_account.children.where(:name => category.name, :builder_id => cogs_account.builder_id).first_or_create
   end
 
   private

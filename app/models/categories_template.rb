@@ -75,7 +75,7 @@ class CategoriesTemplate < ActiveRecord::Base
     r_account = builder.accounts.top.where(:name => Account::REVENUE).first
     ct_account = r_account.children.where(:name => self.category.name).first
     unless ct_account
-      ct_account = r_account.children.create(:name => self.category.name)
+      ct_account = r_account.children.create(:name => self.category.name, :builder_id => r_account.builder_id)
     end
     unless self.accounts.include? ct_account
       self.accounts << ct_account
@@ -90,7 +90,7 @@ class CategoriesTemplate < ActiveRecord::Base
     cogs_account = builder.accounts.top.where(:name => Account::COST_OF_GOODS_SOLD).first
     ct_account = cogs_account.children.where(:name => self.category.name).first
     unless ct_account
-      ct_account = cogs_account.children.create(:name => self.category.name)
+      ct_account = cogs_account.children.create(:name => self.category.name, :builder_id => cogs_account.builder_id)
     end
     unless self.accounts.include? ct_account
       self.accounts << ct_account

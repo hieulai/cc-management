@@ -19,17 +19,20 @@
     </div>
 </div>
 
-<div class="control-group">
-    <%= f.label :opening_balance, "Opening Balance", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:opening_balance, disabled: uneditabled) %>
-        <div class="inline-block opening_balance_updated_at">
-            on
-            <%= f.text_field(:opening_balance_updated_at, class: 'datepicker', disabled: uneditabled, :value => nil) %>
-            <%= f.hidden_field(:opening_balance_updated_at, id: 'opening_balance_updated_at_hidden', :value => nil) %>
-        </div>
-    </div>
-</div>
+<% if @account.bank_account? %>
+  <div class="control-group">
+      <%= f.label :opening_balance, "Opening Balance", class: 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= f.text_field :opening_balance %>
+          <div class="inline-block opening_balance_updated_at">
+              on
+              <%= f.text_field(:opening_balance_updated_at, class: 'datepicker', :value => nil) %>
+              <%= f.hidden_field(:opening_balance_updated_at, id: 'opening_balance_updated_at_hidden', :value => nil) %>
+          </div>
+      </div>
+  </div>
+<% end %>
+
 
 
 
