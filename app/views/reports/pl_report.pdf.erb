@@ -1,4 +1,5 @@
 <% content_for :head do %>
+  <% project = @builder.projects.find(@project_id) if @project_id.present?  %>
   <div class="left-header">
       <%= pdf_image_tag(@builder.image.name_url, :width => "200") if @builder.image.try(:name).present? %>
       <div class="address">
@@ -24,42 +25,35 @@
           </tr>
           <tr>
               <td>
-                  From Date: <%= @from_date.strftime("%m/%d/%Y") %>
+                  From Date: <%= @from_date.try(:strftime, "%m/%d/%Y") %>
                   <br/>
                   To Date: <%= @to_date.try(:strftime, "%m/%d/%Y") %>
               </td>
           </tr>
+          <% if project %>
+            <tr>
+                <td><%= project.name %></td>
+            </tr>
+          <% end %>
       </table>
+
+      <% if project %>
+        <table class="bottom">
+            <tr>
+                <td>Name / Address</td>
+            </tr>
+            <tr>
+                <td>
+                    <% %>
+                    <%= project.client.full_name %>
+                    <br/>
+                    <%= project.client.address %>
+                    <br/>
+                    <%= project.client.city %> <%= ", #{project.client.state}" if project.client.state.present? %> <%= ", #{project.client.zipcode}" if project.client.zipcode.present? %>
+                </td>
+            </tr>
+        </table>
+      <% end %>
   </div>
 <% end %>
-<% r_balance = @builder.accounts.where(:name => "Revenue").first.balance(@from_date, @to_date).to_f
-   c_balance = @builder.accounts.where(:name => "Cost of Goods Sold").first.balance(@from_date, @to_date).to_f
-   e_balance = @builder.accounts.where(:name => "Expenses").first.balance(@from_date, @to_date).to_f
-   gross_profit = r_balance - c_balance
-   net_profit = gross_profit - e_balance
-%>
-
-<table class="splitForPrint report">
-    <tbody>
-    <tr>
-        <td class="name">Revenue</td>
-        <td class="amount"><%= price_tag r_balance %></td>
-    </tr>
-    <tr>
-        <td class="name">Cost of Goods Sold</td>
-        <td class="amount"><%= price_tag c_balance %></td>
-    </tr>
-    <tr>
-        <td class="name">Gross Profit</td>
-        <td class="amount calculate"><%= price_tag gross_profit %></td>
-    </tr>
-    <tr>
-        <td class="name">Expenses</td>
-        <td class="amount"><%= price_tag e_balance %></td>
-    </tr>
-    <tr>
-        <td class="name">Net Profit</td>
-        <td class="amount calculate"><%= price_tag net_profit %></td>
-    </tr>
-    </tbody>
-</table>
+<%= render(:partial => "accounting/profit_loss_table.html.erb", :locals => {options: {from_date: @from_date, to_date: @to_date, project_id: @project_id}}) %>

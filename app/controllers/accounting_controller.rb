@@ -443,6 +443,7 @@ class AccountingController < ApplicationController
   end
 
   def export_profit_loss_report
+    @project_id = params[:project_id]
     if params[:from_date].present? && params[:to_date].present?
       @from_date = Date.parse(params[:from_date])
       @to_date = Date.parse(params[:to_date])
@@ -458,7 +459,7 @@ class AccountingController < ApplicationController
   end
 
   def print_profit_loss_report
-    redirect_to controller: "reports", action: "pl_report", from_date: params[:from_date], to_date: params[:to_date], format: "pdf"
+    redirect_to controller: "reports", action: "pl_report", from_date: params[:from_date], to_date: params[:to_date], project_id: params[:project_id], format: "pdf"
   end
 
   private

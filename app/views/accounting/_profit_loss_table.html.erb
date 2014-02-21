@@ -1,0 +1,22 @@
+<% r_account = @builder.accounts.where(:name => Account::REVENUE).first
+   c_account = @builder.accounts.where(:name => Account::COST_OF_GOODS_SOLD).first
+   e_account = @builder.accounts.where(:name => Account::EXPENSES).first
+   gross_profit = r_account.balance(options).to_f - c_account.balance(options).to_f
+   net_profit = gross_profit -  e_account.balance(options).to_f
+%>
+
+<table class="splitForPrint report">
+    <tbody>
+    <%= render(:partial => "accounting/tr_account_balance.html.erb", :locals => {account: r_account, options: options}) %>
+    <%= render(:partial => "accounting/tr_account_balance.html.erb", :locals => {account: c_account, options: options}) %>
+    <tr>
+        <td class="name">Gross Profit</td>
+        <td class="amount calculate"><%= price_tag gross_profit %></td>
+    </tr>
+    <%= render(:partial => "accounting/tr_account_balance.html.erb", :locals => {account: e_account, options: options}) %>
+    <tr>
+        <td class="name">Net Profit</td>
+        <td class="amount calculate"><%= price_tag net_profit %></td>
+    </tr>
+    </tbody>
+</table>

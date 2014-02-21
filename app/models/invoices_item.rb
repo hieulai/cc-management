@@ -6,6 +6,8 @@ class InvoicesItem < ActiveRecord::Base
 
   scope :previous_created_by_item, lambda { |item_id, dt| where("item_id = ? and created_at < ?", item_id, dt) }
   scope :date_range, lambda { |from_date, to_date| joins(:invoice).where('invoices.invoice_date >= ? AND invoices.invoice_date <= ?', from_date, to_date) }
+  scope :unrecociled, joins(:invoice).where('invoices.reconciled = false')
+  scope :project, lambda { |project_id| joins(:invoice => :estimate).where('estimates.project_id = ?', project_id) }
 
   before_save :decrease_account, :increase_account
   after_destroy :decrease_account

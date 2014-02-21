@@ -73,8 +73,10 @@ class Account < ActiveRecord::Base
       elsif self.kind_of? UnJobCostedItem::NEGATIVES
         ujci_amount -= un_job_costed_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       end
-      b_amount = bills.date_range(options[:from_date], options[:to_date]).map(&:cached_total_amount).compact.sum
-      ii_amount = invoices_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
+      scoped_bills = options[:project_id].present? ? bills.project(options[:project_id]) : bills
+      scoped_invoices_items = options[:project_id].present? ? invoices_items.project(options[:project_id]) : invoices_items
+      b_amount = scoped_bills.date_range(options[:from_date], options[:to_date]).map(&:cached_total_amount).compact.sum
+      ii_amount = scoped_invoices_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       b= -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + b_amount + ii_amount
     end
 
@@ -85,7 +87,7 @@ class Account < ActiveRecord::Base
   def bank_balance
     bb = balance({recursive: false}).to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum -
         received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum -
-        bills.where(:reconciled => false).map(&:cached_total_amount).compact.sum - invoices_items.joins(:invoice).where('invoices.reconciled = false').map(&:amount).compact.sum
+        bills.where(:reconciled => false).map(&:cached_total_amount).compact.sum - invoices_items.unrecociled.map(&:amount).compact.sum
     if self.receipts_items.any?
       if self.kind_of? ReceiptsItem::POSITIVES
         bb-= receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum

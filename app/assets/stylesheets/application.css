@@ -134,6 +134,25 @@ td.calculate {
     border-top: solid 1px #000000;
 }
 
+.indent{
+    width: 20px;
+    display: inline-block;
+}
+
 .select2-results li.select2-result-unselectable.select2-disabled > .select2-result-label {
     font-weight: bold;
+}
+
+.expanded.expander {
+    padding-left: 13px;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-image: url(/assets/expanded.gif);
+}
+
+.collapsed.expander {
+    padding-left: 13px;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-image: url(/assets/collapsed.gif);
 }

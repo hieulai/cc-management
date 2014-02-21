@@ -1,0 +1,21 @@
+<% depth||=0 %>
+<tr <% if depth > 0 %> class="account_<%= account.parent.id %>"  <% end %>>
+    <td class="name">
+        <% depth.times do %>
+          <div class="indent">&nbsp;</div>
+        <% end %>
+        <% if account.children.any? %>
+          <a class="expander" data-expander-target="tr.account_<%= account.id %>" href="#">
+            <%= account.name %>
+          </a>
+        <% else %>
+            <%= account.name %>
+        <% end %>
+
+    </td>
+    <td class="amount"><%= price_tag account.balance(options) %></td>
+</tr>
+<% depth+= 1
+   account.children.each do |c| %>
+  <%= render(:partial => "accounting/tr_account_balance.html.erb", :locals => {account: c, options: options, :depth => depth}) %>
+<% end %>
