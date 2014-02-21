@@ -172,7 +172,7 @@ class Account < ActiveRecord::Base
   end
 
   def bank_account?
-    self == self.bank_account
+    self == self.bank_account || (parent && parent.bank_account?)
   end
 
   def bank_account
@@ -199,7 +199,7 @@ class Account < ActiveRecord::Base
 
   def check_opening_balance_changed
     if self.opening_balance_changed
-      if self != self.bank_account
+      unless self.bank_account?
         errors.add(:base, 'Can not update opening balance for this account')
         return false
       end
