@@ -26,7 +26,7 @@ class Account < ActiveRecord::Base
   has_many :bills, :through => :categories_templates
   has_and_belongs_to_many :invoices_items
 
-  attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id
+  attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
   attr_accessor :opening_balance_changed
 
   default_scope order("name ASC")

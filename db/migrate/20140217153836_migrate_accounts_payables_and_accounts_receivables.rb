@@ -1,6 +1,7 @@
 class MigrateAccountsPayablesAndAccountsReceivables < ActiveRecord::Migration
   def up
     Base::Builder.all.each do |b|
+      next if b.accounts.empty?
       r_account = b.accounts.top.where(name: Account::ACCOUNTS_RECEIVABLE).first
       p_account = b.accounts.top.where(name: Account::ACCOUNTS_PAYABLE).first
       l_account = b.accounts.top.where(name: Account::LIABILITIES).first

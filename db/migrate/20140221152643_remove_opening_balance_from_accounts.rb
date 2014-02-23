@@ -2,6 +2,7 @@ class RemoveOpeningBalanceFromAccounts < ActiveRecord::Migration
   def up
 
     Base::Builder.all.each do |b|
+      next if b.accounts.empty?
       a_account = b.accounts.top.where(name: Account::ASSETS).first
       bank_account = a_account.children.where(name: Account::BANK_ACCOUNTS).first
       b.accounts.where('id != ?', bank_account.id).each do |a|
