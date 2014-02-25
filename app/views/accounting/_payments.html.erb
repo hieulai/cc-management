@@ -22,7 +22,7 @@
           </td>
           <td><%= payment.vendor.try(:display_name) %></td>
           <td><%= payment.method %></td>
-          <td><%= payment.account.name %></td>
+          <td><%= payment.account.try(:name) %></td>
           <td class="right"><%= price_tag(payment.amount) %></td>
           <td><%= payment.memo %></td>
       </tr>
