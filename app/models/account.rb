@@ -41,9 +41,10 @@ class Account < ActiveRecord::Base
   validate :disallow_self_reference
 
   def transactions
-    sent_transfers.each { |t| t.amount *= -1 }
-    r = payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + bills + invoices
+    r = []
     r << [OpenStruct.new(date: self.opening_balance_updated_at, id: self.id, name: self.name, amount: self.opening_balance, display_priority: 0)] if self.bank_account?
+    sent_transfers.each { |t| t.amount *= -1 }
+    r << payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + bills + invoices
     r << children.map { |a| a.transactions }
     r.flatten.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
   end
