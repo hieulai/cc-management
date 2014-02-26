@@ -1,0 +1,10 @@
+<tr class="client-rows">
+    <td><a href='<%= client.id %>'></a>Client</td>
+    <td><%= client.company %></td>
+    <td><%= client.full_name %></td>
+    <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
+    <td><%= client.email %></td>
+    <td></td>
+    <td><%= client.notes %></td>
+
+</tr>

@@ -9,7 +9,7 @@ class AccountingController < ApplicationController
   end
 
   def deposits
-    @deposits = @builder.deposits
+    @deposits = @builder.deposits.page(params[:page])
   end
 
   def new_deposit
@@ -56,7 +56,7 @@ class AccountingController < ApplicationController
   end
 
   def receipts
-    @receipts = @builder.receipts
+    @receipts = @builder.receipts.page(params[:page])
   end
 
   def new_receipt
@@ -133,7 +133,7 @@ class AccountingController < ApplicationController
   end
 
   def invoices
-    @invoices = @builder.invoices
+    @invoices = @builder.invoices.page(params[:page])
   end
 
   def invoice
@@ -205,7 +205,7 @@ class AccountingController < ApplicationController
   end
 
   def purchase_orders
-    @purchase_orders = @builder.purchase_orders
+    @purchase_orders = @builder.purchase_orders.page(params[:page])
   end
 
   def new_purchase_order
@@ -246,7 +246,7 @@ class AccountingController < ApplicationController
   end
 
   def bills
-    @bills = @builder.bills.paginate(:page => params[:page])
+    @bills = @builder.bills.page(params[:page])
   end
 
   def new_bill
@@ -280,7 +280,7 @@ class AccountingController < ApplicationController
   end
 
   def payments
-    @payments = @builder.payments
+    @payments = @builder.payments.page(params[:page])
   end
 
   def new_payment

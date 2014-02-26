@@ -31,7 +31,7 @@
                 <%= price_tag(@account.balance.to_f, "inline-block") %>
             </div>
                 <h2>Payment history:</h2>
-                <table class="grid-view" summary="Payment List">
+            <table class="grid-view pageless" summary="Payment List">
                     <tr class="header">
                         <th>Date</th>
                         <th>Type</th>
@@ -42,44 +42,9 @@
                         <th>R</th>
                         <th>Balance</th>
                     </tr>
-                    <% balance = @account.balance.to_f %>
-                    <% @account.transactions.each do |t| %>
-                      <% if t.instance_of? Payment %>
-                        <%= render(:partial => "tr_payment", :locals => {:t => t, :balance => balance}) %>
-                        <% balance += t.amount.to_f %>
-                      <% elsif t.instance_of? Deposit %>
-                        <%= render(:partial => "tr_deposit", :locals => {:t => t, :balance => balance}) %>
-                        <% balance -= t.amount.to_f %>
-                      <% elsif t.instance_of? Transfer %>
-                        <%= render(:partial => "tr_transfer", :locals => {:t => t, :balance => balance}) %>
-                          <% balance -= t.amount.to_f %>
-                      <% elsif t.instance_of? ReceiptsItem %>
-                        <%= render(:partial => "tr_receipts_item", :locals => {:t => t, :balance => balance}) %>
-                        <% if @account.kind_of? ReceiptsItem::POSITIVES %>
-                          <% balance -= t.amount.to_f %>
-                        <% elsif @account.kind_of? ReceiptsItem::NEGATIVES %>
-                          <% balance += t.amount.to_f %>
-                        <% end %>
-                      <% elsif t.instance_of? UnJobCostedItem %>
-                        <%= render(:partial => "tr_un_job_costed_item", :locals => {:t => t, :balance => balance}) %>
-                        <% if @account.kind_of? UnJobCostedItem::POSITIVES %>
-                          <% balance -= t.amount.to_f %>
-                        <% elsif @account.kind_of? UnJobCostedItem::NEGATIVES %>
-                          <% balance += t.amount.to_f %>
-                        <% end %>
-                      <% elsif t.instance_of? Bill %>
-                        <%= render(:partial => "tr_bill", :locals => {:t => t, :balance => balance}) %>
-                        <% balance -= t.cached_total_amount.to_f %>
-                      <% elsif t.instance_of? Invoice %>
-                        <%= render(:partial => "tr_invoice", :locals => {:t => t, :balance => balance}) %>
-                          <% balance -= t.category_amount.to_f %>
-                      <% else %>
-                        <%= render(:partial => "tr_opening_balance", :locals => {:t => t, :account => @account, :balance => balance}) %>
-                        <% balance -= t.amount.to_f %>
-                      <% end %>
-                    <% end %>
-
+                <%= render(:partial => "tr_transactions", :locals => {:transactions => @transactions}) %>
                 </table>
+            <%= paginate @transactions %>
         </div>
     </div>
 </div>

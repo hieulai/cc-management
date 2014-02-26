@@ -1,0 +1,36 @@
+<% transactions.each do |transaction| %>
+  <% if transaction.instance_of? Payment %>
+    <%= render(:partial => "tr_payment", :locals => {:t => transaction, :balance => @balance}) %>
+    <% @balance += transaction.amount.to_f %>
+  <% elsif transaction.instance_of? Deposit %>
+    <%= render(:partial => "tr_deposit", :locals => {:t => transaction, :balance => @balance}) %>
+    <% @balance -= transaction.amount.to_f %>
+  <% elsif transaction.instance_of? Transfer %>
+    <%= render(:partial => "tr_transfer", :locals => {:t => transaction, :balance => @balance}) %>
+    <% @balance -= transaction.amount.to_f %>
+  <% elsif transaction.instance_of? ReceiptsItem %>
+    <%= render(:partial => "tr_receipts_item", :locals => {:t => transaction, :balance => @balance}) %>
+    <% if @account.kind_of? ReceiptsItem::POSITIVES %>
+      <% @balance -= transaction.amount.to_f %>
+    <% elsif @account.kind_of? ReceiptsItem::NEGATIVES %>
+      <% @balance += transaction.amount.to_f %>
+    <% end %>
+  <% elsif transaction.instance_of? UnJobCostedItem %>
+    <%= render(:partial => "tr_un_job_costed_item", :locals => {:t => transaction, :balance => @balance}) %>
+    <% if @account.kind_of? UnJobCostedItem::POSITIVES %>
+      <% @balance -= transaction.amount.to_f %>
+    <% elsif @account.kind_of? UnJobCostedItem::NEGATIVES %>
+      <% @balance += transaction.amount.to_f %>
+    <% end %>
+  <% elsif transaction.instance_of? Bill %>
+    <%= render(:partial => "tr_bill", :locals => {:t => transaction, :balance => @balance}) %>
+    <% @balance -= transaction.cached_total_amount.to_f %>
+  <% elsif transaction.instance_of? Invoice %>
+    <%= render(:partial => "tr_invoice", :locals => {:t => transaction, :balance => @balance}) %>
+    <% @balance -= transaction.category_amount.to_f %>
+  <% else %>
+    <%= render(:partial => "tr_opening_balance", :locals => {:t => transaction, :account => @account, :balance => @balance}) %>
+    <% @balance -= transaction.amount.to_f %>
+  <% end %>
+<% end %>
+<tr class="pageless-url" style="display: none" value="<%= url_for(action: 'show', id: @account.id, balance: @balance) %>"></tr>

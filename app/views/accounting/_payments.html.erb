@@ -11,7 +11,7 @@
     </tr>
     </thead>
     <tbody>
-    <% @payments.each do |payment| %>
+    <% payments.each do |payment| %>
       <tr class="clickable">
           <td class="center">
               <%= payment.date %>
@@ -30,3 +30,4 @@
     </tbody>
 
 </table>
+<%= paginate payments %>

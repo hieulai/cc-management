@@ -52,7 +52,7 @@ class Account < ActiveRecord::Base
   def balance(options ={})
     options ||= {}
     options[:recursive] = true if options[:recursive].nil?
-    b = read_attribute(:balance) || 0
+    b = read_attribute(:balance).to_f
     if options[:from_date] && options[:to_date]
       p_amount = payments.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
       d_amount = deposits.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum

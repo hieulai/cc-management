@@ -7,6 +7,9 @@ class AccountsController < ApplicationController
   
   def show
     @account = Account.find(params[:id])
+    full_transactions = @account.transactions
+    @balance = transaction_balance(@account, full_transactions, params[:page].try(:to_i))
+    @transactions = Kaminari.paginate_array(full_transactions).page(params[:page])
   end
   
   def new
@@ -105,4 +108,41 @@ class AccountsController < ApplicationController
     @transfer.kind = params[:transfer][:kind]
 
   end
+
+  private
+  def transaction_balance(account, transactions, page)
+    balance = account.balance.to_f
+    page||= 1
+    transactions.each_with_index do |transaction, index|
+      break if index == ((page-1) * Kaminari.config.default_per_page)
+      if transaction.instance_of? Payment
+        balance += transaction.amount.to_f
+      elsif transaction.instance_of? Deposit
+        balance -= transaction.amount.to_f
+      elsif transaction.instance_of? Transfer
+        balance -= transaction.amount.to_f
+      elsif transaction.instance_of? ReceiptsItem
+        if account.kind_of? ReceiptsItem::POSITIVES
+          balance -= transaction.amount.to_f
+        elsif account.kind_of? ReceiptsItem::NEGATIVES
+          balance += transaction.amount.to_f
+        end
+      elsif transaction.instance_of? UnJobCostedItem
+
+        if account.kind_of? UnJobCostedItem::POSITIVES
+          balance -= transaction.amount.to_f
+        elsif account.kind_of? UnJobCostedItem::NEGATIVES
+          balance += transaction.amount.to_f
+        end
+      elsif transaction.instance_of? Bill
+        balance -= transaction.cached_total_amount.to_f
+      elsif transaction.instance_of? Invoice
+        balance -= transaction.category_amount.to_f
+      else
+        balance -= transaction.amount.to_f
+      end
+    end
+    balance
+  end
+
 end

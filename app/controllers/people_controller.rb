@@ -3,16 +3,15 @@ class PeopleController < ApplicationController
     
     def all
       @query = params[:query]
-      @clients = @builder.clients.active.search(@query)
-      @vendors = @builder.vendors.search(@query)
-      @contacts = @builder.contacts.search(@query)
+      all_people = @builder.clients.active.search(@query) + @builder.vendors.search(@query) + @builder.contacts.search(@query)
+      @people = Kaminari.paginate_array(all_people).page(params[:page])
     end
     
     def list_vendors
       @query = params[:query]
       @vendors = @builder.vendors.search(@query)
       respond_to do |format|
-        format.html
+        format.html { @vendors = @vendors.page(params[:page]) }
         format.csv {send_data Vendor.to_csv(@vendors)}
         format.xls { send_data @vendors.to_xls(:headers => Vendor::HEADERS, :columns => [:vendor_type, :trade, :company, :primary_first_name, :primary_last_name, :primary_email,
           :primary_phone1,:primary_phone1_tag, :primary_phone2,:primary_phone2_tag,:secondary_first_name, :secondary_last_name, :secondary_email, :secondary_phone1, :secondary_phone1_tag, 
@@ -62,7 +61,7 @@ class PeopleController < ApplicationController
     
     def list_contacts
       @query = params[:query]
-      @contacts = @builder.contacts.search(@query)
+      @contacts = @builder.contacts.search(@query).page(params[:page])
     end
   
     def show_contact

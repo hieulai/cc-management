@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
     @query = params[:query]
     @items = Item.where(builder_id: session[:builder_id]).order(:name).search(@query)
     respond_to do |format|
-      format.html
+      format.html { @items = @items.page(params[:page]) }
       format.csv {send_data Item.to_csv(@items)}
       format.xls { send_data @items.to_xls(:headers => Item::HEADERS, :columns => [:name, :description, :estimated_cost, :unit, :margin, :price, :notes]), content_type: 'application/vnd.ms-excel', filename: 'items.xls' }
     end

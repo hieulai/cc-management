@@ -22,4 +22,5 @@ module AccountsHelper
     end
     json.to_json
   end
+
 end

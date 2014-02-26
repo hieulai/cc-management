@@ -43,7 +43,7 @@ gem 'wicked_pdf'
 gem 'delayed_job_active_record'
 gem 'rails3-jquery-autocomplete'
 gem 'select2-rails'
-gem 'will_paginate'
+gem 'kaminari'
 
 gem 'devise'
 
