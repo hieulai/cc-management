@@ -173,6 +173,7 @@ class Account < ActiveRecord::Base
   end
 
   def bank_account?
+    return false if new_record?
     self == self.bank_account || (parent && parent.bank_account?)
   end
 
