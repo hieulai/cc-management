@@ -1,5 +1,7 @@
 class Payment < ActiveRecord::Base
   acts_as_paranoid
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
@@ -7,6 +9,7 @@ class Payment < ActiveRecord::Base
   has_many :payments_bills, :dependent => :destroy
 
   has_many :bills, :through => :payments_bills
+
 
   default_scope order("date DESC")
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
@@ -20,6 +23,24 @@ class Payment < ActiveRecord::Base
   after_update :update_account_balance, :if => :account_id_changed?
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
+
+  mapping do
+
+    indexes :vendor_name, type: 'string', :as => 'vendor_name'
+    indexes :account_name, type: 'string', :as => 'account_name'
+  end
+
+  def as_indexed_json(options={})
+    self.as_json(methods: [:account_name, :vendor_name])
+  end
+
+  def account_name
+    account.try(:name)
+  end
+
+  def vendor_name
+    vendor.try(:display_name)
+  end
 
   def amount
     payments_bills.map(&:amount).compact.sum if payments_bills.any?

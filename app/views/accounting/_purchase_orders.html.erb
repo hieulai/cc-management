@@ -20,9 +20,9 @@
           <td class="center">
               <%= po.id %>
           </td>
-          <td><%= po.project.name %></td>
-          <td><%= po.categories_template.category.name %></td>
-          <td><%= po.vendor.try(:display_name)%></td>
+          <td><%= po.project_name %></td>
+          <td><%= po.category_name %></td>
+          <td><%= po.vendor_name%></td>
           <td class="right"><%= number_to_currency(po.total_amount) %></td>
           <td><%= po.notes %></td>
       </tr>

@@ -1,4 +1,6 @@
 class Receipt < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
   before_destroy :check_readonly
 
   belongs_to :builder, :class_name => "Base::Builder"
@@ -26,6 +28,14 @@ class Receipt < ActiveRecord::Base
   validates_presence_of :payor, :if => Proc.new { |r| r.uninvoiced? }
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
+
+  mapping do
+    indexes :payer_name, type: 'string', :as => 'payer_name'
+  end
+
+  def as_indexed_json(options={})
+    self.as_json(methods: [:payer_name])
+  end
 
   def billed?
     self.deposits_receipts.any?

@@ -55,15 +55,7 @@
 </div>
 
 <script>
-    $(".instructions").hide();
-    $(".trigger").click(function () {
-        if ($(".instructions").is(":hidden")) {
-            $(".instructions").slideDown("slow");
-        }
-        else {
-            $(".instructions").hide();
-        }
-    });
+    
     $(".rows").click(function () {
         window.location.href = '/people/edit_vendor/' + $(this).find("a").attr("href");
     });

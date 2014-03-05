@@ -1,4 +1,6 @@
 class Client < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
   
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :projects, dependent: :destroy
@@ -10,8 +12,6 @@ class Client < ActiveRecord::Base
 
   default_scope order("first_name ASC")
   scope :active, where(status: "Active")
-  scope :search, lambda{|query| where("company ILIKE ? OR first_name ILIKE ? OR last_name ILIKE ? OR notes ILIKE ? OR lead_source ILIKE ?",
-     "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")}
 
   scope :search_by_name, lambda { |q|
     (q ? where(["first_name ILIKE ? or last_name ILIKE ? or concat(first_name, ' ', last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%', '%'+ q + '%']) : {})

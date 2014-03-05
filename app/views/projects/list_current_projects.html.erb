@@ -58,15 +58,6 @@
 </div>
 
 <script>
-    $(".instructions").hide();
-    $(".trigger").click(function () {
-        if ($(".instructions").is(":hidden")) {
-            $(".instructions").slideDown("slow");
-        }
-        else {
-            $(".instructions").hide();
-        }
-    });
     $('.table-action, .task, .tasklist, input[type="checkbox"]').click(function (event) {
         event.stopPropagation();
     });

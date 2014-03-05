@@ -23,11 +23,11 @@ module ApplicationHelper
   end
 
   def price n
-    n.nil? ? n : number_to_currency(number_with_precision(n.round(2), precision: 2), :unit =>"")
+    n.nil? ? n : number_to_currency(number_with_precision(n.to_f.round(2), precision: 2), :unit =>"")
   end
 
   def price_tag n, inner_class = ""
-    n.nil? ? n : raw(content_tag(:div, number_to_currency(number_with_precision(n.round(2), precision: 2)), :class => inner_class))
+    n.nil? ? n : raw(content_tag(:div, number_to_currency(number_with_precision(n.to_f.round(2), precision: 2)), :class => inner_class))
   end
 
   def pdf_image_tag(image, options = {})

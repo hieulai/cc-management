@@ -44,8 +44,11 @@ gem 'delayed_job_active_record'
 gem 'rails3-jquery-autocomplete'
 gem 'select2-rails'
 gem 'kaminari'
+gem 'will_paginate'
 
 gem 'devise'
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
 
 gem 'newrelic_rpm'
 

@@ -1,5 +1,8 @@
 class Bill < ActiveRecord::Base
   acts_as_paranoid
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   before_destroy :check_readonly
 
   belongs_to :project
@@ -26,6 +29,7 @@ class Bill < ActiveRecord::Base
   scope :paid, where('remaining_amount = 0')
   scope :date_range, lambda { |from_date, to_date| where('billed_date >= ? AND billed_date <= ?', from_date, to_date) }
   scope :project, lambda { |project_id| where('project_id = ?', project_id) }
+  scope :late, lambda { where('remaining_amount != ? AND due_date < ?', 0, Date.today) || joins(:purchase_order).where('purchase_orders.due_date < ?', Date.today) }
 
   after_initialize :default_values
   before_save :check_zero_amount, :check_total_amount_changed, :decrease_account, :increase_account
@@ -35,6 +39,33 @@ class Bill < ActiveRecord::Base
 
   validates_presence_of :vendor, :billed_date, :builder
   validates_presence_of :project, :categories_template, :if => Proc.new{|b| b.job_costed? }
+
+  mapping do
+    indexes :vendor_name, type: 'string', :as => 'vendor_name'
+    indexes :project_name, type: 'string', :as => 'project_name'
+    indexes :category_name, type: 'string', :as => 'category_name'
+    indexes :vnotes, type: 'string', :as => 'vnotes'
+  end
+
+  def as_indexed_json(options={})
+    self.as_json(methods: [:project_name, :vendor_name, :category_name, :vnotes])
+  end
+
+  def project_name
+    self.source(:project).try(:name)
+  end
+
+  def vendor_name
+    self.source(:vendor).try(:display_name)
+  end
+
+  def category_name
+    self.source(:categories_template).try(:category).try(:name)
+  end
+
+  def vnotes
+    source(:notes)
+  end
 
   def paid?
     self.payments_bills.any?
@@ -50,21 +81,6 @@ class Bill < ActiveRecord::Base
 
   def full_paid?
      self.remaining_amount == 0
-  end
-
-  def late?
-    !full_paid? && !source(:due_date).nil? && source(:due_date) < Date.today
-  end
-
-  def paid_status
-    case
-      when late?
-        'Late'
-      when full_paid?
-        'Paid'
-      else
-        'Unpaid'
-    end
   end
 
   def generated?

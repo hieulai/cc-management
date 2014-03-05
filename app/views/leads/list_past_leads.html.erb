@@ -55,15 +55,6 @@
 </div>
 
 <script>
-    $(".instructions").hide();
-    $(".trigger").click(function () {
-        if ($(".instructions").is(":hidden")) {
-            $(".instructions").slideDown("slow");
-        }
-        else {
-            $(".instructions").hide();
-        }
-    });
 
     $(".project-rows").click(function () {
         window.location.href = $(this).find("a.edit").attr("href");

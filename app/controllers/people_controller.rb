@@ -1,15 +1,17 @@
 class PeopleController < ApplicationController
     before_filter :authenticate_user!
-    
+
     def all
       @query = params[:query]
-      all_people = @builder.clients.active.search(@query) + @builder.vendors.search(@query) + @builder.contacts.search(@query)
-      @people = Kaminari.paginate_array(all_people).page(params[:page])
+      clients = @query.present? ? @builder.clients.active.search(@query).records : @builder.clients.active
+      vendors = @query.present? ? @builder.vendors.search(@query).records : @builder.vendors
+      contacts = @query.present? ? @builder.contacts.search(@query).records : @builder.contacts
+      @people = Kaminari.paginate_array(clients + vendors + contacts).page(params[:page])
     end
     
     def list_vendors
       @query = params[:query]
-      @vendors = @builder.vendors.search(@query)
+      @vendors = @query.present? ?  @builder.vendors.search(@query).records : @builder.vendors
       respond_to do |format|
         format.html { @vendors = @vendors.page(params[:page]) }
         format.csv {send_data Vendor.to_csv(@vendors)}
@@ -61,7 +63,8 @@ class PeopleController < ApplicationController
     
     def list_contacts
       @query = params[:query]
-      @contacts = @builder.contacts.search(@query).page(params[:page])
+      @contacts = @query.present? ?  @builder.contacts.search(@query).records : @builder.contacts
+      @contacts = @contacts.page(params[:page])
     end
   
     def show_contact
@@ -112,7 +115,7 @@ class PeopleController < ApplicationController
         redirect_to action: 'import_export', notice: "No file to import."
       else
         begin
-          errors = Vendor.import(params[:vendor][:data], @builder)
+          errors = Vendor.importData(params[:vendor][:data], @builder)
           msg = "Item imported."
           unless errors.empty?
             msg = errors.join(",")

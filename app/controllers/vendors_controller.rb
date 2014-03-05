@@ -78,7 +78,7 @@ class VendorsController < ApplicationController
         redirect_to action: 'import_export', notice: "No file to import."
       else
         begin
-          errors = Vendor.import(params[:vendor][:data], @builder)
+          errors = Vendor.importData(params[:vendor][:data], @builder)
           msg = "Item imported."
           unless errors.empty?
             msg = errors.join(",")

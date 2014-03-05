@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
 
   def list
     @query = params[:query]
-    @items = Item.where(builder_id: session[:builder_id]).order(:name).search(@query)
+    @items = @query.present? ? @builder.items.search(params[:query]).records : @builder.items
     respond_to do |format|
       format.html { @items = @items.page(params[:page]) }
       format.csv {send_data Item.to_csv(@items)}

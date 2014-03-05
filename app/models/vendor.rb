@@ -1,4 +1,7 @@
 class Vendor < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :bid, :dependent => :destroy
   has_many :payments
@@ -7,10 +10,6 @@ class Vendor < ActiveRecord::Base
   
   attr_accessible :company,:vendor_type,:trade,:primary_first_name,:primary_last_name,:primary_email,:primary_phone1,:primary_phone2,:secondary_first_name,:secondary_last_name,:secondary_email,
   :secondary_phone1,:secondary_phone2,:website,:address,:city,:state,:zipcode,:notes, :primary_phone1_tag,:primary_phone2_tag, :secondary_phone1_tag, :secondary_phone2_tag
-
-  scope :search, lambda{|query| where("company ILIKE ? OR vendor_type ILIKE ? OR trade ILIKE ? OR primary_first_name ILIKE ? OR primary_last_name ILIKE ? OR secondary_first_name ILIKE ? OR
-     secondary_last_name ILIKE ? OR notes ILIKE ?",
-     "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")}
 
   scope :search_by_name, lambda { |q|
     (q ? where(["company ILIKE ? or primary_first_name ILIKE ? or primary_last_name ILIKE ? or concat(primary_first_name, ' ', primary_last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%','%'+ q + '%' ,'%'+ q + '%' ])  : {})
@@ -53,7 +52,7 @@ class Vendor < ActiveRecord::Base
   end
   
   
-  def self.import(file, builder)
+  def self.importData(file, builder)
     spreadsheet = open_spreadsheet(file)
     if spreadsheet.first_row.nil?
       raise "There is no data in file"

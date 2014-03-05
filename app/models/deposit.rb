@@ -1,4 +1,7 @@
 class Deposit < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
   has_many :deposits_receipts, :dependent => :destroy
@@ -13,6 +16,18 @@ class Deposit < ActiveRecord::Base
   after_update :update_account_balance, :if => :account_id_changed?
 
   validates_presence_of :account, :builder, :date
+
+  mapping do
+    indexes :account_name, type: 'string', :as => 'account_name'
+  end
+
+  def as_indexed_json(options={})
+    self.as_json(methods: [:account_name])
+  end
+
+  def account_name
+    account.try(:name)
+  end
 
   def amount
     deposits_receipts.map(&:amount).compact.sum if deposits_receipts.any?

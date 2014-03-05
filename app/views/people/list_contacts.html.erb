@@ -51,15 +51,6 @@
 </div>
 
 <script>
-    $(".instructions").hide();
-    $(".trigger").click(function () {
-        if ($(".instructions").is(":hidden")) {
-            $(".instructions").slideDown("slow");
-        }
-        else {
-            $(".instructions").hide();
-        }
-    });
     $(".contact-rows").click(function () {
         window.location.href = '/people/edit_contact/' + $(this).find("a").attr("href");
     });

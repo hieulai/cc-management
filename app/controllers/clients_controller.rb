@@ -3,7 +3,8 @@ class ClientsController < ApplicationController
 
   def list
     @query = params[:query]
-    @clients = @builder.clients.active.search(@query).page(params[:page])
+    @clients = @query.present? ? @builder.clients.active.search(@query).records : @builder.clients.active
+    @clients = @clients.page(params[:page])
   end
 
   def show

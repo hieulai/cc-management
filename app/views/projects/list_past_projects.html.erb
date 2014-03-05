@@ -56,15 +56,6 @@
 </div>
 
 <script>
-    $(".instructions").hide();
-    $(".trigger").click(function () {
-        if ($(".instructions").is(":hidden")) {
-            $(".instructions").slideDown("slow");
-        }
-        else {
-            $(".instructions").hide();
-        }
-    });
     $('.table-action').click(function (event) {
         event.stopPropagation();
     });

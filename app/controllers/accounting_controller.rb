@@ -9,7 +9,9 @@ class AccountingController < ApplicationController
   end
 
   def deposits
-    @deposits = @builder.deposits.page(params[:page])
+    @query = params[:query]
+    @deposits = @query.present? ? @builder.deposits.search(@query).records : @builder.deposits
+    @deposits = @deposits.page(params[:page])
   end
 
   def new_deposit
@@ -56,7 +58,9 @@ class AccountingController < ApplicationController
   end
 
   def receipts
-    @receipts = @builder.receipts.page(params[:page])
+    @query = params[:query]
+    @receipts = @query.present? ? @builder.receipts.search(@query).records :  @builder.receipts
+    @receipts = @receipts.page(params[:page])
   end
 
   def new_receipt
@@ -133,7 +137,9 @@ class AccountingController < ApplicationController
   end
 
   def invoices
-    @invoices = @builder.invoices.page(params[:page])
+    @query = params[:query]
+    @invoices = @query.present? ? @builder.invoices.search(@query).records :  @builder.invoices
+    @invoices = @invoices.page(params[:page])
   end
 
   def invoice
@@ -205,7 +211,9 @@ class AccountingController < ApplicationController
   end
 
   def purchase_orders
-    @purchase_orders = @builder.purchase_orders.page(params[:page])
+    @query = params[:query]
+    @purchase_orders = @query.present? ? @builder.purchase_orders.search(@query).records :  @builder.purchase_orders
+    @purchase_orders = @purchase_orders.page(params[:page])
   end
 
   def new_purchase_order
@@ -246,7 +254,11 @@ class AccountingController < ApplicationController
   end
 
   def bills
-    @bills = @builder.bills.page(params[:page])
+    @type = params[:type]
+    @query = params[:query]
+    @bills = @type.blank? ? @builder.bills : @builder.bills.send(@type.to_sym)
+    @bills = @query.present? ? @bills.search(@query).records : @bills
+    @bills = @bills.page(params[:page])
   end
 
   def new_bill
@@ -280,7 +292,9 @@ class AccountingController < ApplicationController
   end
 
   def payments
-    @payments = @builder.payments.page(params[:page])
+    @query = params[:query]
+    @payments = @query.present? ? @builder.payments.search(@query).records : @builder.payments
+    @payments = @payments.page(params[:page])
   end
 
   def new_payment

@@ -17,7 +17,7 @@
           </td>
           <td class="center"><%= invoice.invoice_date %></td>
           <td class="center"><%= invoice.sent_date %></td>
-          <td><%= invoice.estimate.project.name %></td>
+          <td><%= invoice.project_name %></td>
           <td class="right"><%= price_tag(invoice.amount) %></td>
       </tr>
     <% end %>

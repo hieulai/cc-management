@@ -164,6 +164,18 @@ var transformToDateRangePickerFor = function (element) {
     });
 };
 
+var loadInstructions = function(){
+    $(".instructions").hide();
+    $(".trigger").click(function () {
+        if ($(".instructions").is(":hidden")) {
+            $(".instructions").slideDown("slow");
+        }
+        else {
+            $(".instructions").hide();
+        }
+    });
+}
+
 $(document).ready(function() {
     load_add_link();
     $("select").select2({
@@ -225,25 +237,17 @@ $(document).ready(function() {
     });
 
     $(".data-tables").each(function () {
-        var options = {
+        var oTable = $(this).dataTable({
             "bPaginate": false,
             "bLengthChange": false,
-            "bFilter": true,
+            "bFilter": false,
             "bSort": true,
             "bInfo": false,
             "bAutoWidth": false,
             "aaSorting": [
                 [ 0, "desc" ]
             ]
-        }
-        var oTable = $(this).dataTable(options);
-        $("#" + $(this).attr("id") + "_wrapper").prev(".button-group").appendTo("#" + $(this).attr("id") + "_filter");
-        if ($(this).attr("id") == "bill-list") {
-            $('input[type="radio"][name="bills_type"]').change(function () {
-                var val = $(this).val() == "All" ? "" : $(this).val();
-                oTable.fnFilter(val, 8, false, true, true, false);
-            });
-        }
+        });
     });
 
     $(document).ajaxStart(function () {
@@ -261,5 +265,6 @@ $(document).ready(function() {
     transformToDatePickerFor();
     transformToSelect2For();
     transformToDateRangePickerFor();
+    loadInstructions();
 
 })

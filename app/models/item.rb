@@ -1,6 +1,8 @@
 class Item < ActiveRecord::Base
   acts_as_paranoid
   include Importable
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   before_destroy :check_readonly
 
@@ -27,8 +29,6 @@ class Item < ActiveRecord::Base
   after_initialize :default_values
 
   default_scope order("name ASC")
-  scope :search, lambda{|query| where("name ILIKE ? OR description ILIKE ? OR notes ILIKE ?",
-     "%#{query}%", "%#{query}%", "%#{query}%")}
   scope :search_by_name, lambda { |q| where("name ILIKE ?", '%'+ q + '%') }
 
   HEADERS = ["Name", "Description", "Estimated_cost", "Unit", "Margin", "Price", "Notes"]
@@ -128,6 +128,8 @@ class Item < ActiveRecord::Base
       end
     end
   end
+
+
 
   private
   def reset_markup

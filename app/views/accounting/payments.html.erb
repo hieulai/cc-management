@@ -1,16 +1,32 @@
 <div>
     <%= render(:partial => "layouts/accounting_sub_menu") %>
-    <div class="zurb-row">
-        <div class="columns">
-            <div class="columns">
-                <h1>Payments</h1>
+
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("+ Payment", {:action => 'new_payment'}, :id => 'add-payment', :class => 'add action-button') %>
+            <span class="trigger help action-button">Instructions >></span>
+
+            <div class="instructions">
+                <p>Click on the row of the payment you want to edit their information.</p>
             </div>
-            <div class="zurb-row">
-                <div class="button-group">
-                    <%= link_to("+ Payment", {:action => 'new_payment'}, :id => 'add-payment', :class => 'action vew btn') %>
-                </div>
-                <%= render(:partial => "payments", :locals => {:payments => @payments}) %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1>Payments</h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+    <div class="columns">
+        <div class="zurb-row">
+            <div class="button-group">
+                <%= form_tag('payments', :method => 'get', :class => 'form-inline') do %>
+                  <p>
+                      <%= label_tag :query, "Search" %>
+                      <%= text_field_tag(:query, @query) %>
+                  </p>
+                <% end %>
             </div>
+            <%= render(:partial => "payments", :locals => {:payments => @payments}) %>
         </div>
     </div>
 </div>

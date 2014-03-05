@@ -9,7 +9,6 @@
         <th>Vendor</th>
         <th>Amount</th>
         <th>Notes</th>
-        <th style="display: none;">Paid Status</th>
     </tr>
     </thead>
     <tbody>
@@ -29,12 +28,11 @@
                 <%= b.id %>
             </td>
             <td class="center"><%= link_to b.purchase_order_id, {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :target => "_blank" if b.purchase_order.present? %></td>
-            <td><%= b.source(:project).try(:name) %></td>
-            <td><%= b.source(:categories_template).try(:category).try(:name) %></td>
-            <td><%= b.source(:vendor).try(:display_name) %></td>
+            <td><%= b.project_name %></td>
+            <td><%= b.category_name %></td>
+            <td><%= b.vendor_name %></td>
             <td class="right"><%= number_to_currency(b.cached_total_amount) %></td>
-            <td><%= b.source(:notes) %></td>
-            <td style="display: none;"><%= b.paid_status %></td>
+            <td><%= b.vnotes %></td>
         </tr>
     <% end %>
     </tbody>

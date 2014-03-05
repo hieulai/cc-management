@@ -50,15 +50,6 @@
 </div>
 
 <script>
-    $(".instructions").hide();
-    $(".trigger").click(function () {
-        if ($(".instructions").is(":hidden")) {
-            $(".instructions").slideDown("slow");
-        }
-        else {
-            $(".instructions").hide();
-        }
-    });
     $(".client-rows").click(function () {
         window.location.href = '/clients/edit/' + $(this).find("a").attr("href");
     });

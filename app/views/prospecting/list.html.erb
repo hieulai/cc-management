@@ -48,15 +48,6 @@
 </div>
 
 <script>
-    $(".instructions").hide();
-    $(".trigger").click(function () {
-        if ($(".instructions").is(":hidden")) {
-            $(".instructions").slideDown("slow");
-        }
-        else {
-            $(".instructions").hide();
-        }
-    });
 
     $(".rows").click(function () {
         window.location.href = '/prospecting/show/' + $(this).find("a").attr("href");

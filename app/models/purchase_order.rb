@@ -1,4 +1,6 @@
 class PurchaseOrder < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   before_destroy :check_readonly
 
@@ -22,6 +24,28 @@ class PurchaseOrder < ActiveRecord::Base
   after_save :create_bill
 
   validates_presence_of :vendor, :project, :categories_template
+
+  mapping do
+    indexes :vendor_name, type: 'string', :as => 'vendor_name'
+    indexes :project_name, type: 'string', :as => 'project_name'
+    indexes :category_name, type: 'string', :as => 'category_name'
+  end
+
+  def as_indexed_json(options={})
+    self.as_json(methods: [:project_name, :vendor_name, :category_name])
+  end
+
+  def project_name
+    project.try(:name)
+  end
+
+  def vendor_name
+    vendor.try(:display_name)
+  end
+
+  def category_name
+    categories_template.try(:category).try(:name)
+  end
 
   def has_bill_paid?
     bill.try(:paid?)
