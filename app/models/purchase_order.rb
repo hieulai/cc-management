@@ -1,6 +1,4 @@
 class PurchaseOrder < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
 
   before_destroy :check_readonly
 
@@ -21,18 +19,28 @@ class PurchaseOrder < ActiveRecord::Base
 
   after_initialize :default_values
   before_save :check_zero_amount, :check_total_amount_changed
-  after_save :create_bill
+  after_save :create_bill, :update_indexes
 
   validates_presence_of :vendor, :project, :categories_template
 
-  mapping do
-    indexes :vendor_name, type: 'string', :as => 'vendor_name'
-    indexes :project_name, type: 'string', :as => 'project_name'
-    indexes :category_name, type: 'string', :as => 'category_name'
-  end
-
-  def as_indexed_json(options={})
-    self.as_json(methods: [:project_name, :vendor_name, :category_name])
+  searchable do
+    integer :id
+    integer :builder_id
+    text :id_t do |po|
+      po.id.to_s
+    end
+    text :date_t do |po|
+      po.date.try(:strftime, Date::DATE_FORMATS[:default])
+    end
+    text :project_names do
+      project_name
+    end
+    text :vendor_name do
+      vendor_name
+    end
+    text :category_name do
+      category_name
+    end
   end
 
   def project_name
@@ -111,5 +119,9 @@ class PurchaseOrder < ActiveRecord::Base
       return false
     end
     self.cached_total_amount = self.total_amount
+  end
+
+  def update_indexes
+    Sunspot.index bill
   end
 end

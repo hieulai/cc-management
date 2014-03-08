@@ -39,7 +39,7 @@
             <%= f.label :due_date, "Due Date", class: 'col-lg-2 control-label' %>
             <div class="controls">
                 <%= f.text_field(:due_date, class: 'datepicker', :value => f.object.try(:due_date).try(:strftime, '%m-%d-%Y')) %>
-                <%= f.hidden_field(:due_date, id: 'purchasable_date_hidden', :value => f.object.try(:due_date).try(:strftime, '%Y-%m-%d')) %>
+                <%= f.hidden_field(:due_date, id: 'purchasable_due_date_hidden', :value => f.object.try(:due_date).try(:strftime, '%Y-%m-%d')) %>
             </div>
         </div>
         <div class="control-group">

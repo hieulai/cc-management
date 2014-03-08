@@ -1,7 +1,5 @@
 class Bill < ActiveRecord::Base
   acts_as_paranoid
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
 
   before_destroy :check_readonly
 
@@ -40,15 +38,33 @@ class Bill < ActiveRecord::Base
   validates_presence_of :vendor, :billed_date, :builder
   validates_presence_of :project, :categories_template, :if => Proc.new{|b| b.job_costed? }
 
-  mapping do
-    indexes :vendor_name, type: 'string', :as => 'vendor_name'
-    indexes :project_name, type: 'string', :as => 'project_name'
-    indexes :category_name, type: 'string', :as => 'category_name'
-    indexes :vnotes, type: 'string', :as => 'vnotes'
-  end
-
-  def as_indexed_json(options={})
-    self.as_json(methods: [:project_name, :vendor_name, :category_name, :vnotes])
+  searchable do
+    integer :id
+    integer :remaining_amount
+    integer :purchase_order_id
+    integer :builder_id
+    date :due_date
+    date :po_due_date do |b|
+      b.purchase_order.try(:due_date)
+    end
+    text :id_t do |b|
+      b.id.to_s
+    end
+    text :purchase_order_id_t do |b|
+      b.purchase_order_id.try(:to_s)
+    end
+    text :due_date_t do
+      source(:due_date).try(:strftime, Date::DATE_FORMATS[:default])
+    end
+    text :project_names do
+      project_name
+    end
+    text :vendor_name do
+      vendor_name
+    end
+    text :category_name do
+      category_name
+    end
   end
 
   def project_name

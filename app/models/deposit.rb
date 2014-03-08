@@ -1,6 +1,4 @@
 class Deposit < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
@@ -17,12 +15,15 @@ class Deposit < ActiveRecord::Base
 
   validates_presence_of :account, :builder, :date
 
-  mapping do
-    indexes :account_name, type: 'string', :as => 'account_name'
-  end
-
-  def as_indexed_json(options={})
-    self.as_json(methods: [:account_name])
+  searchable do
+    text :reference, :notes
+    integer :builder_id
+    text :date_t do |r|
+      r.date.try(:strftime, Date::DATE_FORMATS[:default])
+    end
+    text :account_name do
+      account_name
+    end
   end
 
   def account_name

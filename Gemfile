@@ -47,8 +47,9 @@ gem 'kaminari'
 gem 'will_paginate'
 
 gem 'devise'
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
+gem 'sunspot_rails', '~> 1.3.1'
+gem 'sunspot_solr', '~> 1.3.1'
+gem 'progress_bar'
 
 gem 'newrelic_rpm'
 

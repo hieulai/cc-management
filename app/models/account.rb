@@ -36,6 +36,7 @@ class Account < ActiveRecord::Base
   before_save :check_opening_balance_changed
   before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed?}
   before_destroy :check_if_default
+  after_save :update_indexes
 
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id]
   validate :disallow_self_reference
@@ -220,5 +221,10 @@ class Account < ActiveRecord::Base
       errors.add(:base, 'Cannot delete an account has categories')
       return false
     end
+  end
+
+  def update_indexes
+    Sunspot.index payments
+    Sunspot.index deposits
   end
 end

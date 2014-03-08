@@ -16,6 +16,8 @@ class Category < ActiveRecord::Base
   default_scope order("name ASC")
   scope :raw, where(template_id: nil)
 
+  after_save :update_indexes
+
   validates :name, presence: true
 
   def destroy_with_associations
@@ -37,6 +39,12 @@ class Category < ActiveRecord::Base
     if undestroyable?
       errors[:invoice] << "Category #{name} cannot be deleted once containing items or change orders which are added to an invoice"
       false
+    end
+  end
+
+  def update_indexes
+    categories_templates.each do |ct|
+      ct.update_indexes
     end
   end
 end

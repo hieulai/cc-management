@@ -3,12 +3,17 @@ class ItemsController < ApplicationController
   before_filter :authenticate_user!
 
   def list
-    @query = params[:query]
-    @items = @query.present? ? @builder.items.search(params[:query]).records : @builder.items
     respond_to do |format|
-      format.html { @items = @items.page(params[:page]) }
-      format.csv {send_data Item.to_csv(@items)}
-      format.xls { send_data @items.to_xls(:headers => Item::HEADERS, :columns => [:name, :description, :estimated_cost, :unit, :margin, :price, :notes]), content_type: 'application/vnd.ms-excel', filename: 'items.xls' }
+      format.html do
+        @query = params[:query]
+        @items = Item.search {
+          fulltext params[:query]
+          with :builder_id, session[:builder_id]
+          paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+        }.results
+      end
+      format.csv {send_data Item.to_csv(@builder.items)}
+      format.xls { send_data @builder.items.to_xls(:headers => Item::HEADERS, :columns => [:name, :description, :estimated_cost, :unit, :margin, :price, :notes]), content_type: 'application/vnd.ms-excel', filename: 'items.xls' }
     end
   end
 

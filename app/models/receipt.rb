@@ -1,6 +1,4 @@
 class Receipt < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
   before_destroy :check_readonly
 
   belongs_to :builder, :class_name => "Base::Builder"
@@ -29,12 +27,15 @@ class Receipt < ActiveRecord::Base
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 
-  mapping do
-    indexes :payer_name, type: 'string', :as => 'payer_name'
-  end
-
-  def as_indexed_json(options={})
-    self.as_json(methods: [:payer_name])
+  searchable do
+    text :method, :reference
+    text :received_at_t do |r|
+      r.received_at.try(:strftime, Date::DATE_FORMATS[:default])
+    end
+    integer :builder_id
+    text :payer_name do
+      payer_name
+    end
   end
 
   def billed?

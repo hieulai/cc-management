@@ -10,8 +10,8 @@
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
 development:
   adapter: postgresql
-  database: cc_development
-  username: jonathanwlee
+  database: cc_production
+  username: hieulai
   password: 
   host: localhost
 
@@ -21,7 +21,7 @@ development:
 test:
   adapter: postgresql
   database: cc_test
-  username: jonathanwlee
+  username: hieulai
   password: 
   host: localhost
  
@@ -29,7 +29,7 @@ test:
 production:
   adapter: postgresql
   database: cc_production
-  username: jonathanwlee
+  username: hieulai
   password: 
   host: localhost
   

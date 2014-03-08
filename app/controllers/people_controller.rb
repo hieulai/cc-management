@@ -3,19 +3,37 @@ class PeopleController < ApplicationController
 
     def all
       @query = params[:query]
-      clients = @query.present? ? @builder.clients.active.search(@query).records : @builder.clients.active
-      vendors = @query.present? ? @builder.vendors.search(@query).records : @builder.vendors
-      contacts = @query.present? ? @builder.contacts.search(@query).records : @builder.contacts
+      clients = Client.search {
+        fulltext params[:query]
+        with :builder_id, session[:builder_id]
+        with :status, "Active"
+        paginate :page => 1, :per_page => Client.count
+      }.results
+      vendors = Vendor.search {
+        fulltext params[:query]
+        with :builder_id, session[:builder_id]
+        paginate :page => 1, :per_page => Vendor.count
+      }.results
+      contacts = Contact.search {
+        fulltext params[:query]
+        with :builder_id, session[:builder_id]
+        paginate :page => 1, :per_page => Contact.count
+      }.results
       @people = Kaminari.paginate_array(clients + vendors + contacts).page(params[:page])
     end
     
     def list_vendors
-      @query = params[:query]
-      @vendors = @query.present? ?  @builder.vendors.search(@query).records : @builder.vendors
       respond_to do |format|
-        format.html { @vendors = @vendors.page(params[:page]) }
-        format.csv {send_data Vendor.to_csv(@vendors)}
-        format.xls { send_data @vendors.to_xls(:headers => Vendor::HEADERS, :columns => [:vendor_type, :trade, :company, :primary_first_name, :primary_last_name, :primary_email,
+        format.html do
+          @query = params[:query]
+          @vendors = Vendor.search {
+            fulltext params[:query]
+            with :builder_id, session[:builder_id]
+            paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+          }.results
+        end
+        format.csv {send_data Vendor.to_csv(@builder.vendors)}
+        format.xls { send_data @builder.vendors.to_xls(:headers => Vendor::HEADERS, :columns => [:vendor_type, :trade, :company, :primary_first_name, :primary_last_name, :primary_email,
           :primary_phone1,:primary_phone1_tag, :primary_phone2,:primary_phone2_tag,:secondary_first_name, :secondary_last_name, :secondary_email, :secondary_phone1, :secondary_phone1_tag, 
           :secondary_phone2, :secondary_phone2_tag, :website, :address, :city, :state, :zipcode, 
           :notes]), content_type: 'application/vnd.ms-excel', filename: 'vendors.xls' }
@@ -63,8 +81,10 @@ class PeopleController < ApplicationController
     
     def list_contacts
       @query = params[:query]
-      @contacts = @query.present? ?  @builder.contacts.search(@query).records : @builder.contacts
-      @contacts = @contacts.page(params[:page])
+      @contacts = Contact.search {
+        fulltext params[:query]
+        with :builder_id, session[:builder_id]
+      }.results
     end
   
     def show_contact

@@ -10,8 +10,11 @@ class AccountingController < ApplicationController
 
   def deposits
     @query = params[:query]
-    @deposits = @query.present? ? @builder.deposits.search(@query).records : @builder.deposits
-    @deposits = @deposits.page(params[:page])
+    @deposits = Deposit.search {
+      fulltext params[:query]
+      with :builder_id, session[:builder_id]
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
   end
 
   def new_deposit
@@ -59,8 +62,11 @@ class AccountingController < ApplicationController
 
   def receipts
     @query = params[:query]
-    @receipts = @query.present? ? @builder.receipts.search(@query).records :  @builder.receipts
-    @receipts = @receipts.page(params[:page])
+    @receipts = Receipt.search {
+      fulltext params[:query]
+      with :builder_id, session[:builder_id]
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
   end
 
   def new_receipt
@@ -138,8 +144,11 @@ class AccountingController < ApplicationController
 
   def invoices
     @query = params[:query]
-    @invoices = @query.present? ? @builder.invoices.search(@query).records :  @builder.invoices
-    @invoices = @invoices.page(params[:page])
+    @invoices = Invoice.search {
+      fulltext params[:query]
+      with :builder_id, session[:builder_id]
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
   end
 
   def invoice
@@ -212,8 +221,11 @@ class AccountingController < ApplicationController
 
   def purchase_orders
     @query = params[:query]
-    @purchase_orders = @query.present? ? @builder.purchase_orders.search(@query).records :  @builder.purchase_orders
-    @purchase_orders = @purchase_orders.page(params[:page])
+    @purchase_orders = PurchaseOrder.search {
+      fulltext params[:query]
+      with :builder_id, session[:builder_id]
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
   end
 
   def new_purchase_order
@@ -256,9 +268,23 @@ class AccountingController < ApplicationController
   def bills
     @type = params[:type]
     @query = params[:query]
-    @bills = @type.blank? ? @builder.bills : @builder.bills.send(@type.to_sym)
-    @bills = @query.present? ? @bills.search(@query).records : @bills
-    @bills = @bills.page(params[:page])
+    @bills = Bill.search {
+      fulltext params[:query]
+      with :builder_id, session[:builder_id]
+      with :remaining_amount, 0 if params[:type] == "paid"
+      any_of do
+        with(:remaining_amount).greater_than(0)
+        with(:remaining_amount, nil)
+      end if params[:type] == "unpaid"
+      any_of do
+        all_of do
+          without :remaining_amount, 0
+          with(:due_date).less_than(Date.today)
+        end
+          with(:po_due_date).less_than(Date.today)
+      end if params[:type] == "late"
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
   end
 
   def new_bill
@@ -293,8 +319,11 @@ class AccountingController < ApplicationController
 
   def payments
     @query = params[:query]
-    @payments = @query.present? ? @builder.payments.search(@query).records : @builder.payments
-    @payments = @payments.page(params[:page])
+    @payments = Payment.search {
+      fulltext params[:query]
+      with :builder_id, session[:builder_id]
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
   end
 
   def new_payment

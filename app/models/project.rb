@@ -18,6 +18,8 @@ class Project < ActiveRecord::Base
   scope :current_project, where(status: "Current Project")
   scope :past_project, where(status: "Past Project")
 
+  after_save :update_indexes
+
   def next_tasks n
     incomplete_tasks[0..n-1]
   end
@@ -66,6 +68,12 @@ class Project < ActiveRecord::Base
     co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.approved.pluck(:id)).uniq
     cos_categories = co_categories.map(&:category).uniq
     cos_categories.reject! { |c| categories.pluck(:name).include? c.name } || Array.new
+  end
+
+  def update_indexes
+    Sunspot.index bills
+    Sunspot.index purchase_orders
+    Sunspot.index invoices
   end
   
 end

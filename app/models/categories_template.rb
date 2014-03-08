@@ -98,6 +98,11 @@ class CategoriesTemplate < ActiveRecord::Base
     ct_account
   end
 
+  def update_indexes
+    Sunspot.index bills
+    Sunspot.index purchase_orders
+  end
+
   private
   def check_destroyable
     if self.undestroyable?

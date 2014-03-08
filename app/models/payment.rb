@@ -1,7 +1,5 @@
 class Payment < ActiveRecord::Base
   acts_as_paranoid
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
@@ -9,7 +7,6 @@ class Payment < ActiveRecord::Base
   has_many :payments_bills, :dependent => :destroy
 
   has_many :bills, :through => :payments_bills
-
 
   default_scope order("date DESC")
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
@@ -24,14 +21,19 @@ class Payment < ActiveRecord::Base
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 
-  mapping do
-
-    indexes :vendor_name, type: 'string', :as => 'vendor_name'
-    indexes :account_name, type: 'string', :as => 'account_name'
-  end
-
-  def as_indexed_json(options={})
-    self.as_json(methods: [:account_name, :vendor_name])
+  searchable do
+    text :reference, :method
+    integer :method
+    integer :builder_id
+    text :date_t do |p|
+      p.date.try(:strftime, Date::DATE_FORMATS[:default])
+    end
+    text :vendor_name do
+      vendor_name
+    end
+    text :account_name do
+      account_name
+    end
   end
 
   def account_name

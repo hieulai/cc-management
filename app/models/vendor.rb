@@ -1,11 +1,10 @@
 class Vendor < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
 
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :bid, :dependent => :destroy
   has_many :payments
   has_many :bills
+  has_many :purchase_orders
   has_many :receipts, as: :payer
   
   attr_accessible :company,:vendor_type,:trade,:primary_first_name,:primary_last_name,:primary_email,:primary_phone1,:primary_phone2,:secondary_first_name,:secondary_last_name,:secondary_email,
@@ -20,6 +19,13 @@ class Vendor < ActiveRecord::Base
   validates :vendor_type, presence: true
   validates :trade, presence: { message: "cannot be blank for Subcontractors. Consider entering something such as: Framer, Plumber, Electrician, etc."}, if: :vendor_is_subcontractor?
   validates :company, presence: { message: "and Primary First Name cannot both be blank."}, if: :name_is_blank?
+
+  after_save :update_indexes
+
+  searchable do
+    text :company, :vendor_type, :trade, :primary_first_name, :primary_last_name, :primary_email, :primary_phone1, :notes
+    integer :builder_id
+  end
   
   def vendor_is_subcontractor?
       vendor_type == "Subcontractor"
@@ -78,6 +84,12 @@ class Vendor < ActiveRecord::Base
     when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
     else raise "Unknown file type: #{file[:data].original_filename}"
     end
+  end
+
+  def update_indexes
+    Sunspot.index bills
+    Sunspot.index purchase_orders
+    Sunspot.index payments
   end
   
 end

@@ -3,8 +3,12 @@ class ClientsController < ApplicationController
 
   def list
     @query = params[:query]
-    @clients = @query.present? ? @builder.clients.active.search(@query).records : @builder.clients.active
-    @clients = @clients.page(params[:page])
+    @clients = Client.search {
+      fulltext params[:query]
+      with :builder_id, session[:builder_id]
+      with :status, "Active"
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
   end
 
   def show

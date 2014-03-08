@@ -1,6 +1,4 @@
 class Invoice < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
   before_destroy :check_readonly
 
   belongs_to :builder, :class_name => "Base::Builder"
@@ -23,12 +21,23 @@ class Invoice < ActiveRecord::Base
 
   validates_presence_of :estimate, :builder
 
-  mapping do
-    indexes :project_name, type: 'string', :as => 'project_name'
-  end
-
-  def as_indexed_json(options={})
-    self.as_json(methods: [:project_name])
+  searchable do
+    date :invoice_date
+    date :sent_date
+    integer :builder_id
+    text :reference
+    text :id_t do |i|
+      i.id.to_s
+    end
+    text :sent_date_t do |i|
+      i.sent_date.try(:strftime, Date::DATE_FORMATS[:default])
+    end
+    text :invoice_date_t do |i|
+      i.invoice_date.try(:strftime, Date::DATE_FORMATS[:default])
+    end
+    text :project_name do
+      project_name
+    end
   end
 
   def project_name
