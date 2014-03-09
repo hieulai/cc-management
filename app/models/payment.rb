@@ -22,7 +22,7 @@ class Payment < ActiveRecord::Base
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 
   searchable do
-    text :reference, :method
+    text :reference, :method, :memo
     integer :method
     integer :builder_id
     text :date_t do |p|

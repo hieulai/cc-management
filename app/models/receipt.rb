@@ -28,7 +28,7 @@ class Receipt < ActiveRecord::Base
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 
   searchable do
-    text :method, :reference
+    text :method, :reference, :notes
     text :received_at_t do |r|
       r.received_at.try(:strftime, Date::DATE_FORMATS[:default])
     end

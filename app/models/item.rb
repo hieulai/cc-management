@@ -133,8 +133,6 @@ class Item < ActiveRecord::Base
     end
   end
 
-
-
   private
   def reset_markup
     if read_attribute(:margin).presence

@@ -24,6 +24,7 @@ class PurchaseOrder < ActiveRecord::Base
   validates_presence_of :vendor, :project, :categories_template
 
   searchable do
+    text :notes
     integer :id
     integer :builder_id
     text :id_t do |po|

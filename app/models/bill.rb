@@ -65,6 +65,9 @@ class Bill < ActiveRecord::Base
     text :category_name do
       category_name
     end
+    text :vnotes do
+      vnotes
+    end
   end
 
   def project_name
@@ -80,7 +83,7 @@ class Bill < ActiveRecord::Base
   end
 
   def vnotes
-    source(:notes)
+    self.source(:notes)
   end
 
   def paid?
