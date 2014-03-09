@@ -17,3 +17,8 @@
 
 # Ignore IDE generated files
 *.iml
+.DS_Store
+.generators
+.rakeTasks
+*.patch
+
