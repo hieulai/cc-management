@@ -38,6 +38,8 @@ module Base
           parent_account = self.accounts.top.where(:name => Account::LIABILITIES).first
         elsif name == Account::ACCOUNTS_RECEIVABLE
           parent_account = self.accounts.top.where(:name => Account::ASSETS).first
+        elsif name == Account::COST_OF_GOODS_SOLD
+          parent_account = self.accounts.top.where(:name => Account::EXPENSES).first
         end
 
         if self.accounts.where(:name => name, :parent_id => parent_account.try(:id)).empty?
