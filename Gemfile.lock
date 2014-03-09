@@ -209,7 +209,6 @@ GEM
       rack (>= 1.0)
     wicked_pdf (0.9.6)
       rails
-    will_paginate (3.0.4)
     wkhtmltopdf-binary (0.9.9.1)
 
 PLATFORMS
@@ -248,5 +247,4 @@ DEPENDENCIES
   unf
   unicorn
   wicked_pdf
-  will_paginate
   wkhtmltopdf-binary

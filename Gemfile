@@ -44,7 +44,6 @@ gem 'delayed_job_active_record'
 gem 'rails3-jquery-autocomplete'
 gem 'select2-rails'
 gem 'kaminari'
-gem 'will_paginate'
 
 gem 'devise'
 gem 'sunspot_rails', '~> 1.3.1'
