@@ -21,4 +21,8 @@ class Contact < ActiveRecord::Base
       "#{primary_first_name} #{primary_last_name}"
   end
 
+  def company
+    nil
+  end
+
 end
