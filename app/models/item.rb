@@ -32,7 +32,7 @@ class Item < ActiveRecord::Base
   HEADERS = ["Name", "Description", "Estimated_cost", "Unit", "Margin", "Price", "Notes"]
 
   searchable do
-    text :name, :description, :unit, :price
+    text :name, :description, :unit, :price, :notes
     integer :qty
     integer :builder_id
   end
