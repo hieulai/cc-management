@@ -9,8 +9,11 @@ class Account < ActiveRecord::Base
   ACCOUNTS_PAYABLE = "Accounts Payable"
   ACCOUNTS_RECEIVABLE = "Accounts Receivable"
   BANK_ACCOUNTS = 'Bank Accounts'
+  RETAINED_EARNINGS = "Retained Earnings"
+  DEPOSITS_HELD = "Deposits Held"
+  OPERATING_EXPENSES = "Operating Expenses"
   TOP = [REVENUE, EXPENSES, ASSETS, LIABILITIES, EQUITY]
-  DEFAULTS = TOP + [ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS, COST_OF_GOODS_SOLD]
+  DEFAULTS = TOP + [ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS, COST_OF_GOODS_SOLD, RETAINED_EARNINGS, DEPOSITS_HELD, OPERATING_EXPENSES]
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :parent, class_name: "Account"
@@ -51,6 +54,9 @@ class Account < ActiveRecord::Base
   end
 
   def balance(options ={})
+    b = balance_if_special_account
+    return b if b
+
     options ||= {}
     options[:recursive] = true if options[:recursive].nil?
     b = read_attribute(:balance).to_f
@@ -187,9 +193,11 @@ class Account < ActiveRecord::Base
   def check_if_default
     if (DEFAULTS.include? self.name_was) &&
         (parent_id.nil? ||
-            parent.name == ASSETS && [BANK_ACCOUNTS, ACCOUNTS_RECEIVABLE].include?(self.name_was) ||
+            parent.name == ASSETS && [BANK_ACCOUNTS, ACCOUNTS_RECEIVABLE, DEPOSITS_HELD].include?(self.name_was) ||
             parent.name == LIABILITIES && [ACCOUNTS_PAYABLE].include?(self.name_was) ||
-            parent.name == EXPENSES && [COST_OF_GOODS_SOLD].include?(self.name_was))
+            parent.name == EXPENSES && [COST_OF_GOODS_SOLD, OPERATING_EXPENSES].include?(self.name_was)||
+            parent.name == EQUITY && [RETAINED_EARNINGS].include?(self.name_was)
+        )
       errors[:base] << "Default account is can not be destroyed or modified"
       false
     end
@@ -227,5 +235,17 @@ class Account < ActiveRecord::Base
   def update_indexes
     Sunspot.index payments
     Sunspot.index deposits
+  end
+
+  def balance_if_special_account
+    if name == RETAINED_EARNINGS
+      eq_account = self.builder.accounts.top.where(:name => Account::EQUITY).first
+      if parent_id == eq_account.id
+        ex_account = self.builder.accounts.top.where(:name => Account::EXPENSES).first
+        r_account = self.builder.accounts.top.where(:name => Account::REVENUE).first
+        return r_account.balance - ex_account.balance
+      end
+    end
+      return nil
   end
 end
