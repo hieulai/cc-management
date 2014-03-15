@@ -10,12 +10,12 @@ class DepositsReceipt < ActiveRecord::Base
   def charge_account_and_update_receipt
     remaining_amount = self.receipt.remaining_amount.presence ||self.receipt.amount
     self.amount = remaining_amount
-    self.deposit.account.update_attribute(:balance, self.deposit.account.balance.to_f + self.amount.to_f)
+    self.deposit.account.update_attribute(:balance, self.deposit.account.balance({recursive: false}).to_f + self.amount.to_f)
     self.receipt.update_column(:remaining_amount, remaining_amount.to_f - self.amount.to_f)
   end
 
   def refund_account_and_update_receipt
-    self.deposit.account.update_attribute(:balance, self.deposit.account.balance.to_f - self.amount_was.to_f)
+    self.deposit.account.update_attribute(:balance, self.deposit.account.balance({recursive: false}).to_f - self.amount_was.to_f)
     remaining_amount = self.receipt.billed? ? self.receipt.remaining_amount.to_f + self.amount_was.to_f : nil
     self.receipt.update_column(:remaining_amount, remaining_amount)
   end

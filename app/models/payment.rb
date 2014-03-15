@@ -12,8 +12,8 @@ class Payment < ActiveRecord::Base
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
 
   accepts_nested_attributes_for :payments_bills, :allow_destroy => true
-  
-  attr_accessible :date, :memo, :method, :reference, :reconciled , :builder_id, :account_id, :vendor_id, :payments_bills_attributes
+
+  attr_accessible :date, :memo, :method, :reference, :reconciled, :builder_id, :account_id, :vendor_id, :payments_bills_attributes
 
   validates_presence_of :vendor, :account, :builder, :method, :date
 
@@ -57,8 +57,8 @@ class Payment < ActiveRecord::Base
     old_account = Account.find(account_id_was)
     account = Account.find(account_id)
     payments_bills.each do |pb|
-      old_account.update_attribute(:balance, old_account.balance.to_f + pb.amount)
-      account.update_attribute(:balance, account.balance.to_f - pb.amount)
+      old_account.update_attribute(:balance, old_account.balance({recursive: false}).to_f + pb.amount)
+      account.update_attribute(:balance, account.balance({recursive: false}).to_f - pb.amount)
     end
   end
 
