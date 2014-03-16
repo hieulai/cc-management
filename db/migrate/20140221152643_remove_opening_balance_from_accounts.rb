@@ -3,9 +3,8 @@ class RemoveOpeningBalanceFromAccounts < ActiveRecord::Migration
 
     Base::Builder.all.each do |b|
       next if b.accounts.empty?
-      a_account = b.accounts.top.where(name: Account::ASSETS).first
-      bank_account = a_account.children.where(name: Account::BANK_ACCOUNTS).first
-      b.accounts.where('id != ?', bank_account.id).each do |a|
+      b.accounts.each do |a|
+        next if a.kind_of? [Account::BANK_ACCOUNTS]
         a.update_column(:balance, a.balance({recursive: false}).to_f - a.opening_balance)
       end
     end
