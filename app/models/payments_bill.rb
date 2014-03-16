@@ -19,7 +19,7 @@ class PaymentsBill < ActiveRecord::Base
   end
 
   def refund_account_and_update_bill
-    self.payment.account.update_attribute(:balance, self.payment.account.balance({recursive: false}).to_f + self.amount_was.to_f)
+    self.payment.account.update_attribute(:balance, self.payment.account.balance({recursive: false}).to_f + self.amount_was.to_f) if self.payment.account
     remaining_amount = self.bill.paid? ? self.bill.remaining_amount + self.amount_was.to_f : nil
     self.bill.update_column(:remaining_amount, remaining_amount)
   end

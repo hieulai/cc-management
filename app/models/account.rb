@@ -17,11 +17,11 @@ class Account < ActiveRecord::Base
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :parent, class_name: "Account"
-  has_many :payments
-  has_many :deposits
-  has_many :children, class_name: "Account", foreign_key: "parent_id"
-  has_many :sent_transfers, class_name: Transfer.name, foreign_key: "from_account_id"
-  has_many :received_transfers, class_name: Transfer.name, foreign_key: "to_account_id"
+  has_many :payments, :dependent => :destroy
+  has_many :deposits, :dependent => :destroy
+  has_many :children, class_name: "Account", foreign_key: "parent_id", :dependent => :destroy
+  has_many :sent_transfers, class_name: Transfer.name, foreign_key: "from_account_id", :dependent => :destroy
+  has_many :received_transfers, class_name: Transfer.name, foreign_key: "to_account_id", :dependent => :destroy
   has_many :receipts_items, :dependent => :destroy
   has_many :un_job_costed_items, :dependent => :destroy
   has_and_belongs_to_many :categories_templates
