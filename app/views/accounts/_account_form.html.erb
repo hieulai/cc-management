@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<% if @account.bank_account? %>
+<% if @account.kind_of? Account::BANK_ACCOUNTS %>
   <div class="control-group">
       <%= f.label :opening_balance, "Opening Balance", class: 'col-lg-2 control-label' %>
       <div class="controls">

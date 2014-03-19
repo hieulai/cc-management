@@ -9,7 +9,7 @@ class ReceiptsItem < ActiveRecord::Base
   scope :date_range, lambda { |from_date, to_date| joins(:receipt).where("receipts.received_at >= ? and receipts.received_at <= ? ", from_date, to_date) }
 
   POSITIVES = [Account::LIABILITIES, Account::REVENUE, Account::EQUITY]
-  NEGATIVES = [Account::ASSETS]
+  NEGATIVES = [Account::ASSETS, Account::COST_OF_GOODS_SOLD, Account::EXPENSES]
 
   def billed?
     receipt.billed?
@@ -25,6 +25,7 @@ class ReceiptsItem < ActiveRecord::Base
 
   def charge_account
     return true unless account_id
+    receipt.builder.deposits_held_account.update_attribute(:balance, receipt.builder.deposits_held_account.balance({recursive: false}).to_f + self.amount.to_f)
     account = Account.find(account_id)
     if account.kind_of? POSITIVES
       account.update_attribute(:balance, account.balance({recursive: false}).to_f + self.amount.to_f)
@@ -35,6 +36,7 @@ class ReceiptsItem < ActiveRecord::Base
 
   def refund_account
     return true unless account_id_was
+    receipt.builder.deposits_held_account.update_attribute(:balance, receipt.builder.deposits_held_account.balance({recursive: false}).to_f - self.amount_was.to_f)
     account_was = Account.find(account_id_was)
     if account_was.kind_of? POSITIVES
       account_was.update_attribute(:balance, account_was.balance({recursive: false}).to_f - self.amount_was.to_f)

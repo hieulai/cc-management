@@ -30,24 +30,59 @@ module Base
 
     after_create :create_default_accounts
 
-    def create_default_accounts
-      Account::DEFAULTS.each do |name|
-        if [Account::BANK_ACCOUNTS, Account::ACCOUNTS_RECEIVABLE, Account::DEPOSITS_HELD].include?(name)
-          parent_account = self.accounts.top.where(:name => Account::ASSETS).first
-        elsif [Account::COST_OF_GOODS_SOLD, Account::OPERATING_EXPENSES].include?(name)
-          parent_account = self.accounts.top.where(:name => Account::EXPENSES).first
-        elsif [Account::ACCOUNTS_PAYABLE].include?(name)
-          parent_account = self.accounts.top.where(:name => Account::LIABILITIES).first
-        elsif Account::RETAINED_EARNINGS.include?(name)
-          parent_account = self.accounts.top.where(:name => Account::EQUITY).first
-        end
+    def accounts_receivable_account
+      self.send("#{Account::ASSETS.parameterize.underscore}_account".to_sym).
+          children.where(:name => Account::ACCOUNTS_RECEIVABLE, builder_id: id).
+          first_or_create
+    end
 
-        if self.accounts.where(:name => name, :parent_id => parent_account.try(:id)).empty?
-          self.accounts.create(:name => name, :parent_id => parent_account.try(:id))
-        end
+    def deposits_held_account
+      self.send("#{Account::ASSETS.parameterize.underscore}_account".to_sym).
+          children.where(:name => Account::DEPOSITS_HELD, builder_id: id).
+          first_or_create
+    end
+
+    def bank_accounts_account
+      self.send("#{Account::ASSETS.parameterize.underscore}_account".to_sym).
+          children.where(:name => Account::BANK_ACCOUNTS, builder_id: id).
+          first_or_create
+    end
+
+    def accounts_payable_account
+      self.send("#{Account::LIABILITIES.parameterize.underscore}_account".to_sym).
+          children.where(:name => Account::ACCOUNTS_PAYABLE, builder_id: id).
+          first_or_create
+    end
+
+    def retained_earnings_account
+      self.send("#{Account::EQUITY.parameterize.underscore}_account".to_sym).
+          children.where(:name => Account::RETAINED_EARNINGS, builder_id: id).
+          first_or_create
+    end
+
+    def cost_of_goods_sold_account
+      self.send("#{Account::EXPENSES.parameterize.underscore}_account".to_sym).
+          children.where(:name => Account::COST_OF_GOODS_SOLD, builder_id: id).
+          first_or_create
+    end
+
+    def operating_expenses_account
+      self.send("#{Account::EXPENSES.parameterize.underscore}_account".to_sym).
+          children.where(:name => Account::OPERATING_EXPENSES, builder_id: id).
+          first_or_create
+    end
+
+    Account::TOP.each do |n|
+      define_method("#{n.parameterize.underscore}_account") do
+        accounts.top.where(name: n, builder_id: id).first_or_create
       end
     end
 
+    def create_default_accounts
+      Account::DEFAULTS.each do |n|
+        self.send("#{n.parameterize.underscore}_account".to_sym)
+      end
+    end
   end
 
 end

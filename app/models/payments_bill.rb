@@ -11,16 +11,18 @@ class PaymentsBill < ActiveRecord::Base
 
   private
   def charge_account_and_update_bill
-    self.payment.account.update_attribute(:balance, self.payment.account.balance({recursive: false}).to_f - self.amount)
     # Avoid overpaid
     remaining_amount = self.bill.remaining_amount.presence||self.bill.source(:total_amount)
     self.amount = remaining_amount if self.amount > remaining_amount
+    payment.builder.accounts_payable_account.update_attribute(:balance, payment.builder.accounts_payable_account.balance({recursive: false}).to_f - self.amount.to_f)
+    payment.account.update_attribute(:balance, self.payment.account.balance({recursive: false}).to_f - self.amount)
     self.bill.update_column(:remaining_amount, remaining_amount - self.amount)
   end
 
   def refund_account_and_update_bill
-    self.payment.account.update_attribute(:balance, self.payment.account.balance({recursive: false}).to_f + self.amount_was.to_f) if self.payment.account
-    remaining_amount = self.bill.paid? ? self.bill.remaining_amount + self.amount_was.to_f : nil
+    payment.builder.accounts_payable_account.update_attribute(:balance, payment.builder.accounts_payable_account.balance({recursive: false}).to_f + self.amount_was.to_f)
+    payment.account.update_attribute(:balance, payment.account.balance({recursive: false}).to_f + self.amount_was.to_f)
+    remaining_amount = self.bill.paid? ? self.bill.remaining_amount.to_f + self.amount_was.to_f : nil
     self.bill.update_column(:remaining_amount, remaining_amount)
   end
 end

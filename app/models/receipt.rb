@@ -10,13 +10,16 @@ class Receipt < ActiveRecord::Base
   has_many :deposits, :through => :deposits_receipts
   has_many :receipts_items, :dependent => :destroy
 
-  attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :payer_id, :payer_type, :payor, :client_id, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes
+  attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :payer_id, :payer_type, :payor, :client_id, :reconciled, :account_amount,
+                  :account_type, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true
   accepts_nested_attributes_for :receipts_items, reject_if: :all_blank, allow_destroy: true
-  attr_accessor :create_deposit
+  attr_accessor :create_deposit, :account_amount, :account_type
 
   default_scope order("received_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
+  scope :uninvoiced, where(uninvoiced: true)
+  scope :invoiced, where(uninvoiced: false)
   scope :billed, where('remaining_amount = 0')
 
   before_save :check_readonly, :clear_old_data, :if => :changed?
@@ -42,12 +45,20 @@ class Receipt < ActiveRecord::Base
     self.deposits_receipts.any?
   end
 
+  def date
+    received_at
+  end
+
   def amount
     if self.uninvoiced
       receipts_items.map(&:amount).compact.sum if receipts_items.any?
     else
       receipts_invoices.map(&:amount).compact.sum if receipts_invoices.any?
     end
+  end
+
+  def account_amount
+    instance_variable_get(:@account_amount) || amount
   end
 
   def billed_amount
@@ -67,6 +78,10 @@ class Receipt < ActiveRecord::Base
       errors[:base] << "This receipt is already paid and can not be modified."
       false
     end
+  end
+
+  def display_priority
+    1
   end
 
   private

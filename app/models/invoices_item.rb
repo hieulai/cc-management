@@ -13,33 +13,27 @@ class InvoicesItem < ActiveRecord::Base
   after_destroy :decrease_account
 
   def increase_account
+    invoice.builder.accounts_receivable_account.update_attribute(:balance, invoice.builder.accounts_receivable_account.balance({recursive: false}).to_f + amount.to_f)
     if item.change_order?
       item.change_orders_category.revenue_account.update_attribute(:balance, item.change_orders_category.revenue_account.balance({recursive: false}).to_f + amount.to_f)
-      item.change_orders_category.cogs_account.update_attribute(:balance, item.change_orders_category.cogs_account.balance({recursive: false}).to_f + amount.to_f)
       self.accounts << item.change_orders_category.revenue_account
-      self.accounts << item.change_orders_category.cogs_account
     elsif item.categories_templates.any?
       item.categories_templates.each do |ct|
         ct.revenue_account.update_attribute(:balance, ct.revenue_account.balance({recursive: false}).to_f + amount.to_f)
-        ct.cogs_account.update_attribute(:balance, ct.cogs_account.balance({recursive: false}).to_f + amount.to_f)
         self.accounts << ct.revenue_account
-        self.accounts << ct.cogs_account
       end
     end
   end
 
   def decrease_account
+    invoice.builder.accounts_receivable_account.update_attribute(:balance, invoice.builder.accounts_receivable_account.balance({recursive: false}).to_f - amount_was.to_f)
     if item.change_order?
       item.change_orders_category.revenue_account.update_attribute(:balance, item.change_orders_category.revenue_account.balance({recursive: false}).to_f - amount_was.to_f)
-      item.change_orders_category.cogs_account.update_attribute(:balance, item.change_orders_category.cogs_account.balance({recursive: false}).to_f - amount_was.to_f)
       self.accounts.delete item.change_orders_category.revenue_account
-      self.accounts.delete item.change_orders_category.cogs_account
     elsif item.categories_templates.any?
       item.categories_templates.each do |ct|
         ct.revenue_account.update_attribute(:balance, ct.revenue_account.balance({recursive: false}).to_f - amount_was.to_f)
-        ct.cogs_account.update_attribute(:balance, ct.cogs_account.balance({recursive: false}).to_f - amount_was.to_f)
         self.accounts.delete ct.revenue_account
-        self.accounts.delete ct.cogs_account
       end
     end
   end

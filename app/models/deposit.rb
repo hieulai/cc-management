@@ -5,7 +5,8 @@ class Deposit < ActiveRecord::Base
   has_many :deposits_receipts, :dependent => :destroy
   has_many :receipts, :through => :deposits_receipts
 
-  attr_accessible :date, :notes, :reconciled, :account_id, :builder_id, :deposits_receipts_attributes, :reference
+  attr_accessible :date, :notes, :reconciled, :account_id, :builder_id, :deposits_receipts_attributes, :reference, :account_amount
+  attr_accessor :account_amount
   accepts_nested_attributes_for :deposits_receipts, :allow_destroy => true
 
   default_scope order("date DESC")
@@ -32,6 +33,10 @@ class Deposit < ActiveRecord::Base
 
   def amount
     deposits_receipts.map(&:amount).compact.sum if deposits_receipts.any?
+  end
+
+  def account_amount
+    instance_variable_get(:@account_amount) || amount
   end
 
   def display_priority

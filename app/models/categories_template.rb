@@ -72,7 +72,7 @@ class CategoriesTemplate < ActiveRecord::Base
   def revenue_account
     return nil unless self.template.estimate
     builder = self.template.estimate.builder
-    r_account = builder.accounts.top.where(:name => Account::REVENUE).first
+    r_account = builder.revenue_account
     ct_account = r_account.children.where(:name => self.category.name).first
     unless ct_account
       ct_account = r_account.children.create(:name => self.category.name, :builder_id => r_account.builder_id)
@@ -87,7 +87,7 @@ class CategoriesTemplate < ActiveRecord::Base
   def cogs_account
     return nil unless self.template.estimate
     builder = self.template.estimate.builder
-    cogs_account = builder.accounts.top.where(:name => Account::COST_OF_GOODS_SOLD).first
+    cogs_account = builder.cost_of_goods_sold_account
     ct_account = cogs_account.children.where(:name => self.category.name).first
     unless ct_account
       ct_account = cogs_account.children.create(:name => self.category.name, :builder_id => cogs_account.builder_id)

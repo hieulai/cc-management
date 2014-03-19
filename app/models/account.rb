@@ -1,4 +1,3 @@
-require 'ostruct'
 class Account < ActiveRecord::Base
   REVENUE = "Revenue"
   COST_OF_GOODS_SOLD = "Cost of Goods Sold"
@@ -37,7 +36,7 @@ class Account < ActiveRecord::Base
   scope :undefault, where('name not in (?)', DEFAULTS)
 
   before_save :check_opening_balance_changed
-  before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed?}
+  before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
   before_destroy :check_if_default
   after_save :update_indexes
 
@@ -45,99 +44,27 @@ class Account < ActiveRecord::Base
   validate :disallow_self_reference
 
   def transactions
-    r = []
-    r << [OpenStruct.new(date: self.opening_balance_updated_at, id: self.id, name: self.name, amount: self.opening_balance, display_priority: 0)] if self.bank_account?
-    sent_transfers.each { |t| t.amount *= -1 }
-    r << payments + deposits + sent_transfers + received_transfers + receipts_items + un_job_costed_items + bills + invoices
-    r << children.map { |a| a.transactions }
-    r.flatten.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
+    Accounts::AccountHandler.get_account_handler(self).transactions
   end
 
   def balance(options ={})
-    b = balance_if_special_account
-    return b if b
-
-    options ||= {}
-    options[:recursive] = true if options[:recursive].nil?
-    b = read_attribute(:balance).to_f
-    if options[:from_date] && options[:to_date]
-      p_amount = payments.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      d_amount = deposits.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      st_amount = sent_transfers.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      rt_amount = received_transfers.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      ri_amount = 0
-      ujci_amount = 0
-      if self.kind_of? ReceiptsItem::POSITIVES
-        ri_amount = receipts_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      elsif self.kind_of? ReceiptsItem::NEGATIVES
-        ri_amount -= receipts_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      end
-      if self.kind_of? UnJobCostedItem::POSITIVES
-        ujci_amount += un_job_costed_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      elsif self.kind_of? UnJobCostedItem::NEGATIVES
-        ujci_amount -= un_job_costed_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      end
-      scoped_bills = options[:project_id].present? ? bills.project(options[:project_id]) : bills
-      scoped_invoices_items = options[:project_id].present? ? invoices_items.project(options[:project_id]) : invoices_items
-      b_amount = scoped_bills.date_range(options[:from_date], options[:to_date]).map(&:cached_total_amount).compact.sum
-      ii_amount = scoped_invoices_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      b= -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + b_amount + ii_amount
-    end
-
-    b += (children.map { |a| a.balance(options) }).compact.sum if options[:recursive]
-    b
+    Accounts::AccountHandler.get_account_handler(self).balance(options)
   end
 
   def bank_balance
-    bb = balance({recursive: false}).to_f + payments.where(:reconciled => false).map(&:amount).compact.sum - deposits.where(:reconciled => false).map(&:amount).compact.sum -
-        received_transfers.where(:reconciled => false).map(&:amount).compact.sum + sent_transfers.where(:reconciled => false).map(&:amount).compact.sum -
-        bills.where(:reconciled => false).map(&:cached_total_amount).compact.sum - invoices_items.unrecociled.map(&:amount).compact.sum
-    if self.receipts_items.any?
-      if self.kind_of? ReceiptsItem::POSITIVES
-        bb-= receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
-      elsif self.kind_of? ReceiptsItem::NEGATIVES
-        bb+= receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
-      end
-    end
-
-    if self.un_job_costed_items.any?
-      if self.kind_of? UnJobCostedItem::POSITIVES
-        bb-= un_job_costed_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
-      elsif self.kind_of? UnJobCostedItem::NEGATIVES
-        bb+= un_job_costed_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
-      end
-    end
-
-    bb.round(2)
+    Accounts::AccountHandler.get_account_handler(self).bank_balance
   end
 
   def book_balance
-    balance.to_f
+    Accounts::AccountHandler.get_account_handler(self).book_balance
   end
 
   def outstanding_checks_balance
-    payments.where(:reconciled => false).map(&:amount).compact.sum
+    Accounts::AccountHandler.get_account_handler(self).outstanding_checks_balance
   end
 
   def opening_balance
-    ob = balance({recursive: false}).to_f + payments.map(&:amount).compact.sum - deposits.map(&:amount).compact.sum - received_transfers.map(&:amount).compact.sum +
-        sent_transfers.map(&:amount).compact.sum - bills.map(&:cached_total_amount).compact.sum - invoices_items.map(&:amount).compact.sum
-    if self.receipts_items.any?
-      if self.kind_of? ReceiptsItem::POSITIVES
-        ob-= receipts_items.map(&:amount).compact.sum
-      elsif self.kind_of? ReceiptsItem::NEGATIVES
-        ob+= receipts_items.map(&:amount).compact.sum
-      end
-    end
-
-    if self.un_job_costed_items.any?
-      if self.kind_of? UnJobCostedItem::POSITIVES
-        ob-= un_job_costed_items.map(&:amount).compact.sum
-      elsif self.kind_of? UnJobCostedItem::NEGATIVES
-        ob+= un_job_costed_items.map(&:amount).compact.sum
-      end
-    end
-    ob.round(2)
+    Accounts::AccountHandler.get_account_handler(self).opening_balance
   end
 
   def opening_balance=(b)
@@ -146,13 +73,34 @@ class Account < ActiveRecord::Base
     self.balance = self.balance({recursive: false}).to_f + b.to_f - self.opening_balance
   end
 
+  def invoices
+    r = []
+    invoices_items.group_by(&:invoice_id).each do |k, v|
+      i = Invoice.find(k)
+      i.account_amount = v.map(&:amount).compact.sum
+      r << i
+    end
+    r
+  end
+
+  def has_no_category?
+    categories_templates.empty? && change_orders_categories.empty?
+  end
+
+
+  def default_account?
+    Base::Builder.method_defined?("#{self.name.parameterize.underscore}_account".to_sym) &&
+        self.builder.send("#{self.name.parameterize.underscore}_account".to_sym) == self
+  end
+
   def kind_of?(names)
-    if names.include? self.name
-      true
-    elsif parent
-      parent.kind_of? names
-    else
-      false
+    (self.default_account? && names.include?(self.name)) || (parent && parent.kind_of?(names))
+  end
+
+  DEFAULTS.each do |n|
+    define_method("#{n.parameterize.underscore}_account?") do
+      return false if new_record?
+      return self.default_account? && n == self.name
     end
   end
 
@@ -165,39 +113,9 @@ class Account < ActiveRecord::Base
     }
   end
 
-  def invoices
-    r = []
-    invoices_items.group_by(&:invoice_id).each do |k, v|
-      i = Invoice.find(k)
-      i.category_amount = v.map(&:amount).compact.sum
-      r << i
-    end
-    r
-  end
-
-  def has_no_category?
-    categories_templates.empty? && change_orders_categories.empty?
-  end
-
-  def bank_account?
-    return false if new_record?
-    self == self.bank_account || (parent && parent.bank_account?)
-  end
-
-  def bank_account
-    asset_account = self.builder.accounts.top.where(:name => Account::ASSETS).first
-    asset_account.children.where(:name => Account::BANK_ACCOUNTS).first
-  end
-
   private
   def check_if_default
-    if (DEFAULTS.include? self.name_was) &&
-        (parent_id.nil? ||
-            parent.name == ASSETS && [BANK_ACCOUNTS, ACCOUNTS_RECEIVABLE, DEPOSITS_HELD].include?(self.name_was) ||
-            parent.name == LIABILITIES && [ACCOUNTS_PAYABLE].include?(self.name_was) ||
-            parent.name == EXPENSES && [COST_OF_GOODS_SOLD, OPERATING_EXPENSES].include?(self.name_was)||
-            parent.name == EQUITY && [RETAINED_EARNINGS].include?(self.name_was)
-        )
+    if (self.default_account?)
       errors[:base] << "Default account is can not be destroyed or modified"
       false
     end
@@ -211,7 +129,7 @@ class Account < ActiveRecord::Base
 
   def check_opening_balance_changed
     if self.opening_balance_changed
-      unless self.bank_account?
+      unless self.kind_of? [BANK_ACCOUNTS]
         errors.add(:base, 'Can not update opening balance for this account')
         return false
       end
@@ -235,17 +153,5 @@ class Account < ActiveRecord::Base
   def update_indexes
     Sunspot.index payments
     Sunspot.index deposits
-  end
-
-  def balance_if_special_account
-    if name == RETAINED_EARNINGS
-      eq_account = self.builder.accounts.top.where(:name => Account::EQUITY).first
-      if parent_id == eq_account.id
-        ex_account = self.builder.accounts.top.where(:name => Account::EXPENSES).first
-        r_account = self.builder.accounts.top.where(:name => Account::REVENUE).first
-        return r_account.balance - ex_account.balance
-      end
-    end
-      return nil
   end
 end

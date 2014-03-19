@@ -3,10 +3,10 @@
         <%= t.date %>
         <%= link_to("Edit", {:controller => 'accounts', :action => 'edit', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
     </td>
-    <td>Opening Balance</td>
-    <td></td>
-    <td>Opening Balance</td>
-    <td><%= t.name %> Opening Balance Entry</td>
+    <td><%= t.type %></td>
+    <td><%= t.reference%></td>
+    <td><%= t.payor %></td>
+    <td><%= t.memo %></td>
     <td class="right"><%= price_tag(t.amount) %></td>
     <td class="center action-container">
     </td>

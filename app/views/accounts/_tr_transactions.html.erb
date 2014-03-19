@@ -3,11 +3,11 @@
     <%= render(:partial => "tr_payment", :locals => {:t => transaction, :balance => @balance}) %>
     <% @balance += transaction.amount.to_f %>
   <% elsif transaction.instance_of? Deposit %>
-    <%= render(:partial => "tr_deposit", :locals => {:t => transaction, :balance => @balance}) %>
-    <% @balance -= transaction.amount.to_f %>
+    <%= render(:partial => "tr_deposit", :locals => {:t => transaction, :balance => @balance, :account => @account}) %>
+    <% @balance -= transaction.account_amount.to_f %>
   <% elsif transaction.instance_of? Transfer %>
     <%= render(:partial => "tr_transfer", :locals => {:t => transaction, :balance => @balance}) %>
-    <% @balance -= transaction.amount.to_f %>
+    <% @balance -= transaction.account_amount.to_f %>
   <% elsif transaction.instance_of? ReceiptsItem %>
     <%= render(:partial => "tr_receipts_item", :locals => {:t => transaction, :balance => @balance}) %>
     <% if @account.kind_of? ReceiptsItem::POSITIVES %>
@@ -27,9 +27,12 @@
     <% @balance -= transaction.cached_total_amount.to_f %>
   <% elsif transaction.instance_of? Invoice %>
     <%= render(:partial => "tr_invoice", :locals => {:t => transaction, :balance => @balance}) %>
-    <% @balance -= transaction.category_amount.to_f %>
+    <% @balance -= transaction.account_amount.to_f %>
+  <% elsif transaction.instance_of? Receipt %>
+    <%= render(:partial => "tr_receipt", :locals => {:t => transaction, :balance => @balance}) %>
+    <% @balance -= transaction.account_amount.to_f %>
   <% else %>
-    <%= render(:partial => "tr_opening_balance", :locals => {:t => transaction, :account => @account, :balance => @balance}) %>
+    <%= render(:partial => "tr_misc", :locals => {:t => transaction, :account => @account, :balance => @balance}) %>
     <% @balance -= transaction.amount.to_f %>
   <% end %>
 <% end %>

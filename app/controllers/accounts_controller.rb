@@ -1,21 +1,21 @@
 class AccountsController < ApplicationController
   before_filter :authenticate_user!
-  
+
   def list
     @accounts = @builder.accounts.top
   end
-  
+
   def show
     @account = Account.find(params[:id])
     full_transactions = @account.transactions
     @balance = transaction_balance(@account, full_transactions, params[:page].try(:to_i))
     @transactions = Kaminari.paginate_array(full_transactions).page(params[:page])
   end
-  
+
   def new
     @account =  Account.new
   end
-  
+
   def create
     @builder = Base::Builder.find(session[:builder_id])
     @account = Account.new(params[:account])
@@ -26,11 +26,11 @@ class AccountsController < ApplicationController
       render('new')
     end
   end
-  
+
   def edit
     @account = Account.find(params[:id])
   end
-  
+
   def update
     @account = Account.find(params[:id])
     if @account.update_attributes(params[:account])
@@ -39,7 +39,7 @@ class AccountsController < ApplicationController
       render('edit')
     end
   end
-  
+
   def delete
     @account = Account.find(params[:id])
   end
@@ -118,9 +118,9 @@ class AccountsController < ApplicationController
       if transaction.instance_of? Payment
         balance += transaction.amount.to_f
       elsif transaction.instance_of? Deposit
-        balance -= transaction.amount.to_f
+        balance -= transaction.account_amount.to_f
       elsif transaction.instance_of? Transfer
-        balance -= transaction.amount.to_f
+        balance -= transaction.account_amount.to_f
       elsif transaction.instance_of? ReceiptsItem
         if account.kind_of? ReceiptsItem::POSITIVES
           balance -= transaction.amount.to_f
@@ -128,7 +128,6 @@ class AccountsController < ApplicationController
           balance += transaction.amount.to_f
         end
       elsif transaction.instance_of? UnJobCostedItem
-
         if account.kind_of? UnJobCostedItem::POSITIVES
           balance -= transaction.amount.to_f
         elsif account.kind_of? UnJobCostedItem::NEGATIVES
@@ -137,7 +136,9 @@ class AccountsController < ApplicationController
       elsif transaction.instance_of? Bill
         balance -= transaction.cached_total_amount.to_f
       elsif transaction.instance_of? Invoice
-        balance -= transaction.category_amount.to_f
+        balance -= transaction.account_amount.to_f
+      elsif transaction.instance_of? Receipt
+        balance -= transaction.account_amount.to_f
       else
         balance -= transaction.amount.to_f
       end

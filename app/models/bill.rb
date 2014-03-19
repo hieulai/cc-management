@@ -158,17 +158,17 @@ class Bill < ActiveRecord::Base
   end
 
   def increase_account
-    return true unless categories_template_id
+    return unless job_costed
     category_template = CategoriesTemplate.find(categories_template_id)
-    category_template.revenue_account.update_attribute(:balance, category_template.revenue_account.balance({recursive: false}).to_f + self.total_amount.to_f)
     category_template.cogs_account.update_attribute(:balance, category_template.cogs_account.balance({recursive: false}).to_f + self.total_amount.to_f)
+    builder.accounts_payable_account.update_attribute(:balance, builder.accounts_payable_account.balance({recursive: false}).to_f + self.total_amount.to_f)
   end
 
   def decrease_account
-    return true unless categories_template_id_was
+    return unless job_costed && categories_template_id_was
     category_template_was = CategoriesTemplate.find(categories_template_id_was)
-    category_template_was.revenue_account.update_attribute(:balance, category_template_was.revenue_account.balance({recursive: false}).to_f - self.read_attribute(:cached_total_amount).to_f)
     category_template_was.cogs_account.update_attribute(:balance, category_template_was.cogs_account.balance({recursive: false}).to_f - self.read_attribute(:cached_total_amount).to_f)
+    builder.accounts_payable_account.update_attribute(:balance, builder.accounts_payable_account.balance({recursive: false}).to_f - self.read_attribute(:cached_total_amount).to_f)
   end
 
   def date
