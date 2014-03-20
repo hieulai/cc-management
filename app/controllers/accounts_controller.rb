@@ -115,33 +115,7 @@ class AccountsController < ApplicationController
     page||= 1
     transactions.each_with_index do |transaction, index|
       break if index == ((page-1) * Kaminari.config.default_per_page)
-      if transaction.instance_of? Payment
-        balance += transaction.amount.to_f
-      elsif transaction.instance_of? Deposit
-        balance -= transaction.account_amount.to_f
-      elsif transaction.instance_of? Transfer
-        balance -= transaction.account_amount.to_f
-      elsif transaction.instance_of? ReceiptsItem
-        if account.kind_of? ReceiptsItem::POSITIVES
-          balance -= transaction.amount.to_f
-        elsif account.kind_of? ReceiptsItem::NEGATIVES
-          balance += transaction.amount.to_f
-        end
-      elsif transaction.instance_of? UnJobCostedItem
-        if account.kind_of? UnJobCostedItem::POSITIVES
-          balance -= transaction.amount.to_f
-        elsif account.kind_of? UnJobCostedItem::NEGATIVES
-          balance += transaction.amount.to_f
-        end
-      elsif transaction.instance_of? Bill
-        balance -= transaction.cached_total_amount.to_f
-      elsif transaction.instance_of? Invoice
-        balance -= transaction.account_amount.to_f
-      elsif transaction.instance_of? Receipt
-        balance -= transaction.account_amount.to_f
-      else
-        balance -= transaction.amount.to_f
-      end
+      balance -= transaction.account_amount.to_f
     end
     balance
   end

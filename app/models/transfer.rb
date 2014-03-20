@@ -1,9 +1,8 @@
 class Transfer < ActiveRecord::Base
   belongs_to :from_account, :foreign_key => "from_account_id", :class_name => Account.name
   belongs_to :to_account, :foreign_key => "to_account_id", :class_name => Account.name
-  attr_accessible :date, :amount, :reference, :memo, :reconciled, :kind, :from_account_id, :to_account_id, :account_amount
-  attr_accessor :account_amount
-
+  attr_accessible :date, :amount, :reference, :memo, :reconciled, :kind, :from_account_id, :to_account_id
+  attr_accessor :related_account
   before_save :check_top_accounts, :if => Proc.new { |i| Account::TOP.include?(i.from_account.name) || Account::TOP.include?(i.to_account.name) }
   before_save  :rollback_amount, :transfer_amount
   after_destroy :rollback_amount
@@ -20,7 +19,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def account_amount
-    instance_variable_get(:@account_amount) || amount
+    amount * (related_account.sent_transfers.include?(self) ? 1 : -1)
   end
 
   private

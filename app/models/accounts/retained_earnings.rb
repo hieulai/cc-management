@@ -4,7 +4,7 @@ module Accounts
 
     def self_transactions
       t = super
-      t << [OpenStruct.new(date: @account.opening_balance_updated_at,
+      re = [OpenStruct.new(date: @account.opening_balance_updated_at,
                            id: @account.id,
                            type: "Retained Earnings",
                            reference: "",
@@ -12,7 +12,8 @@ module Accounts
                            memo: "Retained Earnings Entry",
                            amount: @account.balance,
                            display_priority: 0)]
-      t
+      re.define_singleton_method("account_amount") { self.amount }
+      t + re
     end
 
     def balance(options = {})

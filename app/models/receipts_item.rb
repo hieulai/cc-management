@@ -1,4 +1,6 @@
 class ReceiptsItem < ActiveRecord::Base
+  include Accountable
+
   belongs_to :receipt
   belongs_to :account
   attr_accessible :name, :description, :amount, :reconciled, :receipt_id, :account_id

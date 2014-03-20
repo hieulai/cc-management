@@ -3,9 +3,7 @@ module Accounts
 
     def self_transactions
       r = super
-      deposits = @account.builder.deposits
-      deposits.each { |t| t.account_amount = -t.amount }
-      r << deposits
+      r << @account.builder.deposits
       r << @account.builder.receipts
       r
     end

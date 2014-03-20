@@ -9,24 +9,28 @@ module Accounts
 
     def transactions
       t = []
-      t << self.self_transactions
+      st = self.self_transactions.flatten
+      st.each { |t| t.related_account = @account }
+      t << st
       t << @account.children.map { |a| a.transactions }
       t.flatten.sort_by { |x| [x.date.try(:to_date) || Date.new(0), x.display_priority] }.reverse!
     end
 
     def self_transactions
       t = []
-      t = [OpenStruct.new(date: @account.opening_balance_updated_at,
-                          id: @account.id,
-                          type: "Opening Balance",
-                          reference: "",
-                          payor: "Opening Balance",
-                          memo: @account.name + " Opening Balance Entry",
-                          amount: @account.opening_balance,
-                          display_priority: 0)] if @account.kind_of? [Account::BANK_ACCOUNTS]
-      sent_transfers = @account.sent_transfers
-      sent_transfers.each { |t| t.account_amount = -t.amount }
-      t + @account.payments + @account.deposits + sent_transfers + @account.received_transfers + @account.receipts_items + @account.un_job_costed_items + @account.invoices + @account.bills
+      if @account.kind_of? [Account::BANK_ACCOUNTS]
+        ob = OpenStruct.new(date: @account.opening_balance_updated_at,
+                            id: @account.id,
+                            type: "Opening Balance",
+                            reference: "",
+                            payor: "Opening Balance",
+                            memo: @account.name + " Opening Balance Entry",
+                            amount: @account.opening_balance,
+                            display_priority: 0)
+        ob.define_singleton_method("account_amount") { self.amount }
+        t << ob
+      end
+      t << @account.payments + @account.deposits + @account.sent_transfers + @account.received_transfers + @account.receipts_items + @account.un_job_costed_items + @account.invoices + @account.bills
     end
 
     def balance(options ={})

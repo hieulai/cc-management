@@ -1,5 +1,6 @@
 class UnJobCostedItem < ActiveRecord::Base
   acts_as_paranoid
+  include Accountable
 
   belongs_to :bill
   belongs_to :account

@@ -1,4 +1,5 @@
 class Invoice < ActiveRecord::Base
+  include Accountable
   before_destroy :check_readonly
 
   belongs_to :builder, :class_name => "Base::Builder"
@@ -9,8 +10,7 @@ class Invoice < ActiveRecord::Base
   has_many :receipts, :through => :receipts_invoices
 
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
-  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount, :account_amount, :reconciled
-  attr_accessor :account_amount
+  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount, :reconciled
 
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
@@ -20,6 +20,7 @@ class Invoice < ActiveRecord::Base
   before_save :check_readonly, :check_reference
 
   validates_presence_of :estimate, :builder
+  NEGATIVES = []
 
   searchable do
     date :invoice_date
@@ -50,10 +51,6 @@ class Invoice < ActiveRecord::Base
 
   def amount
     invoices_items.map(&:amount).compact.sum if invoices_items.any?
-  end
-
-  def account_amount
-    instance_variable_get(:@account_amount) || amount
   end
 
   def billed_amount

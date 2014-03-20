@@ -1,6 +1,6 @@
 class Bill < ActiveRecord::Base
   acts_as_paranoid
-
+  include Accountable
   before_destroy :check_readonly
 
   belongs_to :project
@@ -37,6 +37,7 @@ class Bill < ActiveRecord::Base
 
   validates_presence_of :vendor, :billed_date, :builder
   validates_presence_of :project, :categories_template, :if => Proc.new{|b| b.job_costed? }
+  NEGATIVES = []
 
   searchable do
     integer :id
@@ -129,6 +130,10 @@ class Bill < ActiveRecord::Base
       update_column(:cached_total_amount, total_amount) if read_attribute(:cached_total_amount) != total_amount
       read_attribute(:cached_total_amount)
     end
+  end
+
+  def amount
+    cached_total_amount
   end
 
   def total_amount

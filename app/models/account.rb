@@ -74,13 +74,7 @@ class Account < ActiveRecord::Base
   end
 
   def invoices
-    r = []
-    invoices_items.group_by(&:invoice_id).each do |k, v|
-      i = Invoice.find(k)
-      i.account_amount = v.map(&:amount).compact.sum
-      r << i
-    end
-    r
+    invoices_items.group_by(&:invoice_id).map { |k, v| Invoice.find(k) }
   end
 
   def has_no_category?
@@ -94,6 +88,7 @@ class Account < ActiveRecord::Base
   end
 
   def kind_of?(names)
+    return true if names == "*"
     (self.default_account? && names.include?(self.name)) || (parent && parent.kind_of?(names))
   end
 

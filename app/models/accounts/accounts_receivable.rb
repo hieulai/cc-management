@@ -4,9 +4,7 @@ module Accounts
     def self_transactions
       r = super
       r << @account.builder.invoices
-      receipts =  @account.builder.receipts.invoiced
-      receipts.each { |t| t.account_amount = -t.amount }
-      r << receipts
+      r << @account.builder.receipts.invoiced
       r
     end
 

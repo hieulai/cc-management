@@ -7,13 +7,7 @@
     <td></td>
     <td><%= t.bill.vendor.full_name %></td>
     <td><%= t.bill.notes %></td>
-    <td class="right">
-        <% if @account.kind_of? UnJobCostedItem::POSITIVES %>
-          <%= price_tag(t.amount) %>
-        <% elsif @account.kind_of? UnJobCostedItem::NEGATIVES %>
-          <%= price_tag(t.amount ? (t.amount * -1) : t.amount) %>
-        <% end %>
-    </td>
+    <td class="right"><%= price_tag(t.account_amount) %></td>
     <td class="center action-container">
         <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :type => t.class.name, :id => t.id)}) %>
     </td>
