@@ -25,6 +25,7 @@ class Bill < ActiveRecord::Base
   default_scope order("due_date DESC")
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :paid, where('remaining_amount = 0')
+  scope :job_costed, where(job_costed: true)
   scope :date_range, lambda { |from_date, to_date| where('billed_date >= ? AND billed_date <= ?', from_date, to_date) }
   scope :project, lambda { |project_id| where('project_id = ?', project_id) }
   scope :late, lambda { where('remaining_amount != ? AND due_date < ?', 0, Date.today) || joins(:purchase_order).where('purchase_orders.due_date < ?', Date.today) }

@@ -19,9 +19,5 @@ module Accounts
     def balance(options = {})
       @account.builder.revenue_account.balance - @account.builder.expenses_account.balance
     end
-
-    def opening_balance
-      0
-    end
   end
 end

@@ -7,9 +7,5 @@ module Accounts
       r << @account.builder.receipts.invoiced
       r
     end
-
-    def opening_balance
-      0
-    end
   end
 end

@@ -14,9 +14,5 @@ module Accounts
       b_amount = scoped_bills.date_range(options[:from_date], options[:to_date]).map(&:cached_total_amount).compact.sum
       b + b_amount
     end
-
-    def opening_balance
-      0
-    end
   end
 end
