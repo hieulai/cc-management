@@ -14,34 +14,64 @@ class Transfer < ActiveRecord::Base
 
   BANK_TRANSFERS = [Account::BANK_ACCOUNTS]
 
+  CASES = [[{name: Account::ASSETS, value: -1}, {name: Account::EQUITY, value: -1}],
+           [{name: Account::ASSETS, value: -1}, {name: Account::EXPENSES, value: 1}],
+           [{name: Account::ASSETS, value: -1}, {name: Account::LIABILITIES, value: -1}],
+           [{name: Account::ASSETS, value: -1}, {name: Account::REVENUE, value: -1}],
+           [{name: Account::EQUITY, value: 1}, {name: Account::ASSETS, value: 1}],
+           [{name: Account::EQUITY, value: -1}, {name: Account::EXPENSES, value: 1}],
+           [{name: Account::EQUITY, value: -1}, {name: Account::LIABILITIES, value: 1}],
+           [{name: Account::EQUITY, value: -1}, {name: Account::REVENUE, value: 1}],
+           [{name: Account::EXPENSES, value: -1}, {name: Account::ASSETS, value: 1}],
+           [{name: Account::EXPENSES, value: -1}, {name: Account::EQUITY, value: 1}],
+           [{name: Account::EXPENSES, value: -1}, {name: Account::LIABILITIES, value: -1}],
+           [{name: Account::EXPENSES, value: -1}, {name: Account::REVENUE, value: 1}],
+           [{name: Account::LIABILITIES, value: 1}, {name: Account::ASSETS, value: 1}],
+           [{name: Account::LIABILITIES, value: -1}, {name: Account::EQUITY, value: 1}],
+           [{name: Account::LIABILITIES, value: 1}, {name: Account::EXPENSES, value: 1}],
+           [{name: Account::LIABILITIES, value: -1}, {name: Account::REVENUE, value: 1}],
+           [{name: Account::REVENUE, value: -1}, {name: Account::ASSETS, value: -1}],
+           [{name: Account::REVENUE, value: -1}, {name: Account::EQUITY, value: 1}],
+           [{name: Account::REVENUE, value: -1}, {name: Account::EXPENSES, value: 1}],
+           [{name: Account::REVENUE, value: -1}, {name: Account::REVENUE, value: 1}]]
+
   def display_priority
     1
   end
 
   def account_amount
-    amount * (related_account.sent_transfers.include?(self) ? 1 : -1)
+    absolute_amount(from_account, to_account, related_account)
   end
 
   private
   def transfer_amount
     from_account_new = Account.find(self.from_account_id)
     to_account_new = Account.find(self.to_account_id)
-    from_account_new.update_attribute(:balance, from_account_new.balance({recursive: false}).to_f - self.amount.to_f)
-    to_account_new.update_attribute(:balance, to_account_new.balance({recursive: false}).to_f + self.amount.to_f)
+    from_account_new.update_attribute(:balance, from_account_new.balance({recursive: false}).to_f + absolute_amount(from_account_new, to_account_new, from_account_new))
+    to_account_new.update_attribute(:balance, to_account_new.balance({recursive: false}).to_f + absolute_amount(from_account_new, to_account_new, to_account_new))
   end
 
   def rollback_amount
     if from_account_id_was && to_account_id_was
       from_account_was = Account.find(self.from_account_id_was)
       to_account_was = Account.find(self.to_account_id_was)
-      from_account_was.update_attribute(:balance, from_account_was.balance({recursive: false}).to_f + self.amount_was.to_f)
-      to_account_was.update_attribute(:balance, to_account_was.balance({recursive: false}).to_f - self.amount_was.to_f)
+      from_account_was.update_attribute(:balance, from_account_was.balance({recursive: false}).to_f + absolute_amount(from_account_was, to_account_was, from_account_was))
+      to_account_was.update_attribute(:balance, to_account_was.balance({recursive: false}).to_f + absolute_amount(from_account_was, to_account_was, to_account_was))
     end
   end
 
   def check_top_accounts
     errors[:base] << "GL Transfers can not be made from/to top-level GL Accounts (Assets, Cost of Goods Sold, Equity, Expenses, Liabilities, Revenue). Create sub-accounts under the main GL Accounts and make transfers between the sub-accounts instead."
     false
+  end
+
+  def absolute_amount(f_account, t_account, related_account)
+    CASES.each do |c|
+      if (f_account.kind_of?(c[0][:name]) && t_account.kind_of?(c[1][:name]))
+        return amount * (f_account == related_account ? c[0][:value] : c[1][:value])
+      end
+    end
+    return amount * (t_account == related_account ? 1 : -1)
   end
 
   def default_values

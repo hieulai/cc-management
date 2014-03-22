@@ -88,6 +88,7 @@ class Account < ActiveRecord::Base
   end
 
   def kind_of?(names)
+    return false if new_record?
     return true if names == "*"
     (self.default_account? && names.include?(self.name)) || (parent && parent.kind_of?(names))
   end
