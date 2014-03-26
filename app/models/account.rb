@@ -25,7 +25,7 @@ class Account < ActiveRecord::Base
   has_many :un_job_costed_items, :dependent => :destroy
   has_and_belongs_to_many :categories_templates
   has_and_belongs_to_many :change_orders_categories
-  has_many :bills, :through => :categories_templates
+  has_many :ct_bills, :through => :categories_templates, :source => :bills
   has_and_belongs_to_many :invoices_items
 
   attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
@@ -75,6 +75,10 @@ class Account < ActiveRecord::Base
 
   def invoices
     invoices_items.group_by(&:invoice_id).map { |k, v| Invoice.find(k) }
+  end
+
+  def bills
+    self.kind_of?([COST_OF_GOODS_SOLD])? ct_bills : Bill.where(:id => nil)
   end
 
   def has_no_category?
