@@ -22,6 +22,7 @@ class Receipt < ActiveRecord::Base
   scope :uninvoiced, where(uninvoiced: true)
   scope :invoiced, where(uninvoiced: false)
   scope :billed, where('remaining_amount = 0')
+  scope :date_range, lambda { |from_date, to_date| where('received_at >= ? AND received_at <= ?', from_date, to_date) }
 
   before_save :check_readonly, :clear_old_data, :if => :changed?
 

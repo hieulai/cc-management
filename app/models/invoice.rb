@@ -15,6 +15,8 @@ class Invoice < ActiveRecord::Base
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
+  scope :date_range, lambda { |from_date, to_date| where('invoice_date >= ? AND invoice_date <= ?', from_date, to_date) }
+  scope :project, lambda { |project_id| joins(:estimate).where('estimates.project_id = ?', project_id) }
 
   after_initialize :default_values
   before_save :check_readonly, :check_reference

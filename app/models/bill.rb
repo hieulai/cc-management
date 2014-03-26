@@ -29,6 +29,7 @@ class Bill < ActiveRecord::Base
   scope :date_range, lambda { |from_date, to_date| where('billed_date >= ? AND billed_date <= ?', from_date, to_date) }
   scope :project, lambda { |project_id| where('project_id = ?', project_id) }
   scope :late, lambda { where('remaining_amount != ? AND due_date < ?', 0, Date.today) || joins(:purchase_order).where('purchase_orders.due_date < ?', Date.today) }
+  scope :unrecociled, where(:reconciled => false)
 
   after_initialize :default_values
   before_save :check_zero_amount, :check_total_amount_changed, :decrease_account, :increase_account

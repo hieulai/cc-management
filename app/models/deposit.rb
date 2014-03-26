@@ -11,7 +11,7 @@ class Deposit < ActiveRecord::Base
 
   default_scope order("date DESC")
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
-
+  scope :unrecociled, where(:reconciled => false)
   after_update :update_account_balance, :if => :account_id_changed?
 
   validates_presence_of :account, :builder, :date

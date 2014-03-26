@@ -50,49 +50,29 @@ module Accounts
     end
 
     def date_balance(options = {})
-      p_amount = @account.payments.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      d_amount = @account.deposits.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      st_amount = @account.sent_transfers.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      rt_amount = @account.received_transfers.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      if @account.kind_of? ReceiptsItem::POSITIVES
-        ri_amount = @account.receipts_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      elsif @account.kind_of? ReceiptsItem::NEGATIVES
-        ri_amount -= @account.receipts_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      end
-      if @account.kind_of? UnJobCostedItem::POSITIVES
-        ujci_amount += @account.un_job_costed_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      elsif @account.kind_of? UnJobCostedItem::NEGATIVES
-        ujci_amount -= @account.un_job_costed_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
-      end
-      scoped_invoices_items = options[:project_id].present? ? invoices_items.project(options[:project_id]) : invoices_items
-      ii_amount = scoped_invoices_items.date_range(options[:from_date], options[:to_date]).map(&:amount).compact.sum
+      payments = @account.payments.date_range(options[:from_date], options[:to_date])
+      deposits = @account.deposits.date_range(options[:from_date], options[:to_date])
+      sent_transfers = @account.sent_transfers.date_range(options[:from_date], options[:to_date])
+      received_transfers = @account.received_transfers.date_range(options[:from_date], options[:to_date])
+      receipt_items = @account.receipts_items.date_range(options[:from_date], options[:to_date])
+      un_job_costed_items = @account.un_job_costed_items.date_range(options[:from_date], options[:to_date])
+      scoped_bills = options[:project_id].present? ? @account.bills.project(options[:project_id]) : @account.bills
+      bills = scoped_bills.date_range(options[:from_date], options[:to_date])
+      scoped_invoices_items = options[:project_id].present? ? @account.invoices_items.project(options[:project_id]) : @account.invoices_items
+      invoices_items = scoped_invoices_items.date_range(options[:from_date], options[:to_date])
 
-      -p_amount + d_amount - st_amount + rt_amount + ri_amount + ujci_amount + ii_amount
+      trans = payments + deposits + sent_transfers + received_transfers + receipt_items + un_job_costed_items + invoices_items + bills
+      trans.each { |t| t.related_account = @account }
+      trans.map(&:account_amount).compact.sum
     end
 
     def bank_balance
-      bb = @account.balance({recursive: false}).to_f +
-          @account.payments.where(:reconciled => false).map(&:amount).compact.sum -
-          @account.deposits.where(:reconciled => false).map(&:amount).compact.sum -
-          @account.received_transfers.where(:reconciled => false).map(&:amount).compact.sum +
-          @account.sent_transfers.where(:reconciled => false).map(&:amount).compact.sum -
-          @account.bills.where(:reconciled => false).map(&:cached_total_amount).compact.sum -
-          @account.invoices_items.unrecociled.map(&:amount).compact.sum
-      if @account.receipts_items.any?
-        if @account.kind_of? ReceiptsItem::POSITIVES
-          bb-= @account.receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
-        elsif @account.kind_of? ReceiptsItem::NEGATIVES
-          bb+= @account.receipts_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
-        end
-      end
-
-      if @account.un_job_costed_items.any?
-        if @account.kind_of? UnJobCostedItem::POSITIVES
-          bb-= @account.un_job_costed_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
-        elsif @account.kind_of? UnJobCostedItem::NEGATIVES
-          bb+= @account.un_job_costed_items.select {|ri| !ri.reconciled}.map(&:amount).compact.sum
-        end
-      end
+      bb = @account.balance({recursive: false}).to_f
+      trans = @account.payments.unrecociled + @account.deposits.unrecociled + @account.received_transfers.unrecociled +
+          @account.sent_transfers.unrecociled + @account.receipts_items.unrecociled + @account.un_job_costed_items.unrecociled +
+          @account.invoices_items.unrecociled + @account.bills.unrecociled
+      trans.each { |t| t.related_account = @account }
+      bb -= trans.map(&:account_amount).compact.sum
       bb.round(2)
     end
 
@@ -101,31 +81,15 @@ module Accounts
     end
 
     def outstanding_checks_balance
-      @account.payments.where(:reconciled => false).map(&:amount).compact.sum
+      @account.payments.unrecociled.map(&:amount).compact.sum
     end
 
     def opening_balance
-      ob = @account.balance({recursive: false}).to_f +
-          @account.payments.map(&:amount).compact.sum -
-          @account.deposits.map(&:amount).compact.sum -
-          @account.received_transfers.map(&:amount).compact.sum +
-          @account.sent_transfers.map(&:amount).compact.sum -
-          @account.invoices_items.map(&:amount).compact.sum
-      if @account.receipts_items.any?
-        if @account.kind_of? ReceiptsItem::POSITIVES
-          ob-= @account.receipts_items.map(&:amount).compact.sum
-        elsif @account.kind_of? ReceiptsItem::NEGATIVES
-          ob+= @account.receipts_items.map(&:amount).compact.sum
-        end
-      end
-
-      if @account.un_job_costed_items.any?
-        if @account.kind_of? UnJobCostedItem::POSITIVES
-          ob-= @account.un_job_costed_items.map(&:amount).compact.sum
-        elsif @account.kind_of? UnJobCostedItem::NEGATIVES
-          ob+= @account.un_job_costed_items.map(&:amount).compact.sum
-        end
-      end
+      ob = @account.balance({recursive: false}).to_f
+      tr = @account.payments + @account.deposits + @account.received_transfers + @account.sent_transfers +
+          @account.receipts_items + @account.un_job_costed_items + @account.invoices_items + @account.bills.unrecociled
+      tr.each { |t| t.related_account = @account }
+      ob -= tr.map(&:account_amount).compact.sum
       ob.round(2)
     end
   end

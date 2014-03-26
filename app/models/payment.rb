@@ -11,6 +11,7 @@ class Payment < ActiveRecord::Base
 
   default_scope order("date DESC")
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
+  scope :unrecociled, where(:reconciled => false)
 
   accepts_nested_attributes_for :payments_bills, :allow_destroy => true
 

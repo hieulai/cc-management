@@ -9,7 +9,7 @@ class Transfer < ActiveRecord::Base
   after_initialize :default_values
 
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
-
+  scope :unrecociled, where(:reconciled => false)
   validates_presence_of :from_account, :to_account, :date, :amount
 
   BANK_TRANSFERS = [Account::BANK_ACCOUNTS]
@@ -43,6 +43,15 @@ class Transfer < ActiveRecord::Base
     absolute_amount(from_account, to_account, related_account)
   end
 
+  def absolute_amount(f_account, t_account, related_account)
+    CASES.each do |c|
+      if (f_account.kind_of?(c[0][:name]) && t_account.kind_of?(c[1][:name]))
+        return amount * (f_account == related_account ? c[0][:value] : c[1][:value])
+      end
+    end
+    return amount * (t_account == related_account ? 1 : -1)
+  end
+
   private
   def transfer_amount
     from_account_new = Account.find(self.from_account_id)
@@ -65,14 +74,6 @@ class Transfer < ActiveRecord::Base
     false
   end
 
-  def absolute_amount(f_account, t_account, related_account)
-    CASES.each do |c|
-      if (f_account.kind_of?(c[0][:name]) && t_account.kind_of?(c[1][:name]))
-        return amount * (f_account == related_account ? c[0][:value] : c[1][:value])
-      end
-    end
-    return amount * (t_account == related_account ? 1 : -1)
-  end
 
   def default_values
     self.kind ||= "Bank Transfer"

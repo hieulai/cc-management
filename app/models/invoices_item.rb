@@ -1,4 +1,5 @@
 class InvoicesItem < ActiveRecord::Base
+  include Accountable
   belongs_to :invoice
   belongs_to :item
   has_and_belongs_to_many :accounts
@@ -11,6 +12,7 @@ class InvoicesItem < ActiveRecord::Base
 
   before_save :decrease_account, :increase_account
   after_destroy :decrease_account
+  NEGATIVES = []
 
   def increase_account
     invoice.builder.accounts_receivable_account.update_attribute(:balance, invoice.builder.accounts_receivable_account.balance({recursive: false}).to_f + amount.to_f)
