@@ -74,7 +74,11 @@ class Account < ActiveRecord::Base
   end
 
   def invoices
-    invoices_items.group_by(&:invoice_id).map { |k, v| Invoice.find(k) }
+    invoices_items.group_by(&:invoice_id).map do |k, v|
+      invoice = Invoice.find(k)
+      invoice.account_amount = v.map(&:amount).compact.sum
+      invoice
+    end
   end
 
   def bills
