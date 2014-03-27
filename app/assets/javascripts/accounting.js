@@ -48,12 +48,12 @@ var calculatePurchasableSubTotalAndTotal = function () {
 };
 
 var calculateAccounting = function (parent, child) {
-    if ($("#" + parent + "-amount:visible").size()) {
+    if ($("." + parent + "-amount:visible").size()) {
         var total = 0;
         $('tr:visible input[name="' + child + '-chosen"]:checked').each(function () {
             total += text_to_number($(this).closest("tr").find('input[name$="[amount]"]').val());
         });
-        $("#" + parent + "-amount").html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
+        $("." + parent + "-amount:visible").html(total == 0 ? "" : number_to_currency_with_unit(total, 2, '.', ','));
     }
 };
 
