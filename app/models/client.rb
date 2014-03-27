@@ -10,6 +10,7 @@ class Client < ActiveRecord::Base
   default_scope order("first_name ASC")
   scope :active, where(status: "Active")
 
+  scope :has_company, where('company is NOT NULL AND btrim(company) != \'\'')
   scope :search_by_name, lambda { |q|
     (q ? where(["first_name ILIKE ? or last_name ILIKE ? or concat(first_name, ' ', last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%', '%'+ q + '%']) : {})
   }
