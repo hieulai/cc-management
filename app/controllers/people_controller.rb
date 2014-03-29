@@ -149,12 +149,12 @@ class PeopleController < ApplicationController
 
     def autocomplete_name
       @peoples = []
-      @peoples << @builder.clients.active.has_company.search_by_name(params[:term]).all
-      @peoples << @builder.vendors.has_company.search_by_name(params[:term]).all
+      @peoples << @builder.clients.active.search_by_name(params[:term]).all
+      @peoples << @builder.vendors.search_by_name(params[:term]).all
       @peoples << @builder.contacts.search_by_name(params[:term]).all
       render :json => @peoples.flatten.map { |p|
         label = p.company.present? ? "#{p.company} <br/> <span class=\"autocomplete-sublabel\">#{p.full_name}</span>" : p.full_name
-        {:id => p.id, :label => label, :value => p.company || p.full_name, :type => p.class.name}
+        {:id => p.id, :label => label, :value => p.company.presence || p.full_name, :type => p.class.name}
       }.to_json
     end
   
