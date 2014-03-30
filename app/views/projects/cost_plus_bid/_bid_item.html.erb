@@ -15,8 +15,10 @@
             <td><%= item.description %></td>
             <td>$<%= item.amount %></td>
             <td>
+                <%= hidden_field_tag "bid[bids_items_attributes][][id]", item.bid_item(bid.id).try(:id) %>
                 $<%= text_field_tag 'bid[bids_items_attributes][][amount]', item.bid_item(bid.id).try(:amount), class: 'input-mini' %>
                 <%= hidden_field_tag 'bid[bids_items_attributes][][item_id]', item.id %>
+                <%= hidden_field_tag 'bid[bids_items_attributes][][_destroy]', !item.bid_item(bid.id).present? %>
             </td>
         </tr>
 
@@ -29,8 +31,10 @@
             <td><%= item.description %></td>
             <td>$<%= item.amount %></td>
             <td>
+                <%= hidden_field_tag "bid[bids_items_attributes][][id]", item.bid_item(bid.id).try(:id) %>
                 $<%= text_field_tag 'bid[bids_items_attributes][][amount]', item.bid_item(bid.id).try(:amount), class: 'input-mini' %>
                 <%= hidden_field_tag 'bid[bids_items_attributes][][item_id]', item.id %>
+                <%= hidden_field_tag 'bid[bids_items_attributes][][_destroy]', !item.bid_item(bid.id).present? %>
             </td>
         </tr>
 

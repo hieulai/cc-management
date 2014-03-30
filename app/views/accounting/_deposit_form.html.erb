@@ -1,3 +1,11 @@
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+    Deposit.init();
+    })
+  </script>
+<% end %>
+
 <% if @deposit.errors.any? %>
   <div id="errorExplanation">
       <h2><%= pluralize(@deposit.errors.count, "Error") %> prohibited

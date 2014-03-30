@@ -1,3 +1,11 @@
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+    TaskList.init();
+    })
+  </script>
+<% end %>
+
 <div>
     <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
     <div class="zurb-row">

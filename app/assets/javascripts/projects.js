@@ -1,116 +1,55 @@
-function calculateBidAmount() {
-    if ($('input[name="bid[bids_items_attributes][][amount]"]').size() > 0) {
-        var bidAmount = 0;
-        $('input[name="bid[bids_items_attributes][][amount]"]').each(function () {
-            var fVal = parseFloat($(this).val());
-            if (!isNaN(fVal)) {
-                bidAmount += parseFloat($(this).val());
+var Project = (function ($, Shared) {
+    var init = function () {
+        calculateBudgetSubtotalsAndTotals();
+    };
+
+    var calculateBudgetSubtotalAndCOAndTotal = function (s) {
+        var coTotal = 0;
+        var total = 0;
+        var coEmpty = true;
+        var allEmpty = true;
+        $("tr.change_order .budget-" + s).each(function () {
+            if (coEmpty && $(this).text() != "") {
+                coEmpty = false;
             }
+            coTotal += Shared.text_to_number($(this).text());
         });
-        $('#bid-amount').text(number_to_currency_with_unit(bidAmount, 2, '.', ','));
-    }
-}
 
-function calculateCOAmount(coFactor){
-    var trItem = $(coFactor).closest("tr");
-    var tdQty = $(trItem).find("input.qty");
-    var tdEstimatedCost = $(trItem).find("input.estimated_cost");
-    var tdMargin = $(trItem).find("input.margin");
-    var margin = $(tdMargin).size() > 0 ? text_to_number($(tdMargin).val()) : 0;
-    var total = text_to_number($(tdQty).val()) * text_to_number($(tdEstimatedCost).val()) + margin;
-    $(trItem).find("div.co-amount").text(number_to_currency_with_unit(total, 2, '.', ','))
-}
-
-function calculateCOAmounts() {
-    $('input.co-factor').each(function () {
-        calculateCOAmount(this);
-    });
-    calculateTotals();
-};
-
-function calculateBudgetSubtotalAndCOAndTotal(s) {
-    var coTotal = 0;
-    var total = 0;
-    var coEmpty = true;
-    var allEmpty = true;
-    $("tr.change_order .budget-" + s).each(function() {
-        if (coEmpty && $(this).text() != "") {
-            coEmpty = false;
+        if (!coEmpty) {
+            $(".co-budget-" + s).text(Shared.number_to_currency_with_unit(coTotal, 2, '.', ','));
         }
-        coTotal+= text_to_number($(this).text());
-    })
-    if (!coEmpty) {
-        $(".co-budget-" + s).text(number_to_currency_with_unit(coTotal, 2, '.', ','));
-    }
-    $(".subtotal-budget-" + s).each(function () {
-        var empty = true;
-        var subtotal = 0;
-        $(this).closest("tr").prevUntil("tr.category").each(function () {
-            if (empty && $(this).find(".budget-" + s).text() != "") {
-                empty = false;
+        $(".subtotal-budget-" + s).each(function () {
+            var empty = true;
+            var subtotal = 0;
+            $(this).closest("tr").prevUntil("tr.category").each(function () {
+                if (empty && $(this).find(".budget-" + s).text() != "") {
+                    empty = false;
+                }
+                subtotal += Shared.text_to_number($(this).find(".budget-" + s).text());
+            })
+            if (!empty) {
+                $(this).text(Shared.number_to_currency_with_unit(subtotal, 2, '.', ','));
+                allEmpty = false;
+                total += subtotal;
             }
-            subtotal += text_to_number($(this).find(".budget-" + s).text());
         })
-        if (!empty) {
-            $(this).text(number_to_currency_with_unit(subtotal, 2, '.', ','));
-            allEmpty = false;
-            total += subtotal;
+        if (!allEmpty) {
+            $(".total-budget-" + s).text(Shared.number_to_currency_with_unit(total, 2, '.', ','));
         }
-    })
-    if (!allEmpty) {
-        $(".total-budget-" + s).text(number_to_currency_with_unit(total, 2, '.', ','));
+    };
+
+    var calculateBudgetSubtotalsAndTotals = function () {
+        if ($("#budget-form").size() > 0) {
+            calculateBudgetSubtotalAndCOAndTotal("estimated-cost");
+            calculateBudgetSubtotalAndCOAndTotal("committed-cost");
+            calculateBudgetSubtotalAndCOAndTotal("actual-cost");
+            calculateBudgetSubtotalAndCOAndTotal("estimated-profit");
+            calculateBudgetSubtotalAndCOAndTotal("committed-profit");
+            calculateBudgetSubtotalAndCOAndTotal("actual-profit");
+        }
+    };
+
+    return {
+        init: init
     }
-}
-
-function calculateBudgetSubtotalsAndTotals(){
-    if ($("#budget-form").size() > 0) {
-        calculateBudgetSubtotalAndCOAndTotal("estimated-cost");
-        calculateBudgetSubtotalAndCOAndTotal("committed-cost");
-        calculateBudgetSubtotalAndCOAndTotal("actual-cost");
-        calculateBudgetSubtotalAndCOAndTotal("estimated-profit");
-        calculateBudgetSubtotalAndCOAndTotal("committed-profit");
-        calculateBudgetSubtotalAndCOAndTotal("actual-profit");
-    }
-}
-$(document).ready(function () {
-    calculateBudgetSubtotalsAndTotals();
-    calculateCOAmounts();
-    calculateBidAmount();
-
-    $(document).on('change', 'input[name="bid[bids_items_attributes][][amount]"]', function () {
-        var fVal = parseFloat($(this).val());
-        if (!isNaN(fVal)) {
-            $(this).closest("tr").find('input[name="bid[bids_items_attributes][][_destroy]"]').val("false");
-        } else {
-            $(this).closest("tr").find('input[name="bid[bids_items_attributes][][_destroy]"]').val("true");
-        }
-        calculateBidAmount();
-    });
-
-    $("#item-lines").on("cocoon:before-remove", function(e, i) {
-        if ($(i).hasClass("co-category")) {
-            $(i).nextUntil(".co-category").remove();
-        }
-    })
-
-    $("#item-lines").on("cocoon:after-remove", function(e, i) {
-        calculateTotals();
-    })
-
-    $("#co-item-list").on('railsAutocomplete.select', '.co-item-name', function (event,data) {
-        $(this).closest("tr").find("input.id").val(data.item.id);
-        $(this).closest("tr").find("input.name").val(data.item.label);
-        $(this).closest("tr").find("input.description").val(data.item.description);
-        $(this).closest("tr").find("input.unit").val(data.item.unit);
-        $(this).closest("tr").find("input.qty").val(data.item.qty);
-        $(this).closest("tr").find("input.estimated_cost").val(data.item.estimated_cost);
-        $(this).closest("tr").find("input.margin").val(data.item.margin);
-        calculateCOAmount(this);
-        calculateTotals();
-    });
-
-    $("#co-item-list").on('change', 'input.co-factor', function () {
-        calculateCOAmount(this);
-        calculateTotals();
-    });
-})
+})(jQuery, Shared);

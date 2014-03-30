@@ -4,4 +4,4 @@
 <% else %>
     $('#item-placeholder').html('<%= escape_javascript(render :partial =>  'bid_item', :locals => {:bid => @bid, :items => @items, :co_items => @co_items}) %>');
 <% end %>
-calculateBidAmount();
+Bid.calculateBidAmount();

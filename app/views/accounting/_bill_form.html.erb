@@ -1,3 +1,11 @@
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+      Bill.init();
+    })
+  </script>
+<% end %>
+
 <%= form_for @bill, :url => {:action => @bill.new_record? ? 'create_bill' : 'update_bill', :id => @bill.id}, :remote => true, :html => {:class => 'bill-form form-horizontal'} do |f| %>
     <% if @bill.errors.any? %>
         <div id="errorExplanation">

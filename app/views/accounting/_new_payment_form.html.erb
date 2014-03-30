@@ -1,3 +1,11 @@
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+    Payment.init();
+    })
+  </script>
+<% end %>
+
 <% vendors =  @builder.vendors.has_unpaid_bills
    (vendors<< @payment.vendor).uniq! unless @payment.new_record?
 %>

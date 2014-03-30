@@ -5,7 +5,7 @@
       trItems.remove();
     }
     category.remove();
-    calculateTotals();
+    Shared.calculateTotals();
 <% else %>
     $.rails.createConfirmDialog('Information', '<%= @category.errors.full_messages.join(".") %>', true);
 <% end %>

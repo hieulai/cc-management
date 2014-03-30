@@ -1,2 +1,2 @@
 $('#bill-placeholder').html('<%= escape_javascript(render :partial =>  'payment_bills', :locals => {:bills => @bills}) %>');
-calculateAccounting("payment", "bill");
+Accounting.calculate("payment", "bill");

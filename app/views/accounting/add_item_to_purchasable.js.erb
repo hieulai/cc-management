@@ -1,11 +1,11 @@
 <% if @item.present? %>
 var $addItem = $('tr#add-item:visible');
 $addItem.before('<%= escape_javascript(render :partial => @type == Bill.name ? 'billed_item' : 'purchased_item', :locals => {:item => @item, :type => @type}) %>')
-calculatePostTaxAmount($addItem.prev().find('div.actual-amount'));
-calculatePurchasableSubTotalAndTotal();
-calculateTotals();
+Purchasable.calculatePostTaxAmount($addItem.prev().find('div.actual-amount'));
+Purchasable.calculateSubTotalAndTotal();
+Shared.calculateTotals();
 
 $addItem.find('input[name="name[]"]').val("");
 var link = $("a#add-purchased-item").attr("href");
-$("a#add-purchased-item").attr("href", updateQueryStringParameter(link, "item_id", ""));
+$("a#add-purchased-item").attr("href", Shared.updateQueryStringParameter(link, "item_id", ""));
 <% end %>
