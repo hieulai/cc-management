@@ -41,6 +41,6 @@ class UnJobCostedItem < ActiveRecord::Base
     bill.builder.accounts_payable_account.update_attribute(:balance, bill.builder.accounts_payable_account.balance({recursive: false}).to_f - self.amount_was.to_f)
     account_was = Account.find(account_id_was)
     self.related_account = account_was
-    account_was.update_attribute(:balance, account_was.balance({recursive: false}).to_f + account_amount)
+    account_was.update_attribute(:balance, account_was.balance({recursive: false}).to_f - account_amount)
   end
 end
