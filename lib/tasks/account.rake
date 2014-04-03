@@ -6,7 +6,10 @@ namespace :account do
 
     Account.all.each do |a|
       puts "  Fixing balance for Account: #{a.id}"
-      a.update_attribute(:balance, a.balance({from_date: from_date, to_date: to_date}))
+      balance = a.balance({from_date: from_date, to_date: to_date, recursive: false})
+      puts "#{balance.to_f}"
+
+      a.update_column(:balance, balance)
     end
   end
 end
