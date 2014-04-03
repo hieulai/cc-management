@@ -3,7 +3,9 @@ module Accounts
 
     def self_transactions
       r = super
-      r << @account.builder.invoices
+      invoices = @account.builder.invoices
+      invoices.each {|i| i.define_singleton_method("account_amount") { self.amount } }
+      r << invoices
       r << @account.builder.receipts.invoiced
       r
     end
@@ -12,6 +14,7 @@ module Accounts
       b = super
       scoped_invoices = options[:project_id].present? ? @account.builder.invoices.project(options[:project_id]) : @account.builder.invoices
       invoices = scoped_invoices.date_range(options[:from_date], options[:to_date])
+      invoices.each {|i| i.define_singleton_method("account_amount") { self.amount } }
       receipts = @account.builder.receipts.invoiced.date_range(options[:from_date], options[:to_date])
 
       trans = invoices + receipts
