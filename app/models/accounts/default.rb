@@ -62,6 +62,23 @@ module Accounts
       invoices_items = scoped_invoices_items.date_range(options[:from_date], options[:to_date])
 
       trans = payments + deposits + sent_transfers + received_transfers + receipt_items + un_job_costed_items + invoices_items + bills
+
+      if @account.kind_of?([Account::BANK_ACCOUNTS]) &&
+          @account.opening_balance_updated_at &&
+          Date.parse(options[:from_date]).to_time <= @account.opening_balance_updated_at &&
+          Date.parse(options[:to_date]).to_time >= @account.opening_balance_updated_at
+        ob = OpenStruct.new(date: @account.opening_balance_updated_at,
+                            id: @account.id,
+                            type: "Opening Balance",
+                            reference: "",
+                            payor: "Opening Balance",
+                            memo: @account.name + " Opening Balance Entry",
+                            amount: @account.opening_balance,
+                            display_priority: 0)
+        ob.define_singleton_method("account_amount") { self.amount }
+        trans << ob
+      end
+
       trans.each { |t| t.related_account = @account }
       trans.map(&:account_amount).compact.sum
     end
