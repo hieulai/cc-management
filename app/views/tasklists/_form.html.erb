@@ -1,3 +1,10 @@
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+      TaskList.init();
+    })
+  </script>
+<% end %>
 <div class="control-group">
     <%= f.label :name, "Task List Name", class: 'col-lg-2 control-label' %>
     <div class='controls'>
