@@ -63,8 +63,8 @@ class Transfer < ActiveRecord::Base
   def rollback_amount
     if Account.exists?(from_account_id_was) && Account.exists?(to_account_id_was)
       from_account_was = Account.find(self.from_account_id_was)
-      from_account_was.update_attribute(:balance, from_account_was.balance({recursive: false}).to_f - absolute_amount(from_account_was, to_account_was, from_account_was))
       to_account_was = Account.find(self.to_account_id_was)
+      from_account_was.update_attribute(:balance, from_account_was.balance({recursive: false}).to_f - absolute_amount(from_account_was, to_account_was, from_account_was))
       to_account_was.update_attribute(:balance, to_account_was.balance({recursive: false}).to_f - absolute_amount(from_account_was, to_account_was, to_account_was))
     end
   end
