@@ -40,32 +40,32 @@ class Transfer < ActiveRecord::Base
   end
 
   def account_amount
-    absolute_amount(from_account, to_account, related_account)
+    absolute_amount(amount, from_account, to_account, related_account)
   end
 
-  def absolute_amount(f_account, t_account, related_account)
+  def absolute_amount(a, f_account, t_account, related_account)
     CASES.each do |c|
       if (f_account.kind_of?(c[0][:name]) && t_account.kind_of?(c[1][:name]))
-        return amount * (f_account == related_account ? c[0][:value] : c[1][:value])
+        return a * (f_account == related_account ? c[0][:value] : c[1][:value])
       end
     end
-    return amount * (t_account == related_account ? 1 : -1)
+    return a * (t_account == related_account ? 1 : -1)
   end
 
   private
   def transfer_amount
     from_account_new = Account.find(self.from_account_id)
     to_account_new = Account.find(self.to_account_id)
-    from_account_new.update_attribute(:balance, from_account_new.balance({recursive: false}).to_f + absolute_amount(from_account_new, to_account_new, from_account_new))
-    to_account_new.update_attribute(:balance, to_account_new.balance({recursive: false}).to_f + absolute_amount(from_account_new, to_account_new, to_account_new))
+    from_account_new.update_attribute(:balance, from_account_new.balance({recursive: false}).to_f + absolute_amount(amount, from_account_new, to_account_new, from_account_new))
+    to_account_new.update_attribute(:balance, to_account_new.balance({recursive: false}).to_f + absolute_amount(amount, from_account_new, to_account_new, to_account_new))
   end
 
   def rollback_amount
     if Account.exists?(from_account_id_was) && Account.exists?(to_account_id_was)
       from_account_was = Account.find(self.from_account_id_was)
       to_account_was = Account.find(self.to_account_id_was)
-      from_account_was.update_attribute(:balance, from_account_was.balance({recursive: false}).to_f - absolute_amount(from_account_was, to_account_was, from_account_was))
-      to_account_was.update_attribute(:balance, to_account_was.balance({recursive: false}).to_f - absolute_amount(from_account_was, to_account_was, to_account_was))
+      from_account_was.update_attribute(:balance, from_account_was.balance({recursive: false}).to_f - absolute_amount(amount_was, from_account_was, to_account_was, from_account_was))
+      to_account_was.update_attribute(:balance, to_account_was.balance({recursive: false}).to_f - absolute_amount(amount_was, from_account_was, to_account_was, to_account_was))
     end
   end
 
