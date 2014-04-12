@@ -160,3 +160,7 @@ td.calculate {
 .clearboth{
     clear: both;
 }
+
+.nowrap {
+    white-space: nowrap;
+}

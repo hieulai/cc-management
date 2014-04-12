@@ -1,0 +1,35 @@
+<table class="item-list splitForPrint">
+    <thead>
+    <tr class="header">
+        <th width="70%">Description</th>
+        <th >Estimated Amount</th>
+        <th >Previously Invoiced</th>
+        <th >This Invoice</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% template.try(:categories_templates).try(:each) do |category_template| %>
+      <%= render :partial => 'accounting/cost_plus_bid/invoice_tr_category', :locals => {:category_template => category_template, :from_date => from_date, :to_date => to_date} %>
+    <% end %>
+    <tr class="tr-category large">
+        <td class="left-bold">
+            TOTALS
+        </td>
+        <td class="right-bold">
+            <div class="total-amount"></div>
+        </td>
+        <td class="right-bold">
+            <div class="total-prior-amount"></div>
+        </td>
+        <td class="right-bold">
+            <div class="total-invoice-amount"></div>
+        </td>
+    </tr>
+    <tr class="tr-footer xlarge highlight">
+        <td colspan="3">CURRENT BALANCE DUE</td>
+        <td class="right">
+            <div class="total-invoice-amount"></div>
+        </td>
+    </tr>
+    </tbody>
+</table>

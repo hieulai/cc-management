@@ -1,0 +1,20 @@
+<tr class="tr-category category" id="category_<%= category_template.category.id %>">
+    <td class="td-category left-bold">
+        <%= category_template.category.name %>
+    </td>
+    <td></td><td></td><td></td>
+</tr>
+<%
+   from_date = from_date.presence || '1900-01-01'
+   to_date =  to_date.presence || '3000-01-01'
+   category_template.bills.date_range(from_date, to_date).each do |bill| %>
+<%= render :partial => 'accounting/cost_plus_bid/invoice_tr_bill', :locals => {:bill => bill, :category => category_template.category} %>
+<% end %>
+<tr>
+    <td class="td-subtotal left-bold">
+        <%= category_template.category.name %> Subtotal
+    </td>
+    <td class="right-bold"><div class="subtotal-amount"></div></td>
+    <td class="right-bold"><div class="subtotal-prior-amount"></div></td>
+    <td class="right-bold"><div class="subtotal-invoice-amount"></div></td>
+</tr>

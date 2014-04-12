@@ -10,7 +10,7 @@ var Shared = (function($){
         if (u) {
             s += "$";
         }
-        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        return "<div class='nowrap'>" + s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "") + "</div>";
     };
 
     var number_to_currency_with_unit = function (n, c, d, t) {

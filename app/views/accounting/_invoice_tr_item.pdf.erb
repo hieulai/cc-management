@@ -3,7 +3,7 @@
         <%= item.description %>
     </td>
     <td>
-        <%= price_tag(@invoice.estimate.kind =="Cost Plus Bid" ? item.amount : item.price, "amount") %>
+        <%= price_tag(item.price, "amount") %>
     </td>
     <td>
         <%= price_tag(item.prior_amount(@invoice.id), "prior-amount") %>

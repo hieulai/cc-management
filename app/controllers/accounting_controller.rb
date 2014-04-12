@@ -157,7 +157,7 @@ class AccountingController < ApplicationController
       format.pdf do
         render :pdf => "Invoice-#{@invoice.id}",
                :layout => 'pdf.html',
-               #:show_as_html => true, // for debugging html & css
+               #:show_as_html => true,
                :footer => {:center => 'Page [page]'}
       end
     end

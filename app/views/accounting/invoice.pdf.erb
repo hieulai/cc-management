@@ -54,42 +54,11 @@
       </table>
   </div>
 <% end %>
-
-<table class="item-list splitForPrint">
-    <thead>
-        <tr class="header">
-            <th width="70%">Description</th>
-            <th >Estimated Amount</th>
-            <th >Previously Invoiced</th>
-            <th >This Invoice</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @invoice.estimate.template.try(:categories_templates).try(:each) do |category_template| %>
-            <%= render :partial => 'accounting/invoice_tr_category', :locals => {:category_template => category_template} %>
-        <% end %>
-        <%- @invoice.estimate.template.try(:estimate).try(:project).try(:cos_categories).try(:each) do |category| %>
-            <%= render :partial => 'accounting/invoice_tr_co_category', :locals => {:template => @invoice.estimate.template, :category => category} %>
-        <% end %>
-        <tr class="tr-category large">
-            <td class="left-bold">
-                TOTALS
-            </td>
-            <td class="right-bold">
-                <div class="total-amount"></div>
-            </td>
-            <td class="right-bold">
-                <div class="total-prior-amount"></div>
-            </td>
-            <td class="right-bold">
-                <div class="total-invoice-amount"></div>
-            </td>
-        </tr>
-        <tr class="tr-footer xlarge highlight">
-            <td colspan="3">CURRENT BALANCE DUE</td>
-            <td class="right">
-                <div class="total-invoice-amount"></div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<% if @invoice.estimate.try(:cost_plus_bid?) %>
+  <%= render(:partial => 'accounting/cost_plus_bid/invoice_template',
+             :locals => {:template => @invoice.try(:estimate).try(:template),
+                         :from_date => @invoice.bill_from_date,
+                         :to_date => @invoice.bill_to_date}) %>
+<% else %>
+  <%= render(:partial => "accounting/invoice_template", :locals => {:invoice => @invoice}) %>
+<% end %>
