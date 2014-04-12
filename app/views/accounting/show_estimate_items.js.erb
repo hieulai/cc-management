@@ -1,4 +1,4 @@
-<% if @invoice.estimate.try(:cost_plus_bid?) %>
+<% if @estimate.try(:cost_plus_bid?) %>
   $('#invoice-items-placeholder').html('<%= escape_javascript(render :partial =>  'accounting/cost_plus_bid/invoice_template', :locals => {:template => @estimate.template, from_date: @from_date, to_date: @to_date}) %>');
   $(".cost-plus-bid").show();
 <% else %>
