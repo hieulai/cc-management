@@ -10,7 +10,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'quiet_assets'
-  gem 'newrelic_rpm'
 end
 
 # Gems used only for assets and not required
