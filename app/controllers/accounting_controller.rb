@@ -195,8 +195,14 @@ class AccountingController < ApplicationController
     @invoice = Invoice.find(params[:id])
     # Destroy all old invoices_items_attributes if estimate changed
     if params[:invoice][:estimate_id].present? && params[:invoice][:estimate_id] != @invoice.estimate_id.to_s
-      @invoice.invoices_items.each do  |ii|
-        params[:invoice][:invoices_items_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
+      if @invoice.estimate.cost_plus_bid?
+        @invoice.invoices_bills.each do |ii|
+          params[:invoice][:invoices_bills_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
+        end
+      else
+        @invoice.invoices_items.each do |ii|
+          params[:invoice][:invoices_items_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
+        end
       end
     end
     if @invoice.update_attributes(params[:invoice])
@@ -399,6 +405,8 @@ class AccountingController < ApplicationController
 
   def show_estimate_items
     @invoice = params[:invoice_id].present? ? Invoice.find(params[:invoice_id]) : Invoice.new
+    @from_date = params[:from_date]
+    @to_date = params[:to_date]
     if params[:invoice].present? && params[:invoice][:estimate_id].present?
       @estimate = Estimate.find(params[:invoice][:estimate_id])
       @invoice = @estimate.invoices.build if @invoice.new_record?

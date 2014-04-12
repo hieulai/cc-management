@@ -21,7 +21,10 @@
 
     <div class="control-group">
         <%= f.label :estimate_id, "Estimate", class: 'col-lg-2 control-label' %>
-        <div class="controls"><%= f.select(:estimate_id, @estimates = @builder.estimates.current.collect { |s| [s.project.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_estimate_items", :invoice_id => @invoice.id)}) %></div>
+        <div class="controls">
+            <%= f.select(:estimate_id, @estimates = @builder.estimates.current.collect { |s| [s.project.name, s.id] }, {:include_blank => true}) %>
+            <%= link_to "", url_for(:action => "show_estimate_items", :invoice_id => @invoice.id), :id => "hidden_estimate_link", :remote => true, :style => "display: none" %>
+        </div>
     </div>
     <div class="control-group">
         <%= f.label :invoice_date, "Invoice Date", class: 'col-lg-2 control-label' %>
@@ -41,7 +44,26 @@
         <%= f.label :reference, "Invoice #", class: 'col-lg-2 control-label' %>
         <div class="controls"><%= f.text_field(:reference, :value => f.object.new_record? ? Invoice.maximum(:reference).to_i + 1 : f.object.try(:reference)) %></div>
     </div>
+    <div class="control-group clearboth cost-plus-bid" style="display: <%= @invoice.estimate.try(:cost_plus_bid?) ? "" : "none" %>">
+        <%= label_tag :date_rage, "Billed date range", class: 'col-lg-2 control-label' %>
+        <div class="controls">
+            <div class="input-group">
+                <input type="text" name="reservation" id="reservation">
+                <%= f.hidden_field :bill_from_date, :value => @invoice.bill_from_date %>
+                <%= f.hidden_field :bill_to_date, :value => @invoice.bill_to_date %>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="invoice-items-placeholder">
-    <%= render(:partial => "invoice_template", :locals => {:template => @invoice.try(:estimate).try(:template)}) %>
+    <% unless @invoice.new_record? %>
+      <% if @invoice.estimate.try(:cost_plus_bid?) %>
+        <%= render(:partial => 'accounting/cost_plus_bid/invoice_template',
+                   :locals => {:template => @invoice.try(:estimate).try(:template),
+                               :from_date => @invoice.bill_from_date,
+                               :to_date => @invoice.bill_to_date}) %>
+      <% else %>
+        <%= render(:partial => "invoice_template", :locals => {:template => @invoice.try(:estimate).try(:template)}) %>
+      <% end %>
+    <% end %>
 </div>

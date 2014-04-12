@@ -27,6 +27,7 @@ class Account < ActiveRecord::Base
   has_and_belongs_to_many :change_orders_categories
   has_many :ct_bills, :through => :categories_templates, :source => :bills
   has_and_belongs_to_many :invoices_items
+  has_and_belongs_to_many :invoices_bills
 
   attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
   attr_accessor :opening_balance_changed
@@ -74,11 +75,19 @@ class Account < ActiveRecord::Base
   end
 
   def invoices
+    results = []
     invoices_items.group_by(&:invoice_id).map do |k, v|
       invoice = Invoice.find(k)
       invoice.account_amount = v.map(&:amount).compact.sum
-      invoice
+      results << invoice
     end
+
+    invoices_bills.group_by(&:invoice_id).map do |k, v|
+      invoice = Invoice.find(k)
+      invoice.account_amount = v.map(&:amount).compact.sum
+      results << invoice
+    end
+    results
   end
 
   def bills

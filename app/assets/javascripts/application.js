@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.ui.all
+//= require moment
 //= require cocoon
 //= require autocomplete-rails
 //= require bootstrap-modal
@@ -240,7 +241,8 @@ var Application = (function ($) {
     };
 
     return {
-        init: init
+        init: init,
+        transformToDatePickerFor: transformToDatePickerFor
     }
 })(jQuery);
 

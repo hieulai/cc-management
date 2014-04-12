@@ -1,5 +1,5 @@
 <% link_class = item.billed? ? 'uneditable' : ''  %>
-<tr class="item item_category_<%= category_template.category.id %> <% if item.change_order? %> change_order <% end%> <% unless item.billable? %> unclickable <% end %>" id="item_<%= item.id %>">
+<tr class="item item_category_<%= category_template.category.id %> <% if item.from_change_order? %> change_order <% end%> <% unless item.billable? %> unclickable <% end %>" id="item_<%= item.id %>">
     <td>
 	</td>	
 	<td>

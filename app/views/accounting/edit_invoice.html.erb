@@ -1,22 +1,26 @@
 <div>
-	<%= render(:partial => "layouts/accounting_sub_menu")%>
-	<h1 class="center">Edit Invoice</h1>
-	
-	<%= form_for(@invoice, :url => {:action => 'update_invoice', :id => @invoice.id}, html: {class: 'form-horizontal'}) do |f| %>
-  <div class="more-actions">
-      <%= link_to "Print", {:action => 'invoice', :id => @invoice.id, :format => :pdf}, :target => '_blank' %>
-      <br/>
-      <%= link_to "Email", {:action => 'invoice_email', :id => @invoice.id}, :target => '_blank' %>
-      <br/>
-      <%= link_to("Delete", {:action => 'delete_invoice', :id => @invoice.id}, :class => 'btn btn-danger') %>
-  </div>
-	<%= render(:partial => "invoice_form", :locals => {:f => f})%>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row">
+        <div class="columns">
+            <h1 class="center">Edit Invoice</h1>
+
+            <%= form_for(@invoice, :url => {:action => 'update_invoice', :id => @invoice.id}, html: {class: 'form-horizontal'}) do |f| %>
+              <div class="more-actions">
+                  <%= link_to "Print", {:action => 'invoice', :id => @invoice.id, :format => :pdf}, :target => '_blank' %>
+                  <br/>
+                  <%= link_to "Email", {:action => 'invoice_email', :id => @invoice.id}, :target => '_blank' %>
+                  <br/>
+                  <%= link_to("Delete", {:action => 'delete_invoice', :id => @invoice.id}, :class => 'btn btn-danger') %>
+              </div>
+              <%= render(:partial => "invoice_form", :locals => {:f => f}) %>
 
 
-	<div class="form-buttons">
-      <%= submit_tag("Save", class: 'btn') %>
-	</div>
-	
-	<% end %>
- 
+              <div class="form-buttons clearboth">
+                  <%= submit_tag("Save", class: 'btn') %>
+              </div>
+
+            <% end %>
+        </div>
+    </div>
+
 </div>

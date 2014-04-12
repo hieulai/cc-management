@@ -6,7 +6,7 @@
             <%= form_for(@invoice, :url => {:action => 'create_invoice'}, :html => {:class => 'form-horizontal'}) do |f| %>
                 <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
                 <%= render(:partial => "invoice_form", :locals => {:f => f}) %>
-                <div class="form-buttons">
+                <div class="form-buttons clearboth">
                     <%= submit_tag("Create", :class => 'btn') %>
                 </div>
             <% end %>

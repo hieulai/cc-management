@@ -156,3 +156,7 @@ td.calculate {
     background-repeat: no-repeat;
     background-image: url(/assets/collapsed.gif);
 }
+
+.clearboth{
+    clear: both;
+}

@@ -1,6 +1,8 @@
 class Bill < ActiveRecord::Base
   acts_as_paranoid
   include Accountable
+  include Invoiceable
+
   before_destroy :check_readonly
 
   belongs_to :project
@@ -13,6 +15,8 @@ class Bill < ActiveRecord::Base
   has_many :payments, :through => :payments_bills
   has_many :bills_items, :dependent => :destroy
   has_many :un_job_costed_items, :dependent => :destroy
+  has_many :invoices_bills, :dependent => :destroy
+  has_many :invoices, :through => :invoices_bills
 
   attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id,
                   :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :billed_date, :reconciled,
@@ -38,7 +42,7 @@ class Bill < ActiveRecord::Base
   after_destroy :decrease_account, :destroy_purchased_categories_template
 
   validates_presence_of :vendor, :billed_date, :builder
-  validates_presence_of :project, :categories_template, :if => Proc.new{|b| b.job_costed? }
+  validates_presence_of :project, :categories_template, :if => Proc.new { |b| b.job_costed? }
   NEGATIVES = []
 
   searchable do
@@ -102,7 +106,7 @@ class Bill < ActiveRecord::Base
   end
 
   def full_paid?
-     self.remaining_amount == 0
+    self.remaining_amount == 0
   end
 
   def generated?
@@ -129,12 +133,15 @@ class Bill < ActiveRecord::Base
     if generated?
       purchase_order.cached_total_amount
     else
-      update_column(:cached_total_amount, total_amount) if read_attribute(:cached_total_amount) != total_amount
       read_attribute(:cached_total_amount)
     end
   end
 
   def amount
+    cached_total_amount
+  end
+
+  def price
     cached_total_amount
   end
 
@@ -199,6 +206,7 @@ class Bill < ActiveRecord::Base
       errors[:base] << "This bill has already been paid in the amount of $#{self.read_attribute(:cached_total_amount)}. Editing a paid bill requires that all item amounts continue to add up to the original payment amount. If the original payment was made for the wrong amount, correct the payment first and then come back and edit the bill."
       return false
     end
+    self.cached_total_amount = self.total_amount
   end
 
   def check_zero_amount

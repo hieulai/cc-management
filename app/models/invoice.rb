@@ -5,11 +5,15 @@ class Invoice < ActiveRecord::Base
   belongs_to :estimate
   has_many :invoices_items, :dependent => :destroy
   has_many :items, :through => :invoices_items
+  has_many :invoices_bills, :dependent => :destroy
+  has_many :bills, :through => :invoices_bills
   has_many :receipts_invoices, :dependent => :destroy
   has_many :receipts, :through => :receipts_invoices
 
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
-  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount, :reconciled
+  accepts_nested_attributes_for :invoices_bills, :allow_destroy => true, reject_if: :unbillable_bill
+  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :invoices_bills_attributes, :remaining_amount,
+                  :reconciled, :bill_from_date, :bill_to_date
   attr_accessor :account_amount, :related_account
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
@@ -19,6 +23,7 @@ class Invoice < ActiveRecord::Base
 
   after_initialize :default_values
   before_save :check_readonly, :check_reference
+  before_update :clear_old_data
 
   validates_presence_of :estimate, :builder
 
@@ -50,7 +55,11 @@ class Invoice < ActiveRecord::Base
   end
 
   def amount
-    invoices_items.map(&:amount).compact.sum if invoices_items.any?
+    if invoices_items.any?
+      invoices_items.map(&:amount).compact.sum
+    elsif invoices_bills.any?
+      invoices_bills.map(&:amount).compact.sum
+    end
   end
 
   def billed_amount
@@ -74,6 +83,10 @@ class Invoice < ActiveRecord::Base
     attributes['item_id'].blank? || !Item.find(attributes['item_id'].to_i).billable?(self.id)
   end
 
+  def unbillable_bill(attributes)
+    attributes['bill_id'].blank? || !Bill.find(attributes['bill_id'].to_i).billable?(self.id)
+  end
+
   def check_readonly
     if billed?
       errors[:base] << "This record is readonly"
@@ -90,6 +103,16 @@ class Invoice < ActiveRecord::Base
       end
     else
       self.reference = self.class.maximum(:reference).to_f + 1
+    end
+  end
+
+  def clear_old_data
+    if self.estimate.cost_plus_bid?
+      self.invoices_items.destroy_all
+    else
+      self.invoices_bills.destroy_all
+      self.bill_from_date = nil
+      self.bill_to_date = nil
     end
   end
 

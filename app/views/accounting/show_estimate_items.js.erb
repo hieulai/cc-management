@@ -1,3 +1,9 @@
-$('#invoice-items-placeholder').html('<%= escape_javascript(render :partial =>  'invoice_template', :locals => {:template => @estimate.template}) %>');
+<% if @invoice.estimate.try(:cost_plus_bid?) %>
+  $('#invoice-items-placeholder').html('<%= escape_javascript(render :partial =>  'accounting/cost_plus_bid/invoice_template', :locals => {:template => @estimate.template, from_date: @from_date, to_date: @to_date}) %>');
+  $(".cost-plus-bid").show();
+<% else %>
+  $('#invoice-items-placeholder').html('<%= escape_javascript(render :partial =>  'invoice_template', :locals => {:template => @estimate.template}) %>');
+  $(".cost-plus-bid").hide();
+<% end %>
 Shared.calculateSubTotals();
 Shared.calculateTotals();

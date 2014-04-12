@@ -1,6 +1,7 @@
 class Item < ActiveRecord::Base
   acts_as_paranoid
   include Importable
+  include Invoiceable
 
   before_destroy :check_readonly
 
@@ -81,47 +82,16 @@ class Item < ActiveRecord::Base
     self.actual_cost.present? ? (self.amount - self.actual_cost) + self.margin : nil
   end
 
-  def prior_amount(invoice_id)
-    previous_ii = InvoicesItem.where(:item_id => id)
-    if invoice_id.present?
-      first_ii = invoice_item(invoice_id)
-      if first_ii.present?
-        previous_ii = InvoicesItem.previous_created_by_item(id, first_ii.created_at)
-      end
-    end
-    previous_ii.map(&:amount).compact.sum if previous_ii.any?
-  end
-
   def bid_item(bid_id)
     self.bids_items.where(:bid_id => bid_id).first
-  end
-
-  def invoice_amount
-    invoices_items.map(&:amount).compact.sum if invoices_items.any?
-  end
-
-  def invoice_item(invoice_id)
-    self.invoices_items.where(:invoice_id => invoice_id).first
   end
 
   def purchased?
     self.purchase_order_id.present? || self.bill_id.present?
   end
 
-  def change_order?
+  def from_change_order?
     self.change_orders_category.present?
-  end
-
-  def billed?
-    self.invoices.any?
-  end
-
-  def billable?(invoice_id =nil, net = false)
-    invoice_item(invoice_id).present? || invoice_amount.nil? || billable_amount(net) > 0
-  end
-
-  def billable_amount(net = false)
-    (net ? amount.to_f : price.to_f) - invoice_amount.to_f
   end
 
   def self.to_csv(items, options = {})

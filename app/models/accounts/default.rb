@@ -61,7 +61,10 @@ module Accounts
       scoped_invoices_items = options[:project_id].present? ? @account.invoices_items.project(options[:project_id]) : @account.invoices_items
       invoices_items = scoped_invoices_items.date_range(options[:from_date], options[:to_date])
 
-      trans = payments + deposits + sent_transfers + received_transfers + receipt_items + un_job_costed_items + invoices_items + bills
+      scoped_invoices_bills = options[:project_id].present? ? @account.invoices_bills.project(options[:project_id]) : @account.invoices_bills
+      invoices_bills = scoped_invoices_bills.date_range(options[:from_date], options[:to_date])
+
+      trans = payments + deposits + sent_transfers + received_transfers + receipt_items + un_job_costed_items + invoices_items + invoices_bills + bills
 
       if @account.kind_of?([Account::BANK_ACCOUNTS]) &&
           @account.opening_balance_updated_at &&
@@ -87,7 +90,7 @@ module Accounts
       bb = @account.balance({recursive: false}).to_f
       trans = @account.payments.unrecociled + @account.deposits.unrecociled + @account.received_transfers.unrecociled +
           @account.sent_transfers.unrecociled + @account.receipts_items.unrecociled + @account.un_job_costed_items.unrecociled +
-          @account.invoices_items.unrecociled + @account.bills.unrecociled
+          @account.invoices_items.unrecociled + @account.invoices_bills.unrecociled + @account.bills.unrecociled
       trans.each { |t| t.related_account = @account }
       bb -= trans.map(&:account_amount).compact.sum
       bb.round(2)
@@ -104,7 +107,8 @@ module Accounts
     def opening_balance
       ob = @account.balance({recursive: false}).to_f
       tr = @account.payments + @account.deposits + @account.received_transfers + @account.sent_transfers +
-          @account.receipts_items + @account.un_job_costed_items + @account.invoices_items + @account.bills.unrecociled
+          @account.receipts_items + @account.un_job_costed_items + @account.invoices_items + @account.invoices_bills
+          @account.bills.unrecociled
       tr.each { |t| t.related_account = @account }
       ob -= tr.map(&:account_amount).compact.sum
       ob.round(2)

@@ -1,14 +1,15 @@
 <% changed = item.change_orders_category.present? ? "change_order" : ""
-   cpb_estimate = @invoice.estimate.kind =="Cost Plus Bid"
-   billable = item.billable?(@invoice.id, cpb_estimate) ? '' : 'unclickable'
+   is_billable = item.billable?(@invoice.id)
+   billable = is_billable ? '' : 'unclickable'
+   invoiceable = item.invoiceable(@invoice.id)
  %>
 <tr class="item item_category_<%= category.id %> <%= changed %> <%= billable %>" id="item_<%= item.id %>">
   <td>
-      <% if item.billable?(@invoice.id, cpb_estimate) %>
-        <%= check_box_tag 'item-chosen', item.invoice_item(@invoice.id).present? ? item.id : "", item.invoice_item(@invoice.id).present? %>
-          <%= hidden_field_tag "invoice[invoices_items_attributes][][id]", item.invoice_item(@invoice.id).try(:id) %>
+      <% if is_billable %>
+        <%= check_box_tag 'item-chosen', invoiceable.present? ? item.id : "", invoiceable.present?, class: "chosen" %>
+          <%= hidden_field_tag "invoice[invoices_items_attributes][][id]", invoiceable.try(:id) %>
         <%= hidden_field_tag "invoice[invoices_items_attributes][][item_id]", item.id %>
-        <%= hidden_field_tag 'invoice[invoices_items_attributes][][_destroy]', !item.invoice_item(@invoice.id).present? %>
+        <%= hidden_field_tag 'invoice[invoices_items_attributes][][_destroy]', !invoiceable.present?, class: "destroy" %>
       <% end %>
 	</td>
   <td></td>
@@ -19,15 +20,15 @@
         <%= item.description %>
     </td>
     <td class="right">
-        <%= price_tag(@invoice.estimate.kind =="Cost Plus Bid" ? item.amount : item.price, "amount") %>
+        <%= price_tag(item.price, "amount") %>
     </td>
     <td class="right">
         <%= price_tag(item.prior_amount(@invoice.id), "prior-amount") %>
     </td>
     <td class="right">
-        <% if item.billable?(@invoice.id, cpb_estimate ) %>
-            <div class="text-field" <% unless item.invoice_item(@invoice.id).present? %> style="display: none" <% end %>>
-                $<%= text_field_tag 'invoice[invoices_items_attributes][][amount]', item.invoice_item(@invoice.id).try(:amount) || item.billable_amount(cpb_estimate), :class => "input-mini invoice-amount" %>
+        <% if is_billable %>
+            <div class="text-field" <% unless invoiceable.present? %> style="display: none" <% end %>>
+                $<%= text_field_tag 'invoice[invoices_items_attributes][][amount]', invoiceable.try(:amount) || item.billable_amount, :class => "input-mini invoice-amount" %>
             </div>
         <% end %>
     </td>

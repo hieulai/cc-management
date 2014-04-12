@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140403150019) do
+ActiveRecord::Schema.define(:version => 20140411161856) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -39,6 +39,14 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.integer "change_orders_category_id"
   end
 
+  create_table "accounts_invoices_bills", :force => true do |t|
+    t.integer "account_id"
+    t.integer "invoices_bill_id"
+  end
+
+  add_index "accounts_invoices_bills", ["account_id"], :name => "index_accounts_invoices_bills_on_account_id"
+  add_index "accounts_invoices_bills", ["invoices_bill_id"], :name => "index_accounts_invoices_bills_on_invoices_bill_id"
+
   create_table "accounts_invoices_items", :force => true do |t|
     t.integer "account_id"
     t.integer "invoices_item_id"
@@ -50,13 +58,13 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
-    t.integer  "primary_phone"
-    t.integer  "secondary_phone"
+    t.string   "primary_phone"
+    t.string   "secondary_phone"
     t.string   "website"
     t.string   "address"
     t.string   "city"
     t.string   "state"
-    t.integer  "zipcode"
+    t.string   "zipcode"
     t.text     "notes"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
@@ -135,8 +143,8 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.string   "address"
     t.string   "city"
     t.string   "state"
-    t.integer  "zipcode"
-    t.integer  "tax_id"
+    t.string   "zipcode"
+    t.string   "tax_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.string   "slogan"
@@ -147,12 +155,12 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.integer  "builder_id"
     t.integer  "template_id"
     t.string   "name"
-    t.decimal  "cost_total"
-    t.decimal  "margin_total"
-    t.decimal  "price_total"
+    t.decimal  "cost_total",       :precision => 10, :scale => 0
+    t.decimal  "margin_total",     :precision => 10, :scale => 0
+    t.decimal  "price_total",      :precision => 10, :scale => 0
     t.boolean  "default"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
     t.integer  "specification_id"
   end
 
@@ -215,12 +223,12 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
-    t.integer  "primary_phone"
-    t.integer  "secondary_phone"
+    t.string   "primary_phone"
+    t.string   "secondary_phone"
     t.string   "address"
     t.string   "city"
     t.string   "state"
-    t.integer  "zipcode"
+    t.string   "zipcode"
     t.string   "lead_source"
     t.date     "last_contacted"
     t.text     "notes"
@@ -328,10 +336,24 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.decimal  "remaining_amount", :precision => 10, :scale => 2
     t.date     "invoice_date"
     t.boolean  "reconciled",                                      :default => false
+    t.date     "bill_from_date"
+    t.date     "bill_to_date"
   end
 
   add_index "invoices", ["builder_id"], :name => "index_invoices_on_builder_id"
   add_index "invoices", ["estimate_id"], :name => "index_invoices_on_estimate_id"
+
+  create_table "invoices_bills", :force => true do |t|
+    t.integer  "invoice_id"
+    t.integer  "bill_id"
+    t.decimal  "amount",     :precision => 10, :scale => 2
+    t.boolean  "reconciled",                                :default => false
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
+  end
+
+  add_index "invoices_bills", ["bill_id"], :name => "index_invoices_bills_on_bill_id"
+  add_index "invoices_bills", ["invoice_id"], :name => "index_invoices_bills_on_invoice_id"
 
   create_table "invoices_items", :force => true do |t|
     t.integer  "invoice_id"
@@ -391,7 +413,7 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.integer  "estimate_id"
     t.string   "name"
     t.string   "unit"
-    t.decimal  "amount"
+    t.decimal  "amount",      :precision => 10, :scale => 0
     t.integer  "stories"
     t.boolean  "CA"
     t.boolean  "CNC"
@@ -399,8 +421,8 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.boolean  "RA"
     t.boolean  "RNC"
     t.boolean  "RR"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
   end
 
   add_index "measurements", ["estimate_id"], :name => "index_measurements_on_estimate_id"
@@ -439,9 +461,9 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.integer  "client_id"
     t.string   "name"
     t.string   "project_type"
-    t.string   "status",            :default => "Current Lead"
+    t.string   "status",                                           :default => "Current Lead"
     t.string   "lead_stage"
-    t.decimal  "progress"
+    t.decimal  "progress",          :precision => 10, :scale => 0
     t.integer  "revenue"
     t.date     "start_date"
     t.date     "completion_date"
@@ -450,8 +472,8 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.string   "next_tasks"
     t.text     "lead_notes"
     t.text     "project_notes"
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
+    t.datetime "created_at",                                                                   :null => false
+    t.datetime "updated_at",                                                                   :null => false
     t.integer  "builder_id"
     t.integer  "first_name"
     t.string   "last_name"
@@ -577,13 +599,13 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
-    t.integer  "primary_phone"
-    t.integer  "secondary_phone"
+    t.string   "primary_phone"
+    t.string   "secondary_phone"
     t.string   "website"
     t.string   "address"
     t.string   "city"
     t.string   "state"
-    t.integer  "zipcode"
+    t.string   "zipcode"
     t.text     "notes"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
@@ -599,16 +621,16 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.string   "primary_first_name"
     t.string   "primary_last_name"
     t.string   "primary_email"
-    t.integer  "primary_phone"
+    t.string   "primary_phone"
     t.string   "secondary_first_name"
     t.string   "secondary_last_name"
     t.string   "secondary_email"
-    t.integer  "secondary_phone"
+    t.string   "secondary_phone"
     t.string   "website"
     t.string   "address"
     t.string   "city"
     t.string   "state"
-    t.integer  "zipcode"
+    t.string   "zipcode"
     t.text     "notes"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
@@ -649,12 +671,12 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.integer  "builder_id"
     t.integer  "estimate_id"
     t.string   "name"
-    t.decimal  "cost_total"
-    t.decimal  "margin_total"
-    t.decimal  "price_total"
+    t.decimal  "cost_total",   :precision => 10, :scale => 0
+    t.decimal  "margin_total", :precision => 10, :scale => 0
+    t.decimal  "price_total",  :precision => 10, :scale => 0
     t.boolean  "default"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
   end
 
   add_index "templates", ["builder_id"], :name => "index_templates_on_builder_id"
@@ -694,7 +716,7 @@ ActiveRecord::Schema.define(:version => 20140403150019) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
-    t.integer  "primary_phone"
+    t.string   "primary_phone"
     t.string   "legacy_hashed_password"
     t.string   "legacy_salt"
     t.datetime "created_at",                             :null => false
