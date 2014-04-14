@@ -22,7 +22,7 @@ var Bid = (function ($, Shared) {
                     bidAmount += parseFloat($(this).val());
                 }
             });
-            $('#bid-amount').text(Shared.number_to_currency_with_unit(bidAmount, 2, '.', ','));
+            $('#bid-amount').html(Shared.number_to_currency_with_unit(bidAmount, 2, '.', ','));
         }
     };
 

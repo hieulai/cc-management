@@ -55,7 +55,7 @@ var Purchasable = (function ($, Shared) {
             var pValue = eValue * qValue;
             var placeHolder = $(obj).closest("tr").find(".actual-amount-placeholder");
             if (placeHolder.find(".actual-amount").size() > 0) {
-                placeHolder.find(".actual-amount").text(Shared.number_to_currency_with_unit(pValue, 2, '.', ','));
+                placeHolder.find(".actual-amount").html(Shared.number_to_currency_with_unit(pValue, 2, '.', ','));
             } else {
                 placeHolder.prepend('<div class="actual-amount">' + Shared.number_to_currency_with_unit(pValue, 2, '.', ',') + '</div>');
             }
@@ -99,7 +99,7 @@ var Purchasable = (function ($, Shared) {
         var actualAmount = Shared.text_to_number($(i).text());
         if ($('input[name$="[sales_tax_rate]"]').size() > 0) {
             actualAmount *= (1 + Shared.text_to_number($('input[name$="[sales_tax_rate]"]').val()) / 100);
-            $(i).closest("tr").find(".post-tax-actual-amount").text(Shared.number_to_currency_with_unit(actualAmount, 2, '.', ','))
+            $(i).closest("tr").find(".post-tax-actual-amount").html(Shared.number_to_currency_with_unit(actualAmount, 2, '.', ','))
         }
         $(i).closest("tr").find('input[name$="[][actual_cost]"]').val(actualAmount.toFixed(2));
     };

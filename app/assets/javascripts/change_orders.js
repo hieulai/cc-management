@@ -38,7 +38,7 @@ var ChangeOrder = (function ($, Shared) {
         var tdMargin = $(trItem).find("input.margin");
         var margin = $(tdMargin).size() > 0 ? Shared.text_to_number($(tdMargin).val()) : 0;
         var total = Shared.text_to_number($(tdQty).val()) * Shared.text_to_number($(tdEstimatedCost).val()) + margin;
-        $(trItem).find("div.co-amount").text(Shared.number_to_currency_with_unit(total, 2, '.', ','));
+        $(trItem).find("div.co-amount").html(Shared.number_to_currency_with_unit(total, 2, '.', ','));
     };
 
     var calculateCOAmounts = function () {

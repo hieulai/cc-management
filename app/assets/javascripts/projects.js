@@ -16,9 +16,9 @@ var Project = (function ($, Shared) {
         });
 
         if (!coEmpty) {
-            $(".co-budget-" + s).text(Shared.number_to_currency_with_unit(coTotal, 2, '.', ','));
+            $(".co-budget-" + s).html(Shared.number_to_currency_with_unit(coTotal, 2, '.', ','));
         }
-        $(".subtotal-budget-" + s).each(function () {
+        $(".subtotal-budget-" + s).html(function () {
             var empty = true;
             var subtotal = 0;
             $(this).closest("tr").prevUntil("tr.category").each(function () {
@@ -28,13 +28,13 @@ var Project = (function ($, Shared) {
                 subtotal += Shared.text_to_number($(this).find(".budget-" + s).text());
             })
             if (!empty) {
-                $(this).text(Shared.number_to_currency_with_unit(subtotal, 2, '.', ','));
+                $(this).html(Shared.number_to_currency_with_unit(subtotal, 2, '.', ','));
                 allEmpty = false;
                 total += subtotal;
             }
         })
         if (!allEmpty) {
-            $(".total-budget-" + s).text(Shared.number_to_currency_with_unit(total, 2, '.', ','));
+            $(".total-budget-" + s).html(Shared.number_to_currency_with_unit(total, 2, '.', ','));
         }
     };
 
