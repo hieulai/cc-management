@@ -31,6 +31,7 @@ class Account < ActiveRecord::Base
 
   attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
   attr_accessor :opening_balance_changed
+  delegate :transactions, :balance, :bank_balance, :book_balance, :outstanding_checks_balance, :opening_balance, to: :handler
 
   default_scope order("name ASC")
   scope :top, where(:parent_id => nil)
@@ -44,28 +45,8 @@ class Account < ActiveRecord::Base
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id]
   validate :disallow_self_reference
 
-  def transactions
-    Accounts::AccountHandler.get_account_handler(self).transactions
-  end
-
-  def balance(options ={})
-    Accounts::AccountHandler.get_account_handler(self).balance(options)
-  end
-
-  def bank_balance
-    Accounts::AccountHandler.get_account_handler(self).bank_balance
-  end
-
-  def book_balance
-    Accounts::AccountHandler.get_account_handler(self).book_balance
-  end
-
-  def outstanding_checks_balance
-    Accounts::AccountHandler.get_account_handler(self).outstanding_checks_balance
-  end
-
-  def opening_balance
-    Accounts::AccountHandler.get_account_handler(self).opening_balance
+  def handler
+    Accounts::AccountHandler.get_account_handler(self)
   end
 
   def opening_balance=(b)
