@@ -334,7 +334,7 @@ class AccountingController < ApplicationController
 
   def new_payment
     @payment =  Payment.new
-    @bills = Array.new
+    @bills = []
   end
 
   def create_payment
@@ -343,7 +343,7 @@ class AccountingController < ApplicationController
     if @payment.save
       redirect_to(params[:original_url].presence ||url_for(:action => "payments"))
     else
-      @bills = Array.new
+      @bills = []
       render('new_payment')
     end
   end
@@ -418,11 +418,12 @@ class AccountingController < ApplicationController
   end
 
   def show_people_bills
-    @bills = Array.new
+    @bills = []
     @payment = params[:payment_id].present? ? Payment.find(params[:payment_id]) : Payment.new
     if params[:payment].present? && params[:payment][:payer_id].present? && params[:payment][:payer_type].present?
       @payer = params[:payment][:payer_type].constantize.find params[:payment][:payer_id]
-      @bills = @payer == @payment.payer ? @payer.bills : @payer.bills.unpaid
+      @bills = @payer.bills.unpaid
+      @bills += @payment.bills if @payment.payer == @payer
     end
     respond_to do |format|
       format.js {}
@@ -430,7 +431,7 @@ class AccountingController < ApplicationController
   end
 
   def show_client_invoices
-    @invoices = Array.new
+    @invoices = []
     @receipt = params[:receipt_id].present? ? Receipt.find(params[:receipt_id]) : Receipt.new
     if params[:receipt].present? && params[:receipt][:client_id].present?
       @client = Client.find params[:receipt][:client_id]

@@ -21,10 +21,10 @@
 <div class="control-group">
     <%= f.label :vendor_id, "Payor", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= hidden_field_tag :payer, f.object.payer.try(:display_name), data: {url: people_autocomplete_name_path} %>
+        <%= hidden_field_tag :payer, @payment.payer.try(:display_name), data: {url: people_autocomplete_name_path} %>
         <%= f.hidden_field :payer_id, class: 'payer-id' %>
         <%= f.hidden_field :payer_type, class: 'payer-type' %>
-        <%= link_to "", url_for(:action => "show_people_bills"), :id => "hidden_people_link", :remote => true, :style => "display: none" %>
+        <%= link_to "", url_for(:action => "show_people_bills", payment_id: @payment.id), :id => "hidden_people_link", :remote => true, :style => "display: none" %>
     </div>
 </div>
 <div class="control-group">
@@ -44,8 +44,8 @@
 <div class="control-group">
     <%= f.label :date, "Date", class: 'col-lg-2 control-label' %>
     <div class="controls">
-      <%= f.text_field(:date, class: 'datepicker', :value => f.object.try(:date).try(:strftime, '%m-%d-%Y')) %>
-      <%= f.hidden_field(:date, id: 'payment_date_hidden', :value => f.object.try(:date).try(:strftime, '%Y-%m-%d')) %>
+      <%= f.text_field(:date, class: 'datepicker', :value => @payment.try(:date).try(:strftime, '%m-%d-%Y')) %>
+      <%= f.hidden_field(:date, id: 'payment_date_hidden', :value => @payment.try(:date).try(:strftime, '%Y-%m-%d')) %>
     </div>
 </div>
 <div class="control-group">
