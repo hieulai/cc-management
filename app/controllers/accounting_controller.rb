@@ -350,13 +350,14 @@ class AccountingController < ApplicationController
   
   def edit_payment
     @payment = Payment.find(params[:id])
-    @bills = (@payment.bills + @payment.vendor.bills.unpaid).uniq
+    @bills = (@payment.bills + @payment.payer.bills.unpaid).uniq
   end
 
   def update_payment
     @payment = Payment.find(params[:id])
-    # Destroy all old payments_bills_attributes if vendor changed
-    if params[:payment][:vendor_id].present? && params[:payment][:vendor_id] != @payment.vendor_id.to_s
+    # Destroy all old payments_bills_attributes if payer changed
+    if (params[:payment][:payer_id].present? && params[:payment][:payer_id] != @payment.payer_id.to_s) ||
+        (params[:payment][:payer_type].present? && params[:payment][:payer_type] != @payment.payer_type.to_s)
       @payment.payments_bills.each do  |pb|
         params[:payment][:payments_bills_attributes] << {id: pb.id, _destroy: true}.with_indifferent_access
       end
@@ -364,7 +365,7 @@ class AccountingController < ApplicationController
     if @payment.update_attributes(params[:payment])
       redirect_to(:action => "payments")
     else
-      @bills = (@payment.bills + @payment.vendor.bills.unpaid).uniq
+      @bills = (@payment.bills + @payment.payer.bills.unpaid).uniq
       render('edit_payment')
     end
   end
@@ -416,12 +417,12 @@ class AccountingController < ApplicationController
     end
   end
 
-  def show_vendor_bills
+  def show_people_bills
     @bills = Array.new
     @payment = params[:payment_id].present? ? Payment.find(params[:payment_id]) : Payment.new
-    if params[:payment].present? && params[:payment][:vendor_id].present?
-      @vendor = Vendor.find params[:payment][:vendor_id]
-      @bills = @vendor == @payment.vendor ? @vendor.bills : @vendor.bills.unpaid
+    if params[:payment].present? && params[:payment][:payer_id].present? && params[:payment][:payer_type].present?
+      @payer = params[:payment][:payer_type].constantize.find params[:payment][:payer_id]
+      @bills = @payer == @payment.payer ? @payer.bills : @payer.bills.unpaid
     end
     respond_to do |format|
       format.js {}
@@ -464,14 +465,6 @@ class AccountingController < ApplicationController
     respond_to do |format|
       format.js {}
     end
-  end
-
-  def autocomplete_vendor_name
-    @vendors = @builder.vendors.search_by_name(params[:term]).order(:company)
-    render :json => @vendors.map { |v|
-      label = v.company.present? ? "#{v.company} <br/> <span class=\"autocomplete-sublabel\">#{v.full_name}</span>" : v.full_name
-      {:id => v.id, :label => label, :value => v.display_name}
-    }.to_json
   end
 
   def show_account_details_payables
@@ -523,7 +516,8 @@ class AccountingController < ApplicationController
     if @purchasable.instance_of? Bill
       if params[:bill][:create_payment] == "1"
         payment = Payment.new(params[:payment].merge(:builder_id => session[:builder_id],
-                                                      :vendor_id => @purchasable.vendor_id))
+                                                      :payer_id => @purchasable.payer_id,
+                                                      :payer_type => @purchasable.payer_type))
         unless payment.valid?
           @bill = @purchasable
           @bill.errors[:base] << "Payment information invalid: <br/> #{payment.errors.full_messages.join("<br/>")}"

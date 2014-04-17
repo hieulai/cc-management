@@ -5,7 +5,7 @@
     </td>
     <td><%= t.method %></td>
     <td><%= t.reference %></td>
-    <td><%= t.vendor.try(:display_name) %></td>
+    <td><%= t.payer.try(:display_name) %></td>
     <td><%= t.memo %></td>
     <td class="right"><%= price_tag(t.account_amount) %></td>
     <td class="center action-container">

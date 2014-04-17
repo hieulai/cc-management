@@ -6,10 +6,6 @@
   </script>
 <% end %>
 
-<% vendors =  @builder.vendors.has_unpaid_bills
-   (vendors<< @payment.vendor).uniq! unless @payment.new_record?
-%>
-
 <% if @payment.errors.any? %>
   <div id="errorExplanation">
       <h2><%= pluralize(@payment.errors.count, "Error") %> prohibited
@@ -23,8 +19,13 @@
 <% end %>
 
 <div class="control-group">
-    <%= f.label :vendor_id, "Vendor", class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.select(:vendor_id, vendors.collect { |s| [s.display_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_vendor_bills", :payment_id => @payment.id)}) %></div>
+    <%= f.label :vendor_id, "Payor", class: 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= hidden_field_tag :payer, f.object.payer.try(:display_name), data: {url: people_autocomplete_name_path} %>
+        <%= f.hidden_field :payer_id, class: 'payer-id' %>
+        <%= f.hidden_field :payer_type, class: 'payer-type' %>
+        <%= link_to "", url_for(:action => "show_people_bills"), :id => "hidden_people_link", :remote => true, :style => "display: none" %>
+    </div>
 </div>
 <div class="control-group">
     <%= f.label :account_id, "Account", class: 'col-lg-2 control-label' %>

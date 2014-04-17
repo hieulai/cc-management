@@ -7,6 +7,7 @@ class Bill < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :vendor
+  belongs_to :payer, polymorphic: true
   belongs_to :categories_template
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :purchase_order
@@ -20,7 +21,8 @@ class Bill < ActiveRecord::Base
 
   attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id,
                   :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :billed_date, :reconciled,
-                  :category_id, :bills_items_attributes, :items_attributes, :un_job_costed_items_attributes
+                  :category_id, :bills_items_attributes, :items_attributes, :un_job_costed_items_attributes,
+                  :payer_id, :payer_type
   accepts_nested_attributes_for :bills_items, :allow_destroy => true
   accepts_nested_attributes_for :items, :allow_destroy => true
   accepts_nested_attributes_for :un_job_costed_items, :reject_if => :all_blank, :allow_destroy => true
@@ -41,7 +43,7 @@ class Bill < ActiveRecord::Base
   after_update :destroy_old_purchased_categories_template
   after_destroy :decrease_account, :destroy_purchased_categories_template
 
-  validates_presence_of :vendor, :billed_date, :builder
+  validates_presence_of :payer_id, :payer_type, :billed_date, :builder
   validates_presence_of :project, :categories_template, :if => Proc.new { |b| b.job_costed? }
   NEGATIVES = []
 
@@ -66,8 +68,8 @@ class Bill < ActiveRecord::Base
     text :project_names do
       project_name
     end
-    text :vendor_name do
-      vendor_name
+    text :payer_name do
+      payer_name
     end
     text :category_name do
       category_name
@@ -81,8 +83,8 @@ class Bill < ActiveRecord::Base
     self.source(:project).try(:name)
   end
 
-  def vendor_name
-    self.source(:vendor).try(:display_name)
+  def payer_name
+    self.source(:payer).try(:display_name)
   end
 
   def category_name

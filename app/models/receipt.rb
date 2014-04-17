@@ -12,7 +12,8 @@ class Receipt < ActiveRecord::Base
   has_many :receipts_items, :dependent => :destroy
 
   attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :payer_id, :payer_type, :payor, :client_id, :reconciled,
-                  :account_type, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes
+                  :account_type, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes,
+                  :payer_id, :payer_type
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true
   accepts_nested_attributes_for :receipts_items, reject_if: :all_blank, allow_destroy: true
   attr_accessor :create_deposit, :account_type

@@ -5,6 +5,7 @@ class Payment < ActiveRecord::Base
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
   belongs_to :vendor
+  belongs_to :payer, polymorphic: true
   has_many :payments_bills, :dependent => :destroy
 
   has_many :bills, :through => :payments_bills
@@ -16,8 +17,8 @@ class Payment < ActiveRecord::Base
   accepts_nested_attributes_for :payments_bills, :allow_destroy => true
 
   attr_accessible :date, :memo, :method, :reference, :reconciled, :builder_id, :account_id, :vendor_id,
-                  :payments_bills_attributes
-  validates_presence_of :vendor, :account, :builder, :method, :date
+                  :payments_bills_attributes, :payer_id, :payer_type
+  validates_presence_of :payer_id, :payer_type, :account, :builder, :method, :date
 
   after_update :update_account_balance, :if => :account_id_changed?
 
@@ -31,8 +32,8 @@ class Payment < ActiveRecord::Base
     text :date_t do |p|
       p.date.try(:strftime, Date::DATE_FORMATS[:default])
     end
-    text :vendor_name do
-      vendor_name
+    text :payer_name do
+      payer_name
     end
     text :account_name do
       account_name
@@ -43,8 +44,8 @@ class Payment < ActiveRecord::Base
     account.try(:name)
   end
 
-  def vendor_name
-    vendor.try(:display_name)
+  def payer_name
+    payer.try(:display_name)
   end
 
   def amount

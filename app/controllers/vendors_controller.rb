@@ -68,27 +68,6 @@ class VendorsController < ApplicationController
       Vendor.find(params[:id]).destroy
       redirect_to(:action => 'list')
     end
-    
-    def import_export
-      @vendor = Vendor.new
-    end
-  
-    def import
-      if params[:vendor].nil?
-        redirect_to action: 'import_export', notice: "No file to import."
-      else
-        begin
-          errors = Vendor.importData(params[:vendor][:data], @builder)
-          msg = "Item imported."
-          unless errors.empty?
-            msg = errors.join(",")
-          end
-          redirect_to action: 'list', notice: msg
-        rescue StandardError => e
-          redirect_to action: 'import_export', notice: e
-        end
-      end
-    end
   
   end
 

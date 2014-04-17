@@ -54,15 +54,7 @@ Cc::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-   match ':controller(/:action(/:id))(.:format)'
-   resources :accounting do
-     get :autocomplete_vendor_name, :on => :collection
-   end
-
-  resources :projects do
-    get :autocomplete_vendor_name, :on => :collection
-  end
-
+  match ':controller(/:action(/:id))(.:format)'
   get 'items/autocomplete_name', to: 'items#autocomplete_name'
   get 'people/autocomplete_name', to: 'people#autocomplete_name'
 

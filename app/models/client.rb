@@ -1,4 +1,6 @@
 class Client < ActiveRecord::Base
+  include Billable
+
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :projects, dependent: :destroy
   has_many :invoices, :through => :projects
@@ -9,13 +11,10 @@ class Client < ActiveRecord::Base
 
   default_scope order("first_name ASC")
   scope :active, where(status: "Active")
-
   scope :search_by_name, lambda { |q|
     (q ? where(["first_name ILIKE ? or last_name ILIKE ? or concat(first_name, ' ', last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%', '%'+ q + '%']) : {})
   }
-
   scope :has_unbilled_invoices, joins(:invoices).where("invoices.remaining_amount is NULL OR invoices.remaining_amount > 0")
-
   scope :has_unbilled_receipts, joins(:receipts).where("receipts.remaining_amount is NULL OR receipts.remaining_amount > 0")
 
   after_save :update_indexes
@@ -30,6 +29,10 @@ class Client < ActiveRecord::Base
     text :client_type do
       "Client"
     end
+  end
+
+  def display_name
+    full_name
   end
       
   def full_name

@@ -1,4 +1,5 @@
 class Contact < ActiveRecord::Base
+  include Billable
 
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :receipts, as: :payer
@@ -15,6 +16,10 @@ class Contact < ActiveRecord::Base
     text :contact_type do
       "Other"
     end
+  end
+
+  def display_name
+    full_name
   end
      
   def full_name

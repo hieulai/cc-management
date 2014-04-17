@@ -11,6 +11,8 @@ var Bid = (function ($, Shared) {
             }
             calculateBidAmount();
         });
+
+        Shared.initPeopleSelector();
     };
 
     var calculateBidAmount = function () {

@@ -16,8 +16,8 @@
 <div class="control-group">
     <%= f.label :vendor, "Vendor", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= autocomplete_field :vendor, :name, autocomplete_vendor_name_accounting_index_path, :value => @bid.vendor.try(:display_name), :id_element => "#bid_vendor_id", :update_elements => {} %>
-        <%= f.hidden_field :vendor_id, :value => @bid.vendor.try(:id) %>
+        <%= hidden_field_tag :payer, @bid.vendor.try(:display_name), data: {url: people_autocomplete_name_path(type: Vendor.name)} %>
+        <%= f.hidden_field :vendor_id, class: 'payer-id' %>
     </div>
 </div>
 <div class="control-group">

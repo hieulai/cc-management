@@ -25,8 +25,7 @@ var Purchasable = (function ($, Shared) {
         $(document).on('railsAutocomplete.select', '.purchasable-items-list input[name="name[]"]', function () {
             var itemId = $('input[name="purchased_item[id]"]').val();
             var link = $("a#add-purchased-item").attr("href");
-            $("a#add-purchased-item").attr("href", Shared.updateQueryStringParameter(link, "item_id", itemId));
-            $("a#add-purchased-item").click();
+            $("a#add-purchased-item").attr("href", Shared.updateQueryStringParameter(link, "item_id", itemId)).click();
         });
 
         $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
@@ -44,6 +43,8 @@ var Purchasable = (function ($, Shared) {
             calculatePostTaxAmounts();
             calculateSubTotalAndTotal();
         });
+
+        Shared.initPeopleSelector();
     };
 
     var calculateAmount = function (obj, f) {

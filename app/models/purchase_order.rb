@@ -4,6 +4,7 @@ class PurchaseOrder < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :vendor
+  belongs_to :payer, polymorphic: true
   belongs_to :categories_template
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :items, :dependent => :destroy
@@ -12,7 +13,9 @@ class PurchaseOrder < ActiveRecord::Base
 
   default_scope order("date DESC")
 
-  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :cached_total_amount , :builder_id, :project_id, :categories_template_id, :vendor_id, :due_date, :category_id, :purchase_orders_items_attributes, :items_attributes
+  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :cached_total_amount , :builder_id, :project_id,
+                  :categories_template_id, :vendor_id, :due_date, :category_id, :purchase_orders_items_attributes, :items_attributes,
+                  :payer_id, :payer_type
   accepts_nested_attributes_for :purchase_orders_items, :allow_destroy => true
   accepts_nested_attributes_for :items, :allow_destroy => true
   attr_accessor :category_id
@@ -21,7 +24,7 @@ class PurchaseOrder < ActiveRecord::Base
   before_save :check_zero_amount, :check_total_amount_changed
   after_save :create_bill, :update_indexes
 
-  validates_presence_of :vendor, :project, :categories_template
+  validates_presence_of :payer_id, :payer_type, :project, :categories_template
 
   searchable do
     text :notes
@@ -36,8 +39,8 @@ class PurchaseOrder < ActiveRecord::Base
     text :project_names do
       project_name
     end
-    text :vendor_name do
-      vendor_name
+    text :payer_name do
+      payer_name
     end
     text :category_name do
       category_name
@@ -48,8 +51,8 @@ class PurchaseOrder < ActiveRecord::Base
     project.try(:name)
   end
 
-  def vendor_name
-    vendor.try(:display_name)
+  def payer_name
+    payer.try(:display_name)
   end
 
   def category_name
@@ -94,7 +97,8 @@ class PurchaseOrder < ActiveRecord::Base
     unless PurchaseOrder.find(self.id).bill
       Bill.create!(:purchase_order_id => self.id,
                    :builder_id => self.builder_id,
-                   :vendor_id => self.vendor_id,
+                   :payer_id => self.payer_id,
+                   :payer_type => self.payer_type,
                    :project_id => self.project_id,
                    :categories_template_id => self.categories_template_id)
     end

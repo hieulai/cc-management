@@ -129,16 +129,16 @@ class PeopleController < ApplicationController
     def import_export
       @vendor = @builder.vendors.new
     end
-  
+
     def import
       if params[:vendor].nil?
         redirect_to action: 'import_export', notice: "No file to import."
       else
         begin
-          errors = Vendor.importData(params[:vendor][:data], @builder)
-          msg = "Item imported."
-          unless errors.empty?
-            msg = errors.join(",")
+          result = Vendor.import(params[:vendor][:data], @builder)
+          msg = "Vendor imported."
+          unless result[:errors].empty?
+            msg = result[:errors].join(",")
           end
           redirect_to action: 'list_vendors', notice: msg
         rescue StandardError => e
@@ -148,13 +148,19 @@ class PeopleController < ApplicationController
     end
 
     def autocomplete_name
-      @peoples = []
-      @peoples << @builder.clients.active.search_by_name(params[:term]).all
-      @peoples << @builder.vendors.search_by_name(params[:term]).all
-      @peoples << @builder.contacts.search_by_name(params[:term]).all
-      render :json => @peoples.flatten.map { |p|
+      @people = []
+      if params[:type].present?
+        scope = @builder.try(params[:type].downcase.pluralize.to_sym)
+        scope = scope.active if params[:type] == Client.name
+        @people << scope.search_by_name(params[:term]).all
+      else
+        @people << @builder.clients.active.search_by_name(params[:term]).all
+        @people << @builder.vendors.search_by_name(params[:term]).all
+        @people << @builder.contacts.search_by_name(params[:term]).all
+      end
+      render :json => @people.flatten.map { |p|
         label = p.company.present? ? "#{p.company} <br/> <span class=\"autocomplete-sublabel\">#{p.full_name}</span>" : p.full_name
-        {:id => p.id, :label => label, :value => p.company.presence || p.full_name, :type => p.class.name}
+        {:id => p.id, :label => label, :value => p.display_name, :type => p.class.name}
       }.to_json
     end
   

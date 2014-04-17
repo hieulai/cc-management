@@ -5,7 +5,7 @@
     </td>
     <td>Bill</td>
     <td></td>
-    <td><%= t.bill.vendor.full_name %></td>
+    <td><%= t.bill.payer.try(:display_name) %></td>
     <td><%= t.bill.notes %></td>
     <td class="right"><%= price_tag(t.account_amount) %></td>
     <td class="center action-container">

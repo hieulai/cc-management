@@ -6,7 +6,7 @@
         <th>PO #</th>
         <th>Project</th>
         <th>Category</th>
-        <th>Vendor</th>
+        <th>Payor</th>
         <th>Amount</th>
         <th>Notes</th>
     </tr>
@@ -30,7 +30,7 @@
             <td class="center"><%= link_to b.purchase_order_id, {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :target => "_blank" if b.purchase_order.present? %></td>
             <td><%= b.project_name %></td>
             <td><%= b.category_name %></td>
-            <td><%= b.vendor_name %></td>
+            <td><%= b.payer_name %></td>
             <td class="right"><%= number_to_currency(b.cached_total_amount) %></td>
             <td><%= b.vnotes %></td>
         </tr>

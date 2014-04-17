@@ -82,6 +82,47 @@ var Shared = (function($){
         }
     }
 
+    var initPeopleSelector = function (callback) {
+        var format = function (data) {
+            return data.label;
+        };
+
+        var $input = $("#payer");
+        $input.select2({
+            minimumInputLength: 2,
+            width: "220px",
+            placeholder: "",
+            allowClear: true,
+            formatResult: format,
+            formatSelection: format,
+            ajax: {
+                url: $input.attr("data-url"),
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        term: term
+                    };
+                },
+                results: function (data, page) {
+
+                    return { results: data };
+                }
+            },
+            initSelection: function (element, callback) {
+                var data = {id: element.val(), text: element.val(), label: element.val()};
+                callback(data);
+            }
+        });
+
+        $input.on("select2-selecting", function (e) {
+            $("input.payer-id").val(e.object.id);
+            $("input.payer-type").val(e.object.type);
+            if (callback) {
+                callback(e.object.id, e.object.type );
+            }
+        });
+    };
+
     return {
         number_to_currency: number_to_currency,
         number_to_currency_with_unit: number_to_currency_with_unit,
@@ -90,7 +131,8 @@ var Shared = (function($){
         calculateTotals: calculateTotals,
         calculateSubTotals: calculateSubTotals,
         toggleItemInputs: toggleItemInputs,
-        updateQueryStringParameter: updateQueryStringParameter
+        updateQueryStringParameter: updateQueryStringParameter,
+        initPeopleSelector: initPeopleSelector
     }
 
 })(jQuery)

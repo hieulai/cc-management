@@ -5,7 +5,7 @@
             <th>PO #</th>
             <th>Project</th>
             <th>Category</th>
-            <th>Vendor</th>
+            <th>Payor</th>
             <th>Amount</th>
             <th>Notes</th>
         </tr>
@@ -22,7 +22,7 @@
           </td>
           <td><%= po.project_name %></td>
           <td><%= po.category_name %></td>
-          <td><%= po.vendor_name%></td>
+          <td><%= po.payer_name %></td>
           <td class="right"><%= number_to_currency(po.total_amount) %></td>
           <td><%= po.notes %></td>
       </tr>
