@@ -49,7 +49,7 @@ var pdfPage = {
  *
  * @type {Number}
  */
-var splitThreshold = 40;
+var splitThreshold = 60;
 
 /**
  * Class name of the tables to automatically split.
