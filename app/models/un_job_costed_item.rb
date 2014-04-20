@@ -5,6 +5,7 @@ class UnJobCostedItem < ActiveRecord::Base
   belongs_to :bill
   belongs_to :account
   attr_accessible :account_id, :amount, :bill_id, :description, :name, :reconciled
+  counter_culture :bill, :column_name => "cached_total_amount", :delta_column => 'amount'
 
   before_save :refund_account, :unless => :deleted_at_changed?
   before_save :charge_account

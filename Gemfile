@@ -28,6 +28,7 @@ group :production do
 end
 
 gem "acts_as_paranoid"
+gem 'counter_culture', '~> 0.1.18'
 
 gem 'roo'
 gem 'to_xls', '~> 1.0.0'
@@ -59,7 +60,7 @@ gem 'newrelic_rpm'
 # gem 'jbuilder'
 
 # Use unicorn as the app server
-gem 'unicorn'
+#gem 'unicorn'
 
 # Deploy with Capistrano
 # gem 'capistrano'

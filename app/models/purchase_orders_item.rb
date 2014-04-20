@@ -3,6 +3,7 @@ class PurchaseOrdersItem < ActiveRecord::Base
 
   belongs_to :purchase_order
   attr_accessible :purchase_order_id
+  counter_culture :purchase_order, :column_name => "cached_total_amount", :delta_column => 'actual_cost'
 
   after_destroy :check_to_destroy_payment
 

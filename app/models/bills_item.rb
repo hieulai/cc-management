@@ -4,6 +4,7 @@ class BillsItem < ActiveRecord::Base
 
   belongs_to :bill
   attr_accessible :bill_id
+  counter_culture :bill, :column_name => "cached_total_amount", :delta_column => 'actual_cost'
 
   after_destroy :check_to_destroy_payment
 

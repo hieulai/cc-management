@@ -67,12 +67,16 @@ class PurchaseOrder < ActiveRecord::Base
     bill.try(:full_paid?)
   end
 
+  def cached_total_amount
+    read_attribute(:cached_total_amount).to_f + self.shipping.to_f
+  end
+
   def total_amount
     c_po_items = purchase_orders_items.reject(&:marked_for_destruction?)
     c_items = items.reject(&:marked_for_destruction?)
     if self.shipping || c_po_items.any? || c_items.any?
       t =0
-      t+= self.shipping||0
+      t+= self.shipping.to_f
       t+= c_po_items.map(&:actual_cost).compact.sum if c_po_items.any?
       t+= c_items.map(&:actual_cost).compact.sum if c_items.any?
       t.round(2)
@@ -123,7 +127,6 @@ class PurchaseOrder < ActiveRecord::Base
       errors[:base] << "This purchase order has bill #{bill.id} which has already been paid in the amount of $#{cached_total_amount}. Editing a paid bill requires that all item amounts continue to add up to the original payment amount. If the original payment was made for the wrong amount, correct the payment first and then come back and edit the bill."
       return false
     end
-    self.cached_total_amount = self.total_amount
   end
 
   def update_indexes
