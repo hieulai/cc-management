@@ -16,10 +16,15 @@
  * WARNING: WorksForMe(tm)!
  * If it doesn't work, first check for javascript errors using a webkit browser.
  *
+ * @author Jason Playne <jason@jasonplayne.com>
+ * @version 1.1
+ *
  * @author Florin Stancu <niflostancu@gmail.com>
  * @version 1.0
+ *
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 
 /**
  * PDF page settings.
@@ -29,7 +34,6 @@
  *
  * @type {Object}
  */
-
 var pdfPage = {
     width: 8.26, // inches
     height: 11.69, // inches
@@ -77,75 +81,49 @@ $(window).load(function () {
 
     // temporary set body's width and padding to match pdf's size
     var $body = $('body');
-    $body.css('width', (pdfPage.width - pdfPage.margins.left - pdfPage.margins.right)+'in');
-    $body.css('padding-left', pdfPage.margins.left+'in');
-    $body.css('padding-right', pdfPage.margins.right+'in');
+    $body.css('width', (pdfPage.width - pdfPage.margins.left - pdfPage.margins.right) + 'in');
+    $body.css('padding-left', pdfPage.margins.left + 'in');
+    $body.css('padding-right', pdfPage.margins.right + 'in');
 
-    /*
-     * Cycle through all tables and split them in two if necessary.
-     * We need this in a loop for it to work for tables spanning multiple pages:
-     * first, the table is split in two; then, if the second table also spans multiple
-     * pages, it is also split and so on until there are no more.
-     * Because when modifying the upper tables, the elements' positions will change,
-     * we need to maintain an offset correction value.
-     *
-     * This method can be used for all document's elements (not just tables), but the
-     * overhead would be too big. Use CSS's `page-break-inside: avoid` which works for
-     * divs and many other block elements.
-     */
-    var tablesModified = true;
-    var offsetCorrection = 0;
-    while (tablesModified) {
-        tablesModified = false;
+    //////
+    $('table.' + splitClassName).each(function () {
+        var $origin_table = $(this);
 
-        $('table.'+splitClassName).each(function(){
-            var $t = $(this);
+        var $template = $origin_table.clone()
+        $template.find('> tbody > tr').remove();
 
-            // clone the original table
-            var copy = $t.clone();
-            copy.find('tbody > tr').remove();
-            var $cbody = copy.find('tbody');
-            var found = false;
-            $t.removeClass(splitClassName); // for optimisation
 
-            var newOffsetCorrection = offsetCorrection;
-            $('tbody tr', $t).each(function(){
-                var $tr = $(this);
+        var current_table = 0
+        var split_tables = Array()
+        split_tables.push($template.clone())
+        insertIntoDom($origin_table, split_tables[current_table])
 
-                // compute element's top position and page's end
-                var top = $tr.offset().top;
-                var ctop = offsetCorrection + top;
-                var pageEnd = (Math.floor(ctop/pageHeight)+1)*pageHeight;
+        $origin_table.find('> tbody tr').each(function () {
+            var $tr = $(this);
 
-                // use for debugging (prints TR's top inside its first column)
-                // $tr.find('td:first').html(ctop);
+            $tr.detach().appendTo(split_tables[current_table].find('> tbody'));
+            var pageAHeight = pageHeight - splitThreshold;
+            if (current_table == 0) {
+                pageAHeight -= $origin_table.offset().top;
+            }
+            if ($(split_tables[current_table]).height() > pageAHeight) {
+                current_table++
+                split_tables.push($template.clone())
+                insertIntoDom($origin_table, split_tables[current_table])
+            }
 
-                // check whether the current element is close to the page's end.
-                if (ctop >= (pageEnd - splitThreshold)) {
-                    // move the element to the cloned table
-                    $tr.detach().appendTo($cbody);
-                    if (!found) {
-                        // compute the new offset correction
-                        newOffsetCorrection += (pageEnd - ctop);
-                    }
-                    found = true;
-                }
-            });
-
-            // if the cloned table has no contents...
-            if (!found)
-                return;
-
-            offsetCorrection = newOffsetCorrection;
-            tablesModified = true;
-            // add a page-breaking div
-            // (with some whitespace to correctly show table top border)
-            var $br = $('<div style="height: 10px;"></div>')
-                .css('page-break-before', 'always');
-            $br.insertAfter($t);
-            copy.insertAfter($br);
         });
+        $origin_table.remove()
+
+        $('div.page-breaker').last().remove()
+    });
+
+    function insertIntoDom(after, what) {
+        var $br = $('<div class="page-breaker" style="height: 10px;"></div>').css('page-break-before', 'always');
+        $(what).appendTo($(after).parent());
+        $br.insertAfter(what);
     }
+
 
     // restore body's padding
     $body.css('padding-left', 0);
