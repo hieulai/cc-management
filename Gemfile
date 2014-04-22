@@ -25,6 +25,7 @@ end
 
 group :production do
   gem 'pg'
+  gem 'unicorn'
 end
 
 gem "acts_as_paranoid"
@@ -60,7 +61,7 @@ gem 'newrelic_rpm'
 # gem 'jbuilder'
 
 # Use unicorn as the app server
-#gem 'unicorn'
+
 
 # Deploy with Capistrano
 # gem 'capistrano'
