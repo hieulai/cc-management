@@ -25,13 +25,11 @@
               <td>Invoice #<%= @invoice.reference %></td>
           </tr>
           <tr>
-              <td>Date</td>
+              <td>Created Date</td>
           </tr>
           <tr>
               <td>
-                  Created Date: <%= @invoice.created_at.strftime("%m/%d/%Y") %>
-                  <br/>
-                  Sent Date: <%= @invoice.sent_date.try(:strftime, "%m/%d/%Y") %>
+                  <%= @invoice.created_at.strftime("%m/%d/%Y") %>
               </td>
           </tr>
           <tr>
@@ -45,9 +43,9 @@
           <tr>
               <td>
                   <%= @client.full_name %>
-                  <br/>
+                  <br/> &nbsp;
                   <%= @client.address %>
-                  <br/>
+                  <br/> &nbsp;
                   <%= @client.city %> <%= ", #{@client.state}" if @client.state.present? %> <%=", #{@client.zipcode}" if @client.zipcode.present? %>
               </td>
           </tr>

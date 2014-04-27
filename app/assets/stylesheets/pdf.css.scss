@@ -117,10 +117,12 @@ table.report {
   .right-header{
     width: 49%;
     float: right;
+    table{
+      width: 90%;
+    }
     table.top{
       border: none;
-      width: 250px;
-      margin: 10px auto 0 auto;
+      margin: 10px 0 0 auto;
       tr:nth-child(even) {background: #CCC}
       tr:nth-child(odd) {background: #FFF}
       tr:first-child{
@@ -133,7 +135,7 @@ table.report {
         }
       }
     table.bottom{
-      margin: 40px auto 0 auto;
+      margin: 40px 0 0 auto;
       td {
         border: solid 1px #000000;
       }
