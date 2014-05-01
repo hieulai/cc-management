@@ -1,5 +1,5 @@
 class Estimate < ActiveRecord::Base
-  before_destroy :check_destroyable, :destroy_template
+  before_destroy :check_destroyable
 
   # mount_uploader :data, DataUploader
   belongs_to :builder, :class_name => "Base::Builder", :class_name => "Base::Builder"
@@ -30,15 +30,20 @@ class Estimate < ActiveRecord::Base
     kind == "Cost Plus Bid"
   end
 
+  def destroy_with_associations
+    return false if check_destroyable == false
+    template.destroy_with_associations
+    invoices.each do |i|
+      i.destroy_with_associations
+    end
+    delete
+  end
+
   private
   def check_destroyable
     if undestroyable?
       errors[:base] << "Estimate #{id} cannot be deleted once containing items which are added to an invoice"
       false
     end
-  end
-
-  def destroy_template
-    template.destroy_with_associations
   end
 end

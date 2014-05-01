@@ -78,6 +78,16 @@ class Invoice < ActiveRecord::Base
     1
   end
 
+  def destroy_with_associations
+    invoices_items.destroy_all
+    invoices_bills.destroy_all
+    receipts.each do |r|
+       r.destroy_with_associations
+    end
+    receipts_invoices.destroy_all
+    delete
+  end
+
   private
   def unbillable_item(attributes)
     attributes['item_id'].blank? || !Item.find(attributes['item_id'].to_i).billable?(self.id)

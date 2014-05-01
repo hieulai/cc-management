@@ -84,6 +84,15 @@ class Receipt < ActiveRecord::Base
     1
   end
 
+  def destroy_with_associations
+    receipts_items.destroy_all
+    deposits.each do |d|
+      d.destroy
+    end
+    deposits_receipts.destroy_all
+    delete
+  end
+
   private
   def clear_old_data
     if self.uninvoiced

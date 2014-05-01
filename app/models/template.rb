@@ -43,7 +43,7 @@ class Template < ActiveRecord::Base
     categories_templates.each do |ct|
         ct.destroy_with_associations
     end
-    destroy
+    delete
   end
 
   def undestroyable?

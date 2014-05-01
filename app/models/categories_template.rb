@@ -50,18 +50,26 @@ class CategoriesTemplate < ActiveRecord::Base
     items.each do |i|
       i.destroy
     end
-    category.destroy if category.present?
+
     purchase_orders.each do |po|
       if po.bill
+        po.bill.payments.each do |p|
+          p.destroy
+        end
         po.bill.payments_bills.destroy_all
-        po.bill.destroy
+        po.bill.delete
       end
-      po.destroy
+      po.delete
     end
     bills.each do |b|
+      b.payments.each do |p|
+        p.destroy
+      end
       b.payments_bills.destroy_all
-      b.destroy
+      b.delete
     end
+    category.delete if category.present? && !purchased
+    delete
   end
 
   def estimated_amount
