@@ -57,7 +57,7 @@ class AccountsController < ApplicationController
     @type = params[:type].to_s
     @object = @type.constantize.find(params[:id])
     if @object
-      @object.update_attribute(:reconciled, params["#{params[:type].to_s}_#{params[:id]}".to_sym].present?)
+      @object.update_column(:reconciled, params["#{params[:type].to_s}_#{params[:id]}".to_sym].present?)
     end
     respond_to do |format|
       format.js
