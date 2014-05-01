@@ -15,14 +15,14 @@ class InvoicesBill < ActiveRecord::Base
   NEGATIVES = []
 
   def increase_account
-    invoice.builder.accounts_receivable_account.update_attribute(:balance, invoice.builder.accounts_receivable_account.balance({recursive: false}).to_f + amount.to_f)
-    bill.categories_template.revenue_account.update_attribute(:balance, bill.categories_template.revenue_account.balance({recursive: false}).to_f + amount.to_f)
+    invoice.builder.accounts_receivable_account.update_column(:balance, invoice.builder.accounts_receivable_account.balance({recursive: false}).to_f + amount.to_f)
+    bill.categories_template.revenue_account.update_column(:balance, bill.categories_template.revenue_account.balance({recursive: false}).to_f + amount.to_f)
     self.accounts << bill.categories_template.revenue_account
   end
 
   def decrease_account
-    invoice.builder.accounts_receivable_account.update_attribute(:balance, invoice.builder.accounts_receivable_account.balance({recursive: false}).to_f - amount_was.to_f)
-    bill.categories_template.revenue_account.update_attribute(:balance, bill.categories_template.revenue_account.balance({recursive: false}).to_f - amount_was.to_f)
+    invoice.builder.accounts_receivable_account.update_column(:balance, invoice.builder.accounts_receivable_account.balance({recursive: false}).to_f - amount_was.to_f)
+    bill.categories_template.revenue_account.update_column(:balance, bill.categories_template.revenue_account.balance({recursive: false}).to_f - amount_was.to_f)
     self.accounts.delete bill.categories_template.revenue_account
   end
 end

@@ -145,7 +145,7 @@ class Account < ActiveRecord::Base
   end
 
   def update_indexes
-    Sunspot.index payments
-    Sunspot.index deposits
+    Sunspot.delay.index payments
+    Sunspot.delay.index deposits
   end
 end

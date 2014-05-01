@@ -28,17 +28,17 @@ class ReceiptsItem < ActiveRecord::Base
 
   def charge_account
     return true unless account_id
-    receipt.builder.deposits_held_account.update_attribute(:balance, receipt.builder.deposits_held_account.balance({recursive: false}).to_f + self.amount.to_f)
+    receipt.builder.deposits_held_account.update_column(:balance, receipt.builder.deposits_held_account.balance({recursive: false}).to_f + self.amount.to_f)
     account = Account.find(account_id)
     self.related_account = account
-    account.update_attribute(:balance, account.balance({recursive: false}).to_f + account_amount)
+    account.update_column(:balance, account.balance({recursive: false}).to_f + account_amount)
   end
 
   def refund_account
     return true unless account_id_was
-    receipt.builder.deposits_held_account.update_attribute(:balance, receipt.builder.deposits_held_account.balance({recursive: false}).to_f - self.amount_was.to_f)
+    receipt.builder.deposits_held_account.update_column(:balance, receipt.builder.deposits_held_account.balance({recursive: false}).to_f - self.amount_was.to_f)
     account_was = Account.find(account_id_was)
     self.related_account = account_was
-    account_was.update_attribute(:balance, account_was.balance({recursive: false}).to_f - account_amount)
+    account_was.update_column(:balance, account_was.balance({recursive: false}).to_f - account_amount)
   end
 end

@@ -49,9 +49,9 @@ class Vendor < ActiveRecord::Base
   end
 
   def update_indexes
-    Sunspot.index bills
-    Sunspot.index purchase_orders
-    Sunspot.index payments
+    Sunspot.delay.index bills
+    Sunspot.delay.index purchase_orders
+    Sunspot.delay.index payments
   end
   
 end

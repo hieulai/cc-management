@@ -61,8 +61,8 @@ class Payment < ActiveRecord::Base
     old_account = Account.find(account_id_was)
     account = Account.find(account_id)
     payments_bills.each do |pb|
-      old_account.update_attribute(:balance, old_account.balance({recursive: false}).to_f + pb.amount)
-      account.update_attribute(:balance, account.balance({recursive: false}).to_f - pb.amount)
+      old_account.update_column(:balance, old_account.balance({recursive: false}).to_f + pb.amount)
+      account.update_column(:balance, account.balance({recursive: false}).to_f - pb.amount)
     end
   end
 

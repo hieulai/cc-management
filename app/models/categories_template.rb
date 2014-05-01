@@ -99,8 +99,8 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def update_indexes
-    Sunspot.index bills
-    Sunspot.index purchase_orders
+    Sunspot.delay.index bills
+    Sunspot.delay.index purchase_orders
   end
 
   private

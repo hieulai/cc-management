@@ -56,16 +56,16 @@ class Transfer < ActiveRecord::Base
   def transfer_amount
     from_account_new = Account.find(self.from_account_id)
     to_account_new = Account.find(self.to_account_id)
-    from_account_new.update_attribute(:balance, from_account_new.balance({recursive: false}).to_f + absolute_amount(amount, from_account_new, to_account_new, from_account_new))
-    to_account_new.update_attribute(:balance, to_account_new.balance({recursive: false}).to_f + absolute_amount(amount, from_account_new, to_account_new, to_account_new))
+    from_account_new.update_column(:balance, from_account_new.balance({recursive: false}).to_f + absolute_amount(amount, from_account_new, to_account_new, from_account_new))
+    to_account_new.update_column(:balance, to_account_new.balance({recursive: false}).to_f + absolute_amount(amount, from_account_new, to_account_new, to_account_new))
   end
 
   def rollback_amount
     if Account.exists?(from_account_id_was) && Account.exists?(to_account_id_was)
       from_account_was = Account.find(self.from_account_id_was)
       to_account_was = Account.find(self.to_account_id_was)
-      from_account_was.update_attribute(:balance, from_account_was.balance({recursive: false}).to_f - absolute_amount(amount_was, from_account_was, to_account_was, from_account_was))
-      to_account_was.update_attribute(:balance, to_account_was.balance({recursive: false}).to_f - absolute_amount(amount_was, from_account_was, to_account_was, to_account_was))
+      from_account_was.update_column(:balance, from_account_was.balance({recursive: false}).to_f - absolute_amount(amount_was, from_account_was, to_account_was, from_account_was))
+      to_account_was.update_column(:balance, to_account_was.balance({recursive: false}).to_f - absolute_amount(amount_was, from_account_was, to_account_was, to_account_was))
     end
   end
 

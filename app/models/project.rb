@@ -71,9 +71,9 @@ class Project < ActiveRecord::Base
   end
 
   def update_indexes
-    Sunspot.index bills
-    Sunspot.index purchase_orders
-    Sunspot.index invoices
+    Sunspot.delay.index bills
+    Sunspot.delay.index purchase_orders
+    Sunspot.delay.index invoices
   end
   
 end

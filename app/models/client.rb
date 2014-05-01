@@ -40,6 +40,6 @@ class Client < ActiveRecord::Base
   end
 
   def update_indexes
-    Sunspot.index receipts
+    Sunspot.delay.index receipts
   end
 end

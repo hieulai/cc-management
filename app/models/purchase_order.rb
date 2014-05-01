@@ -130,6 +130,6 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def update_indexes
-    Sunspot.index bill
+    Sunspot.delay.index bill
   end
 end
