@@ -31,7 +31,7 @@ class Account < ActiveRecord::Base
 
   attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
   attr_accessor :opening_balance_changed
-  delegate :transactions, :balance, :bank_balance, :book_balance, :outstanding_checks_balance, :opening_balance, to: :handler
+  delegate :transactions, :balance, :bank_balance, :book_balance, :outstanding_checks_balance, :old_opening_balance, to: :handler
 
   default_scope order("name ASC")
   scope :top, where(:parent_id => nil)
@@ -47,12 +47,6 @@ class Account < ActiveRecord::Base
 
   def handler
     Accounts::AccountHandler.get_account_handler(self)
-  end
-
-  def opening_balance=(b)
-    return if b.to_f == self.opening_balance
-    self.opening_balance_changed = true
-    self.balance = self.balance({recursive: false}).to_f + b.to_f - self.opening_balance
   end
 
   def invoices
@@ -122,7 +116,7 @@ class Account < ActiveRecord::Base
   end
 
   def check_opening_balance_changed
-    if self.opening_balance_changed
+    if self.opening_balance_changed?
       unless self.kind_of? [BANK_ACCOUNTS]
         errors.add(:base, 'Can not update opening balance for this account')
         return false
@@ -132,6 +126,8 @@ class Account < ActiveRecord::Base
         errors.add(:base, 'Opening balance updated date is required')
         return false
       end
+
+      self.balance = self.balance({recursive: false}).to_f + opening_balance.to_f - old_opening_balance
     else
       self.opening_balance_updated_at = self.opening_balance_updated_at_was
     end

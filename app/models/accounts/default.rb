@@ -104,7 +104,7 @@ module Accounts
       @account.payments.unrecociled.map(&:amount).compact.sum
     end
 
-    def opening_balance
+    def old_opening_balance
       ob = @account.balance({recursive: false}).to_f
       tr = @account.payments + @account.deposits + @account.received_transfers + @account.sent_transfers +
           @account.receipts_items + @account.un_job_costed_items + @account.invoices_items + @account.invoices_bills
