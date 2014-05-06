@@ -96,7 +96,7 @@ var Application = (function ($) {
         if (!element) {
             element = document;
         }
-        $(element).find(".daterangepicker").each(function () {
+        $(element).find(".daterangepickerSet").each(function () {
             var $fromDate = $(this).find(".from_date");
             var $toDate = $(this).find(".to_date");
             $fromDate.datepicker({
@@ -104,7 +104,7 @@ var Application = (function ($) {
                 altFormat: "yy-mm-dd",
                 dateFormat: "mm-dd-yy",
                 onClose: function (selectedDate) {
-                    $(this).closest(".daterangepicker").find(".to_date").datepicker("option", "minDate", selectedDate);
+                    $(this).closest(".daterangepickerSet").find(".to_date").datepicker("option", "minDate", selectedDate);
                 }
             });
             $toDate.datepicker({
@@ -112,13 +112,13 @@ var Application = (function ($) {
                 altFormat: "yy-mm-dd",
                 dateFormat: "mm-dd-yy",
                 onClose: function (selectedDate) {
-                    $(this).closest(".daterangepicker").find(".from_date").datepicker("option", "maxDate", selectedDate);
+                    $(this).closest(".daterangepickerSet").find(".from_date").datepicker("option", "maxDate", selectedDate);
                 }
             });
 
             $(this).on('change', '.range-picker', function () {
-                var $fromDate = $(this).closest(".daterangepicker").find(".from_date");
-                var $toDate = $(this).closest(".daterangepicker").find(".to_date");
+                var $fromDate = $(this).closest(".daterangepickerSet").find(".from_date");
+                var $toDate = $(this).closest(".daterangepickerSet").find(".to_date");
                 switch ($(this).val()) {
                     case "current_month":
                         $fromDate.datepicker("setDate", moment().startOf('month').toDate());

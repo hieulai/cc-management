@@ -38,19 +38,10 @@ class Template < ActiveRecord::Base
     dup_template
   end
 
-  def destroy_with_associations
-    return false if check_destroyable == false
-    categories_templates.each do |ct|
-        ct.destroy_with_associations
-    end
-    delete
-  end
-
   def undestroyable?
     categories_templates.select { |ct| ct.undestroyable? }.any?
   end
 
-  private
   def check_destroyable
     if undestroyable?
       errors[:invoice] << "Template #{name} cannot be deleted once containing items which are added to an invoice"

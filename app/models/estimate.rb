@@ -32,9 +32,45 @@ class Estimate < ActiveRecord::Base
 
   def destroy_with_associations
     return false if check_destroyable == false
-    template.destroy_with_associations
+    return false if template.check_destroyable == false
+    template.categories_templates.each do |ct|
+      ct.items.each do |i|
+        i.destroy
+      end
+      ct.purchase_orders.each do |po|
+        if po.bill
+          po.bill.payments.each do |p|
+            p.destroy
+          end
+          po.bill.payments_bills.destroy_all
+          po.bill.delete
+        end
+        po.delete
+      end
+      ct.bills.each do |b|
+        b.payments.each do |p|
+          p.destroy
+        end
+        b.payments_bills.destroy_all
+        b.delete
+      end
+      ct.category.delete if ct.category.present? && !ct.purchased
+      ct.delete
+    end
+    template.delete
     invoices.each do |i|
-      i.destroy_with_associations
+      i.invoices_items.destroy_all
+      i.invoices_bills.destroy_all
+      i.receipts.each do |r|
+        r.receipts_items.destroy_all
+        r.deposits.each do |d|
+          d.destroy
+        end
+        r.deposits_receipts.destroy_all
+        r.delete
+      end
+      i.receipts_invoices.destroy_all
+      i.delete
     end
     delete
   end

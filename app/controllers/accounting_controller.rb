@@ -91,7 +91,10 @@ class AccountingController < ApplicationController
     end
 
     if @receipt.save
-      deposit.deposits_receipts.create(receipt_id: @receipt.id, amount: @receipt.amount) if deposit && deposit.save
+      if deposit
+        deposit.deposits_receipts.new(receipt_id: @receipt.id, amount: @receipt.amount)
+        deposit.save
+      end
       respond_to do |format|
         format.html { redirect_to(params[:original_url].presence ||url_for(:action => 'receipts')) }
         format.js { render :js => "window.location = '#{ params[:original_url].presence ||url_for(:action => "receipts")}'" }
@@ -197,10 +200,12 @@ class AccountingController < ApplicationController
     if params[:invoice][:estimate_id].present? && params[:invoice][:estimate_id] != @invoice.estimate_id.to_s
       if @invoice.estimate.cost_plus_bid?
         @invoice.invoices_bills.each do |ii|
+          params[:invoice][:invoices_bills_attributes] ||= []
           params[:invoice][:invoices_bills_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
         end
       else
         @invoice.invoices_items.each do |ii|
+          params[:invoice][:invoices_items_attributes] ||= []
           params[:invoice][:invoices_items_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
         end
       end
@@ -533,8 +538,9 @@ class AccountingController < ApplicationController
     assign_categories_template
     if @purchasable.save
       # Create payment simultaneously for bills
-      if @purchasable.instance_of?(Bill) && payment && payment.save
-        payment.payments_bills.create(bill_id: @purchasable.id, amount: @purchasable.total_amount)
+      if @purchasable.instance_of?(Bill) && payment
+        payment.payments_bills.new(bill_id: @purchasable.id, amount: @purchasable.total_amount)
+        payment.save
       end
       respond_to do |format|
         format.html { redirect_to(params[:original_url].presence ||url_for(:action => @type.pluralize)) }

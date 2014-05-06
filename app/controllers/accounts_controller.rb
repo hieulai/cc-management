@@ -7,9 +7,12 @@ class AccountsController < ApplicationController
 
   def show
     @account = Account.find(params[:id])
-    full_transactions = @account.transactions
-    @balance = transaction_balance(@account, full_transactions, params[:page].try(:to_i))
-    @transactions = Kaminari.paginate_array(full_transactions).page(params[:page])
+    if params[:page]
+      @balance = @account.balance({offset: (params[:page].to_i - 1) * Kaminari.config.default_per_page}).to_f
+    else
+      @balance = @account.balance.to_f
+    end
+    @transactions = @account.transactions.page params[:page]
   end
 
   def new
@@ -54,10 +57,9 @@ class AccountsController < ApplicationController
   end
 
   def reconcile
-    @type = params[:type].to_s
-    @object = @type.constantize.find(params[:id])
+    @object = AccountingTransaction.find(params[:id])
     if @object
-      @object.update_column(:reconciled, params["#{params[:type].to_s}_#{params[:id]}".to_sym].present?)
+      @object.update_column(:reconciled, params["#{AccountingTransaction.name}_#{params[:id]}".to_sym].present?)
     end
     respond_to do |format|
       format.js
@@ -108,16 +110,4 @@ class AccountsController < ApplicationController
     @transfer.kind = params[:transfer][:kind]
 
   end
-
-  private
-  def transaction_balance(account, transactions, page)
-    balance = account.balance.to_f
-    page||= 1
-    transactions.each_with_index do |transaction, index|
-      break if index == ((page-1) * Kaminari.config.default_per_page)
-      balance -= transaction.account_amount.to_f
-    end
-    balance
-  end
-
 end

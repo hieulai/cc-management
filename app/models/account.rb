@@ -28,10 +28,10 @@ class Account < ActiveRecord::Base
   has_many :ct_bills, :through => :categories_templates, :source => :bills
   has_and_belongs_to_many :invoices_items
   has_and_belongs_to_many :invoices_bills
+  has_many :accounting_transactions, :dependent => :destroy
+  has_one :accounting_transaction, as: :transactionable, dependent: :destroy
 
-  attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :opening_balance_changed, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
-  attr_accessor :opening_balance_changed
-  delegate :transactions, :balance, :bank_balance, :book_balance, :outstanding_checks_balance, :old_opening_balance, to: :handler
+  attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
 
   default_scope order("name ASC")
   scope :top, where(:parent_id => nil)
@@ -40,33 +40,39 @@ class Account < ActiveRecord::Base
   before_save :check_opening_balance_changed
   before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
   before_destroy :check_if_default
-  after_save :update_indexes
+  after_save :update_opening_balance_transaction, :update_indexes
 
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id]
   validate :disallow_self_reference
 
-  def handler
-    Accounts::AccountHandler.get_account_handler(self)
+  def transactions
+    AccountingTransaction.where(account_id: tree_ids)
   end
 
-  def invoices
-    results = []
-    invoices_items.group_by(&:invoice_id).map do |k, v|
-      invoice = Invoice.find(k)
-      invoice.account_amount = v.map(&:amount).compact.sum
-      results << invoice
+  def balance(options ={})
+    options ||= {}
+    options[:recursive] = true if options[:recursive].nil?
+    r = AccountingTransaction.where(account_id: tree_ids(options[:recursive]))
+    if options[:from_date] && options[:to_date]
+      r = r.date_range(options[:from_date], options[:to_date])
     end
-
-    invoices_bills.group_by(&:invoice_id).map do |k, v|
-      invoice = Invoice.find(k)
-      invoice.account_amount = v.map(&:amount).compact.sum
-      results << invoice
+    if options[:offset]
+      ids = r.offset(options[:offset]).pluck(:id)
+      r = AccountingTransaction.where(id: ids)
     end
-    results
+    r.sum(:amount)
   end
 
-  def bills
-    self.kind_of?([COST_OF_GOODS_SOLD])? ct_bills : Bill.where(:id => nil)
+  def bank_balance
+    accounting_transactions.reconciled.sum(:amount)
+  end
+
+  def book_balance
+    balance.to_f
+  end
+
+  def outstanding_checks_balance
+    accounting_transactions.where(transactionable_type: Payment.name).unreconciled.sum(:amount)
   end
 
   def has_no_category?
@@ -101,6 +107,16 @@ class Account < ActiveRecord::Base
     }
   end
 
+  def tree_ids(recursive = true)
+    results = [id]
+    if recursive
+      children.each do |c|
+        results << c.tree_ids
+      end
+    end
+    results.flatten
+  end
+
   private
   def check_if_default
     if (self.default_account?)
@@ -126,8 +142,6 @@ class Account < ActiveRecord::Base
         errors.add(:base, 'Opening balance updated date is required')
         return false
       end
-
-      self.balance = self.balance({recursive: false}).to_f + opening_balance.to_f - old_opening_balance
     else
       self.opening_balance_updated_at = self.opening_balance_updated_at_was
     end
@@ -138,6 +152,11 @@ class Account < ActiveRecord::Base
       errors.add(:base, 'Cannot delete an account has categories')
       return false
     end
+  end
+
+  def update_opening_balance_transaction
+    create_accounting_transaction unless accounting_transaction
+    accounting_transaction.update_attributes({date: opening_balance_updated_at.try(:to_date), amount: opening_balance})
   end
 
   def update_indexes

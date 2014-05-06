@@ -18,7 +18,7 @@
                 <%= select_tag(:project_id, options_for_select(@builder.projects.collect { |p| [p.name, p.id] }), :include_blank => true, class: "range-picker") %>
 
               <% end %>
-              <div class="daterangepicker" style="display: inline-block">
+              <div class="daterangepickerSet" style="display: inline-block">
                   <%= label_tag :date_range, 'Date Range', class: 'col-lg-2 control-label' %>
                   <%= select_tag(:date_range, options_for_select([["Current Month", "current_month"], ["Current Quarter", "current_quarter"], ["Current Year", "current_year"]]), :include_blank => true, class: "range-picker") %>
                   <%= label_tag :from_date, 'From Date', class: 'col-lg-2 control-label' %>

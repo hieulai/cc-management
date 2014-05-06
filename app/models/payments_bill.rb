@@ -4,6 +4,7 @@ class PaymentsBill < ActiveRecord::Base
   belongs_to :payment
   belongs_to :bill
   attr_accessible :amount, :bill_id, :payment_id
+  counter_culture :payment, :column_name => "cached_total_amount", :delta_column => 'amount'
 
   before_save :refund_account_and_update_bill, :unless => :deleted_at_changed?
   before_save :charge_account_and_update_bill

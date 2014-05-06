@@ -1,15 +1,15 @@
 <tr class="clickable <% if t.reconciled %> unclickable <% end %>">
     <td class="center">
         <%= t.date %>
-        <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_payment', :id => t.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+        <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_payment', :id => t.transactionable_id}, :class => 'action edit clickable-link', :style => 'display: none') %>
     </td>
-    <td><%= t.method %></td>
-    <td><%= t.reference %></td>
-    <td><%= t.payer.try(:display_name) %></td>
-    <td><%= t.memo %></td>
-    <td class="right"><%= price_tag(t.account_amount) %></td>
+    <td><%= t.transactionable.method %></td>
+    <td><%= t.transactionable.reference %></td>
+    <td><%= t.transactionable.payer.try(:display_name) %></td>
+    <td><%= t.transactionable.memo %></td>
+    <td class="right"><%= price_tag(t.amount) %></td>
     <td class="center action-container">
-        <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :type => t.class.name, :id => t.id)}) %>
+        <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :id => t.id)}) %>
     </td>
     <td class="right"><%= price_tag(balance) %></td>
 </tr>

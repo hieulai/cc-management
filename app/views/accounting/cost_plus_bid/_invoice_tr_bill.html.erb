@@ -3,7 +3,7 @@
    billable = is_billable ? '' : 'unclickable'
    invoiceable =  bill.invoiceable(@invoice.id)
  %>
-<tr class="bill bill_category_<%= category.id %> <%= billable %>" id="bill_<%= bill.id %>">
+<tr class="item item_category_<%= category.id %> <%= billable %>" id="bill_<%= bill.id %>">
   <td>
       <% if is_billable %>
         <%= check_box_tag 'bill-chosen', invoiceable.present? ? bill.id : "", invoiceable.present?, class: 'chosen' %>

@@ -2,6 +2,7 @@ class DepositsReceipt < ActiveRecord::Base
   belongs_to :deposit
   belongs_to :receipt
   attr_accessible :amount, :receipt_id, :deposit_id
+  counter_culture :deposit, :column_name => "cached_total_amount", :delta_column => 'amount'
 
   before_save :refund_account_and_update_receipt, :charge_account_and_update_receipt
   after_destroy :refund_account_and_update_receipt

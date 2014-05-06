@@ -9,12 +9,12 @@ class Invoice < ActiveRecord::Base
   has_many :bills, :through => :invoices_bills
   has_many :receipts_invoices, :dependent => :destroy
   has_many :receipts, :through => :receipts_invoices
+  has_many :accounting_transactions, as: :transactionable, :dependent => :destroy
 
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
   accepts_nested_attributes_for :invoices_bills, :allow_destroy => true, reject_if: :unbillable_bill
   attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :invoices_bills_attributes, :remaining_amount,
-                  :reconciled, :bill_from_date, :bill_to_date
-  attr_accessor :account_amount, :related_account
+                  :reconciled, :bill_from_date, :bill_to_date, :cached_total_amount
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
@@ -22,8 +22,9 @@ class Invoice < ActiveRecord::Base
   scope :project, lambda { |project_id| joins(:estimate).where('estimates.project_id = ?', project_id) }
 
   after_initialize :default_values
-  before_save :check_readonly, :check_reference
+  before_save :check_total_amount_changed, :check_reference
   before_update :clear_old_data
+  after_save :update_transactions
 
   validates_presence_of :estimate, :builder
 
@@ -56,9 +57,9 @@ class Invoice < ActiveRecord::Base
 
   def amount
     if invoices_items.any?
-      invoices_items.map(&:amount).compact.sum
+      invoices_items.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     elsif invoices_bills.any?
-      invoices_bills.map(&:amount).compact.sum
+      invoices_bills.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     end
   end
 
@@ -78,16 +79,6 @@ class Invoice < ActiveRecord::Base
     1
   end
 
-  def destroy_with_associations
-    invoices_items.destroy_all
-    invoices_bills.destroy_all
-    receipts.each do |r|
-       r.destroy_with_associations
-    end
-    receipts_invoices.destroy_all
-    delete
-  end
-
   private
   def unbillable_item(attributes)
     attributes['item_id'].blank? || !Item.find(attributes['item_id'].to_i).billable?(self.id)
@@ -99,8 +90,15 @@ class Invoice < ActiveRecord::Base
 
   def check_readonly
     if billed?
-      errors[:base] << "This record is readonly"
+      errors[:base] << "This invoice is already paid and can not be deleted."
       false
+    end
+  end
+
+  def check_total_amount_changed
+    if !self.new_record? && self.billed? && self.amount!= self.read_attribute(:cached_total_amount)
+      errors[:base] << "This invoice has already been paid in the amount of $#{self.read_attribute(:cached_total_amount)}. Editing a paid invoice requires that all item amounts continue to add up to the original receipt amount. If the original receipt was made for the wrong amount, correct the receipt first and then come back and edit the invoice."
+      return false
     end
   end
 
@@ -128,5 +126,9 @@ class Invoice < ActiveRecord::Base
 
   def default_values
     self.invoice_date ||= Date.today
+  end
+
+  def update_transactions
+    accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
   end
 end

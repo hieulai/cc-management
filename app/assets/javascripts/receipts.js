@@ -1,7 +1,6 @@
 var Receipt = (function ($, Shared, Accounting) {
     var init = function () {
-        Accounting.init("receipt", "invoice");
-        Accounting.init("receipt", "item");
+        initChildren();
 
         $("#receipt-form").on('railsAutocomplete.select', '.receipt-item-name', function (event, data) {
             $(this).closest("tr").find("input.name").val(data.item.label);
@@ -19,8 +18,17 @@ var Receipt = (function ($, Shared, Accounting) {
         $("#receipt-form").on('change', 'input[name="receipt[uninvoiced]"]', function () {
             $(".invoiced").toggle();
             $(".uninvoiced").toggle();
+            initChildren();
         });
     };
+
+    var initChildren = function () {
+        if ($(".invoiced").is(":visible")) {
+            Accounting.init("receipt", "invoice");
+        } else {
+            Accounting.init("receipt", "item");
+        }
+    }
 
     return {
         init: init

@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140413160420) do
+ActiveRecord::Schema.define(:version => 20140505173931) do
+
+  create_table "accounting_transactions", :force => true do |t|
+    t.string   "name"
+    t.integer  "transactionable_id"
+    t.string   "transactionable_type"
+    t.date     "date"
+    t.decimal  "amount",               :precision => 10, :scale => 2
+    t.boolean  "reconciled",                                          :default => false
+    t.integer  "account_id"
+    t.integer  "display_priority",                                    :default => 1
+    t.datetime "created_at",                                                             :null => false
+    t.datetime "updated_at",                                                             :null => false
+  end
+
+  add_index "accounting_transactions", ["account_id"], :name => "index_accounting_transactions_on_account_id"
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
@@ -25,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20140413160420) do
     t.datetime "updated_at",                                                :null => false
     t.integer  "parent_id"
     t.datetime "opening_balance_updated_at"
+    t.decimal  "opening_balance",            :precision => 10, :scale => 2
   end
 
   add_index "accounts", ["builder_id"], :name => "index_accounts_on_builder_id"
@@ -285,10 +301,11 @@ ActiveRecord::Schema.define(:version => 20140413160420) do
     t.integer  "account_id"
     t.date     "date"
     t.text     "notes"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                                                            :null => false
+    t.datetime "updated_at",                                                            :null => false
     t.string   "reference"
-    t.boolean  "reconciled", :default => false
+    t.boolean  "reconciled",                                         :default => false
+    t.decimal  "cached_total_amount", :precision => 10, :scale => 2
   end
 
   create_table "deposits_receipts", :force => true do |t|
@@ -333,17 +350,30 @@ ActiveRecord::Schema.define(:version => 20140413160420) do
     t.integer  "estimate_id"
     t.date     "sent_date"
     t.integer  "reference"
-    t.datetime "created_at",                                                         :null => false
-    t.datetime "updated_at",                                                         :null => false
-    t.decimal  "remaining_amount", :precision => 10, :scale => 2
+    t.datetime "created_at",                                                            :null => false
+    t.datetime "updated_at",                                                            :null => false
+    t.decimal  "remaining_amount",    :precision => 10, :scale => 2
     t.date     "invoice_date"
-    t.boolean  "reconciled",                                      :default => false
+    t.boolean  "reconciled",                                         :default => false
     t.date     "bill_from_date"
     t.date     "bill_to_date"
+    t.decimal  "cached_total_amount", :precision => 10, :scale => 2
   end
 
   add_index "invoices", ["builder_id"], :name => "index_invoices_on_builder_id"
   add_index "invoices", ["estimate_id"], :name => "index_invoices_on_estimate_id"
+
+  create_table "invoices_accounts", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "invoice_id"
+    t.date     "date"
+    t.decimal  "amount",     :precision => 10, :scale => 2
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "invoices_accounts", ["account_id"], :name => "index_invoices_accounts_on_account_id"
+  add_index "invoices_accounts", ["invoice_id"], :name => "index_invoices_accounts_on_invoice_id"
 
   create_table "invoices_bills", :force => true do |t|
     t.integer  "invoice_id"
@@ -433,16 +463,17 @@ ActiveRecord::Schema.define(:version => 20140413160420) do
     t.integer  "account_id"
     t.date     "date"
     t.string   "memo"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                                                            :null => false
+    t.datetime "updated_at",                                                            :null => false
     t.integer  "vendor_id"
     t.string   "method"
     t.integer  "reference"
     t.integer  "builder_id"
-    t.boolean  "reconciled", :default => false
+    t.boolean  "reconciled",                                         :default => false
     t.time     "deleted_at"
     t.integer  "payer_id"
     t.string   "payer_type"
+    t.decimal  "cached_total_amount", :precision => 10, :scale => 2
   end
 
   add_index "payments", ["account_id"], :name => "index_payments_on_account_id"
@@ -552,14 +583,15 @@ ActiveRecord::Schema.define(:version => 20140413160420) do
     t.date     "received_at"
     t.integer  "reference"
     t.text     "notes"
-    t.datetime "created_at",                                                         :null => false
-    t.datetime "updated_at",                                                         :null => false
-    t.decimal  "remaining_amount", :precision => 10, :scale => 2
-    t.boolean  "uninvoiced",                                      :default => false
+    t.datetime "created_at",                                                            :null => false
+    t.datetime "updated_at",                                                            :null => false
+    t.decimal  "remaining_amount",    :precision => 10, :scale => 2
+    t.boolean  "uninvoiced",                                         :default => false
     t.string   "payor"
     t.integer  "payer_id"
     t.string   "payer_type"
-    t.boolean  "reconciled",                                      :default => false
+    t.boolean  "reconciled",                                         :default => false
+    t.decimal  "cached_total_amount", :precision => 10, :scale => 2
   end
 
   create_table "receipts_invoices", :force => true do |t|

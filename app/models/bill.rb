@@ -1,6 +1,5 @@
 class Bill < ActiveRecord::Base
   acts_as_paranoid
-  include Accountable
   include Invoiceable
 
   before_destroy :check_readonly
@@ -18,6 +17,7 @@ class Bill < ActiveRecord::Base
   has_many :un_job_costed_items, :dependent => :destroy
   has_many :invoices_bills, :dependent => :destroy
   has_many :invoices, :through => :invoices_bills
+  has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 
   attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id,
                   :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :billed_date, :reconciled,
@@ -40,7 +40,7 @@ class Bill < ActiveRecord::Base
   after_initialize :default_values
   before_save :check_zero_amount, :check_total_amount_changed, :decrease_account, :increase_account
   before_update :clear_old_data
-  after_update :destroy_old_purchased_categories_template
+  after_save :update_transactions, :destroy_old_purchased_categories_template
   after_destroy :decrease_account, :destroy_purchased_categories_template
 
   validates_presence_of :payer_id, :payer_type, :billed_date, :builder
@@ -176,8 +176,9 @@ class Bill < ActiveRecord::Base
   def increase_account
     return unless job_costed
     category_template = CategoriesTemplate.find(categories_template_id)
-    category_template.cogs_account.update_column(:balance, category_template.cogs_account.balance({recursive: false}).to_f + self.total_amount.to_f)
-    builder.accounts_payable_account.update_column(:balance, builder.accounts_payable_account.balance({recursive: false}).to_f + self.total_amount.to_f)
+    ta = self.total_amount.to_f
+    category_template.cogs_account.update_column(:balance, category_template.cogs_account.balance({recursive: false}).to_f + ta)
+    builder.accounts_payable_account.update_column(:balance, builder.accounts_payable_account.balance({recursive: false}).to_f + ta)
   end
 
   def decrease_account
@@ -187,12 +188,20 @@ class Bill < ActiveRecord::Base
     builder.accounts_payable_account.update_column(:balance, builder.accounts_payable_account.balance({recursive: false}).to_f - self.read_attribute(:cached_total_amount).to_f)
   end
 
-  def date
-    billed_date
+  def update_transactions
+    ta = self.total_amount.to_f
+    accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: ta})
+    cogs_account_id_was = CategoriesTemplate.find(categories_template_id_was).cogs_account.id if categories_template_id_was
+    cogs_account_id = CategoriesTemplate.find(categories_template_id).cogs_account.id if categories_template_id
+    if job_costed
+      accounting_transactions.where(account_id: cogs_account_id_was|| cogs_account_id).first_or_create.update_attributes({account_id: cogs_account_id, date: date, amount: ta})
+    else
+      accounting_transactions.where(account_id: cogs_account_id_was).destroy_all
+    end
   end
 
-  def display_priority
-    1
+  def date
+    billed_date
   end
 
   private

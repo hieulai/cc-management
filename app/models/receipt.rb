@@ -1,6 +1,5 @@
 class Receipt < ActiveRecord::Base
   before_destroy :check_readonly
-  include Accountable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :client
@@ -10,10 +9,11 @@ class Receipt < ActiveRecord::Base
   has_many :deposits_receipts, :dependent => :destroy
   has_many :deposits, :through => :deposits_receipts
   has_many :receipts_items, :dependent => :destroy
+  has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 
   attr_accessible :method, :notes, :received_at, :reference, :uninvoiced, :payer_id, :payer_type, :payor, :client_id, :reconciled,
                   :account_type, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes,
-                  :payer_id, :payer_type
+                  :payer_id, :payer_type, :cached_total_amount
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true
   accepts_nested_attributes_for :receipts_items, reject_if: :all_blank, allow_destroy: true
   attr_accessor :create_deposit, :account_type
@@ -25,7 +25,8 @@ class Receipt < ActiveRecord::Base
   scope :billed, where('remaining_amount = 0')
   scope :date_range, lambda { |from_date, to_date| where('received_at >= ? AND received_at <= ?', from_date, to_date) }
 
-  before_save :check_readonly, :clear_old_data, :if => :changed?
+  before_save :check_total_amount_changed, :clear_old_data
+  after_save :update_transactions
 
   validates_presence_of :builder, :method, :received_at
   validates_presence_of :client, :if => Proc.new { |r| !r.uninvoiced? }
@@ -55,9 +56,9 @@ class Receipt < ActiveRecord::Base
 
   def amount
     if self.uninvoiced
-      receipts_items.map(&:amount).compact.sum if receipts_items.any?
+      receipts_items.reject(&:marked_for_destruction?).map(&:amount).compact.sum if receipts_items.any?
     else
-      receipts_invoices.map(&:amount).compact.sum if receipts_invoices.any?
+      receipts_invoices.reject(&:marked_for_destruction?).map(&:amount).compact.sum if receipts_invoices.any?
     end
   end
 
@@ -80,28 +81,31 @@ class Receipt < ActiveRecord::Base
     end
   end
 
-  def display_priority
-    1
-  end
-
-  def destroy_with_associations
-    receipts_items.destroy_all
-    deposits.each do |d|
-      d.destroy
+  def check_total_amount_changed
+    if !self.new_record? && self.billed? && self.amount!= self.read_attribute(:cached_total_amount)
+      errors[:base] << "This receipt has already been paid in the amount of $#{self.read_attribute(:cached_total_amount)}. Editing a paid receipt requires that all item amounts continue to add up to the original deposit amount. If the original deposit was made for the wrong amount, correct the deposit first and then come back and edit the receipt."
+      return false
     end
-    deposits_receipts.destroy_all
-    delete
   end
 
   private
   def clear_old_data
     if self.uninvoiced
-      self.invoices.destroy_all
+      self.receipts_invoices.destroy_all
       self.client = nil
     else
       self.receipts_items.destroy_all
       self.payer = nil
       self.payor = nil
+    end
+  end
+
+  def update_transactions
+    accounting_transactions.where(account_id: builder.deposits_held_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
+    if uninvoiced
+      accounting_transactions.where(account_id: builder.accounts_receivable_account.id).destroy_all
+    else
+      accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f * -1})
     end
   end
 end

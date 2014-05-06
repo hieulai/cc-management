@@ -1,6 +1,5 @@
 class UnJobCostedItem < ActiveRecord::Base
   acts_as_paranoid
-  include Accountable
 
   belongs_to :bill
   belongs_to :account
@@ -9,7 +8,8 @@ class UnJobCostedItem < ActiveRecord::Base
 
   before_save :refund_account, :unless => :deleted_at_changed?
   before_save :charge_account
-  after_destroy :refund_account
+  after_save :update_transactions
+  after_destroy :refund_account, :destroy_transactions
 
   default_scope { order(:created_at) }
   scope :date_range, lambda { |from_date, to_date| joins(:bill).where("bills.billed_date >= ? and bills.billed_date <= ? ", from_date, to_date) }
@@ -25,23 +25,38 @@ class UnJobCostedItem < ActiveRecord::Base
     bill.billed_date
   end
 
-  def display_priority
-    1
+  def account_amount(a, r_account)
+    (a || 0) * (r_account.kind_of?(NEGATIVES) ? -1 : 1)
   end
 
   def charge_account
     return true unless account_id
     bill.builder.accounts_payable_account.update_column(:balance, bill.builder.accounts_payable_account.balance({recursive: false}).to_f + self.amount.to_f)
     account = Account.find(account_id)
-    self.related_account = account
-    account.update_column(:balance, account.balance({recursive: false}).to_f + account_amount)
+    account.update_column(:balance, account.balance({recursive: false}).to_f + account_amount(amount, account))
   end
 
   def refund_account
     return true unless account_id_was
     bill.builder.accounts_payable_account.update_column(:balance, bill.builder.accounts_payable_account.balance({recursive: false}).to_f - self.amount_was.to_f)
     account_was = Account.find(account_id_was)
-    self.related_account = account_was
-    account_was.update_column(:balance, account_was.balance({recursive: false}).to_f - account_amount)
+    account_was.update_column(:balance, account_was.balance({recursive: false}).to_f - account_amount(amount_was, account_was))
+  end
+
+  def update_transactions
+    if account_id_was
+      bat_was = bill.accounting_transactions.where(account_id: account_id_was).first
+      if bat_was
+        account_was = Account.find(account_id_was)
+        bat_was.update_attributes({date: date, amount: bat_was.amount.to_f - account_amount(amount_was, account_was)})
+        bat_was.destroy if bill.un_job_costed_items.where(account_id: account_id_was).empty?
+      end
+    end
+    bat = bill.accounting_transactions.where(account_id: account_id).first_or_create
+    bat.update_attributes({date: date, amount: bat.amount.to_f + account_amount(amount, account)})
+  end
+
+  def destroy_transactions
+    bill.accounting_transactions.where(account_id: account_id_was).destroy_all if bill.un_job_costed_items.where(account_id: account_id_was).empty?
   end
 end

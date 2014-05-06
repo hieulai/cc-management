@@ -22,7 +22,7 @@
                     <th>Balance</th>
                 </tr>
                 <% @accounts.each do |a| %>
-                    <%= render(:partial => "tr_account", :locals => {:account => a, :depth => 0}) %>
+                    <%= render(:partial => "accounts", :locals => {:account => a, :depth => 0}) %>
                 <% end %>
             </table>
         </div>
