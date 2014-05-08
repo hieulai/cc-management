@@ -35,17 +35,15 @@ class Bill < ActiveRecord::Base
   scope :date_range, lambda { |from_date, to_date| where('billed_date >= ? AND billed_date <= ?', from_date, to_date) }
   scope :project, lambda { |project_id| where('project_id = ?', project_id) }
   scope :late, lambda { where('remaining_amount != ? AND due_date < ?', 0, Date.today) || joins(:purchase_order).where('purchase_orders.due_date < ?', Date.today) }
-  scope :unrecociled, where(:reconciled => false)
 
   after_initialize :default_values
-  before_save :check_zero_amount, :check_total_amount_changed, :decrease_account, :increase_account
   before_update :clear_old_data
+  before_save :check_zero_amount, :check_total_amount_changed
   after_save :update_transactions, :destroy_old_purchased_categories_template
-  after_destroy :decrease_account, :destroy_purchased_categories_template
+  after_destroy :destroy_purchased_categories_template
 
   validates_presence_of :payer_id, :payer_type, :billed_date, :builder
   validates_presence_of :project, :categories_template, :if => Proc.new { |b| b.job_costed? }
-  NEGATIVES = []
 
   searchable do
     integer :id
@@ -171,21 +169,6 @@ class Bill < ActiveRecord::Base
 
   def purchasable_items
     bills_items
-  end
-
-  def increase_account
-    return unless job_costed
-    category_template = CategoriesTemplate.find(categories_template_id)
-    ta = self.total_amount.to_f
-    category_template.cogs_account.update_column(:balance, category_template.cogs_account.balance({recursive: false}).to_f + ta)
-    builder.accounts_payable_account.update_column(:balance, builder.accounts_payable_account.balance({recursive: false}).to_f + ta)
-  end
-
-  def decrease_account
-    return unless job_costed && categories_template_id_was
-    category_template_was = CategoriesTemplate.find(categories_template_id_was)
-    category_template_was.cogs_account.update_column(:balance, category_template_was.cogs_account.balance({recursive: false}).to_f - self.read_attribute(:cached_total_amount).to_f)
-    builder.accounts_payable_account.update_column(:balance, builder.accounts_payable_account.balance({recursive: false}).to_f - self.read_attribute(:cached_total_amount).to_f)
   end
 
   def update_transactions

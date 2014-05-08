@@ -5,13 +5,11 @@ class Transfer < ActiveRecord::Base
   attr_accessible :date, :amount, :reference, :memo, :reconciled, :kind, :from_account_id, :to_account_id
 
   before_save :check_top_accounts, :if => Proc.new { |i| Account::TOP.include?(i.from_account.name) || Account::TOP.include?(i.to_account.name) }
-  before_save  :rollback_amount, :transfer_amount
-  after_destroy :rollback_amount
   after_initialize :default_values
   after_save :update_transactions
 
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
-  scope :unrecociled, where(:reconciled => false)
+
   validates_presence_of :from_account, :to_account, :date, :amount
 
   BANK_TRANSFERS = [Account::BANK_ACCOUNTS]
@@ -51,22 +49,6 @@ class Transfer < ActiveRecord::Base
   end
 
   private
-  def transfer_amount
-    from_account_new = Account.find(self.from_account_id)
-    to_account_new = Account.find(self.to_account_id)
-    from_account_new.update_column(:balance, from_account_new.balance({recursive: false}).to_f + absolute_amount(amount, from_account_new, to_account_new, true))
-    to_account_new.update_column(:balance, to_account_new.balance({recursive: false}).to_f + absolute_amount(amount, from_account_new, to_account_new, false))
-  end
-
-  def rollback_amount
-    if Account.exists?(from_account_id_was) && Account.exists?(to_account_id_was)
-      from_account_was = Account.find(self.from_account_id_was)
-      to_account_was = Account.find(self.to_account_id_was)
-      from_account_was.update_column(:balance, from_account_was.balance({recursive: false}).to_f - absolute_amount(amount_was, from_account_was, to_account_was, true))
-      to_account_was.update_column(:balance, to_account_was.balance({recursive: false}).to_f - absolute_amount(amount_was, from_account_was, to_account_was, false))
-    end
-  end
-
   def update_transactions
     from_account = Account.find(self.from_account_id)
     to_account = Account.find(self.to_account_id)

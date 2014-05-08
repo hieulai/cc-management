@@ -11,7 +11,6 @@ class Payment < ActiveRecord::Base
 
   default_scope order("date DESC")
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
-  scope :unrecociled, where(:reconciled => false)
 
   accepts_nested_attributes_for :payments_bills, :allow_destroy => true
 
@@ -20,11 +19,9 @@ class Payment < ActiveRecord::Base
                   :cached_total_amount
   validates_presence_of :payer_id, :payer_type, :account, :builder, :method, :date
 
-  after_update :update_account_balance, :if => :account_id_changed?
   after_save :update_transactions
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
-  NEGATIVES = "*"
 
   searchable do
     text :reference, :method, :memo
@@ -51,16 +48,6 @@ class Payment < ActiveRecord::Base
 
   def amount
     payments_bills.map(&:amount).compact.sum if payments_bills.any?
-  end
-
-  private
-  def update_account_balance
-    old_account = Account.find(account_id_was)
-    account = Account.find(account_id)
-    payments_bills.each do |pb|
-      old_account.update_column(:balance, old_account.balance({recursive: false}).to_f + pb.amount)
-      account.update_column(:balance, account.balance({recursive: false}).to_f - pb.amount)
-    end
   end
 
   def update_transactions

@@ -11,8 +11,6 @@ class Deposit < ActiveRecord::Base
 
   default_scope order("date DESC")
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
-  scope :unrecociled, where(:reconciled => false)
-  after_update :update_account_balance, :if => :account_id_changed?
   after_save :update_transactions
 
   validates_presence_of :account, :builder, :date
@@ -37,15 +35,6 @@ class Deposit < ActiveRecord::Base
   end
 
   private
-  def update_account_balance
-    old_account = Account.find(account_id_was)
-    account = Account.find(account_id)
-    deposits_receipts.each do |dr|
-      old_account.update_column(:balance, old_account.balance.to_f - dr.amount)
-      account.update_column(:balance, account.balance.to_f + dr.amount)
-    end
-  end
-
   def update_transactions
     accounting_transactions.where(account_id: builder.deposits_held_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f * -1})
     accounting_transactions.where(account_id: account_id_was|| account_id).first_or_create.update_attributes({account_id: account_id, date: date, amount: amount.to_f})
