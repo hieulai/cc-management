@@ -21,24 +21,27 @@
   <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
 
   <%
-     clients = @builder.clients.active.has_unbilled_invoices
+     all_clients = @builder.clients.active
+     clients = all_clients.has_unbilled_invoices
      clients << @receipt.client if @receipt.client
      clients.uniq!
      invoices= @receipt.invoices
      invoices+= @receipt.client.invoices.unbilled if @receipt.client
      invoices.uniq!
      uninvoiced_display = @receipt.uninvoiced ? "" : "none"
-     invoiced_display = @receipt.uninvoiced ? "none" : ""
+     invoiced_display = @receipt.invoiced ? "" : "none"
+     client_credit_display = @receipt.client_credit ? "" : "none"
+     invoiced_client_credit_display = @receipt.invoiced || @receipt.client_credit ? "" : "none"
   %>
 
-  <div class="span6">
+  <div class="span6" id="receipt-kind" data-kind="<%= @receipt.kind %>">
       <div class="control-group">
-          <%= f.label :type, 'Type', class: 'col-lg-2 control-label' %>
+          <%= f.label :kind, 'Type', class: 'col-lg-2 control-label' %>
           <div class="controls">
-              <%= f.collection_radio_buttons(:uninvoiced, [[false, "Receipt for Invoice"], [true, "Uninvoiced Receipt"]], :first, :last) %>
+              <%= f.collection_radio_buttons(:kind, Receipt::TYPES, :first, :last) %>
           </div>
       </div>
-      <div class="control-group uninvoiced" id="client-select" style="display: <%= uninvoiced_display %>">
+      <div class="control-group uninvoiced receipt-kind" style="display: <%= uninvoiced_display %>">
           <%= f.label :payor, "Payor", class: 'col-lg-2 control-label' %>
           <div class="controls">
               <%= autocomplete_field :receipt, :payor, people_autocomplete_name_path, :class => 'receipt-people-name', :value => @receipt.payer.try(:full_name) || @receipt.payor %>
@@ -46,9 +49,16 @@
               <%= f.hidden_field :payer_type, :class => 'payerType' %>
           </div>
       </div>
-      <div class="control-group invoiced" id="client-select" style="display: <%= invoiced_display %>">
+      <div class="control-group invoiced client_credit receipt-kind client-select" style="display: <%= invoiced_client_credit_display %>">
           <%= f.label :client_id, "Client", class: 'col-lg-2 control-label' %>
-          <div class="controls"><%= f.select(:client_id, clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %></div>
+          <div class="controls">
+          </div>
+          <script id="invoiced-client-select" type="text/html">
+              <%= f.select(:client_id, clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %>
+          </script>
+          <script id="client_credit-client-select" type="text/html">
+              <%= f.select(:client_id, all_clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}) %>
+          </script>
       </div>
       <div class="control-group">
           <%= f.label :method, "Payment Type", class: 'col-lg-2 control-label' %>
@@ -63,6 +73,12 @@
           <div class="controls">
               <%= f.text_field(:received_at, class: 'datepicker', :value => f.object.try(:received_at).try(:strftime, '%m-%d-%Y')) %>
               <%= f.hidden_field(:received_at, id: 'receipt_received_date_hidden', :value => f.object.try(:received_at).try(:strftime, '%Y-%m-%d')) %>
+          </div>
+      </div>
+      <div class="client_credit control-group receipt-kind" style="display: <%= client_credit_display %>">
+          <%= f.label :received_at, "Amount", class: 'col-lg-2 control-label' %>
+          <div class="controls">
+              <%= f.text_field(:credit_amount) %>
           </div>
       </div>
       <div class="control-group">
@@ -105,13 +121,13 @@
         </div>
     </div>
   <% end %>
-  <div class="uninvoiced" style="display: <%= uninvoiced_display %>">
+  <div class="uninvoiced receipt-kind" style="display: <%= uninvoiced_display %>">
       <%= render(:partial => 'accounting/uninvoiced_receipts/receipts_items', :locals => {:f => f}) %>
   </div>
-  <div class="invoiced" id="receipt-invoices-placeholder" style="display: <%= invoiced_display %>">
+  <div class="invoiced receipt-kind" id="receipt-invoices-placeholder" style="display: <%= invoiced_display %>">
       <%= render(:partial => "receipt_invoices", :locals => {:f => f, :invoices => invoices}) %>
   </div>
-  <div class="form-buttons">
+  <div class="form-buttons clearboth">
       <%= submit_tag(@receipt.new_record? ? "Create" : "Save", :class => 'btn') %>
   </div>
 <% end %>

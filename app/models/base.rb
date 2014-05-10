@@ -72,6 +72,12 @@ module Base
           first_or_create
     end
 
+    def client_credit_account
+      self.send("#{Account::LIABILITIES.parameterize.underscore}_account".to_sym).
+          children.where(:name => Account::CLIENT_CREDIT, builder_id: id).
+          first_or_create
+    end
+
     Account::TOP.each do |n|
       define_method("#{n.parameterize.underscore}_account") do
         accounts.top.where(name: n, builder_id: id).first_or_create

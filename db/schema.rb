@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140505173931) do
+ActiveRecord::Schema.define(:version => 20140509165249) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -586,12 +586,13 @@ ActiveRecord::Schema.define(:version => 20140505173931) do
     t.datetime "created_at",                                                            :null => false
     t.datetime "updated_at",                                                            :null => false
     t.decimal  "remaining_amount",    :precision => 10, :scale => 2
-    t.boolean  "uninvoiced",                                         :default => false
     t.string   "payor"
     t.integer  "payer_id"
     t.string   "payer_type"
     t.boolean  "reconciled",                                         :default => false
     t.decimal  "cached_total_amount", :precision => 10, :scale => 2
+    t.string   "kind"
+    t.decimal  "credit_amount",       :precision => 10, :scale => 2
   end
 
   create_table "receipts_invoices", :force => true do |t|

@@ -15,19 +15,31 @@ var Receipt = (function ($, Shared, Accounting) {
             Accounting.calculate("receipt", "item");
         });
 
-        $("#receipt-form").on('change', 'input[name="receipt[uninvoiced]"]', function () {
-            $(".invoiced").toggle();
-            $(".uninvoiced").toggle();
+        $("#receipt-form").on('change', 'input[name="receipt[kind]"]', function () {
+            $(".receipt-kind").hide();
+            $("." + $(this).val()).show();
+            $("#receipt-kind").attr("data-kind", $(this).val());
             initChildren();
         });
     };
 
     var initChildren = function () {
-        if ($(".invoiced").is(":visible")) {
+        var kind = $("#receipt-kind").attr("data-kind");
+        if (kind == "invoiced") {
             Accounting.init("receipt", "invoice");
-        } else {
+            $(".client-select .controls").html($("#invoiced-client-select").html());
+        } else if (kind == "client_credit") {
+            $(".client-select .controls").html($("#client_credit-client-select").html());
+        } else if (kind == "uninvoiced") {
             Accounting.init("receipt", "item");
+            $(".client-select .controls").html("");
         }
+        $('.client-select select').select2({
+            width: "220px",
+            placeholder: "",
+            allowClear: true
+        });
+
     }
 
     return {
