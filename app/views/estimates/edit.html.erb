@@ -4,11 +4,7 @@
         <div class="columns margin-bottom">
             <h1 class="center">Edit Estimate</h1>
             <%= form_for(@estimate, :url => {:action => 'update', :id => @estimate.id}, :html => {:class => 'edit_estimate form-horizontal f-left'}) do |f| %>
-              <% if @estimate.kind == "Cost Plus Bid" %>
-                <%= render(:partial => "estimates/cost_plus_bid/edit_form", :locals => {:f => f}) %>
-              <% else %>
                 <%= render(:partial => "edit_form", :locals => {:f => f}) %>
-              <% end %>
             <% end %>
             <div class="more-actions">
                 <%= link_to "Print", {:controller => 'estimates', :action => 'show', :id => @estimate.id, :format => :pdf}, :target => '_blank' %>

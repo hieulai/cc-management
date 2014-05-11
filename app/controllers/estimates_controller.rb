@@ -142,14 +142,13 @@ class EstimatesController < ApplicationController
     end
   end
 
-    def show_template
-      @template = Template.find(params[:template][:id])
-      @items = Item.where(builder_id: session[:builder_id]).order(:name)
-      @categories = Category.where(builder_id: session[:builder_id]).order(:name)
-      respond_to do |format|
-        format.js {}
-      end
+  def switch_type
+    @estimate = Estimate.find(params[:id])
+    @estimate.kind = params[:estimate][:kind]
+    respond_to do |format|
+      format.js {}
     end
+  end
 
     def add_item
       @category_template = CategoriesTemplate.find(params[:category_template_id])
