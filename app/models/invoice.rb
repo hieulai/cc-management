@@ -36,6 +36,9 @@ class Invoice < ActiveRecord::Base
     text :id_t do |i|
       i.id.to_s
     end
+    text :amount_t do
+      sprintf('%.2f', amount.to_f)
+    end
     text :sent_date_t do |i|
       i.sent_date.try(:strftime, Date::DATE_FORMATS[:default])
     end

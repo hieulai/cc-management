@@ -57,6 +57,9 @@ class Bill < ActiveRecord::Base
     text :id_t do |b|
       b.id.to_s
     end
+    text :amount_t do
+      sprintf('%.2f', total_amount.to_f)
+    end
     text :purchase_order_id_t do |b|
       b.purchase_order_id.try(:to_s)
     end

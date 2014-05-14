@@ -45,6 +45,9 @@ class Receipt < ActiveRecord::Base
     text :received_at_t do |r|
       r.received_at.try(:strftime, Date::DATE_FORMATS[:default])
     end
+    text :amount_t do
+      sprintf('%.2f', amount.to_f)
+    end
     integer :builder_id
     text :payer_name do
       payer_name

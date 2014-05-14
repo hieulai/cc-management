@@ -33,6 +33,9 @@ class PurchaseOrder < ActiveRecord::Base
     text :id_t do |po|
       po.id.to_s
     end
+    text :amount_t do
+      sprintf('%.2f', total_amount)
+    end
     text :date_t do |po|
       po.date.try(:strftime, Date::DATE_FORMATS[:default])
     end

@@ -21,6 +21,9 @@ class Deposit < ActiveRecord::Base
     text :date_t do |r|
       r.date.try(:strftime, Date::DATE_FORMATS[:default])
     end
+    text :amount_t do
+      sprintf('%.2f', amount.to_f)
+    end
     text :account_name do
       account_name
     end

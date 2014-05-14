@@ -30,6 +30,9 @@ class Payment < ActiveRecord::Base
     text :date_t do |p|
       p.date.try(:strftime, Date::DATE_FORMATS[:default])
     end
+    text :amount_t do
+      sprintf('%.2f', amount.to_f)
+    end
     text :payer_name do
       payer_name
     end

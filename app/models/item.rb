@@ -37,6 +37,18 @@ class Item < ActiveRecord::Base
 
   searchable do
     text :name, :description, :unit, :price, :notes
+    text :qty_t do
+      sprintf('%.2f', qty.to_f)
+    end
+    text :estimated_cost_t do
+      sprintf('%.2f', estimated_cost.to_f)
+    end
+    text :markup_t do
+      sprintf('%.2f', markup.to_f)
+    end
+    text :price_t do
+      sprintf('%.2f', price.to_f)
+    end
     integer :qty
     integer :builder_id
   end
