@@ -1,6 +1,7 @@
 <table class="grid-view data-tables" id="bill-list" summary="Bill List">
     <thead>
     <tr class="header">
+        <th>Billed Date</th>
         <th>Due Date</th>
         <th>Bill #</th>
         <th>PO #</th>
@@ -15,7 +16,7 @@
     <% bills.each do |b| %>
         <tr class="clickable <%= b.full_paid? ? "unclickable" : "" %>">
             <td class="center">
-                <%= b.source(:due_date) %>
+                <%= b.billed_date %>
                     <% if b.generated? %>
                         <% if b.purchase_order_id %>
                             <%= link_to("Edit", {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :class => 'action edit clickable-link', :style => 'display: none') %>
@@ -23,6 +24,9 @@
                     <% else %>
                         <%= link_to("Edit", {:action => 'edit_bill', :id => b.id}, :class => 'action edit clickable-link', :style => 'display: none') %>
                     <% end %>
+            </td>
+            <td class="center">
+                <%= b.source(:due_date) %>
             </td>
             <td class="center">
                 <%= b.id %>

@@ -284,15 +284,16 @@ class AccountingController < ApplicationController
       with :builder_id, session[:builder_id]
       with :remaining_amount, 0 if params[:type] == "paid"
       any_of do
-        with(:remaining_amount).greater_than(0)
+        without(:remaining_amount).less_than(0)
         with(:remaining_amount, nil)
       end if params[:type] == "unpaid"
-      any_of do
-        all_of do
-          without :remaining_amount, 0
+
+      all_of do
+        without :remaining_amount, 0
+        any_of do
           with(:due_date).less_than(Date.today)
-        end
           with(:po_due_date).less_than(Date.today)
+        end
       end if params[:type] == "late"
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results

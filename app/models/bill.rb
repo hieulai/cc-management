@@ -28,7 +28,7 @@ class Bill < ActiveRecord::Base
   accepts_nested_attributes_for :un_job_costed_items, :reject_if => :all_blank, :allow_destroy => true
   attr_accessor :create_payment, :category_id
 
-  default_scope order("due_date DESC")
+  default_scope order("billed_date DESC")
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :paid, where('remaining_amount = 0')
   scope :job_costed, where(job_costed: true)
@@ -47,7 +47,7 @@ class Bill < ActiveRecord::Base
 
   searchable do
     integer :id
-    integer :remaining_amount
+    float :remaining_amount, :trie => true
     integer :purchase_order_id
     integer :builder_id
     date :due_date
@@ -109,7 +109,7 @@ class Bill < ActiveRecord::Base
   end
 
   def full_paid?
-    self.remaining_amount == 0
+    paid? && remaining_amount == 0
   end
 
   def generated?
