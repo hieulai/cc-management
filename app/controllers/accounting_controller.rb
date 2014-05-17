@@ -294,10 +294,7 @@ class AccountingController < ApplicationController
 
       all_of do
         without :remaining_amount, 0
-        any_of do
-          with(:due_date).less_than(Date.today)
-          with(:po_due_date).less_than(Date.today)
-        end
+        with(:due_date).less_than(Date.today)
       end if params[:type] == "late"
       order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
