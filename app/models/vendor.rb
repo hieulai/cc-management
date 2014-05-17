@@ -23,7 +23,9 @@ class Vendor < ActiveRecord::Base
 
   searchable do
     integer :builder_id
-    string :vendor_type
+    string :type do
+      vendor_type
+    end
     string :trade
     string :company
     string :full_name do
