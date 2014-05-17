@@ -1,15 +1,15 @@
 <table class="grid-view data-tables" id="bill-list" summary="Bill List">
     <thead>
     <tr class="header">
-        <th>Billed Date</th>
-        <th>Due Date</th>
-        <th>Bill #</th>
-        <th>PO #</th>
-        <th>Project</th>
-        <th>Category</th>
-        <th>Payor</th>
-        <th>Amount</th>
-        <th>Notes</th>
+        <%= sorted_ths [["Billed Date", "billed_date"],
+                        ["Due Date", "due_date"],
+                        ["Bill #", "id"],
+                        ["PO #", "purchase_order_id"],
+                        ["Project", "project_name"],
+                        ["Category", "category_name"],
+                        ["Payor", "payer_name"],
+                        ["Amount", "amount"],
+                        ["Notes", "vnotes"]] %>
     </tr>
     </thead>
     <tbody>

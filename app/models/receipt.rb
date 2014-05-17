@@ -41,6 +41,17 @@ class Receipt < ActiveRecord::Base
   validates_presence_of :payor, :if => Proc.new { |r| r.uninvoiced }
 
   searchable do
+    integer :reference
+    date :received_at
+    float :amount do
+      amount
+    end
+    string :notes
+    string :method
+    string :payer_name do
+      payer_name
+    end
+
     text :method, :reference, :notes
     text :received_at_t do |r|
       r.received_at.try(:strftime, Date::DATE_FORMATS[:default])

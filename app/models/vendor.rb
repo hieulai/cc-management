@@ -22,8 +22,25 @@ class Vendor < ActiveRecord::Base
   after_save :update_indexes
 
   searchable do
-    text :company, :vendor_type, :trade, :primary_first_name, :primary_last_name, :primary_email, :primary_phone1, :notes
     integer :builder_id
+    string :vendor_type
+    string :trade
+    string :company
+    string :full_name do
+      full_name
+    end
+    string :project_names do
+
+    end
+    string :primary_phone do
+      primary_phone
+    end
+    string :email do
+      email
+    end
+    string :notes
+
+    text :company, :vendor_type, :trade, :primary_first_name, :primary_last_name, :primary_email, :primary_phone1, :notes
   end
   
   HEADERS = ["Vendor_Type", "Trade", "Company", "Primary_First_Name", "Primary_Last_Name", "Primary_Email", "Primary_Phone1","Primary_Phone1_Tag", "Primary_Phone2","Primary_Phone2_Tag",
@@ -31,12 +48,32 @@ class Vendor < ActiveRecord::Base
        "Website", "Address", "City", "State", "Zipcode", 
                  "Notes"]
 
+  def email
+    primary_email
+  end
+
   def display_name
     company.presence || full_name
   end
 
   def full_name
      "#{primary_first_name} #{primary_last_name}"
+  end
+
+  def type
+    vendor_type
+  end
+
+  def primary_phone
+    primary_phone1.to_s
+  end
+
+  def project_names
+    ""
+  end
+
+  def notes
+    read_attribute(:notes).to_s
   end
   
   def self.to_csv

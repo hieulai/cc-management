@@ -29,7 +29,6 @@ var Application = (function ($) {
 
     var init = function(){
         loadAddLink();
-        loadDataTables();
         loadInstructions();
         transformToDatePickerFor();
         transformToSelect2For();
@@ -177,22 +176,6 @@ var Application = (function ($) {
 
         $('.cocoon-container').bind('cocoon:after-remove', function() {
             loadAddLink();
-        });
-    };
-
-    var loadDataTables = function () {
-        $(".data-tables").each(function () {
-            var oTable = $(this).dataTable({
-                "bPaginate": false,
-                "bLengthChange": false,
-                "bFilter": false,
-                "bSort": true,
-                "bInfo": false,
-                "bAutoWidth": false,
-                "aaSorting": [
-                    [ 0, "desc" ]
-                ]
-            });
         });
     };
 

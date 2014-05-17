@@ -13,6 +13,7 @@ class AccountingController < ApplicationController
     @deposits = Deposit.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
+      order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
   end
@@ -65,6 +66,7 @@ class AccountingController < ApplicationController
     @receipts = Receipt.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
+      order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
   end
@@ -150,6 +152,7 @@ class AccountingController < ApplicationController
     @invoices = Invoice.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
+      order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
   end
@@ -235,6 +238,7 @@ class AccountingController < ApplicationController
     @purchase_orders = PurchaseOrder.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
+      order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
   end
@@ -295,6 +299,7 @@ class AccountingController < ApplicationController
           with(:po_due_date).less_than(Date.today)
         end
       end if params[:type] == "late"
+      order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
   end
@@ -334,6 +339,7 @@ class AccountingController < ApplicationController
     @payments = Payment.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
+      order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
   end

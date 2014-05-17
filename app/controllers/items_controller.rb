@@ -9,6 +9,7 @@ class ItemsController < ApplicationController
         @items = Item.search {
           fulltext params[:query]
           with :builder_id, session[:builder_id]
+          order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
           paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
         }.results
       end

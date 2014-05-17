@@ -24,17 +24,15 @@
             <table class="grid-view margin-bottom responsive" summary="Project List">
                 <tr class="header">
                     <th>Actions</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Default Quantity</th>
-                    <th>Cost</th>
-                    <th>Unit</th>
-                    <th>Preset Margin</th>
-                    <th>Price</th>
-                    <th>Notes</th>
-                    <!-- Displays all items that are attached to a category -->
+                    <%= sorted_ths [["Name", "name"],
+                                    ["Description", "description"],
+                                    ["Default Quantity", "qty"],
+                                    ["Cost", "estimated_cost"],
+                                    ["Unit", "unit"],
+                                    ["Preset Margin", "markup"],
+                                    ["Price", "price"],
+                                    ["Notes", "notes"]] %>
                 </tr>
-                <!-- Displays all items that are NOT attached to a category -->
                 <% @items.each do |item| %>
                     <tr>
                         <td class="center">

@@ -24,9 +24,23 @@ class Payment < ActiveRecord::Base
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
 
   searchable do
-    text :reference, :method, :memo
     integer :method
     integer :builder_id
+    date :date
+    integer :reference
+    string :payer_name do
+      payer_name
+    end
+    string :method
+    string :account_name do
+      account_name
+    end
+    float :amount do
+      amount
+    end
+    string :memo
+
+    text :reference, :method, :memo
     text :date_t do |p|
       p.date.try(:strftime, Date::DATE_FORMATS[:default])
     end

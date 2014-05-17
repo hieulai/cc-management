@@ -28,13 +28,13 @@
             <table class="grid-view margin-bottom responsive" summary="Project List">
                 <tr class="header">
                     <th>Actions</th>
-                    <th>Company</th>
-                    <th>Client Name</th>
-                    <th>Primary Phone</th>
-                    <th>Email</th>
-                    <th>Associated Projects</th>
-                    <th>Lead Source</th>
-                    <th>Notes</th>
+                    <%= sorted_ths [["Company", "company"],
+                                    ["Client Name", "full_name"],
+                                    ["Primary Phone", "primary_phone"],
+                                    ["Email", "email"],
+                                    ["Associated Projects", "project_names"],
+                                    ["Lead Source", "lead_source"],
+                                    ["Notes", "notes"]] %>
                 </tr>
                 <% @clients.each do |client| %>
                     <tr class="client-rows">

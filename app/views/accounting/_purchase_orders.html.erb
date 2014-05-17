@@ -1,13 +1,13 @@
 <table class="grid-view data-tables" id="po-list" summary="Purchase Order List">
     <thead>
         <tr class="header">
-            <th>Order Date</th>
-            <th>PO #</th>
-            <th>Project</th>
-            <th>Category</th>
-            <th>Payor</th>
-            <th>Amount</th>
-            <th>Notes</th>
+            <%= sorted_ths [["Order Date", "date"],
+                            ["PO #", "id"],
+                            ["Project", "project_name"],
+                            ["Category", "category_name"],
+                            ["Payor", "payer_name"],
+                            ["Amount", "amount"],
+                            ["Notes", "notes"]] %>
         </tr>
     </thead>
     <tbody>

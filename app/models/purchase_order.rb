@@ -27,9 +27,24 @@ class PurchaseOrder < ActiveRecord::Base
   validates_presence_of :payer_id, :payer_type, :project, :categories_template
 
   searchable do
-    text :notes
     integer :id
     integer :builder_id
+    date :date
+    float :amount do
+      total_amount
+    end
+    string :notes
+    string :project_name do
+      project_name
+    end
+    string :payer_name do
+      payer_name
+    end
+    string :category_name do
+      category_name
+    end
+
+    text :notes
     text :id_t do |po|
       po.id.to_s
     end

@@ -1,11 +1,11 @@
 <table class="grid-view data-tables" id="deposit-list" summary="Payment List" cellspacing="0">
     <thead>
     <tr class="header">
-        <th>Reference #</th>
-        <th>Deposit Date</th>
-        <th>Deposit to</th>
-        <th>Amount</th>
-        <th>Notes</th>
+        <%= sorted_ths [["Reference #", "reference"],
+                        ["Deposit Date", "date"],
+                        ["Deposit to", "account_name"],
+                        ["Amount", "amount"],
+                        ["Notes", "notes"]] %>
     </tr>
     </thead>
     <tbody>

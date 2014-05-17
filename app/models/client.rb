@@ -20,23 +20,55 @@ class Client < ActiveRecord::Base
   after_save :update_indexes
 
   searchable do
-    text :company, :first_name, :last_name, :primary_phone, :email, :lead_source, :notes
     string :status
     integer :builder_id
+    string :company
+    string :full_name do
+      full_name
+    end
+    string :primary_phone
+    string :email
+    string :project_names do
+      project_names
+    end
+    string :type do
+      type
+    end
+
+    string :lead_source
+    string :notes
+
+    text :company, :first_name, :last_name, :primary_phone, :email, :lead_source, :notes
     text :project_names do
       projects.pluck(:name)
     end
     text :client_type do
-      "Client"
+      type
     end
+  end
+
+  def type
+    "Client"
   end
 
   def display_name
     full_name
   end
+
+  def primary_phone
+    read_attribute(:primary_phone).to_s
+  end
       
   def full_name
      "#{first_name} #{last_name}"
+  end
+
+  def project_names
+    projects.pluck(:name).join(" ")
+  end
+
+  def notes
+    read_attribute(:notes).to_s
   end
 
   def update_indexes

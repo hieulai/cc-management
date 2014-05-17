@@ -19,7 +19,12 @@ class PeopleController < ApplicationController
         with :builder_id, session[:builder_id]
         paginate :page => 1, :per_page => Contact.count
       }.results
-      @people = Kaminari.paginate_array(clients + vendors + contacts).page(params[:page])
+      results = clients + vendors + contacts
+      if params[:sort_field] && params[:sort_dir]
+        results = results.sort_by { |r| r.try(params[:sort_field]) }
+        results = results.reverse if params[:sort_dir] == "desc"
+      end
+      @people = Kaminari.paginate_array(results).page(params[:page])
     end
     
     def list_vendors
@@ -29,6 +34,7 @@ class PeopleController < ApplicationController
           @vendors = Vendor.search {
             fulltext params[:query]
             with :builder_id, session[:builder_id]
+            order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
             paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
           }.results
         end
@@ -84,6 +90,8 @@ class PeopleController < ApplicationController
       @contacts = Contact.search {
         fulltext params[:query]
         with :builder_id, session[:builder_id]
+        order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
+        paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
       }.results
     end
   

@@ -22,6 +22,26 @@ module ApplicationHelper
     end
   end
 
+  def sorted_ths(names = [])
+    tag = ""
+    names.each do |field|
+      class_name = 'sorting'
+      sort_dir = "asc"
+      if params[:sort_field] == field[1]
+        if params[:sort_dir] == "asc"
+          class_name = "sorting_asc"
+          sort_dir = "desc"
+        else
+          class_name = "sorting_desc"
+        end
+      end
+      tag += content_tag :th, :class => class_name do
+        link_to(field[0], params.merge(sort_field: field[1], sort_dir: sort_dir))
+      end
+    end
+    raw(tag)
+  end
+
   def price n
     n.nil? ? n : number_to_currency(number_with_precision(n.to_f.round(2), precision: 2), :unit =>"")
   end

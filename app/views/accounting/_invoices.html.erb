@@ -1,11 +1,11 @@
 <table class="grid-view data-tables" id="invoice-list" summary="Invoice Items List" cellspacing="0">
     <thead>
     <tr class="header">
-        <th>Invoice #</th>
-        <th>Invoice Date</th>
-        <th>Sent Date</th>
-        <th>Project</th>
-        <th>Amount</th>
+        <%= sorted_ths [["Invoice #", "reference"],
+                        ["Invoice Date", "invoice_date"],
+                        ["Sent Date", "sent_date"],
+                        ["Project", "project_name"],
+                        ["Amount", "amount"]] %>
     </tr>
     </thead>
     <tbody>

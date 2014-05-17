@@ -36,6 +36,20 @@ class Item < ActiveRecord::Base
   HEADERS = ["Name", "Description", "Estimated_cost", "Unit", "Margin", "Price", "Notes"]
 
   searchable do
+    float :qty
+    integer :builder_id
+    string :name
+    string :description
+    float :estimated_cost do
+      estimated_cost
+    end
+    string :unit
+    float :markup
+    float :price do
+      price
+    end
+    string :notes
+
     text :name, :description, :unit, :price, :notes
     text :qty_t do
       sprintf('%.2f', qty.to_f)
@@ -49,8 +63,6 @@ class Item < ActiveRecord::Base
     text :price_t do
       sprintf('%.2f', price.to_f)
     end
-    integer :qty
-    integer :builder_id
   end
 
   def margin

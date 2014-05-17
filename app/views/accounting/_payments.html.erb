@@ -1,13 +1,13 @@
 <table class="grid-view data-tables" id="payment-list" summary="Payment List" cellspacing="0">
     <thead>
     <tr class="header">
-        <th>Paid</th>
-        <th>Reference #</th>
-        <th>Payee</th>
-        <th>Type</th>
-        <th>Account</th>
-        <th>Amount</th>
-        <th>Memo</th>
+        <%= sorted_ths [["Paid", "date"],
+                        ["Reference #", "reference"],
+                        ["Payee", "payer_name"],
+                        ["Type", "method"],
+                        ["Account", "account_name"],
+                        ["Amount", "amount"],
+                        ["Memo", "memo"]] %>
     </tr>
     </thead>
     <tbody>

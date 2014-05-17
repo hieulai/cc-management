@@ -16,8 +16,19 @@ class Deposit < ActiveRecord::Base
   validates_presence_of :account, :builder, :date
 
   searchable do
-    text :reference, :notes
     integer :builder_id
+    integer :reference
+    date :date
+    string :account_name do
+      account_name
+    end
+    float :amount do
+      amount
+    end
+    string :notes
+
+
+    text :reference, :notes
     text :date_t do |r|
       r.date.try(:strftime, Date::DATE_FORMATS[:default])
     end

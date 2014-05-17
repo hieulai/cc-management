@@ -27,14 +27,14 @@
         <div class="columns">
             <table class="grid-view margin-bottom responsive" summary="Project List">
                 <tr class="header">
-                    <th>Type</th>
-                    <th>Trade</th>
-                    <th>Company</th>
-                    <th>Main Contact</th>
-                    <th>Primary Phone</th>
-                    <th>Email</th>
-                    <th>Associated Projects</th>
-                    <th>Notes</th>
+                    <%= sorted_ths [["Type", "type"],
+                                    ["Trade", "trade"],
+                                    ["Company", "company"],
+                                    ["Main Contact", "full_name"],
+                                    ["Primary Phone", "primary_phone"],
+                                    ["Email", "email"],
+                                    ["Associated Projects", "project_names"],
+                                    ["Notes", "notes"]] %>
                 </tr>
                 <% @vendors.each do |v| %>
                     <tr class="rows">

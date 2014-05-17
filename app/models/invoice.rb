@@ -32,6 +32,14 @@ class Invoice < ActiveRecord::Base
     date :invoice_date
     date :sent_date
     integer :builder_id
+    integer :reference
+    string :project_name do
+      project_name
+    end
+    float :amount do
+      amount
+    end
+
     text :reference
     text :id_t do |i|
       i.id.to_s

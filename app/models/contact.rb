@@ -11,11 +11,32 @@ class Contact < ActiveRecord::Base
   }
 
   searchable do
-    text :primary_first_name, :primary_last_name, :primary_email, :primary_phone1, :notes
     integer :builder_id
-    text :contact_type do
-      "Other"
+    string :full_name do
+      full_name
     end
+    string :primary_phone do
+      primary_phone
+    end
+    string :email do
+      email
+    end
+    string :project_names do
+      project_names
+    end
+    string :contact_type do
+      type
+    end
+
+    string :notes
+    text :primary_first_name, :primary_last_name, :primary_email, :primary_phone1, :notes
+    text :contact_type do
+      type
+    end
+  end
+
+  def email
+    primary_email
   end
 
   def display_name
@@ -27,7 +48,23 @@ class Contact < ActiveRecord::Base
   end
 
   def company
-    nil
+    ""
+  end
+
+  def primary_phone
+    primary_phone1.to_s
+  end
+
+  def type
+    "Other"
+  end
+
+  def project_names
+    ""
+  end
+
+  def notes
+    read_attribute(:notes).to_s
   end
 
 end

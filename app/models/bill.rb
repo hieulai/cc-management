@@ -50,23 +50,39 @@ class Bill < ActiveRecord::Base
     float :remaining_amount, :trie => true
     integer :purchase_order_id
     integer :builder_id
-    date :due_date
-    date :po_due_date do |b|
-      b.purchase_order.try(:due_date)
+    date :billed_date
+    date :due_date do
+      source(:due_date)
     end
+    string :project_name do
+      project_name
+    end
+    string :category_name do
+      category_name
+    end
+    string :payer_name do
+      payer_name
+    end
+    string :vnotes do
+      vnotes
+    end
+    float :amount do
+      amount
+    end
+
     text :id_t do |b|
       b.id.to_s
     end
     text :amount_t do
       sprintf('%.2f', total_amount.to_f)
     end
-    text :purchase_order_id_t do |b|
-      b.purchase_order_id.try(:to_s)
+    text :purchase_order_id_t do
+      purchase_order_id.try(:to_s)
     end
     text :due_date_t do
       source(:due_date).try(:strftime, Date::DATE_FORMATS[:default])
     end
-    text :project_names do
+    text :project_name do
       project_name
     end
     text :payer_name do
