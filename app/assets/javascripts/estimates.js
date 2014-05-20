@@ -31,12 +31,12 @@ var Estimate = (function ($, Shared) {
             }
         });
 
-        $(document).on('click', '.trigger-add', function () {
+        $(document).off('click', '.trigger-add').on('click', '.trigger-add', function () {
             var row = $(this).closest("tr");
             row.nextAll("tr.add").first().clone().addClass("temp").show().insertAfter(row);
             return false;
         });
-        $(document).on('click', '.cancel-add', function () {
+        $(document).off('click', '.cancel-add').on('click', '.cancel-add', function () {
             var row = $(this).closest("tr").first();
             if (row.hasClass("temp")) {
                 row.remove();
@@ -47,7 +47,7 @@ var Estimate = (function ($, Shared) {
         });
 
         if ($("input#estimate_profit").size() > 0) {
-            $("input#estimate_profit").on('change', function () {
+            $("input#estimate_profit").off('change').on('change', function () {
                 Shared.calculateTotals("margin");
                 Shared.calculateTotals("price");
             });

@@ -1,7 +1,9 @@
+var $templatePlaceholder = $('#template-placeholder');
+$templatePlaceholder.attr("data-kind", "<%= @estimate.kind %>")
 <% if @estimate.kind == "Cost Plus Bid" %>
-$('#template-placeholder').html('<%= escape_javascript(render :partial =>  'estimates/cost_plus_bid/template') %>');
+$templatePlaceholder.html('<%= escape_javascript(render :partial =>  'estimates/cost_plus_bid/template') %>');
 <% else %>
-$('#template-placeholder').html('<%= escape_javascript(render :partial =>  'template') %>');
+$templatePlaceholder.html('<%= escape_javascript(render :partial =>  'template') %>');
 <% end %>
 Shared.calculateTotals();
 Shared.calculateSubTotals();

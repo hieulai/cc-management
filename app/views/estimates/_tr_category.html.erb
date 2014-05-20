@@ -13,7 +13,7 @@
     <%= render :partial => 'tr_item', :locals => {:item => item, :category_template => category_template} %>
 <% end %>
 <tr style="display: none" class="add add-item item_category_<%= category_template.category.id %>">
-    <td colspan=11>
+    <td colspan=12>
         <%= form_for :item, :url => {:controller => 'estimates', :action => 'add_item', :category_template_id => category_template.id}, :html => {:class => "form-inline"}, :remote => true do |f| %>
             Item:
             <%= f.autocomplete_field :name, items_autocomplete_name_path, :id_element => "##{f.object_id}", :update_elements => {} %>

@@ -11,7 +11,7 @@
                 <br/>
                 <%= link_to "Email", {:controller => 'estimates', :action => 'show_email', :id => @estimate.id}, :target => '_blank' %>
             </div>
-            <div id="template-placeholder">
+            <div id="template-placeholder" data-kind="<%= @estimate.kind %>">
                 <% if @estimate.kind == "Cost Plus Bid" %>
                   <%= render :partial => 'estimates/cost_plus_bid/template' %>
                 <% else %>
