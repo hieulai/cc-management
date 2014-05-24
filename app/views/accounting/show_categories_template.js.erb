@@ -1,0 +1,3 @@
+$('#tr-category-select option:selected').remove();
+$('#tr-category-select').before('<%= escape_javascript(render :partial =>  "#{@purchasable.class.name.underscore}_categories_template", :locals => {:purchase_order => @purchasable, :bill => @purchasable, :categories_template => @categories_template, :p_ct => @p_ct}) %>');
+Purchasable.calculateSubTotalAndTotal();

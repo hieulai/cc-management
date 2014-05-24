@@ -4,25 +4,24 @@
     <div class="zurb-row">
         <div class="columns margin-bottom">
             <h2>Edit Purchase Order</h2>
-            <%= link_to("Delete", {:action => 'delete_purchase_order', :id => @purchasable.id}, :class => 'btn btn-danger f-right') %>
-            <%= form_for @purchasable, :url => {:action => 'update_purchase_order', :id => @purchasable.id}, :remote => true, html: {class: 'purchasable-form form-horizontal'} do |f| %>
+            <%= link_to("Delete", {:action => 'delete_purchase_order', :id => @purchase_order.id}, :class => 'btn btn-danger f-right') %>
+            <%= form_for @purchase_order, :url => {:action => 'update_purchase_order', :id => @purchase_order.id}, :remote => true, html: {class: 'purchasable-form form-horizontal'} do |f| %>
 
-              <% if @purchasable.errors.any? %>
+              <% if @purchase_order.errors.any? %>
                 <div id="errorExplanation">
-                    <h2><%= pluralize(@purchasable.errors.count, "Error") %> prohibited
+                    <h2><%= pluralize(@purchase_order.errors.count, "Error") %> prohibited
                         this purchase order from being saved:</h2>
                     <ul>
-                        <% @purchasable.errors.full_messages.each do |msg| %>
+                        <% @purchase_order.errors.full_messages.each do |msg| %>
                           <li><%= msg.html_safe %></li>
                         <% end %>
                     </ul>
                 </div>
               <% end %>
-              <%= render(:partial => "purchasable_form", :locals => {:f => f, :purchasable => @purchasable}) %>
-              <div id="item-placeholder">
-                  <%= render(:partial => "purchasable_items", :locals => {:f => f, :purchasable => @purchasable, :categories_template => @purchasable.categories_template}) %>
+              <%= render(:partial => "purchase_order_form", :locals => {:f => f, :purchase_order => @purchase_order}) %>
+              <div id="table-placeholder">
+                  <%= render(:partial => "purchase_order_table", :locals => {:purchase_order => @purchase_order}) %>
               </div>
-
 
             <% end %>
 

@@ -7,11 +7,8 @@ class Category < ActiveRecord::Base
   has_many :change_orders_categories, :dependent => :destroy
   has_many :templates, through: :categories_templates
   has_many :bids, :dependent => :destroy
-  has_many :items
   
   attr_accessible :name, :cost_total, :margin_total, :price_total, :default, :items_attributes
-
-  accepts_nested_attributes_for :items, reject_if: :all_blank, allow_destroy: true
 
   default_scope order("name ASC")
   scope :raw, where(template_id: nil)
@@ -28,6 +25,10 @@ class Category < ActiveRecord::Base
       end
     end
     destroy
+  end
+
+  def raw?
+    template_id.nil? && builder_id
   end
 
   def undestroyable?

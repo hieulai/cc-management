@@ -11,29 +11,24 @@
         <div class="control-group">
             <%= f.label :payer_name, "Payor", class: 'col-lg-2 control-label' %>
             <div class="controls">
-                <%= hidden_field_tag :payer, purchasable.payer.try(:display_name), data: {url: people_autocomplete_name_path} %>
+                <%= hidden_field_tag :payer, purchase_order.payer.try(:display_name), data: {url: people_autocomplete_name_path} %>
                 <%= f.hidden_field :payer_id, class: 'payer-id' %>
                 <%= f.hidden_field :payer_type, class: 'payer-type' %>
             </div>
         </div>
         <div class="control-group">
             <%= f.label :project_id, "Project", class: 'col-lg-2 control-label' %>
-            <div class="controls"><%= f.select(:project_id, Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => purchasable.id, :type => purchasable.class.name)}) %></div>
-        </div>
-        <div class="control-group">
-            <%= f.label :category_id, "Category", class: 'col-lg-2 control-label' %>
             <div class="controls">
-                <div id="categories_template-placeholder">
-                    <% categories_template = purchasable.categories_template_id.present? ? CategoriesTemplate.find(purchasable.categories_template_id) : CategoriesTemplate.new %>
-                    <%= f.select(:category_id, grouped_category_options(purchasable.project), {:selected => categories_template.category_id, :include_blank => true},
-                                 :data => {:remote => true, :url => url_for(:action => "show_category_items", :id => purchasable.id, :type => purchasable.class.name, :project_id => purchasable.project.try(:id))}) %>
-                </div>
+                <%= f.select(:project_id,
+                             Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id]).collect { |s| [s.name, s.id] },
+                             {:include_blank => true},
+                             :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => purchase_order.id, :type => purchase_order.class.name)}) %>
             </div>
         </div>
-        <% unless purchasable.new_record? %>
+        <% unless purchase_order.new_record? %>
           <div class="control-group">
-              <%= f.label :purchasable_id, "#{purchasable.class.name.underscore.humanize} #", class: 'col-lg-2 control-label' %>
-              <div class="controls"><%= purchasable.id %></div>
+              <%= f.label :purchasable_id, "Purchase order #", class: 'col-lg-2 control-label' %>
+              <div class="controls"><%= purchase_order.id %></div>
           </div>
         <% end %>
 

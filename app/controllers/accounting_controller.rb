@@ -252,7 +252,7 @@ class AccountingController < ApplicationController
   end
 
   def edit_purchase_order
-    @purchasable = PurchaseOrder.find(params[:id])
+    @purchase_order = PurchaseOrder.find(params[:id])
   end
 
   def update_purchase_order
@@ -275,6 +275,7 @@ class AccountingController < ApplicationController
   def add_item_to_purchasable
     @type = params[:type]
     @item = Item.find(params[:item_id]) if params[:item_id].present?
+    @category = Category.find(params[:category_id]) if params[:category_id].present?
     respond_to do |format|
       format.js {}
     end
@@ -456,21 +457,25 @@ class AccountingController < ApplicationController
     @type = params[:type].to_s.underscore
     @purchasable = params[:id].present? ? klass.find(params[:id]) : klass.new
     @project = params[@type.to_sym][:project_id].present? ? Project.find(params[@type.to_sym][:project_id]) : nil
+    @purchasable.project = @project
     respond_to do |format|
       format.js {}
     end
   end
 
-  def show_category_items
+  def show_categories_template
     klass =  params[:type].to_s.constantize
     @type = params[:type].to_s.underscore
     @purchasable = params[:id].present? ? klass.find(params[:id]) : klass.new
-    project = params[:project_id].present? ? Project.find(params[:project_id]) : nil
-    category = params[@type.to_sym][:category_id].present? ? Category.find(params[@type.to_sym][:category_id]) : nil
+    project = Project.find(params[:project_id])
+    @purchasable.project = project
+    category = params[:category_select].present? ? Category.find(params[:category_select]) : nil
     if project && category
       @categories_template = CategoriesTemplate.where(:category_id => category.id, :template_id => project.estimates.first.template.id).first_or_initialize
+      @p_ct = @categories_template.send("#{@type.pluralize}_categories_templates".to_sym).where("#{@type}_id".to_sym => @purchasable.id).first_or_initialize
     else
       @categories_template = nil
+      @p_ct = nil
     end
     respond_to do |format|
       format.js {}
@@ -520,6 +525,7 @@ class AccountingController < ApplicationController
   def create_purchasable(type)
     klass =  type.to_s.constantize
     @type = type.to_s.underscore
+    assign_categories_templates
     @purchasable = klass.new(params[@type.to_sym])
     @purchasable.builder_id = session[:builder_id]
     # Checking for valid payment
@@ -539,7 +545,6 @@ class AccountingController < ApplicationController
         end
       end
     end
-    assign_categories_template
     if @purchasable.save
       # Create payment simultaneously for bills
       if @purchasable.instance_of?(Bill) && payment
@@ -564,7 +569,15 @@ class AccountingController < ApplicationController
     klass = type.to_s.constantize
     @type = type.to_s.underscore
     @purchasable = klass.find(params[:id])
-    assign_categories_template
+    assign_categories_templates
+
+    # Destroy all old po_cts if project changed
+    if params[@type.to_sym][:project_id].present? && params[@type.to_sym][:project_id] != @purchasable.project_id.to_s
+      @purchasable.send("#{@type.pluralize}_categories_templates".to_sym).each do |p_ct|
+        params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym] << {id: p_ct.id, _destroy: true}.with_indifferent_access
+      end
+    end
+
     if @purchasable.update_attributes(params[@type.to_sym])
       respond_to do |format|
         format.html { redirect_to(params[:original_url].presence ||url_for(:action => @type.pluralize)) }
@@ -580,33 +593,23 @@ class AccountingController < ApplicationController
     end
   end
 
-  def assign_categories_template
-    category_template = CategoriesTemplate.new
-    if params[@type.to_sym][:category_id].present? && params[@type.to_sym][:project_id].present?
+  def assign_categories_templates
+    if params[@type.to_sym][:project_id].present? && params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym].present?
       project = Project.find(params[@type.to_sym][:project_id])
-      category_template = CategoriesTemplate.where(:category_id => params[@type.to_sym][:category_id], :template_id => project.estimates.first.template.id).first
-      unless category_template
-        category = Category.find params[@type.to_sym][:category_id]
-        if category
-          category_template = category.categories_templates.where(:template_id => project.estimates.first.template.id).first
-        end
+      params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym].each do |p_ct|
+        category_template = CategoriesTemplate.where(:category_id => p_ct[:category_id], :template_id => project.estimates.first.template.id).first
         unless category_template
-          category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.estimates.first.template.id, :purchased => true)
+          category = Category.find p_ct[:category_id]
+          if category
+            category_template = category.categories_templates.where(:template_id => project.estimates.first.template.id).first
+          end
+          unless category_template
+            category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.estimates.first.template.id, :purchased => true)
+          end
         end
-      end
-      # Destroy all old purchasable_items if category template changed
-      if @purchasable.categories_template_id != category_template.id
-        params[@type.to_sym]["#{@type.pluralize}_items_attributes"]||= []
-        @purchasable.purchasable_items.each do |pi|
-          params[@type.to_sym]["#{@type.pluralize}_items_attributes"] << {id: pi.id, _destroy: true}.with_indifferent_access
-        end
-        params[@type.to_sym]["items_attributes"]||=[]
-        @purchasable.items.each do |i|
-          params[@type.to_sym]["items_attributes"] << {id: i.id, _destroy: true}.with_indifferent_access
-        end
+        p_ct[:categories_template_id] = category_template.id
       end
     end
-    @purchasable.categories_template_id = category_template.id
   end
 
   def handle_purchasable_errors

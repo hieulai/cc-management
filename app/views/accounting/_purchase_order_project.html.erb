@@ -1,0 +1,42 @@
+<% purchase_order.purchase_orders_categories_templates.each do |p_ct| %>
+  <% if p_ct.categories_template.template.estimate.project_id == purchase_order.project_id %>
+    <%= render(:partial => "purchase_order_categories_template", :locals => {:purchase_order => purchase_order, :p_ct => p_ct, :categories_template => p_ct.categories_template}) %>
+  <% end %>
+<% end %>
+
+<tr id="tr-category-select" class="category add">
+    <td colspan="10">
+        Category: <%= select_tag("category_select",
+                                 grouped_options_for_select(grouped_category_options(purchase_order)),
+                                 {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => purchase_order.id, :type => PurchaseOrder.name, :project_id => purchase_order.project.try(:id))}}) %>
+    </td>
+</tr>
+<tr>
+    <td colspan="7">Subtotal</td>
+    <td id="subtotal" class="right light-blue"></td>
+    <td></td>
+    <td class="right">
+        <div class="total-amount"></div>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="7">Sales Tax</td>
+    <td id="sales_tax" class="right light-blue"></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="7">Shipping</td>
+    <td class="right light-blue">$<%= text_field_tag("purchase_order[shipping]", purchase_order.shipping, class: 'input-mini') %></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="7" class="strong">TOTAL</td>
+    <td id="total" class="right light-blue strong"></td>
+    <td></td>
+    <td class="right strong">
+        <div class="total-amount"></div>
+    </td>
+</tr>

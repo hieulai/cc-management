@@ -42,16 +42,6 @@
                 <%= f.label :project_id, "Project", class: 'col-lg-2 control-label' %>
                 <div class="controls"><%= f.select(:project_id, @builder.projects.current_project.collect { |s| [s.name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => @bill.id, :type => @bill.class.name)}) %></div>
             </div>
-            <div class="control-group job_costed" style="display: <%= job_costed_display %>">
-                <%= f.label :category_id, "Category", class: 'col-lg-2 control-label' %>
-                <div class="controls">
-                    <div id="categories_template-placeholder">
-                        <% categories_template = @bill.categories_template.present? ? @bill.categories_template : CategoriesTemplate.new %>
-                        <%= f.select(:category_id, grouped_category_options(@bill.project), {:selected => categories_template.category_id, :include_blank => true},
-                                     :data => {:remote => true, :url => url_for(:action => "show_category_items", :id => @bill.id, :type => @bill.class.name, :project_id => @bill.project.try(:id))}) %>
-                    </div>
-                </div>
-            </div>
             <% unless @bill.new_record? %>
                 <div class="control-group">
                     <%= f.label :purchasable_id, "#{@bill.class.name.underscore.humanize} #", class: 'col-lg-2 control-label' %>
@@ -116,8 +106,8 @@
         <% end %>
     </div>
 
-  <div class="job_costed" id="item-placeholder" style="display: <%= job_costed_display %>">
-      <%= render(:partial => "bill_items", :locals => {:f => f, :purchasable => @bill, :categories_template => @bill.categories_template}) %>
+  <div class="job_costed" id="table-placeholder" style="display: <%= job_costed_display %>">
+      <%= render(:partial => "bill_table", :locals => {:f => f, :bill => @bill}) %>
   </div>
   <div class="un_job_costed" style="display: <%= un_job_costed_display %>">
       <%= render(:partial => "accounting/un_job_costed_bills/bill_items", :locals => {:f => f}) %>

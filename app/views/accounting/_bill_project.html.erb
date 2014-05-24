@@ -1,0 +1,20 @@
+<% bill.bills_categories_templates.each do |p_ct| %>
+  <% if p_ct.categories_template.template.estimate.project_id == bill.project_id %>
+    <%= render(:partial => "bill_categories_template", :locals => {:bill => bill, :p_ct => p_ct, :categories_template => p_ct.categories_template}) %>
+  <% end %>
+<% end %>
+
+<tr id="tr-category-select" class="category add">
+    <td colspan="7">
+        Category: <%= select_tag("category_select",
+                                 grouped_options_for_select(grouped_category_options(bill)),
+                                 {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => bill.id, :type => Bill.name, :project_id => bill.project.try(:id))}}) %>
+    </td>
+</tr>
+<tr>
+    <td colspan="5" class="strong">TOTAL</td>
+    <td id="total" class="right light-blue strong"></td>
+    <td class="right strong">
+        <div class="total-amount"></div>
+    </td>
+</tr>

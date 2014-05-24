@@ -1,5 +1,6 @@
 module AccountingHelper
-  def grouped_category_options(project)
+  def grouped_category_options(purchasable)
+    project = purchasable.project
     return [] unless project
     result = []
     original_categories = []
@@ -9,6 +10,7 @@ module AccountingHelper
       end
     end
     raw_categories = @builder.categories.raw.reject { |c| original_categories.map { |c| c[:name] }.include? c.name }
+    original_categories = original_categories.reject { |c| purchasable.categories_templates.pluck(:category_id).include? c.id }
     result << ['From estimate', original_categories.map { |c| [c.name, c.id] }] if original_categories.any?
     result << ['New', raw_categories.map { |c| [c.name, c.id] }] if raw_categories.any?
     result

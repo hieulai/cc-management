@@ -4,7 +4,7 @@
             <%= sorted_ths [["Order Date", "date"],
                             ["PO #", "id"],
                             ["Project", "project_name"],
-                            ["Category", "category_name"],
+                            ["Categories", "category_names"],
                             ["Payor", "payer_name"],
                             ["Amount", "amount"],
                             ["Notes", "notes"]] %>
@@ -21,7 +21,13 @@
               <%= po.id %>
           </td>
           <td><%= po.project_name %></td>
-          <td><%= po.category_name %></td>
+          <td>
+              <ul>
+                  <% po.category_names.split(",").each do |name| %>
+                    <li><%= name %></li>
+                  <% end %>
+              </ul>
+          </td>
           <td><%= po.payer_name %></td>
           <td class="right"><%= number_to_currency(po.total_amount) %></td>
           <td><%= po.notes %></td>

@@ -1,0 +1,45 @@
+<% object_name = bill.class.name.underscore
+   child_name = p_ct.class.name.underscore
+%>
+<tr class="category" id="category_<%= categories_template.category_id %>" data-raw="<%= categories_template.category.raw? %>" data-id="<%= categories_template.category_id %>" data-name="<%= categories_template.category.name %>">
+    <td class="center"><%= link_to "x", "#", :class => 'remove-category btn' %></td>
+    <td colspan="6">
+        <h3><%= categories_template.category.name %></h3>
+        <%= hidden_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][id]", p_ct.try(:id) %>
+        <%= hidden_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][category_id]", categories_template.category_id %>
+        <%= hidden_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][_destroy]", "false" %>
+    </td>
+</tr>
+<% categories_template.try(:items).try(:each) do |i| %>
+  <%= render :partial => 'bill_item', :locals => {:item => i, :bill => bill, :p_ct => p_ct} %>
+<% end %>
+
+<% if categories_template.template %>
+  <% categories_template.template.estimate.project.co_items(categories_template.category).try(:each) do |i| %>
+    <%= render :partial => 'bill_item', :locals => {:item => i, :bill => bill, :p_ct => p_ct} %>
+  <% end %>
+<% end %>
+
+<% p_ct.items.try(:each) do |i| %>
+  <%= render :partial => 'billed_item', :locals => {:item => i, :category_id => categories_template.category_id} %>
+<% end %>
+<tr class="subtotal item_category_<%= categories_template.category_id  %>">
+    <td colspan="4">
+        <%= categories_template.category.name %> Subtotal
+    </td>
+    <td></td>
+    <td class="right">
+        <div class="subtotal-actual-amount"></div>
+    </td>
+    <td class="right">
+        <div class="subtotal-amount"></div>
+    </td>
+</tr>
+
+<tr class="add add-item" id="add-item-to-category-<%= categories_template.category_id %>">
+    <td colspan="7">
+        <%= autocomplete_field :name, nil, items_autocomplete_name_path, :id_element => "#add-item-to-category-"+ categories_template.category_id.to_s + " #purchased_item_id", :update_elements => {} %>
+        <%= hidden_field :purchased_item, :id %>
+        <%= link_to "+ Item", {:action => 'add_item_to_purchasable', :item_id => "", :type => bill.class.name, :category_id => categories_template.category_id}, :remote => true, :id => "add-purchased-item", :class => 'btn' %>
+    </td>
+</tr>

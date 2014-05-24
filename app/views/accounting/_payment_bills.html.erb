@@ -34,7 +34,13 @@
           <td class="center"><%= b.id %></td>
           <td class="center"><%= b.source(:due_date) %></td>
           <td><%= b.source(:project).try(:name) %></td>
-          <td><%= b.source(:categories_template).try(:category).try(:name) %></td>
+          <td>
+              <ul>
+                  <% b.category_names.split(",").each do |name| %>
+                    <li><%= name %></li>
+                  <% end %>
+              </ul>
+          </td>
           <td class="right unpaid-amount">
               <%= price_tag(b.paid_amount) %>
           </td>

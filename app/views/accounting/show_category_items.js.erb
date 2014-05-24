@@ -1,3 +1,0 @@
-$('#item-placeholder').html('<%= escape_javascript(render :partial =>  @purchasable.instance_of?(Bill) ? 'bill_items' : 'purchasable_items', :locals => {:purchasable => @purchasable, :categories_template => @categories_template}) %>');
-Purchasable.calculateSubTotalAndTotal();
-Shared.calculateTotals();

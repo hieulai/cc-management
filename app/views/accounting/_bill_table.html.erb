@@ -1,0 +1,18 @@
+<table class="grid-view purchasable-items-list" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th></th>
+        <th>Category</th>
+        <th>Item</th>
+        <th>Estimate Description</th>
+        <th>Bill Memo</th>
+        <th class="cell-price">Amount</th>
+        <th class="cell-price">Estimated Costs</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if bill.project %>
+      <%= render(:partial => "bill_project", :locals => {:bill => bill}) %>
+    <% end %>
+    </tbody>
+</table>

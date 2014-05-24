@@ -6,7 +6,7 @@
                         ["Bill #", "id"],
                         ["PO #", "purchase_order_id"],
                         ["Project", "project_name"],
-                        ["Category", "category_name"],
+                        ["Categories", "category_names"],
                         ["Payor", "payer_name"],
                         ["Amount", "amount"],
                         ["Notes", "vnotes"]] %>
@@ -33,7 +33,13 @@
             </td>
             <td class="center"><%= link_to b.purchase_order_id, {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :target => "_blank" if b.purchase_order.present? %></td>
             <td><%= b.project_name %></td>
-            <td><%= b.category_name %></td>
+            <td>
+                <ul>
+                    <% b.category_names.split(",").each do |name| %>
+                      <li><%= name %></li>
+                    <% end %>
+                </ul>
+            </td>
             <td><%= b.payer_name %></td>
             <td class="right"><%= number_to_currency(b.cached_total_amount) %></td>
             <td><%= b.vnotes %></td>

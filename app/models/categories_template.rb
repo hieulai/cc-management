@@ -7,8 +7,11 @@ class CategoriesTemplate < ActiveRecord::Base
 
   belongs_to :template
   belongs_to :category
-  has_many :purchase_orders, :dependent => :destroy
-  has_many :bills, :dependent => :destroy
+  has_many :bills_categories_templates, :dependent => :destroy
+  has_many :purchase_orders_categories_templates, :dependent => :destroy
+  has_many :bills, :through => :bills_categories_templates
+  has_many :purchase_orders, :through => :purchase_orders_categories_templates
+
   has_and_belongs_to_many :items
   has_and_belongs_to_many :accounts
   accepts_nested_attributes_for :items, allow_destroy: true
@@ -28,7 +31,7 @@ class CategoriesTemplate < ActiveRecord::Base
   def merged_purchasable_items
     po_ids = purchase_orders.pluck(:id)
     bill_ids = bills.pluck(:id)
-    r = Array.new
+    r = []
     Item.where('purchase_order_id in (?)  or bill_id in (?)', po_ids, bill_ids).group_by(&:name).each do |name, list|
       estimated_cost = list.map(&:amount).compact.sum
       actual_cost = list.map(&:actual_cost).compact.sum

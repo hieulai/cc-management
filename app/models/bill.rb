@@ -7,26 +7,28 @@ class Bill < ActiveRecord::Base
   belongs_to :project
   belongs_to :vendor
   belongs_to :payer, polymorphic: true
-  belongs_to :categories_template
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :purchase_order
+  belongs_to :categories_template
+
   has_many :items, :dependent => :destroy
+  has_many :bills_items, :dependent => :destroy
   has_many :payments_bills, :dependent => :destroy
   has_many :payments, :through => :payments_bills
-  has_many :bills_items, :dependent => :destroy
   has_many :un_job_costed_items, :dependent => :destroy
   has_many :invoices_bills, :dependent => :destroy
   has_many :invoices, :through => :invoices_bills
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
+  has_many :bills_categories_templates, :dependent => :destroy
+  has_many :categories_templates, :through => :bills_categories_templates
 
   attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id,
                   :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :billed_date, :reconciled,
-                  :category_id, :bills_items_attributes, :items_attributes, :un_job_costed_items_attributes,
-                  :payer_id, :payer_type
-  accepts_nested_attributes_for :bills_items, :allow_destroy => true
-  accepts_nested_attributes_for :items, :allow_destroy => true
+                  :un_job_costed_items_attributes, :payer_id, :payer_type, :bills_categories_templates_attributes
+
   accepts_nested_attributes_for :un_job_costed_items, :reject_if => :all_blank, :allow_destroy => true
-  attr_accessor :create_payment, :category_id
+  accepts_nested_attributes_for :bills_categories_templates, :allow_destroy => true
+  attr_accessor :create_payment
 
   default_scope order("billed_date DESC")
   scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
@@ -39,11 +41,11 @@ class Bill < ActiveRecord::Base
   after_initialize :default_values
   before_update :clear_old_data
   before_save :check_zero_amount, :check_total_amount_changed
-  after_save :update_transactions, :destroy_old_purchased_categories_template
-  after_destroy :destroy_purchased_categories_template
+  after_save :update_transactions
 
-  validates_presence_of :payer_id, :payer_type, :billed_date, :builder
-  validates_presence_of :project, :categories_template, :if => Proc.new { |b| b.job_costed? }
+  validates_presence_of :billed_date, :builder
+  validates_presence_of :payer_id, :payer_type, :if => Proc.new { |b| b.purchase_order_id.nil? }
+  validates_presence_of :project, :if => Proc.new { |b| b.job_costed? && b.purchase_order_id.nil? }
 
   searchable do
     integer :id
@@ -57,8 +59,8 @@ class Bill < ActiveRecord::Base
     string :project_name do
       project_name
     end
-    string :category_name do
-      category_name
+    string :category_names do
+      category_names
     end
     string :payer_name do
       payer_name
@@ -88,8 +90,8 @@ class Bill < ActiveRecord::Base
     text :payer_name do
       payer_name
     end
-    text :category_name do
-      category_name
+    text :category_names do
+      category_names
     end
     text :vnotes do
       vnotes
@@ -104,8 +106,13 @@ class Bill < ActiveRecord::Base
     self.source(:payer).try(:display_name)
   end
 
-  def category_name
-    self.source(:categories_template).try(:category).try(:name)
+  def category_names
+    if generated?
+      purchase_order.category_names
+    else
+      categories_templates.map { |ct| ct.category.name }.join(",")
+    end
+
   end
 
   def vnotes
@@ -167,43 +174,27 @@ class Bill < ActiveRecord::Base
   def total_amount
     return purchase_order.total_amount if generated?
     if job_costed
-      # marked_for_destruction? is used in saving callback
-      c_bills_items = bills_items.reject(&:marked_for_destruction?)
-      c_items = items.reject(&:marked_for_destruction?)
-      if c_bills_items.any? || c_items.any?
-        t=0
-        t+= c_bills_items.map(&:actual_cost).compact.sum if c_bills_items.any?
-        t+= c_items.map(&:actual_cost).compact.sum if c_items.any?
-        t
-      end
+      bills_categories_templates.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     else
       c_un_job_costed_items = un_job_costed_items.reject(&:marked_for_destruction?)
-      t= c_un_job_costed_items.map(&:amount).compact.sum
+      c_un_job_costed_items.map(&:amount).compact.sum
     end
-  end
-
-  def purchasable_item(item_id)
-    bills_items.where(:item_id => item_id).first
-  end
-
-  def purchasable_items
-    bills_items
   end
 
   def update_transactions
-    ta = self.total_amount.to_f
-    accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: ta})
-    cogs_account_id_was = CategoriesTemplate.find(categories_template_id_was).cogs_account.id if categories_template_id_was
-    cogs_account_id = CategoriesTemplate.find(categories_template_id).cogs_account.id if categories_template_id
-    if job_costed
-      accounting_transactions.where(account_id: cogs_account_id_was|| cogs_account_id).first_or_create.update_attributes({account_id: cogs_account_id, date: date, amount: ta})
-    else
-      accounting_transactions.where(account_id: cogs_account_id_was).destroy_all
-    end
+    accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: total_amount.to_f})
   end
 
   def date
     billed_date
+  end
+
+  def purchasable_items
+    r = []
+    bills_categories_templates.each do |b_ct|
+      r << b_ct.bills_items
+    end
+    r.flatten
   end
 
   private
@@ -228,24 +219,12 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  def destroy_old_purchased_categories_template
-    return if categories_template_id_was.blank?
-    ct = CategoriesTemplate.find(categories_template_id_was)
-    ct.destroy if ct.purchased && ct.bills.empty?
-  end
-
-  def destroy_purchased_categories_template
-    categories_template.destroy if categories_template && categories_template.purchased && categories_template.bills.empty?
-  end
-
   def clear_old_data
     if self.job_costed
       self.un_job_costed_items.destroy_all
     else
-      self.items.destroy_all
-      self.bills_items.destroy_all
       self.project_id = nil
-      self.categories_template_id = nil
+      self.bills_categories_templates.destroy_all
     end
   end
 

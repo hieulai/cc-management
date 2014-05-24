@@ -1,2 +1,3 @@
-$('#categories_template-placeholder').html('<%= escape_javascript(select(@type.to_sym, :category_id, grouped_category_options(@project), {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_category_items", :id => @purchasable.id, :type => @purchasable.class.name, :project_id => @project.try(:id) )})) %>');
-$('select[name="<%=@type.to_sym %>[category_id]"]').change();
+$('#table-placeholder').html('<%= escape_javascript(render(:partial => "#{@purchasable.class.name.underscore}_table", :locals => {:purchase_order => @purchasable, :bill => @purchasable})) %>');
+Purchasable.calculateSubTotalAndTotal();
+Shared.calculateTotals();

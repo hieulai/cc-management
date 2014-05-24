@@ -23,15 +23,29 @@ var Purchasable = (function ($, Shared) {
         });
 
         $(document).on('railsAutocomplete.select', '.purchasable-items-list input[name="name[]"]', function () {
-            var itemId = $('input[name="purchased_item[id]"]').val();
-            var link = $("a#add-purchased-item").attr("href");
-            $("a#add-purchased-item").attr("href", Shared.updateQueryStringParameter(link, "item_id", itemId)).click();
+            var itemId = $(this).parent().find('input[name="purchased_item[id]"]').val();
+            var $link = $(this).parent().find("a");
+            $link.attr("href", Shared.updateQueryStringParameter($link.attr("href"), "item_id", itemId)).click();
         });
 
         $(document).on('click', '.purchasable-items-list a.remove-item', function (e) {
             e.preventDefault();
-            $(this).closest("tr").hide();
-            $(this).closest("tr").find('input[name$="[][_destroy]"]').val("true");
+            var $tr = $(this).closest("tr");
+            $tr.hide();
+            $tr.find('input[name$="[][_destroy]"]').val("true");
+            calculateSubTotalAndTotal();
+            return false;
+        });
+
+        $(document).on('click', '.purchasable-items-list a.remove-category', function (e) {
+            e.preventDefault();
+            var $tr = $(this).closest("tr");
+            $tr.hide();
+            $tr.nextUntil('tr.category').hide();
+            $tr.find('input[name$="[][_destroy]"]').val("true");
+            $("#tr-category-select optgroup:eq(" + ($tr.attr("data-raw") == "true" ? 1 : 0) + ")").append(
+                $('<option></option>').val($tr.attr("data-id")).html($tr.attr("data-name"))
+            );
             calculateSubTotalAndTotal();
             return false;
         });
@@ -94,6 +108,8 @@ var Purchasable = (function ($, Shared) {
             }
             Shared.fillValue("#total", total, empty);
         }
+        Shared.calculateSubTotals();
+        Shared.calculateTotals();
     };
 
     var calculatePostTaxAmount = function (i) {

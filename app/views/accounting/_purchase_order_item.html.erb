@@ -1,6 +1,6 @@
 <%
    change_order_item = item.change_orders_category_id.present? ? "change_order" : ""
-   object_name = bill.class.name.underscore
+   object_name = purchase_order.class.name.underscore
    child_name = p_ct.class.name.underscore
    purchasable_object = p_ct.purchasable_item(item.id)
    text_field_display = purchasable_object ? "" : "none"
@@ -23,12 +23,32 @@
     <td>
         <%= text_area_tag "#{object_name}[#{child_name.pluralize}_attributes][][#{object_name.pluralize}_items_attributes][][memo]", purchasable_object.try(:memo), {:class => "text-field", :style => "display: #{text_field_display}", :size => '10x1'} %>
     </td>
-
-    <td class="right light-blue">
-        <div class="text-field" style="display: <%= text_field_display %>">
-            $<%= text_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][#{object_name.pluralize}_items_attributes][][actual_cost]", purchasable_object.try(:actual_cost) || item.estimated_cost * item.qty, :class => "actual-amount input-mini", :size => 10 %>
+    <td class="right">
+        <%= text_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][#{object_name.pluralize}_items_attributes][][qty]", purchasable_object.try(:qty) || item.qty, :class => "text-field input-mini", :style => "display: #{text_field_display}", :size => 10 %>
+        <div class="item-qty value-field" style="display: <%= value_display %>">
+            <%= item.qty %>
+        </div>
+    </td>
+    <td class="right">
+        $<%= text_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][#{object_name.pluralize}_items_attributes][][estimated_cost]",
+                            purchasable_object.try(:estimated_cost) || item.estimated_cost,
+                            :class => "text-field input-mini", :style => "display: #{text_field_display}", :size => 10 %>
+        <div class="item-estimated_cost value-field" style="display: <%= value_display %>">
+            <%= price(item.estimated_cost) %>
         </div>
     </td>
 
+    <td class="right light-blue">
+        <div class="actual-amount-placeholder">
+            <%= price_tag(purchasable_object.try(:estimated_cost) && purchasable_object.try(:qty) ?
+                              purchasable_object.try(:estimated_cost) * purchasable_object.try(:qty) : nil, 'actual-amount') %>
+        </div>
+    </td>
+    <td class="right">
+        <div class="text-field" style="display: <%= text_field_display %>">
+            <div class="post-tax-actual-amount"></div>
+            <%= hidden_field_tag "#{object_name}[#{object_name.pluralize}_categories_templates_attributes][][#{object_name.pluralize}_items_attributes][][actual_cost]" %>
+        </div>
+    </td>
     <td class="right"><%= price_tag(item.amount, 'amount') %></td>
 </tr>

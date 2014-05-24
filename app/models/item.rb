@@ -11,6 +11,8 @@ class Item < ActiveRecord::Base
   belongs_to :purchase_order
   belongs_to :bill
   belongs_to :change_orders_category
+  belongs_to :bills_categories_template
+  belongs_to :purchase_orders_categories_template
   has_many :categories_templates, through: :categories_templates_items
   has_many :templates, through: :categories_templates_items
   has_many :invoices_items, :dependent => :destroy
@@ -20,10 +22,11 @@ class Item < ActiveRecord::Base
   has_many :purchase_orders_items, :dependent => :destroy
   has_many :bids_items, :dependent => :destroy
 
-  counter_culture :bill, :column_name => "cached_total_amount", :delta_column => 'actual_cost'
-  counter_culture :purchase_order, :column_name => "cached_total_amount", :delta_column => 'actual_cost'
+  counter_culture [:bills_categories_template, :bill], :column_name => "cached_total_amount", :delta_column => 'actual_cost'
+  counter_culture [:purchase_orders_categories_template, :purchase_order], :column_name => "cached_total_amount", :delta_column => 'actual_cost'
 
-  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file, :change_order, :client_billed, :markup, :bill_memo, :purchase_order_id, :bill_id, :builder_id
+  attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file,
+                  :change_order, :client_billed, :markup, :bill_memo, :purchase_order_id, :bill_id, :builder_id
   validates :name, presence: true
 
   before_save :check_readonly, :if => :changed? , :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
@@ -84,7 +87,7 @@ class Item < ActiveRecord::Base
   def actual_cost
     if bills_items.any? || purchase_orders_items.any?
       bills_items.sum(&:actual_cost).to_f + purchase_orders_items.sum(&:actual_cost).to_f
-    elsif bill || purchase_order || new_record?
+    else
       read_attribute(:actual_cost)
     end
   end
@@ -113,14 +116,6 @@ class Item < ActiveRecord::Base
     self.bids_items.where(:bid_id => bid_id).first
   end
 
-  def purchased?
-    self.purchase_order_id.present? || self.bill_id.present?
-  end
-
-  def from_change_order?
-    self.change_orders_category.present?
-  end
-
   def self.to_csv(items, options = {})
     CSV.generate(options = {}) do |csv|
       csv << HEADERS
@@ -128,6 +123,14 @@ class Item < ActiveRecord::Base
         csv << [item.name, item.description, item.estimated_cost, item.unit, item.markup, item.price, item.notes]
       end
     end
+  end
+
+  def purchased?
+    self.purchase_orders_categories_template || self.bills_categories_template
+  end
+
+  def from_change_order?
+    self.change_orders_category.present?
   end
 
   private

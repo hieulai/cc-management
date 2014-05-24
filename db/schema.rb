@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140509165249) do
+ActiveRecord::Schema.define(:version => 20140524084225) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -139,19 +139,32 @@ ActiveRecord::Schema.define(:version => 20140509165249) do
   add_index "bills", ["purchase_order_id"], :name => "index_bills_on_purchase_order_id"
   add_index "bills", ["vendor_id"], :name => "index_bills_on_vendor_id"
 
+  create_table "bills_categories_templates", :force => true do |t|
+    t.integer  "bill_id"
+    t.integer  "categories_template_id"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+  end
+
+  add_index "bills_categories_templates", ["bill_id"], :name => "index_bills_categories_templates_on_bill_id"
+  add_index "bills_categories_templates", ["categories_template_id"], :name => "index_bills_categories_templates_on_categories_template_id"
+
   create_table "bills_items", :force => true do |t|
     t.integer  "bill_id"
     t.integer  "item_id"
     t.string   "description"
-    t.decimal  "qty",            :precision => 10, :scale => 2
-    t.decimal  "amount",         :precision => 10, :scale => 2
-    t.decimal  "estimated_cost", :precision => 10, :scale => 2
-    t.decimal  "actual_cost",    :precision => 10, :scale => 2
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
+    t.decimal  "qty",                          :precision => 10, :scale => 2
+    t.decimal  "amount",                       :precision => 10, :scale => 2
+    t.decimal  "estimated_cost",               :precision => 10, :scale => 2
+    t.decimal  "actual_cost",                  :precision => 10, :scale => 2
+    t.datetime "created_at",                                                  :null => false
+    t.datetime "updated_at",                                                  :null => false
     t.text     "memo"
     t.time     "deleted_at"
+    t.integer  "bills_categories_template_id"
   end
+
+  add_index "bills_items", ["bills_categories_template_id"], :name => "index_bills_items_on_bills_ct_id"
 
   create_table "builders", :force => true do |t|
     t.string   "company_name"
@@ -401,33 +414,37 @@ ActiveRecord::Schema.define(:version => 20140509165249) do
     t.integer  "category_id"
     t.string   "name"
     t.string   "description"
-    t.decimal  "qty",                       :precision => 10, :scale => 2
+    t.decimal  "qty",                                    :precision => 10, :scale => 2
     t.string   "unit"
-    t.decimal  "estimated_cost",            :precision => 10, :scale => 2
-    t.decimal  "markup",                    :precision => 10, :scale => 2
+    t.decimal  "estimated_cost",                         :precision => 10, :scale => 2
+    t.decimal  "markup",                                 :precision => 10, :scale => 2
     t.boolean  "default"
     t.text     "notes"
-    t.datetime "created_at",                                                                  :null => false
-    t.datetime "updated_at",                                                                  :null => false
+    t.datetime "created_at",                                                                               :null => false
+    t.datetime "updated_at",                                                                               :null => false
     t.string   "file"
-    t.decimal  "committed_cost",            :precision => 10, :scale => 2
-    t.decimal  "actual_cost",               :precision => 10, :scale => 2
-    t.boolean  "change_order",                                             :default => false, :null => false
-    t.boolean  "client_billed",                                            :default => false, :null => false
-    t.decimal  "uncommitted_cost",          :precision => 10, :scale => 2
-    t.decimal  "margin",                    :precision => 10, :scale => 2
+    t.decimal  "committed_cost",                         :precision => 10, :scale => 2
+    t.decimal  "actual_cost",                            :precision => 10, :scale => 2
+    t.boolean  "change_order",                                                          :default => false, :null => false
+    t.boolean  "client_billed",                                                         :default => false, :null => false
+    t.decimal  "uncommitted_cost",                       :precision => 10, :scale => 2
+    t.decimal  "margin",                                 :precision => 10, :scale => 2
     t.integer  "purchase_order_id"
     t.integer  "change_orders_category_id"
     t.integer  "bill_id"
     t.text     "bill_memo"
     t.time     "deleted_at"
+    t.integer  "purchase_orders_categories_template_id"
+    t.integer  "bills_categories_template_id"
   end
 
   add_index "items", ["bill_id"], :name => "index_items_on_bill_id"
+  add_index "items", ["bills_categories_template_id"], :name => "index_items_on_bills_categories_template_id"
   add_index "items", ["builder_id"], :name => "index_items_on_builder_id"
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
   add_index "items", ["change_orders_category_id"], :name => "index_items_on_change_orders_category_id"
   add_index "items", ["purchase_order_id"], :name => "index_items_on_purchase_order_id"
+  add_index "items", ["purchase_orders_categories_template_id"], :name => "index_items_on_purchase_orders_categories_template_id"
   add_index "items", ["template_id"], :name => "index_items_on_template_id"
 
   create_table "leads", :force => true do |t|
@@ -563,18 +580,31 @@ ActiveRecord::Schema.define(:version => 20140509165249) do
   add_index "purchase_orders", ["project_id"], :name => "index_purchase_orders_on_project_id"
   add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
 
+  create_table "purchase_orders_categories_templates", :force => true do |t|
+    t.integer  "purchase_order_id"
+    t.integer  "categories_template_id"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+  end
+
+  add_index "purchase_orders_categories_templates", ["categories_template_id"], :name => "index_pos_cts_on_categories_template_id"
+  add_index "purchase_orders_categories_templates", ["purchase_order_id"], :name => "index_pos_cts_on_purchase_order_id"
+
   create_table "purchase_orders_items", :force => true do |t|
     t.integer  "purchase_order_id"
     t.integer  "item_id"
     t.string   "description"
-    t.decimal  "qty",               :precision => 10, :scale => 2
-    t.decimal  "amount",            :precision => 10, :scale => 2
-    t.decimal  "estimated_cost",    :precision => 10, :scale => 2
-    t.decimal  "actual_cost",       :precision => 10, :scale => 2
-    t.datetime "created_at",                                       :null => false
-    t.datetime "updated_at",                                       :null => false
+    t.decimal  "qty",                                    :precision => 10, :scale => 2
+    t.decimal  "amount",                                 :precision => 10, :scale => 2
+    t.decimal  "estimated_cost",                         :precision => 10, :scale => 2
+    t.decimal  "actual_cost",                            :precision => 10, :scale => 2
+    t.datetime "created_at",                                                            :null => false
+    t.datetime "updated_at",                                                            :null => false
     t.text     "memo"
+    t.integer  "purchase_orders_categories_template_id"
   end
+
+  add_index "purchase_orders_items", ["purchase_orders_categories_template_id"], :name => "index_pos_items_on_pos_ct_id"
 
   create_table "receipts", :force => true do |t|
     t.integer  "builder_id"

@@ -5,26 +5,27 @@ class PurchaseOrder < ActiveRecord::Base
   belongs_to :project
   belongs_to :vendor
   belongs_to :payer, polymorphic: true
-  belongs_to :categories_template
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :items, :dependent => :destroy
   has_one :bill, :dependent => :destroy
   has_many :purchase_orders_items, :dependent => :destroy
+  has_many :purchase_orders_categories_templates, :dependent => :destroy
+  has_many :categories_templates, :through => :purchase_orders_categories_templates
 
   default_scope order("date DESC")
 
-  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :cached_total_amount , :builder_id, :project_id,
-                  :categories_template_id, :vendor_id, :due_date, :category_id, :purchase_orders_items_attributes, :items_attributes,
-                  :payer_id, :payer_type
+  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :cached_total_amount, :builder_id, :project_id,
+                  :vendor_id, :due_date, :purchase_orders_items_attributes, :items_attributes,
+                  :payer_id, :payer_type, :purchase_orders_categories_templates_attributes, :categories_template_id
   accepts_nested_attributes_for :purchase_orders_items, :allow_destroy => true
   accepts_nested_attributes_for :items, :allow_destroy => true
-  attr_accessor :category_id
+  accepts_nested_attributes_for :purchase_orders_categories_templates, :allow_destroy => true
 
   after_initialize :default_values
   before_save :check_zero_amount, :check_total_amount_changed
-  after_save :create_bill, :update_indexes
+  after_save :create_default_bill, :update_indexes
 
-  validates_presence_of :payer_id, :payer_type, :project, :categories_template
+  validates_presence_of :payer_id, :payer_type, :project
 
   searchable do
     integer :id
@@ -40,8 +41,8 @@ class PurchaseOrder < ActiveRecord::Base
     string :payer_name do
       payer_name
     end
-    string :category_name do
-      category_name
+    string :category_names do
+      category_names
     end
 
     text :notes
@@ -60,8 +61,8 @@ class PurchaseOrder < ActiveRecord::Base
     text :payer_name do
       payer_name
     end
-    text :category_name do
-      category_name
+    text :category_names do
+      category_names
     end
   end
 
@@ -73,8 +74,8 @@ class PurchaseOrder < ActiveRecord::Base
     payer.try(:display_name)
   end
 
-  def category_name
-    categories_template.try(:category).try(:name)
+  def category_names
+    categories_templates.map { |ct| ct.category.name }.join(", ")
   end
 
   def has_bill_paid?
@@ -90,23 +91,15 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def total_amount
-    c_po_items = purchase_orders_items.reject(&:marked_for_destruction?)
-    c_items = items.reject(&:marked_for_destruction?)
-    if self.shipping || c_po_items.any? || c_items.any?
-      t =0
-      t+= self.shipping.to_f
-      t+= c_po_items.map(&:actual_cost).compact.sum if c_po_items.any?
-      t+= c_items.map(&:actual_cost).compact.sum if c_items.any?
-      t.round(2)
-    end
-  end
-
-  def purchasable_item(item_id)
-    purchase_orders_items.where(:item_id => item_id).first
+    purchase_orders_categories_templates.reject(&:marked_for_destruction?).map(&:amount).compact.sum + shipping.to_f
   end
 
   def purchasable_items
-    purchase_orders_items
+    r = []
+    purchase_orders_categories_templates.each do |p_ct|
+      r << p_ct.purchase_orders_items
+    end
+    r.flatten
   end
 
   private
@@ -115,15 +108,9 @@ class PurchaseOrder < ActiveRecord::Base
     self.sales_tax_rate||=8.25
   end
 
-  def create_bill
-    unless PurchaseOrder.find(self.id).bill
-      Bill.create!(:purchase_order_id => self.id,
-                   :builder_id => self.builder_id,
-                   :payer_id => self.payer_id,
-                   :payer_type => self.payer_type,
-                   :project_id => self.project_id,
-                   :categories_template_id => self.categories_template_id)
-    end
+  def create_default_bill
+    self.create_bill({:purchase_order_id => self.id, :builder_id => self.builder_id}) unless bill
+    bill.update_attributes({:payer_id => payer_id, :payer_type => payer_type})
   end
 
   def check_readonly
