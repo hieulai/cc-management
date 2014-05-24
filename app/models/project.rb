@@ -17,6 +17,7 @@ class Project < ActiveRecord::Base
   scope :past_lead, where(status: "Past Lead")
   scope :current_project, where(status: "Current Project")
   scope :past_project, where(status: "Past Project")
+  scope :has_estimate, includes(:estimates).where("estimates.id IS NOT NULL")
 
   after_save :update_indexes
 

@@ -20,7 +20,7 @@
             <%= f.label :project_id, "Project", class: 'col-lg-2 control-label' %>
             <div class="controls">
                 <%= f.select(:project_id,
-                             Project.where("builder_id = ? AND status ='Current Project'", session[:builder_id]).collect { |s| [s.name, s.id] },
+                             @builder.projects.current_project.has_estimate.collect { |s| [s.name, s.id] },
                              {:include_blank => true},
                              :data => {:remote => true, :url => url_for(:action => "show_project_categories_template", :id => purchase_order.id, :type => purchase_order.class.name)}) %>
             </div>
