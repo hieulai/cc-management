@@ -6,6 +6,8 @@ class PurchaseOrder < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :payer, polymorphic: true
   belongs_to :builder, :class_name => "Base::Builder"
+  belongs_to :categories_template
+
   has_many :items, :dependent => :destroy
   has_one :bill, :dependent => :destroy
   has_many :purchase_orders_items, :dependent => :destroy
