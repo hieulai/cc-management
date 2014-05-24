@@ -104,6 +104,7 @@ class PurchaseOrder < ActiveRecord::Base
   def default_values
     self.chosen ||= true
     self.sales_tax_rate||=8.25
+    self.cached_total_amount||=0
   end
 
   def create_default_bill
