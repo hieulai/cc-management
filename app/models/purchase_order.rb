@@ -77,7 +77,7 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def category_names
-    categories_templates.map { |ct| ct.category.name }.join(", ")
+    categories_templates.map { |ct| ct.category.name }.join(",")
   end
 
   def has_bill_paid?
@@ -86,10 +86,6 @@ class PurchaseOrder < ActiveRecord::Base
 
   def has_bill_full_paid?
     bill.try(:full_paid?)
-  end
-
-  def cached_total_amount
-    read_attribute(:cached_total_amount).to_f + self.shipping.to_f
   end
 
   def total_amount
@@ -133,6 +129,8 @@ class PurchaseOrder < ActiveRecord::Base
     if !self.new_record? && self.has_bill_paid? && self.total_amount!= self.cached_total_amount
       errors[:base] << "This purchase order has bill #{bill.id} which has already been paid in the amount of $#{cached_total_amount}. Editing a paid bill requires that all item amounts continue to add up to the original payment amount. If the original payment was made for the wrong amount, correct the payment first and then come back and edit the bill."
       return false
+    else
+      self.cached_total_amount+= self.shipping.to_f
     end
   end
 
