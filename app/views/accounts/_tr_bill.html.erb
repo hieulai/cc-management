@@ -1,7 +1,11 @@
 <tr class="clickable <% if t.reconciled%> unclickable <% end %>">
     <td class="center">
         <%= t.date %>
-        <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_bill', :id => t.transactionable_id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+        <% if t.transactionable.purchase_order %>
+          <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_purchase_order', :id => t.transactionable.purchase_order_id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+        <% else %>
+          <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_bill', :id => t.transactionable_id}, :class => 'action edit clickable-link', :style => 'display: none') %>
+        <% end %>
     </td>
     <td>Bill</td>
     <td></td>
