@@ -57,6 +57,9 @@ var Invoice = (function ($, moment ,  Shared, Accounting) {
             options, function (start, end, label) {
                 var fromDate = start.format('YYYY-MM-DD');
                 var toDate = end.format('YYYY-MM-DD');
+                if (fromDate == "Invalid date" || toDate == "Invalid date" ) {
+                    return;
+                }
                 $fromDateInput.val(fromDate);
                 $toDateInput.val(toDate);
                 triggerEstimateSelection(fromDate, toDate);
