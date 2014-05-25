@@ -99,7 +99,7 @@ class Receipt < ActiveRecord::Base
   end
 
   def payer_name
-    uninvoiced ? payor : client.try(:full_name)
+    uninvoiced ? payer.try(:display_name) : client.try(:full_name)
   end
 
   def check_readonly

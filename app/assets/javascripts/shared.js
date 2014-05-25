@@ -82,12 +82,12 @@ var Shared = (function($){
         }
     }
 
-    var initPeopleSelector = function (callback) {
+    var initPeopleSelector = function (callback, selector) {
         var format = function (data) {
             return data.label;
         };
-
-        var $input = $("#payer");
+        selector = selector == null ? "#payer" : selector;
+        var $input = $(selector);
         $input.select2({
             minimumInputLength: 2,
             width: "220px",
@@ -110,7 +110,9 @@ var Shared = (function($){
             },
             initSelection: function (element, callback) {
                 var data = {id: element.val(), text: element.val(), label: element.val()};
-                callback(data);
+                if (callback) {
+                    callback(data);
+                }
             }
         });
 

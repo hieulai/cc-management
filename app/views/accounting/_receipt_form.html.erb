@@ -42,13 +42,14 @@
           </div>
       </div>
       <div class="control-group uninvoiced receipt-kind" style="display: <%= uninvoiced_display %>">
-          <%= f.label :payor, "Payor", class: 'col-lg-2 control-label' %>
+          <%= f.label :payer_name, "Payor", class: 'col-lg-2 control-label' %>
           <div class="controls">
-              <%= autocomplete_field :receipt, :payor, people_autocomplete_name_path, :class => 'receipt-people-name', :value => @receipt.payer.try(:full_name) || @receipt.payor %>
-              <%= f.hidden_field :payer_id, :class => 'payerId' %>
-              <%= f.hidden_field :payer_type, :class => 'payerType' %>
+              <%= hidden_field_tag "receipt[payor]", @receipt.payer.try(:display_name) || @receipt.payor, data: {url: people_autocomplete_name_path} %>
+              <%= f.hidden_field :payer_id, class: 'payer-id' %>
+              <%= f.hidden_field :payer_type, class: 'payer-type' %>
           </div>
       </div>
+
       <div class="control-group invoiced client_credit receipt-kind client-select" style="display: <%= invoiced_client_credit_display %>">
           <%= f.label :client_id, "Client", class: 'col-lg-2 control-label' %>
           <div class="controls">

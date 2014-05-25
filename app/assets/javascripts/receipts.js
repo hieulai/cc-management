@@ -21,6 +21,7 @@ var Receipt = (function ($, Shared, Accounting) {
             $("#receipt-kind").attr("data-kind", $(this).val());
             initChildren();
         });
+        Shared.initPeopleSelector(null, "#receipt_payor");
     };
 
     var initChildren = function () {
