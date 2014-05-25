@@ -13,8 +13,7 @@ class Estimate < ActiveRecord::Base
 
   accepts_nested_attributes_for :measurements
 
-  attr_accessible :progress, :status, :data,
-  :deadline, :revenue, :profit, :margin, :notes, :project_id, :measurements_attributes, :builder_id, :kind
+  attr_accessible :progress, :status, :deadline, :revenue, :profit, :margin, :notes, :project_id, :measurements_attributes, :builder_id, :kind
 
   validates_presence_of :project, :builder
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140524084225) do
+ActiveRecord::Schema.define(:version => 20140525142145) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -116,28 +116,23 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
   create_table "bills", :force => true do |t|
     t.integer  "builder_id"
     t.integer  "project_id"
-    t.integer  "vendor_id"
     t.integer  "purchase_order_id"
-    t.integer  "categories_template_id"
     t.date     "due_date"
     t.text     "notes"
-    t.datetime "created_at",                                                               :null => false
-    t.datetime "updated_at",                                                               :null => false
-    t.decimal  "remaining_amount",       :precision => 10, :scale => 2
-    t.boolean  "job_costed",                                            :default => true
-    t.decimal  "cached_total_amount",    :precision => 10, :scale => 2
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
+    t.decimal  "remaining_amount",    :precision => 10, :scale => 2
+    t.boolean  "job_costed",                                         :default => true
+    t.decimal  "cached_total_amount", :precision => 10, :scale => 2
     t.date     "billed_date"
     t.time     "deleted_at"
-    t.boolean  "reconciled",                                            :default => false
     t.integer  "payer_id"
     t.string   "payer_type"
   end
 
   add_index "bills", ["builder_id"], :name => "index_bills_on_builder_id"
-  add_index "bills", ["categories_template_id"], :name => "index_bills_on_categories_template_id"
   add_index "bills", ["project_id"], :name => "index_bills_on_project_id"
   add_index "bills", ["purchase_order_id"], :name => "index_bills_on_purchase_order_id"
-  add_index "bills", ["vendor_id"], :name => "index_bills_on_vendor_id"
 
   create_table "bills_categories_templates", :force => true do |t|
     t.integer  "bill_id"
@@ -150,7 +145,6 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
   add_index "bills_categories_templates", ["categories_template_id"], :name => "index_bills_categories_templates_on_categories_template_id"
 
   create_table "bills_items", :force => true do |t|
-    t.integer  "bill_id"
     t.integer  "item_id"
     t.string   "description"
     t.decimal  "qty",                          :precision => 10, :scale => 2
@@ -314,10 +308,9 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.integer  "account_id"
     t.date     "date"
     t.text     "notes"
-    t.datetime "created_at",                                                            :null => false
-    t.datetime "updated_at",                                                            :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.string   "reference"
-    t.boolean  "reconciled",                                         :default => false
     t.decimal  "cached_total_amount", :precision => 10, :scale => 2
   end
 
@@ -363,11 +356,10 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.integer  "estimate_id"
     t.date     "sent_date"
     t.integer  "reference"
-    t.datetime "created_at",                                                            :null => false
-    t.datetime "updated_at",                                                            :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.decimal  "remaining_amount",    :precision => 10, :scale => 2
     t.date     "invoice_date"
-    t.boolean  "reconciled",                                         :default => false
     t.date     "bill_from_date"
     t.date     "bill_to_date"
     t.decimal  "cached_total_amount", :precision => 10, :scale => 2
@@ -392,9 +384,8 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.integer  "invoice_id"
     t.integer  "bill_id"
     t.decimal  "amount",     :precision => 10, :scale => 2
-    t.boolean  "reconciled",                                :default => false
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   add_index "invoices_bills", ["bill_id"], :name => "index_invoices_bills_on_bill_id"
@@ -429,21 +420,17 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.boolean  "client_billed",                                                         :default => false, :null => false
     t.decimal  "uncommitted_cost",                       :precision => 10, :scale => 2
     t.decimal  "margin",                                 :precision => 10, :scale => 2
-    t.integer  "purchase_order_id"
     t.integer  "change_orders_category_id"
-    t.integer  "bill_id"
     t.text     "bill_memo"
     t.time     "deleted_at"
     t.integer  "purchase_orders_categories_template_id"
     t.integer  "bills_categories_template_id"
   end
 
-  add_index "items", ["bill_id"], :name => "index_items_on_bill_id"
   add_index "items", ["bills_categories_template_id"], :name => "index_items_on_bills_categories_template_id"
   add_index "items", ["builder_id"], :name => "index_items_on_builder_id"
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
   add_index "items", ["change_orders_category_id"], :name => "index_items_on_change_orders_category_id"
-  add_index "items", ["purchase_order_id"], :name => "index_items_on_purchase_order_id"
   add_index "items", ["purchase_orders_categories_template_id"], :name => "index_items_on_purchase_orders_categories_template_id"
   add_index "items", ["template_id"], :name => "index_items_on_template_id"
 
@@ -480,13 +467,12 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.integer  "account_id"
     t.date     "date"
     t.string   "memo"
-    t.datetime "created_at",                                                            :null => false
-    t.datetime "updated_at",                                                            :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.integer  "vendor_id"
     t.string   "method"
     t.integer  "reference"
     t.integer  "builder_id"
-    t.boolean  "reconciled",                                         :default => false
     t.time     "deleted_at"
     t.integer  "payer_id"
     t.string   "payer_type"
@@ -560,23 +546,21 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
   create_table "purchase_orders", :force => true do |t|
     t.integer  "project_id"
     t.integer  "vendor_id"
-    t.integer  "categories_template_id"
     t.text     "notes"
     t.boolean  "chosen"
-    t.datetime "created_at",                                            :null => false
-    t.datetime "updated_at",                                            :null => false
-    t.decimal  "sales_tax_rate",         :precision => 10, :scale => 4
-    t.decimal  "shipping",               :precision => 10, :scale => 2
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
+    t.decimal  "sales_tax_rate",      :precision => 10, :scale => 4
+    t.decimal  "shipping",            :precision => 10, :scale => 2
     t.date     "date"
     t.integer  "builder_id"
     t.date     "due_date"
-    t.decimal  "cached_total_amount",    :precision => 10, :scale => 2
+    t.decimal  "cached_total_amount", :precision => 10, :scale => 2
     t.integer  "payer_id"
     t.string   "payer_type"
   end
 
   add_index "purchase_orders", ["builder_id"], :name => "index_purchase_orders_on_builder_id"
-  add_index "purchase_orders", ["categories_template_id"], :name => "index_purchase_orders_on_categories_template_id"
   add_index "purchase_orders", ["project_id"], :name => "index_purchase_orders_on_project_id"
   add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
 
@@ -591,7 +575,6 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
   add_index "purchase_orders_categories_templates", ["purchase_order_id"], :name => "index_pos_cts_on_purchase_order_id"
 
   create_table "purchase_orders_items", :force => true do |t|
-    t.integer  "purchase_order_id"
     t.integer  "item_id"
     t.string   "description"
     t.decimal  "qty",                                    :precision => 10, :scale => 2
@@ -613,13 +596,12 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.date     "received_at"
     t.integer  "reference"
     t.text     "notes"
-    t.datetime "created_at",                                                            :null => false
-    t.datetime "updated_at",                                                            :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.decimal  "remaining_amount",    :precision => 10, :scale => 2
     t.string   "payor"
     t.integer  "payer_id"
     t.string   "payer_type"
-    t.boolean  "reconciled",                                         :default => false
     t.decimal  "cached_total_amount", :precision => 10, :scale => 2
     t.string   "kind"
     t.decimal  "credit_amount",       :precision => 10, :scale => 2
@@ -642,9 +624,8 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.string   "name"
     t.string   "description"
     t.decimal  "amount",      :precision => 10, :scale => 2
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
-    t.boolean  "reconciled",                                 :default => false
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
   end
 
   add_index "receipts_items", ["account_id"], :name => "index_receipts_items_on_account_id"
@@ -758,9 +739,8 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.decimal  "amount",          :precision => 10, :scale => 2
     t.string   "reference"
     t.text     "memo"
-    t.boolean  "reconciled",                                     :default => false
-    t.datetime "created_at",                                                        :null => false
-    t.datetime "updated_at",                                                        :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
     t.string   "kind"
   end
 
@@ -770,9 +750,8 @@ ActiveRecord::Schema.define(:version => 20140524084225) do
     t.decimal  "amount",      :precision => 10, :scale => 2
     t.integer  "bill_id"
     t.integer  "account_id"
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
-    t.boolean  "reconciled",                                 :default => false
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
     t.time     "deleted_at"
   end
 

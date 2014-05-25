@@ -2,7 +2,7 @@ class Transfer < ActiveRecord::Base
   belongs_to :from_account, :foreign_key => "from_account_id", :class_name => Account.name
   belongs_to :to_account, :foreign_key => "to_account_id", :class_name => Account.name
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
-  attr_accessible :date, :amount, :reference, :memo, :reconciled, :kind, :from_account_id, :to_account_id
+  attr_accessible :date, :amount, :reference, :memo, :kind, :from_account_id, :to_account_id
 
   before_save :check_top_accounts, :if => Proc.new { |i| Account::TOP.include?(i.from_account.name) || Account::TOP.include?(i.to_account.name) }
   after_initialize :default_values

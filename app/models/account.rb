@@ -17,6 +17,7 @@ class Account < ActiveRecord::Base
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :parent, class_name: "Account"
+
   has_many :payments, :dependent => :destroy
   has_many :deposits, :dependent => :destroy
   has_many :children, class_name: "Account", foreign_key: "parent_id", :dependent => :destroy
@@ -24,13 +25,14 @@ class Account < ActiveRecord::Base
   has_many :received_transfers, class_name: Transfer.name, foreign_key: "to_account_id", :dependent => :destroy
   has_many :receipts_items, :dependent => :destroy
   has_many :un_job_costed_items, :dependent => :destroy
-  has_and_belongs_to_many :categories_templates
-  has_and_belongs_to_many :change_orders_categories
   has_many :ct_bills, :through => :categories_templates, :source => :bills
-  has_and_belongs_to_many :invoices_items
-  has_and_belongs_to_many :invoices_bills
   has_many :accounting_transactions, :dependent => :destroy
   has_one :accounting_transaction, as: :transactionable, dependent: :destroy
+
+  has_and_belongs_to_many :categories_templates
+  has_and_belongs_to_many :change_orders_categories
+  has_and_belongs_to_many :invoices_items
+  has_and_belongs_to_many :invoices_bills
 
   attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
 

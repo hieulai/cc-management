@@ -6,21 +6,17 @@ class PurchaseOrder < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :payer, polymorphic: true
   belongs_to :builder, :class_name => "Base::Builder"
-  belongs_to :categories_template
 
-  has_many :items, :dependent => :destroy
   has_one :bill, :dependent => :destroy
-  has_many :purchase_orders_items, :dependent => :destroy
   has_many :purchase_orders_categories_templates, :dependent => :destroy
+  has_many :purchase_orders_items, :through => :purchase_orders_categories_templates
+  has_many :items, :through => :purchase_orders_categories_templates
   has_many :categories_templates, :through => :purchase_orders_categories_templates
 
   default_scope order("date DESC")
 
   attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :cached_total_amount, :builder_id, :project_id,
-                  :vendor_id, :due_date, :purchase_orders_items_attributes, :items_attributes,
-                  :payer_id, :payer_type, :purchase_orders_categories_templates_attributes, :categories_template_id
-  accepts_nested_attributes_for :purchase_orders_items, :allow_destroy => true
-  accepts_nested_attributes_for :items, :allow_destroy => true
+                  :vendor_id, :due_date, :payer_id, :payer_type, :purchase_orders_categories_templates_attributes
   accepts_nested_attributes_for :purchase_orders_categories_templates, :allow_destroy => true
 
   after_initialize :default_values

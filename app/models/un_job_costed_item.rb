@@ -3,7 +3,7 @@ class UnJobCostedItem < ActiveRecord::Base
 
   belongs_to :bill
   belongs_to :account
-  attr_accessible :account_id, :amount, :bill_id, :description, :name, :reconciled
+  attr_accessible :account_id, :amount, :bill_id, :description, :name
   counter_culture :bill, :column_name => "cached_total_amount", :delta_column => 'amount'
 
   after_save :update_transactions

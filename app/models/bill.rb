@@ -5,14 +5,10 @@ class Bill < ActiveRecord::Base
   before_destroy :check_readonly
 
   belongs_to :project
-  belongs_to :vendor
   belongs_to :payer, polymorphic: true
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :purchase_order
-  belongs_to :categories_template
 
-  has_many :items, :dependent => :destroy
-  has_many :bills_items, :dependent => :destroy
   has_many :payments_bills, :dependent => :destroy
   has_many :payments, :through => :payments_bills
   has_many :un_job_costed_items, :dependent => :destroy
@@ -20,10 +16,12 @@ class Bill < ActiveRecord::Base
   has_many :invoices, :through => :invoices_bills
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
   has_many :bills_categories_templates, :dependent => :destroy
+  has_many :items, :through => :bills_categories_templates
+  has_many :bills_items, :through => :bills_categories_templates
   has_many :categories_templates, :through => :bills_categories_templates
 
   attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id,
-                  :project_id, :categories_template_id, :vendor_id, :job_costed, :due_date, :billed_date, :reconciled,
+                  :project_id, :job_costed, :due_date, :billed_date,
                   :un_job_costed_items_attributes, :payer_id, :payer_type, :bills_categories_templates_attributes
 
   accepts_nested_attributes_for :un_job_costed_items, :reject_if => :all_blank, :allow_destroy => true
@@ -190,11 +188,7 @@ class Bill < ActiveRecord::Base
   end
 
   def purchasable_items
-    r = []
-    bills_categories_templates.each do |b_ct|
-      r << b_ct.bills_items
-    end
-    r.flatten
+    bills_items
   end
 
   private

@@ -29,14 +29,14 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def merged_purchasable_items
-    po_ids = purchase_orders.pluck(:id)
-    bill_ids = bills.pluck(:id)
+    po_ids = purchase_orders_categories_templates.pluck(:id)
+    bill_ids = bills_categories_templates.pluck(:id)
     r = []
-    Item.where('purchase_order_id in (?)  or bill_id in (?)', po_ids, bill_ids).group_by(&:name).each do |name, list|
+    Item.where('purchase_orders_categories_template_id in (?)  or bills_categories_template_id in (?)', po_ids, bill_ids).group_by(&:name).each do |name, list|
       estimated_cost = list.map(&:amount).compact.sum
       actual_cost = list.map(&:actual_cost).compact.sum
       margin = list.map(&:margin).compact.sum
-      r << Item.new(:name => name, :description => list.first.description, :estimated_cost => estimated_cost, :margin => margin, :actual_cost => actual_cost, :purchase_order_id => list.first.purchase_order_id, :bill_id => list.first.bill_id)
+      r << Item.new(:name => name, :description => list.first.description, :estimated_cost => estimated_cost, :margin => margin, :actual_cost => actual_cost, :purchase_orders_categories_template_id => list.first.purchase_orders_categories_template_id, :bills_categories_template_id => list.first.bills_categories_template_id)
     end
     return r
   end

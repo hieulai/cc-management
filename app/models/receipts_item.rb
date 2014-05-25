@@ -1,7 +1,7 @@
 class ReceiptsItem < ActiveRecord::Base
   belongs_to :receipt
   belongs_to :account
-  attr_accessible :name, :description, :amount, :reconciled, :receipt_id, :account_id
+  attr_accessible :name, :description, :amount, :receipt_id, :account_id
   counter_culture :receipt, :column_name => "cached_total_amount", :delta_column => 'amount'
 
   after_save :update_transactions

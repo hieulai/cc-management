@@ -27,8 +27,8 @@
                 <% @specifications.each do |spec| %>
                     <tr>
                         <td class="center">
-                            <%= link_to("Edit", {:action => 'edit_specification', :id => spec.id}, :class => 'action edit') %>
-                            <%= link_to("Delete", {:action => 'delete_specification', :id => spec.id}, :class => 'action edit') %>
+                            <%= link_to("Edit", {:action => 'edit_specification', :id => spec.id}, :class => 'table-action edit') %>
+                            <%= link_to("Delete", {:action => 'delete_specification', :id => spec.id}, :class => 'table-action delete') %>
                         </td>
                         <td><%= spec.category.name %></td>
                         <td><%= spec.name %></td>

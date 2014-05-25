@@ -20,7 +20,7 @@ class Receipt < ActiveRecord::Base
   has_many :receipts_items, :dependent => :destroy
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 
-  attr_accessible :method, :notes, :received_at, :reference, :payer_id, :payer_type, :payor, :client_id, :reconciled,
+  attr_accessible :method, :notes, :received_at, :reference, :payer_id, :payer_type, :payor, :client_id,
                   :account_type, :create_deposit, :receipts_invoices_attributes, :remaining_amount, :receipts_items_attributes,
                   :payer_id, :payer_type, :cached_total_amount, :kind, :credit_amount
   accepts_nested_attributes_for :receipts_invoices, :allow_destroy => true

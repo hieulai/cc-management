@@ -1,11 +1,12 @@
 class Deposit < ActiveRecord::Base
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
+
   has_many :deposits_receipts, :dependent => :destroy
   has_many :receipts, :through => :deposits_receipts
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 
-  attr_accessible :date, :notes, :reconciled, :account_id, :builder_id,
+  attr_accessible :date, :notes, :account_id, :builder_id,
                   :deposits_receipts_attributes, :reference, :cached_total_amount
   accepts_nested_attributes_for :deposits_receipts, :allow_destroy => true
 
