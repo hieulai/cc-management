@@ -93,7 +93,7 @@ class Item < ActiveRecord::Base
   end
 
   def committed_cost
-    bids_items.map(&:amount).compact.sum if bids_items.any?
+    bids_items.chosen.map(&:amount).compact.sum if bids_items.chosen.any?
   end
 
   def price
