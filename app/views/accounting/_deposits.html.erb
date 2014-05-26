@@ -1,8 +1,8 @@
 <table class="grid-view data-tables" id="deposit-list" summary="Payment List" cellspacing="0">
     <thead>
     <tr class="header">
-        <%= sorted_ths [["Reference #", "reference"],
-                        ["Deposit Date", "date"],
+        <%= sorted_ths [["Deposit Date", "date"],
+                        ["Reference #", "reference"],
                         ["Deposit to", "account_name"],
                         ["Amount", "amount"],
                         ["Notes", "notes"]] %>
@@ -11,12 +11,12 @@
     <tbody>
     <% deposits.each do |deposit| %>
       <tr class="clickable">
+          <td class="center">
+              <%= deposit.date %>
+          </td>
           <td>
               <%= deposit.reference %>
               <%= link_to("Edit", {:action => 'edit_deposit', :id => deposit.id}, :class => 'action edit clickable-link', style: 'display: none') %>
-          </td>
-          <td class="center">
-              <%= deposit.date %>
           </td>
           <td><%= deposit.account_name %></td>
           <td class="right"><%= price_tag(deposit.cached_total_amount) %></td>

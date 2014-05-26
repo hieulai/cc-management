@@ -10,6 +10,8 @@ class AccountingController < ApplicationController
 
   def deposits
     @query = params[:query]
+    params[:sort_field] ||= "date"
+    params[:sort_dir] ||= "desc"
     @deposits = Deposit.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
@@ -63,6 +65,9 @@ class AccountingController < ApplicationController
 
   def receipts
     @query = params[:query]
+    params[:sort_field] ||= "received_at"
+    params[:sort_dir] ||= "desc"
+
     @receipts = Receipt.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
@@ -149,6 +154,8 @@ class AccountingController < ApplicationController
 
   def invoices
     @query = params[:query]
+    params[:sort_field] ||= "invoice_date"
+    params[:sort_dir] ||= "desc"
     @invoices = Invoice.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
@@ -284,6 +291,8 @@ class AccountingController < ApplicationController
   def bills
     @type = params[:type]
     @query = params[:query]
+    params[:sort_field] ||= "billed_date"
+    params[:sort_dir] ||= "desc"
     @bills = Bill.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]
@@ -334,6 +343,8 @@ class AccountingController < ApplicationController
 
   def payments
     @query = params[:query]
+    params[:sort_field] ||= "date"
+    params[:sort_dir] ||= "desc"
     @payments = Payment.search {
       fulltext params[:query]
       with :builder_id, session[:builder_id]

@@ -1,8 +1,8 @@
 <table class="grid-view data-tables" id="invoice-list" summary="Invoice Items List" cellspacing="0">
     <thead>
     <tr class="header">
-        <%= sorted_ths [["Invoice #", "reference"],
-                        ["Invoice Date", "invoice_date"],
+        <%= sorted_ths [["Invoice Date", "invoice_date"],
+                        ["Invoice #", "reference"],
                         ["Sent Date", "sent_date"],
                         ["Project", "project_name"],
                         ["Amount", "amount"]] %>
@@ -11,11 +11,11 @@
     <tbody>
     <% invoices.each do |invoice| %>
       <tr class="clickable <%= invoice.billed? ? "unclickable" : "" %>">
+          <td class="center"><%= invoice.invoice_date %></td>
           <td class="center">
               <%= invoice.reference %>
               <%= link_to("Edit", {:action => 'edit_invoice', :id => invoice.id}, :class => 'action edit clickable-link', style: 'display: none') %>
           </td>
-          <td class="center"><%= invoice.invoice_date %></td>
           <td class="center"><%= invoice.sent_date %></td>
           <td><%= invoice.project_name %></td>
           <td class="right"><%= price_tag(invoice.amount) %></td>

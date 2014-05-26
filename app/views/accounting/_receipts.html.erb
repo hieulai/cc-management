@@ -1,8 +1,8 @@
 <table class="grid-view data-tables" id="receipt-list" summary="Payment List" cellspacing="0">
     <thead>
     <tr class="header">
-        <%= sorted_ths [["Reference #", "reference"],
-                        ["Date Received", "received_at"],
+        <%= sorted_ths [["Date Received", "received_at"],
+                        ["Reference #", "reference"],
                         ["Payor", "payer_name"],
                         ["Payment Type", "method"],
                         ["Amount", "amount"],
@@ -12,11 +12,11 @@
     <tbody>
     <% receipts.each do |receipt| %>
       <tr class="clickable <%= receipt.billed? ? "unclickable" : "" %>">
+          <td class="center"><%= receipt.received_at %></td>
           <td>
               <%= receipt.reference %>
               <%= link_to("Edit", {:action => 'edit_receipt', :id => receipt.id}, :class => 'action edit clickable-link', style: 'display: none') %>
           </td>
-          <td class="center"><%= receipt.received_at %></td>
           <td><%= receipt.payer_name %></td>
           <td><%= receipt.method %></td>
           <td class="right"><%= price_tag(receipt.amount) %></td>
