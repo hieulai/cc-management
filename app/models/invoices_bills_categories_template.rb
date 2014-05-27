@@ -3,7 +3,6 @@ class InvoicesBillsCategoriesTemplate < ActiveRecord::Base
   belongs_to :bills_categories_template
   has_and_belongs_to_many :accounts
 
-  counter_culture :invoice, :column_name => "cached_total_amount", :delta_column => 'amount'
   attr_accessible :amount, :invoice_id, :bills_categories_template_id
 
   scope :previous_created, lambda { |bills_categories_template_id, dt| where("bills_categories_template_id = ? and created_at < ?", bills_categories_template_id, dt) }

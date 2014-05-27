@@ -2,7 +2,6 @@ class DepositsReceipt < ActiveRecord::Base
   belongs_to :deposit
   belongs_to :receipt
   attr_accessible :amount, :receipt_id, :deposit_id
-  counter_culture :deposit, :column_name => "cached_total_amount", :delta_column => 'amount'
 
   before_save :increase_receipt_remaining_amount, :decrease_receipt_remaining_amount
   after_destroy :increase_receipt_remaining_amount

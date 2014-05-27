@@ -2,7 +2,6 @@ class ReceiptsInvoice < ActiveRecord::Base
   belongs_to :receipt
   belongs_to :invoice
   attr_accessible :amount, :receipt_id, :invoice_id
-  counter_culture :receipt, :column_name => "cached_total_amount", :delta_column => 'amount'
   before_save :refund_invoice, :update_invoice
   after_destroy :refund_invoice
 

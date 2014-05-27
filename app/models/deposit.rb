@@ -1,4 +1,5 @@
 class Deposit < ActiveRecord::Base
+  include Cacheable
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
 
@@ -45,8 +46,12 @@ class Deposit < ActiveRecord::Base
     account.try(:name)
   end
 
+  def total_amount
+    amount
+  end
+
   def amount
-    deposits_receipts.map(&:amount).compact.sum if deposits_receipts.any?
+    deposits_receipts.reject(&:marked_for_destruction?).map(&:amount).compact.sum if deposits_receipts.reject(&:marked_for_destruction?).any?
   end
 
   private

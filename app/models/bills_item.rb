@@ -3,7 +3,6 @@ class BillsItem < ActiveRecord::Base
   include Purchasable
 
   belongs_to :bills_categories_template
-  counter_culture [:bills_categories_template, :bill], :column_name => "cached_total_amount", :delta_column => 'actual_cost'
 
   after_destroy :check_to_destroy_payment
 

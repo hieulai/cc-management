@@ -7,7 +7,7 @@ class Receipt < ActiveRecord::Base
            ["uninvoiced", UNINVOICED],
            ["client_credit", CLIENT_CREDIT]]
   NEGATIVES = [Account::ACCOUNTS_RECEIVABLE]
-
+  include Cacheable
   before_destroy :check_readonly
 
   belongs_to :builder, :class_name => "Base::Builder"
@@ -34,7 +34,7 @@ class Receipt < ActiveRecord::Base
 
   before_save :check_total_amount_changed, :clear_old_data
   after_initialize :default_values
-  after_save :update_transactions, :update_cached_total_amount
+  after_save :update_transactions, :update_cached_total_amount_for_credit
 
   validates_presence_of :builder, :method, :received_at
   validates_presence_of :client, :if => Proc.new { |r| r.invoiced || r.client_credit }
@@ -90,6 +90,10 @@ class Receipt < ActiveRecord::Base
     end
   end
 
+  def total_amount
+    amount
+  end
+
   def billed_amount
     self.deposits_receipts.map(&:amount).compact.sum if self.deposits_receipts.any?
   end
@@ -138,7 +142,7 @@ class Receipt < ActiveRecord::Base
     end
   end
 
-  def update_cached_total_amount
+  def update_cached_total_amount_for_credit
     self.update_column(:cached_total_amount, self.cached_total_amount.to_f - credit_amount_was.to_f)
     self.update_column(:cached_total_amount, self.cached_total_amount.to_f + credit_amount.to_f) if self.client_credit
   end

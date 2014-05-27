@@ -1,4 +1,5 @@
 class Invoice < ActiveRecord::Base
+  include Cacheable
   before_destroy :check_readonly
 
   belongs_to :builder, :class_name => "Base::Builder"
@@ -75,6 +76,10 @@ class Invoice < ActiveRecord::Base
     elsif invoices_bills_categories_templates.any?
       invoices_bills_categories_templates.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     end
+  end
+
+  def total_amount
+    amount
   end
 
   def billed_amount

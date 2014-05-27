@@ -1,5 +1,5 @@
 class PurchaseOrder < ActiveRecord::Base
-
+  include Cacheable
   before_destroy :check_readonly
 
   belongs_to :project

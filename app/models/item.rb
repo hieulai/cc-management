@@ -20,9 +20,6 @@ class Item < ActiveRecord::Base
   has_many :bids_items, :dependent => :destroy
   has_and_belongs_to_many :categories_templates
 
-  counter_culture [:bills_categories_template, :bill], :column_name => "cached_total_amount", :delta_column => 'actual_cost'
-  counter_culture [:purchase_orders_categories_template, :purchase_order], :column_name => "cached_total_amount", :delta_column => 'actual_cost'
-
   attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file,
                   :change_order, :client_billed, :markup, :bill_memo, :builder_id, :bills_categories_template_id, :purchase_orders_categories_template_id
   validates :name, presence: true

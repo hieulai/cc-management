@@ -4,7 +4,6 @@ class PaymentsBill < ActiveRecord::Base
   belongs_to :payment
   belongs_to :bill
   attr_accessible :amount, :bill_id, :payment_id
-  counter_culture :payment, :column_name => "cached_total_amount", :delta_column => 'amount'
 
   before_save :increase_bill_remaining_amount, :unless => :deleted_at_changed?
   before_save :decrease_bill_remaining_amount

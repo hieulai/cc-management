@@ -1,5 +1,6 @@
 class Payment < ActiveRecord::Base
   acts_as_paranoid
+  include Cacheable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
@@ -64,6 +65,10 @@ class Payment < ActiveRecord::Base
 
   def amount
     payments_bills.map(&:amount).compact.sum if payments_bills.any?
+  end
+
+  def total_amount
+    amount
   end
 
   def update_transactions

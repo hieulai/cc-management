@@ -2,7 +2,6 @@ class InvoicesBill < ActiveRecord::Base
   belongs_to :invoice
   belongs_to :bill
   has_and_belongs_to_many :accounts
-  counter_culture :invoice, :column_name => "cached_total_amount", :delta_column => 'amount'
   attr_accessible :amount, :invoice_id, :bill_id
 
   scope :previous_created, lambda { |bill_id, dt| where("bill_id = ? and created_at < ?", bill_id, dt) }
