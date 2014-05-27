@@ -188,7 +188,11 @@ class Bill < ActiveRecord::Base
   end
 
   def purchasable_items
-    bills_items
+    r = []
+    bills_categories_templates.each do |b_ct|
+      r << b_ct.bills_items
+    end
+    r.flatten
   end
 
   private
