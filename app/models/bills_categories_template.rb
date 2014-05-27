@@ -1,8 +1,11 @@
 class BillsCategoriesTemplate < ActiveRecord::Base
   belongs_to :bill
+  include Invoiceable
+
   belongs_to :categories_template
   has_many :bills_items, :dependent => :destroy
   has_many :items, :dependent => :destroy
+  has_many :invoices_bills_categories_templates, :dependent => :destroy
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 
   accepts_nested_attributes_for :bills_items, :reject_if => :all_blank, :allow_destroy => true
@@ -10,8 +13,14 @@ class BillsCategoriesTemplate < ActiveRecord::Base
   attr_accessible :bill_id, :categories_template_id, :category_id, :bills_items_attributes, :items_attributes
   attr_accessor :category_id
 
+  scope :date_range, lambda { |from_date, to_date| includes(:bill).where('bills.billed_date >= ? AND bills.billed_date <= ?', from_date, to_date) }
+
   after_save :update_transactions
   after_destroy :destroy_purchased_categories_template
+
+  def price
+    amount
+  end
 
   def amount
     bills_items.reject(&:marked_for_destruction?).map(&:actual_cost).compact.sum +

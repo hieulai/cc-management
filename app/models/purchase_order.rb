@@ -9,8 +9,6 @@ class PurchaseOrder < ActiveRecord::Base
 
   has_one :bill, :dependent => :destroy
   has_many :purchase_orders_categories_templates, :dependent => :destroy
-  has_many :purchase_orders_items, :through => :purchase_orders_categories_templates
-  has_many :items, :through => :purchase_orders_categories_templates
   has_many :categories_templates, :through => :purchase_orders_categories_templates
 
   default_scope order("date DESC")

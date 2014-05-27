@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140525142145) do
+ActiveRecord::Schema.define(:version => 20140527162349) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -62,6 +62,14 @@ ActiveRecord::Schema.define(:version => 20140525142145) do
 
   add_index "accounts_invoices_bills", ["account_id"], :name => "index_accounts_invoices_bills_on_account_id"
   add_index "accounts_invoices_bills", ["invoices_bill_id"], :name => "index_accounts_invoices_bills_on_invoices_bill_id"
+
+  create_table "accounts_invoices_bills_categories_templates", :force => true do |t|
+    t.integer "account_id"
+    t.integer "invoices_bills_categories_template_id"
+  end
+
+  add_index "accounts_invoices_bills_categories_templates", ["account_id"], :name => "index_a_ibs_cts_on_account_id"
+  add_index "accounts_invoices_bills_categories_templates", ["invoices_bills_categories_template_id"], :name => "index_a_ibs_cts_on_ibs_ct_id"
 
   create_table "accounts_invoices_items", :force => true do |t|
     t.integer "account_id"
@@ -390,6 +398,17 @@ ActiveRecord::Schema.define(:version => 20140525142145) do
 
   add_index "invoices_bills", ["bill_id"], :name => "index_invoices_bills_on_bill_id"
   add_index "invoices_bills", ["invoice_id"], :name => "index_invoices_bills_on_invoice_id"
+
+  create_table "invoices_bills_categories_templates", :force => true do |t|
+    t.integer  "invoice_id"
+    t.integer  "bills_categories_template_id"
+    t.decimal  "amount",                       :precision => 10, :scale => 2
+    t.datetime "created_at",                                                  :null => false
+    t.datetime "updated_at",                                                  :null => false
+  end
+
+  add_index "invoices_bills_categories_templates", ["bills_categories_template_id"], :name => "index_ibs_cts_on_bills_categories_template_id"
+  add_index "invoices_bills_categories_templates", ["invoice_id"], :name => "index_invoices_bills_categories_templates_on_invoice_id"
 
   create_table "invoices_items", :force => true do |t|
     t.integer  "invoice_id"

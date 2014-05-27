@@ -6,6 +6,7 @@ class Invoice < ActiveRecord::Base
 
   has_many :invoices_items, :dependent => :destroy
   has_many :items, :through => :invoices_items
+  has_many :invoices_bills_categories_templates, :dependent => :destroy
   has_many :invoices_bills, :dependent => :destroy
   has_many :bills, :through => :invoices_bills
   has_many :receipts_invoices, :dependent => :destroy
@@ -14,8 +15,9 @@ class Invoice < ActiveRecord::Base
 
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
   accepts_nested_attributes_for :invoices_bills, :allow_destroy => true, reject_if: :unbillable_bill
+  accepts_nested_attributes_for :invoices_bills_categories_templates, :allow_destroy => true, reject_if: :unbillable_bills_categories_template
   attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :invoices_bills_attributes, :remaining_amount,
-                  :bill_from_date, :bill_to_date, :cached_total_amount
+                  :bill_from_date, :bill_to_date, :cached_total_amount, :invoices_bills_categories_templates_attributes
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
@@ -70,8 +72,8 @@ class Invoice < ActiveRecord::Base
   def amount
     if invoices_items.any?
       invoices_items.reject(&:marked_for_destruction?).map(&:amount).compact.sum
-    elsif invoices_bills.any?
-      invoices_bills.reject(&:marked_for_destruction?).map(&:amount).compact.sum
+    elsif invoices_bills_categories_templates.any?
+      invoices_bills_categories_templates.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     end
   end
 
@@ -98,6 +100,10 @@ class Invoice < ActiveRecord::Base
 
   def unbillable_bill(attributes)
     attributes['bill_id'].blank? || !Bill.find(attributes['bill_id'].to_i).billable?(self.id)
+  end
+
+  def unbillable_bills_categories_template(attributes)
+    attributes['bills_categories_template_id'].blank? || !BillsCategoriesTemplate.find(attributes['bills_categories_template_id'].to_i).billable?(self.id)
   end
 
   def check_readonly
@@ -130,7 +136,7 @@ class Invoice < ActiveRecord::Base
     if self.estimate.cost_plus_bid?
       self.invoices_items.destroy_all
     else
-      self.invoices_bills.destroy_all
+      self.invoices_bills_categories_templates.destroy_all
       self.bill_from_date = nil
       self.bill_to_date = nil
     end

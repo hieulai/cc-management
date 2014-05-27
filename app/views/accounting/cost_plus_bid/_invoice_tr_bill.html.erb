@@ -1,34 +1,34 @@
 <%
-   is_billable = bill.billable?(@invoice.id)
+   is_billable = b_ct.billable?(@invoice.id)
    billable = is_billable ? '' : 'unclickable'
-   invoiceable =  bill.invoiceable(@invoice.id)
+   invoiceable = b_ct.invoiceable(@invoice.id)
  %>
-<tr class="item item_category_<%= category.id %> <%= billable %>" id="bill_<%= bill.id %>">
+<tr class="item item_category_<%= category.id %> <%= billable %>" id="bill_<%= b_ct.id %>">
   <td>
       <% if is_billable %>
-        <%= check_box_tag 'bill-chosen', invoiceable.present? ? bill.id : "", invoiceable.present?, class: 'chosen' %>
-        <%= hidden_field_tag "invoice[invoices_bills_attributes][][id]", invoiceable.try(:id) %>
-        <%= hidden_field_tag "invoice[invoices_bills_attributes][][bill_id]", bill.id %>
-        <%= hidden_field_tag 'invoice[invoices_bills_attributes][][_destroy]', !invoiceable.present?, class: 'destroy' %>
+        <%= check_box_tag 'bill-chosen', invoiceable.present? ? b_ct.id : "", invoiceable.present?, class: 'chosen' %>
+        <%= hidden_field_tag "invoice[invoices_bills_categories_templates_attributes][][id]", invoiceable.try(:id) %>
+        <%= hidden_field_tag "invoice[invoices_bills_categories_templates_attributes][][bills_categories_template_id]", b_ct.id %>
+        <%= hidden_field_tag 'invoice[invoices_bills_categories_templates_attributes][][_destroy]', !invoiceable.present?, class: 'destroy' %>
       <% end %>
 	</td>
   <td></td>
 	<td>
-        <%= bill.id %>
+        <%= b_ct.bill.id %>
     </td>
     <td>
-        <%= bill.billed_date %>
+        <%= b_ct.bill.billed_date %>
     </td>
     <td class="right">
-        <%= price_tag(bill.price, "amount") %>
+        <%= price_tag(b_ct.price, "amount") %>
     </td>
     <td class="right">
-        <%= price_tag(bill.prior_amount(@invoice.id), "prior-amount") %>
+        <%= price_tag(b_ct.prior_amount(@invoice.id), "prior-amount") %>
     </td>
     <td class="right">
         <% if is_billable %>
             <div class="text-field" <% unless invoiceable.present? %> style="display: none" <% end %>>
-                $<%= text_field_tag 'invoice[invoices_bills_attributes][][amount]', invoiceable.try(:amount) || bill.billable_amount, :class => "input-mini invoice-amount" %>
+                $<%= text_field_tag 'invoice[invoices_bills_categories_templates_attributes][][amount]', invoiceable.try(:amount) || b_ct.billable_amount, :class => "input-mini invoice-amount" %>
             </div>
         <% end %>
     </td>

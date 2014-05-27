@@ -1,6 +1,5 @@
 class Bill < ActiveRecord::Base
   acts_as_paranoid
-  include Invoiceable
 
   before_destroy :check_readonly
 
@@ -16,8 +15,6 @@ class Bill < ActiveRecord::Base
   has_many :invoices, :through => :invoices_bills
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
   has_many :bills_categories_templates, :dependent => :destroy
-  has_many :items, :through => :bills_categories_templates
-  has_many :bills_items, :through => :bills_categories_templates
   has_many :categories_templates, :through => :bills_categories_templates
 
   attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id,

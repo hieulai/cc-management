@@ -8,8 +8,8 @@
 <%
    from_date = from_date.presence || '1900-01-01'
    to_date =  to_date.presence || '3000-01-01'
-   category_template.bills.date_range(from_date, to_date).each do |bill| %>
-  <%= render :partial => 'accounting/cost_plus_bid/invoice_tr_bill', :locals => {:bill => bill, :category => category_template.category} %>
+   category_template.bills_categories_templates.date_range(from_date, to_date).each do |b_ct| %>
+  <%= render :partial => 'accounting/cost_plus_bid/invoice_tr_bill', :locals => {:b_ct => b_ct, :category => category_template.category} %>
 <% end %>
 <tr class="subtotal bill_category_<%= category_template.category.id %>">
     <td colspan=4>
