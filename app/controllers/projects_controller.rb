@@ -494,4 +494,32 @@ class ProjectsController < ApplicationController
       {:id => v.id, :label => label, :value => v.display_name}
     }.to_json
   end
+
+  def search_category_by_name
+    categories_templates = []
+    raw_categories = []
+    unless params[:project_id].blank?
+      original_categories = []
+      project = Project.find(params[:project_id])
+      if project.estimates.any?
+        project.estimates.each do |e|
+          categories_templates+= e.template.categories_templates
+          original_categories+= e.template.categories_templates.map { |c| c.category }
+        end
+      end
+      raw_categories = @builder.categories.raw.reject { |c| original_categories.map { |c| c[:name] }.include? c.name }
+      categories_templates.select! { |ct| ct.category.name == params[:name] }
+      raw_categories.select! { |c| c.name == params[:name] }
+    end
+    if categories_templates.size > 0
+      render :json => {:categories_template => {:id => categories_templates[0].id,
+                                                :category_id => categories_templates[0].category_id,
+                                                :name => categories_templates[0].category.name}}.to_json
+    elsif raw_categories.size > 0
+      render :json => {:category => {:id => raw_categories[0].id,
+                                     :name => raw_categories[0].name}}.to_json
+    else
+      render :json => {}.to_json
+    end
+  end
 end

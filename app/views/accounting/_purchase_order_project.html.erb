@@ -6,9 +6,12 @@
 
 <tr id="tr-category-select" class="category add">
     <td colspan="10">
-        Category: <%= select_tag("category_select",
-                                 grouped_options_for_select(grouped_category_options(purchase_order)),
-                                 {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => purchase_order.id, :type => PurchaseOrder.name, :project_id => purchase_order.project.try(:id))}}) %>
+        Category:
+        <div id="add-category">
+            <%= select_tag("category_select",
+                           grouped_options_for_select(grouped_category_options(purchase_order)),
+                           {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => purchase_order.id, :type => PurchaseOrder.name, :project_id => purchase_order.project.try(:id))}}) %>
+        </div>
     </td>
 </tr>
 <tr>

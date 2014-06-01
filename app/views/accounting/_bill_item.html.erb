@@ -2,11 +2,11 @@
    change_order_item = item.change_orders_category_id.present? ? "change_order" : ""
    object_name = bill.class.name.underscore
    child_name = p_ct.class.name.underscore
-   purchasable_object = p_ct.purchasable_item(item.id)
+   purchasable_object = p_ct.try(:purchasable_item, item.id)
    text_field_display = purchasable_object ? "" : "none"
    value_display = purchasable_object ? "none" : ""
 %>
-<tr class="item item_category_<%= p_ct.categories_template.category_id %> <%= change_order_item %>" id="item_<%= item.id %> ">
+<tr class="item item_category_<%= p_ct.try(:categories_template).try(:category_id) %> <%= change_order_item %>" id="item_<%= item.id %> " data-id="<%= item.id %>" data-name="<%= item.name %>"  data-description="<%= item.description %>">
     <td class="center">
         <%= check_box_tag 'item-chosen', purchasable_object ? item.id : "", purchasable_object.present? %>
         <%= hidden_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][#{object_name.pluralize}_items_attributes][][id]", purchasable_object.try(:id) %>
@@ -26,7 +26,7 @@
 
     <td class="right light-blue">
         <div class="text-field" style="display: <%= text_field_display %>">
-            $<%= text_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][#{object_name.pluralize}_items_attributes][][actual_cost]", purchasable_object.try(:actual_cost) || item.estimated_cost * item.qty, :class => "actual-amount input-mini", :size => 10 %>
+            $<%= text_field_tag "#{object_name}[#{child_name.pluralize}_attributes][][#{object_name.pluralize}_items_attributes][][actual_cost]",  purchasable_object.try(:new_record?) ? item.estimated_cost * item.qty : purchasable_object.try(:actual_cost).to_f, :class => "actual-amount input-mini", :size => 10 %>
         </div>
     </td>
 

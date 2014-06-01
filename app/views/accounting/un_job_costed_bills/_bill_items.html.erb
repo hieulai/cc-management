@@ -9,12 +9,13 @@
     </tr>
     </thead>
     <tbody>
+    <% accounts =  select2_bill_gl_accounts_json %>
     <%= f.fields_for :un_job_costed_items, @bill.un_job_costed_items.any? ? @bill.un_job_costed_items : Array.new(5) { UnJobCostedItem.new } do |i| %>
-        <%= render(:partial => 'accounting/un_job_costed_bills/bill_item', :locals => {:f => i}) %>
+        <%= render(:partial => 'accounting/un_job_costed_bills/bill_item', :locals => {:f => i, :accounts => accounts}) %>
     <% end %>
     <tr class="add-item" id="add-item">
         <td colspan="5">
-            <%= link_to_add_association 'Add Item', f, :un_job_costed_items, partial: 'accounting/un_job_costed_bills/bill_item', "data-association-insertion-traversal" => "closest", "data-association-insertion-node" => "tr#add-item", :"data-association-insertion-method" => "before" %>
+            <%= link_to_add_association 'Add Item', f, :un_job_costed_items, partial: 'accounting/un_job_costed_bills/bill_item', :render_options => {:locals => {:accounts => accounts}}, "data-association-insertion-traversal" => "closest", "data-association-insertion-node" => "tr#add-item", :"data-association-insertion-method" => "before" %>
         </td>
     </tr>
     <tr>

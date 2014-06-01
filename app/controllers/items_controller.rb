@@ -119,4 +119,23 @@ class ItemsController < ApplicationController
                                       :margin => i.margin} }.to_json
   end
 
+  def search_by_name_and_description
+    items = []
+    unless params[:categories_template_id].blank?
+      categories_template = CategoriesTemplate.find(params[:categories_template_id])
+      all_items = (categories_template.items + categories_template.co_items).flatten
+      items = all_items.select { |i| i.name == params[:name] && i.description == params[:description] }
+    end
+
+    if items.size > 0
+      render :json => {:id => items[0].id,
+                       :name => items[0].name,
+                       :description => items[0].description,
+                       :amount => items[0].amount}.to_json
+    else
+      render :json => {}.to_json
+    end
+
+  end
+
 end

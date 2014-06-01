@@ -1,3 +1,131 @@
-$('#table-placeholder').html('<%= escape_javascript(render(:partial => "#{@purchasable.class.name.underscore}_table", :locals => {:purchase_order => @purchasable, :bill => @purchasable})) %>');
-Purchasable.calculateSubTotalAndTotal();
-Shared.calculateTotals();
+var type = "<%= Bill.name %>";
+<% if @purchasable.instance_of? PurchaseOrder %>
+    type = "<%= PurchaseOrder.name %>";
+<% end %>
+
+if ($("tr.category[data-id]").size() == 0 || type == "<%= PurchaseOrder.name %>") {
+  $('#table-placeholder').html('<%= escape_javascript(render(:partial => "#{@purchasable.class.name.underscore}_table", :locals => {:purchase_order => @purchasable, :bill => @purchasable})) %>');
+
+} else {
+  // Restore bill's state on new selected project
+  var renderBilledItem = function (element) {
+    return $($(element).nextAll(".subtotal")[0]).before('<%= escape_javascript(render :partial => @purchasable.instance_of?(Bill) ? 'billed_item' : 'purchased_item', :locals => {:item => Item.new, :category_id => 0}) %>').prev();
+  }
+
+  var renderPurchasableItem = function (element) {
+    return $($(element).nextAll(".subtotal")[0]).before('<%= escape_javascript(render :partial => @purchasable.instance_of?(Bill) ? 'bill_item' : 'purchase_order_item', :locals => {:item => Item.new, :bill => @purchasable, :purchase_order => @purchasable, :p_ct => @purchasable.instance_of?(Bill) ? BillsCategoriesTemplate.new : PurchaseOrdersCategoriesTemplate.new}) %>').prev();
+  }
+
+  var cNames = [];
+  $("tr.category[data-id]").each(function (index, trCategory) {
+    var cName = $(trCategory).attr("data-name");
+    cNames.push(cName);
+
+    $.ajax({
+      url: "<%= url_for({:controller => "projects", :action => "search_category_by_name"}) %>",
+      data: {
+        project_id: "<%= @purchasable.project_id %>",
+        name: cName
+      },
+      dataType: "json",
+      success: function (found) {
+        var cId = "";
+        var ctId = "";
+
+        if (found.categories_template) {
+          cId = found.categories_template.category_id;
+          ctId = found.categories_template.id;
+        } else if (found.category) {
+          cId = found.category.id;
+        } else {
+          // TODO: Create new category?
+        }
+        // Update category ids
+        $(trCategory).attr("id", "category_" + cId);
+        $(trCategory).attr("data-id", cId);
+
+        $(trCategory).find('input[name$="[][id]"]').val("");
+        $(trCategory).find('input[name$="[][category_id]"]').val(cId);
+        $($(trCategory).nextAll(".subtotal")[0]).attr("class", "subtotal item_category_" + cId);
+        var $addItem = $($(trCategory).nextAll(".add-item")[0]);
+        $addItem.attr("id", "add-item-to-category-" + cId);
+        $addItem.find('input[name="name[]"]').attr("data-id-element", "#" + $addItem.attr("id") + " #purchased_item_id");
+        var $link = $addItem.find("a");
+        $link.attr("href", Shared.updateQueryStringParameter($link.attr("href"), "category_id", cId));
+
+        // Update item ids
+        var $trItem = $(trCategory).nextUntil(".subtotal");
+        $trItem.each(function (i, trItem) {
+          if ($(trItem).is(":hidden")) {
+            return;
+          }
+          var iName = $(trItem).attr("data-name");
+          var iDescription = $(trItem).attr("data-description");
+
+          var description = $(trItem).find("td:eq(3)").text().trim();
+          var billMemo = $(trItem).find('textarea[name$="[][memo]"]').val();
+          var actualCost = $(trItem).find('input[name$="[][actual_cost]"]:visible').val();
+          if ($(trItem).hasClass("purchased")) {
+            var description = $(trItem).find('input[name$="[][description]"]').val();
+            var billMemo = $(trItem).find('textarea[name$="[][bill_memo]"]').val();
+          }
+          $.ajax({
+            url: "<%= url_for({:controller => "items", :action => "search_by_name_and_description"}) %>",
+            data: {
+              categories_template_id: ctId,
+              name: iName,
+              description: iDescription
+            },
+            dataType: "json",
+            success: function (foundItem) {
+              debugger;
+              if (foundItem.id) {
+                var addedTr = renderPurchasableItem(trCategory);
+                $(addedTr).attr("id", "item_" + foundItem.id);
+                $(addedTr).attr("data-id", foundItem.id);
+                $(addedTr).attr("data-name", iName);
+                $(addedTr).attr("data-description", iDescription);
+                $(addedTr).attr("class", "item item_category_" + cId);
+                $(addedTr).find('input[name$="[][id]"]').val("");
+                $(addedTr).find('input[name$="[][item_id]"]').val(foundItem.id);
+                $(addedTr).find("td:eq(2)").append(document.createTextNode(iName));
+                $(addedTr).find("td:eq(3)").append(document.createTextNode(description));
+                $(addedTr).find('textarea[name$="[][memo]"]').val(billMemo).show();
+                $(addedTr).find('input[name$="[][actual_cost]"]').val(actualCost).closest("div").show();
+                $(addedTr).find("td:eq(6) .amount").text("$" + foundItem.amount);
+                $(addedTr).find('#item-chosen').prop('checked', $(trItem).find("#item-chosen").is(":checked") || $(trItem).hasClass("purchased"));
+              } else {
+                var addedTr = renderBilledItem(trCategory);
+                $(addedTr).attr("class", "item item_category_" + cId + " purchased");
+                $(addedTr).attr("data-name", iName);
+                $(addedTr).attr("data-description", iDescription);
+                $(addedTr).find("td:eq(2)").append(document.createTextNode(iName));
+                $(addedTr).find('input[name$="[][name]"]').val(iName);
+                $(addedTr).find('input[name$="[][description]"]').val(description);
+                $(addedTr).find('textarea[name$="[][bill_memo]"]').val(billMemo);
+                $(addedTr).find('input[name$="[][actual_cost]"]').val(actualCost);
+                debugger;
+              }
+              $(trItem).remove();
+              Shared.calculateSubTotals();
+              Shared.calculateTotals();
+            }
+          });
+        });
+
+      }
+    });
+  });
+
+
+  $('#add-category').html('<%= escape_javascript(select_tag("category_select",
+                         grouped_options_for_select(grouped_category_options(@purchasable)),
+                         {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => @purchasable.id, :type => @purchasable.class.name, :project_id => @purchasable.project.try(:id))}})) %>');
+
+  $("#category_select option").each(function () {
+    if (cNames.indexOf($(this).text()) > 0) {
+      $(this).remove();
+    }
+  });
+}
+

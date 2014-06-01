@@ -15,7 +15,7 @@
 <% end %>
 
 <% if categories_template.template %>
-  <% categories_template.template.estimate.project.co_items(categories_template.category).try(:each) do |i| %>
+  <% categories_template.co_items.try(:each) do |i| %>
     <%= render :partial => 'bill_item', :locals => {:item => i, :bill => bill, :p_ct => p_ct} %>
   <% end %>
 <% end %>

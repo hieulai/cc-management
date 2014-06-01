@@ -1,11 +1,10 @@
 <% if @item.present? %>
-var $addItem = $('tr#add-item-to-category-<%= @category.id %>:visible');
-var $subTotal = $('tr.subtotal.item_category_<%= @category.id %>:visible');
-$subTotal.before('<%= escape_javascript(render :partial => @type == Bill.name ? 'billed_item' : 'purchased_item', :locals => {:item => @item, :type => @type, :category_id => @category.id}) %>')
-Purchasable.calculatePostTaxAmount($subTotal.prev().find('div.actual-amount'));
-Purchasable.calculateSubTotalAndTotal();
-
-$addItem.find('input[name="name[]"]').val("");
-var $link = $addItem.find("a");
-$link.attr("href", Shared.updateQueryStringParameter($link.attr("href"), "item_id", ""));
+  var $addItem = $('tr#add-item-to-category-<%= @category.id %>:visible');
+  var $subTotal = $('tr.subtotal.item_category_<%= @category.id %>:visible');
+  $subTotal.before('<%= escape_javascript(render :partial => @type == Bill.name ? 'billed_item' : 'purchased_item', :locals => {:item => @item, :type => @type, :category_id => @category.id}) %>')
+  Purchasable.calculatePostTaxAmount($subTotal.prev().find('div.actual-amount'));
+  Purchasable.calculateSubTotalAndTotal();
+  $addItem.find('input[name="name[]"]').val("");
+  var $link = $addItem.find("a");
+  $link.attr("href", Shared.updateQueryStringParameter($link.attr("href"), "item_id", ""));
 <% end %>

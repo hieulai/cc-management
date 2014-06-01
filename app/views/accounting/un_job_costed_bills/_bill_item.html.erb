@@ -11,7 +11,7 @@
         <%= f.text_field :description, :class => "description text-field", :size => 10 %>
     </td>
     <td>
-        <%= f.hidden_field(:account_id, :class => "to_select2", :data => {:source => select2_bill_gl_accounts_json}) %>
+        <%= f.hidden_field(:account_id, :class => "to_select2", :data => {:source => accounts}) %>
     </td>
     <td class="right">
         $<%= f.text_field :amount, :class => "text-field input-mini amount", :size => 10 %>
