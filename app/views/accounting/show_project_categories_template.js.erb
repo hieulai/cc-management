@@ -92,6 +92,7 @@ if ($("tr.category[data-id]").size() == 0 || type == "<%= PurchaseOrder.name %>"
                 $(addedTr).find("td:eq(3)").append(document.createTextNode(description));
                 $(addedTr).find('textarea[name$="[][memo]"]').val(billMemo).show();
                 $(addedTr).find('input[name$="[][actual_cost]"]').val(actualCost).closest("div").show();
+                $(addedTr).find('input[name$="[][_destroy]"]').val(false);
                 $(addedTr).find("td:eq(6) .amount").text("$" + foundItem.amount);
                 $(addedTr).find('#item-chosen').prop('checked', $(trItem).find("#item-chosen").is(":checked") || $(trItem).hasClass("purchased"));
               } else {
