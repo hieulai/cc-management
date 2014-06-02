@@ -8,16 +8,13 @@ class Invoice < ActiveRecord::Base
   has_many :invoices_items, :dependent => :destroy
   has_many :items, :through => :invoices_items
   has_many :invoices_bills_categories_templates, :dependent => :destroy
-  has_many :invoices_bills, :dependent => :destroy
-  has_many :bills, :through => :invoices_bills
   has_many :receipts_invoices, :dependent => :destroy
   has_many :receipts, :through => :receipts_invoices
   has_many :accounting_transactions, as: :transactionable, :dependent => :destroy
 
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
-  accepts_nested_attributes_for :invoices_bills, :allow_destroy => true, reject_if: :unbillable_bill
   accepts_nested_attributes_for :invoices_bills_categories_templates, :allow_destroy => true, reject_if: :unbillable_bills_categories_template
-  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :invoices_bills_attributes, :remaining_amount,
+  attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount,
                   :bill_from_date, :bill_to_date, :cached_total_amount, :invoices_bills_categories_templates_attributes
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
@@ -101,10 +98,6 @@ class Invoice < ActiveRecord::Base
   private
   def unbillable_item(attributes)
     attributes['item_id'].blank? || !Item.find(attributes['item_id'].to_i).billable?(self.id)
-  end
-
-  def unbillable_bill(attributes)
-    attributes['bill_id'].blank? || !Bill.find(attributes['bill_id'].to_i).billable?(self.id)
   end
 
   def unbillable_bills_categories_template(attributes)

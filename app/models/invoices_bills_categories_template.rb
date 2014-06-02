@@ -20,6 +20,6 @@ class InvoicesBillsCategoriesTemplate < ActiveRecord::Base
   def refund_invoices_accounts
     revenue_ia = InvoicesAccount.where(invoice_id: invoice.id, account_id: bills_categories_template.categories_template.revenue_account.id).first_or_create
     revenue_ia.update_attributes({date: invoice.date, amount: revenue_ia.amount.to_f - amount_was.to_f})
-    revenue_ia.destroy if bills_categories_template.categories_template.revenue_account.invoices_bills.where(invoice_id: invoice_id).empty?
+    revenue_ia.destroy if bills_categories_template.categories_template.revenue_account.invoices_bills_categories_templates.where(invoice_id: invoice_id).empty?
   end
 end

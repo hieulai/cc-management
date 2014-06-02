@@ -59,7 +59,7 @@ class Estimate < ActiveRecord::Base
     template.delete
     invoices.each do |i|
       i.invoices_items.destroy_all
-      i.invoices_bills.destroy_all
+      i.invoices_bills_categories_templates.destroy_all
       i.receipts.each do |r|
         r.receipts_items.destroy_all
         r.deposits.each do |d|

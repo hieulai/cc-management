@@ -1,7 +1,6 @@
 class InvoicesAccount < ActiveRecord::Base
   belongs_to :account
   belongs_to :invoice
-  has_many :invoices_bills
   has_many :invoices_items
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 

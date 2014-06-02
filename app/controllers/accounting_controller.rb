@@ -209,9 +209,9 @@ class AccountingController < ApplicationController
     # Destroy all old invoices_items_attributes if estimate changed
     if params[:invoice][:estimate_id].present? && params[:invoice][:estimate_id] != @invoice.estimate_id.to_s
       if @invoice.estimate.cost_plus_bid?
-        @invoice.invoices_bills.each do |ii|
-          params[:invoice][:invoices_bills_attributes] ||= []
-          params[:invoice][:invoices_bills_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
+        @invoice.invoices_bills_categories_templates.each do |ii|
+          params[:invoice][:invoices_bills_categories_templates_attributes] ||= []
+          params[:invoice][:invoices_bills_categories_templates_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
         end
       else
         @invoice.invoices_items.each do |ii|

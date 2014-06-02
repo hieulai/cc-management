@@ -12,8 +12,6 @@ class Bill < ActiveRecord::Base
   has_many :payments_bills, :dependent => :destroy
   has_many :payments, :through => :payments_bills
   has_many :un_job_costed_items, :dependent => :destroy
-  has_many :invoices_bills, :dependent => :destroy
-  has_many :invoices, :through => :invoices_bills
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
   has_many :bills_categories_templates, :dependent => :destroy
   has_many :categories_templates, :through => :bills_categories_templates

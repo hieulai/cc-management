@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140527162349) do
+ActiveRecord::Schema.define(:version => 20140602153354) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -54,14 +54,6 @@ ActiveRecord::Schema.define(:version => 20140527162349) do
     t.integer "account_id"
     t.integer "change_orders_category_id"
   end
-
-  create_table "accounts_invoices_bills", :force => true do |t|
-    t.integer "account_id"
-    t.integer "invoices_bill_id"
-  end
-
-  add_index "accounts_invoices_bills", ["account_id"], :name => "index_accounts_invoices_bills_on_account_id"
-  add_index "accounts_invoices_bills", ["invoices_bill_id"], :name => "index_accounts_invoices_bills_on_invoices_bill_id"
 
   create_table "accounts_invoices_bills_categories_templates", :force => true do |t|
     t.integer "account_id"
@@ -387,17 +379,6 @@ ActiveRecord::Schema.define(:version => 20140527162349) do
 
   add_index "invoices_accounts", ["account_id"], :name => "index_invoices_accounts_on_account_id"
   add_index "invoices_accounts", ["invoice_id"], :name => "index_invoices_accounts_on_invoice_id"
-
-  create_table "invoices_bills", :force => true do |t|
-    t.integer  "invoice_id"
-    t.integer  "bill_id"
-    t.decimal  "amount",     :precision => 10, :scale => 2
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
-  end
-
-  add_index "invoices_bills", ["bill_id"], :name => "index_invoices_bills_on_bill_id"
-  add_index "invoices_bills", ["invoice_id"], :name => "index_invoices_bills_on_invoice_id"
 
   create_table "invoices_bills_categories_templates", :force => true do |t|
     t.integer  "invoice_id"

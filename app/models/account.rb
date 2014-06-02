@@ -32,7 +32,6 @@ class Account < ActiveRecord::Base
   has_and_belongs_to_many :categories_templates
   has_and_belongs_to_many :change_orders_categories
   has_and_belongs_to_many :invoices_items
-  has_and_belongs_to_many :invoices_bills
   has_and_belongs_to_many :invoices_bills_categories_templates
 
   attr_accessible :name, :balance, :opening_balance, :opening_balance_updated_at, :number, :category, :subcategory, :prefix, :parent_id, :builder_id
