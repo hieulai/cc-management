@@ -5,6 +5,7 @@
                         ["Due Date", "due_date"],
                         ["Bill #", "id"],
                         ["PO #", "purchase_order_id"],
+                        ["Payment #", "payment_ids"],
                         ["Project", "project_name"],
                         ["Categories", "category_names"],
                         ["Payor", "payer_name"],
@@ -32,6 +33,13 @@
                 <%= b.id %>
             </td>
             <td class="center"><%= link_to b.purchase_order_id, {:action => 'edit_purchase_order', :id => b.purchase_order_id}, :target => "_blank" if b.purchase_order.present? %></td>
+            <td class="center">
+                <ul>
+                    <% b.payment_ids.split(",").each do |id| %>
+                      <li> <%= link_to "#{id}", {controller: 'accounting', action: 'edit_payment', id: id} %> </li>
+                    <% end %>
+                </ul>
+            </td>
             <td><%= b.project_name %></td>
             <td>
                 <ul>

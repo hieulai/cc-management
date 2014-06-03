@@ -4,7 +4,7 @@
    invoiceable = b_ct.invoiceable(@invoice.id)
  %>
 <tr class="item item_category_<%= category.id %> <%= billable %>" id="bill_<%= b_ct.id %>">
-  <td>
+  <td class="center">
       <% if is_billable %>
         <%= check_box_tag 'bill-chosen', invoiceable.present? ? b_ct.id : "", invoiceable.present?, class: 'chosen' %>
         <%= hidden_field_tag "invoice[invoices_bills_categories_templates_attributes][][id]", invoiceable.try(:id) %>

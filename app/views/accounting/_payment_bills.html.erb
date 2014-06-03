@@ -2,6 +2,7 @@
     <tr class="header">
         <th></th>
         <th>Bill #</th>
+        <th>Billed Date</th>
         <th>Due Date</th>
         <th>Project</th>
         <th>Category</th>
@@ -32,6 +33,7 @@
               <%= hidden_field_tag 'payment[payments_bills_attributes][][_destroy]', !b.payment_bill(@payment.id).present? %>
           </td>
           <td class="center"><%= b.id %></td>
+          <td class="center"><%= b.billed_date %></td>
           <td class="center"><%= b.source(:due_date) %></td>
           <td><%= b.source(:project).try(:name) %></td>
           <td>
@@ -60,7 +62,7 @@
       </tr>
     <% end %>
     <tr>
-        <td class="strong" colspan="7">Total</td>
+        <td class="strong" colspan="8">Total</td>
         <td class="right payment-amount"></td>
         <td colspan="1"></td>
     </tr>

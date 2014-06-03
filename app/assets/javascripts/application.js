@@ -29,6 +29,7 @@ var Application = (function ($) {
 
     var init = function(){
         loadAddLink();
+        loadCheckAll();
         loadInstructions();
         transformToDatePickerFor();
         transformToSelect2For();
@@ -38,6 +39,14 @@ var Application = (function ($) {
         setupTrClickable();
         setupFormSubmit();
         setupCocoonBehavior();
+    };
+
+    var loadCheckAll = function(){
+        $('input[type="checkbox"][name="select-all"]').each(function () {
+            $(this).on('click', function(){
+                $.Deferred().resolve($($(this).attr("data-target") + ($(this).is(":checked") ? ":not(:checked)" : ":checked")).trigger('click'));
+            })
+        })
     };
 
     var loadAddLink = function(){

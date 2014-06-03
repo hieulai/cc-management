@@ -53,6 +53,9 @@ class Bill < ActiveRecord::Base
     string :project_name do
       project_name
     end
+    string :payment_ids do
+      payment_ids
+    end
     string :category_names do
       category_names
     end
@@ -68,6 +71,9 @@ class Bill < ActiveRecord::Base
 
     text :id_t do |b|
       b.id.to_s
+    end
+    text :payment_ids do
+      payment_ids
     end
     text :amount_t do
       sprintf('%.2f', total_amount.to_f)
@@ -94,6 +100,10 @@ class Bill < ActiveRecord::Base
 
   def project_name
     self.source(:project).try(:name)
+  end
+
+  def payment_ids
+    payments.map { |p| p.id }.join(",")
   end
 
   def payer_name
