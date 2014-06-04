@@ -2,7 +2,7 @@ class PaymentsBill < ActiveRecord::Base
   acts_as_paranoid
 
   belongs_to :payment
-  belongs_to :bill
+  belongs_to :bill, touch: true
   attr_accessible :amount, :bill_id, :payment_id
 
   before_save :increase_bill_remaining_amount, :unless => :deleted_at_changed?

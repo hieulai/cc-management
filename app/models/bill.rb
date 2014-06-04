@@ -36,6 +36,7 @@ class Bill < ActiveRecord::Base
   before_update :clear_old_data
   before_save :check_zero_amount, :check_total_amount_changed
   after_save :update_transactions
+  after_touch :index
 
   validates_presence_of :billed_date, :builder
   validates_presence_of :payer_id, :payer_type, :if => Proc.new { |b| b.purchase_order_id.nil? }
