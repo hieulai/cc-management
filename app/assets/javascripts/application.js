@@ -42,11 +42,9 @@ var Application = (function ($) {
     };
 
     var loadCheckAll = function(){
-        $('input[type="checkbox"][name="select-all"]').each(function () {
-            $(this).on('click', function(){
-                $.Deferred().resolve($($(this).attr("data-target") + ($(this).is(":checked") ? ":not(:checked)" : ":checked")).trigger('click'));
-            })
-        })
+        $(document).on('click', 'input[type="checkbox"][name="select-all"]', function () {
+            $.Deferred().resolve($($(this).attr("data-target") + ($(this).is(":checked") ? ":not(:checked)" : ":checked")).trigger('click'));
+        });
     };
 
     var loadAddLink = function(){
