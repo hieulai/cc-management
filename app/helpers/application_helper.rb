@@ -35,6 +35,7 @@ module ApplicationHelper
           class_name = "sorting_desc"
         end
       end
+      class_name+= " #{field[2]}" if field[2]
       tag += content_tag :th, :class => class_name do
         link_to(field[0], params.merge(sort_field: field[1], sort_dir: sort_dir))
       end

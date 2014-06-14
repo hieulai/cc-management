@@ -29,10 +29,10 @@
                 <tr class="header">
                     <%= sorted_ths [["Type", "type"],
                                     ["Company", "company"],
-                                    ["Main Contact", "main_full_name"],
-                                    ["Primary Phone", "main_primary_phone"],
+                                    ["Main Contact", "main_full_name", "medium"],
+                                    ["Primary Phone", "main_primary_phone", "medium"],
                                     ["Email", "main_email"],
-                                    ["Associated Projects", "project_names"],
+                                    ["Associated Projects", "project_names", "medium"],
                                     ["Notes", "notes"]] %>
                 </tr>
                 <% @contacts.each do |c| %>

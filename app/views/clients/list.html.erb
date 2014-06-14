@@ -29,11 +29,11 @@
                 <tr class="header">
                     <th>Actions</th>
                     <%= sorted_ths [["Company", "company"],
-                                    ["Client Name", "main_full_name"],
-                                    ["Primary Phone", "main_primary_phone"],
+                                    ["Client Name", "main_full_name", "medium"],
+                                    ["Primary Phone", "main_primary_phone", "medium"],
                                     ["Email", "main_email"],
-                                    ["Associated Projects", "project_names"],
-                                    ["Lead Source", "lead_source"],
+                                    ["Associated Projects", "project_names", "medium"],
+                                    ["Lead Source", "lead_source", "medium"],
                                     ["Notes", "notes"]] %>
                 </tr>
                 <% @clients.each do |client| %>

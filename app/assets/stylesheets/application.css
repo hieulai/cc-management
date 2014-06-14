@@ -164,3 +164,7 @@ td.calculate {
 .nowrap {
     white-space: nowrap;
 }
+
+th.medium{
+    min-width: 150px;
+}
