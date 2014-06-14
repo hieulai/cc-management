@@ -6,6 +6,7 @@ class Project < ActiveRecord::Base
   has_many :change_orders, :dependent => :destroy
   has_many :specifications, :dependent => :destroy
   has_many :purchase_orders, :dependent => :destroy
+  has_many :projects_payers, :dependent => :destroy
   has_many :bills, :dependent => :destroy
   has_one :tasklist, :dependent => :destroy
   has_many :invoices, :through => :estimates
@@ -75,6 +76,7 @@ class Project < ActiveRecord::Base
     Sunspot.delay.index bills
     Sunspot.delay.index purchase_orders
     Sunspot.delay.index invoices
+    Sunspot.index projects_payers.map { |pp| pp.payer }
   end
   
 end

@@ -29,9 +29,9 @@
                 <tr class="header">
                     <th>Actions</th>
                     <%= sorted_ths [["Company", "company"],
-                                    ["Client Name", "full_name"],
-                                    ["Primary Phone", "primary_phone"],
-                                    ["Email", "email"],
+                                    ["Client Name", "main_full_name"],
+                                    ["Primary Phone", "main_primary_phone"],
+                                    ["Email", "main_email"],
                                     ["Associated Projects", "project_names"],
                                     ["Lead Source", "lead_source"],
                                     ["Notes", "notes"]] %>
@@ -43,14 +43,17 @@
                             <%= link_to("Delete", {:action => 'delete', :id => client.id}, :title => 'Delete', :class => 'delete table-action') %>
                         </td>
                         <td><%= client.company %></td>
-                        <td><%= client.full_name %></td>
-                        <td><%= number_to_phone(client.primary_phone, :area_code => true) %></td>
-                        <td><%= client.email %></td>
+                        <td><%= client.main_full_name %></td>
+                        <td><%= number_to_phone(client.main_primary_phone, :area_code => true) %></td>
+                        <td><%= client.main_email %></td>
                         <td>
-                            <% client.projects.each do |project| %>
-                                <%= project.name %>
-                                </br>
-                            <% end %>
+                            <ul>
+                                <% client.project_names.split(",").each do |name| %>
+                                  <li>
+                                      <%= name %>
+                                  </li>
+                                <% end %>
+                            </ul>
                         </td>
                         <td><%= client.lead_source %></td>
                         <td><%= client.notes %></td>

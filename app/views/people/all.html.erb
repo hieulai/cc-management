@@ -28,20 +28,32 @@
                 <tr class="header">
                     <%= sorted_ths [["Type", "type"],
                                     ["Company", "company"],
-                                    ["Main Contact", "full_name"],
-                                    ["Primary Phone", "primary_phone"],
-                                    ["Email", "email"],
+                                    ["Main Contact", "main_full_name"],
+                                    ["Primary Phone", "main_primary_phone"],
+                                    ["Email", "main_email"],
                                     ["Associated Projects", "project_names"],
                                     ["Notes", "notes"]] %>
                 </tr>
                 <% @people.each do |p| %>
-                  <% if p.instance_of? Client %>
-                    <%= render(:partial => "tr_client", :locals => {client: p}) %>
-                  <% elsif p.instance_of? Vendor %>
-                    <%= render(:partial => "tr_vendor", :locals => {vendor: p}) %>
-                  <% elsif p.instance_of? Contact %>
-                    <%= render(:partial => "tr_contact", :locals => {contact: p}) %>
-                  <% end %>
+                  <tr class="<%= p.class.name.underscore %>-rows">
+                      <td>
+                          <a href='<%= p.id %>'></a><%= p.type %>
+                      </td>
+                      <td><%= p.company %></td>
+                      <td><%= p.main_full_name %></td>
+                      <td><%= number_to_phone(p.main_primary_phone, :area_code => true) %></td>
+                      <td><%= p.main_email %></td>
+                      <td>
+                          <ul>
+                              <% p.project_names.split(",").each do |name| %>
+                                <li>
+                                    <%= name %>
+                                </li>
+                              <% end %>
+                          </ul>
+                      </td>
+                      <td><%= p.notes %></td>
+                  </tr>
                 <% end %>
             </table>
             <%= paginate @people %>

@@ -7,7 +7,7 @@
         </div>
         <div class="large-6 medium-6 columns">
             <h1 class="center">
-                <%= @contact.full_name %>
+                <%= @contact.display_name %>
             </h1>
         </div>
         <div class="large-3 medium-2 columns">
@@ -15,33 +15,16 @@
     </div>
     <div class="zurb-row">
         <div class="columns margin-bottom">
-            <h2>Contact's Info:</h2>
+            <h2>Company Info:</h2>
 
             <p>
-                <b><%= "First Name:" %></b>
-                <%= @contact.primary_first_name %>
+                <b><%= "Company Name:" %></b>
+                <%= @contact.company %>
             </p>
 
             <p>
-                <b><%= "Last Name:" %></b>
-                <%= @contact.primary_last_name %>
-            </p>
-
-            <p>
-                <b><%= "Primary Phone:" %></b>
-                <%= number_to_phone(@contact.primary_phone1, :area_code => true) %>
-                - <%= @contact.primary_phone1_tag %>
-            </p>
-
-            <p>
-                <b><%= "Secondary Phone:" %></b>
-                <%= number_to_phone(@contact.primary_phone2, :area_code => true) %>
-                - <%= @contact.primary_phone2_tag %>
-            </p>
-
-            <p>
-                <b><%= "Email:" %></b>
-                <%= @contact.primary_email %>
+                <b><%= "Website:" %></b>
+                <%= @contact.website %>
             </p>
 
             <p>
@@ -68,6 +51,21 @@
                 <b><%= "Notes:" %></b>
                 <%= @contact.notes %>
             </p>
+
+            <h2>Primary Contact's Info:</h2>
+            <%= render(:partial => "shared/profile_details", :locals => {:object => @contact.profiles[0] || @contact.profiles.build}) %>
+
+            <h2>Secondary Contact's Info:</h2>
+            <%= render(:partial => "shared/profile_details", :locals => {:object => @contact.profiles[1] || @contact.profiles.build}) %>
+
+            <p>
+                <ul>
+                    <% @contact.project_names.split(",").each do |name| %>
+                      <li><%= name %></li>
+                    <% end %>
+                </ul>
+            </p>
+
         </div>
     </div>
 </div>

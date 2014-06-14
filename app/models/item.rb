@@ -31,7 +31,7 @@ class Item < ActiveRecord::Base
   default_scope order("name ASC")
   scope :search_by_name, lambda { |q| where("name ILIKE ?", '%'+ q + '%') }
 
-  HEADERS = ["Name", "Description", "Estimated_cost", "Unit", "Margin", "Price", "Notes"]
+  HEADERS = ["Name", "Description", "Estimated Cost", "Unit", "Margin", "Price", "Notes"]
 
   searchable do
     float :qty

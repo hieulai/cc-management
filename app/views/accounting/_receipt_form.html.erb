@@ -55,10 +55,10 @@
           <div class="controls">
           </div>
           <script id="invoiced-client-select" type="text/html">
-              <%= f.select(:client_id, clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %>
+              <%= f.select(:client_id, clients.collect { |s| [s.main_full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %>
           </script>
           <script id="client_credit-client-select" type="text/html">
-              <%= f.select(:client_id, all_clients.collect { |s| [s.full_name, s.id] }, {:include_blank => true}) %>
+              <%= f.select(:client_id, all_clients.collect { |s| [s.main_full_name, s.id] }, {:include_blank => true}) %>
           </script>
       </div>
       <div class="control-group">

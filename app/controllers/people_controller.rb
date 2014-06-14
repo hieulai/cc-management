@@ -21,7 +21,7 @@ class PeopleController < ApplicationController
       }.results
       results = clients + vendors + contacts
       if params[:sort_field] && params[:sort_dir]
-        results = results.sort_by { |r| r.try(params[:sort_field]) }
+        results = results.sort_by { |r| r.try(params[:sort_field]).to_s }
         results = results.reverse if params[:sort_dir] == "desc"
       end
       @people = Kaminari.paginate_array(results).page(params[:page])
@@ -39,7 +39,7 @@ class PeopleController < ApplicationController
           }.results
         end
         format.csv {send_data Vendor.to_csv(@builder.vendors)}
-        format.xls { send_data @builder.vendors.to_xls(:headers => Vendor::HEADERS, :columns => [:vendor_type, :trade, :company, :primary_first_name, :primary_last_name, :primary_email,
+        format.xls { send_data @builder.vendors.to_xls(:headers => Vendor::HEADERS, :columns => [:vendor_type, :trade, :company, :primary_first_name, :primary_last_name, :email,
           :primary_phone1,:primary_phone1_tag, :primary_phone2,:primary_phone2_tag,:secondary_first_name, :secondary_last_name, :secondary_email, :secondary_phone1, :secondary_phone1_tag, 
           :secondary_phone2, :secondary_phone2_tag, :website, :address, :city, :state, :zipcode, 
           :notes]), content_type: 'application/vnd.ms-excel', filename: 'vendors.xls' }
@@ -126,11 +126,11 @@ class PeopleController < ApplicationController
     end
   
     def delete_contact
-      @builder.contacts.find(params[:id])
+       @contact = @builder.contacts.find(params[:id])
     end
 
     def destroy_contact
-      @builder.contacts.find(params[:id]).destroy
+      @contact = @builder.contacts.find(params[:id]).destroy
       redirect_to(:action => 'list_contacts')
     end
     
@@ -158,16 +158,33 @@ class PeopleController < ApplicationController
     def autocomplete_name
       @people = []
       if params[:type].present?
-        scope = @builder.try(params[:type].downcase.pluralize.to_sym)
-        scope = scope.active if params[:type] == Client.name
-        @people << scope.search_by_name(params[:term]).all
+        klass = params[:type].constantize
+        @people << klass.search {
+          fulltext params[:term], {:fields => :company_or_main_full_name}
+          with :builder_id, session[:builder_id]
+          with :status, "Active" if params[:type] == Client.name
+          paginate :page => 1, :per_page => klass.count
+        }.results
       else
-        @people << @builder.clients.active.search_by_name(params[:term]).all
-        @people << @builder.vendors.search_by_name(params[:term]).all
-        @people << @builder.contacts.search_by_name(params[:term]).all
+        @people << Client.search {
+          fulltext params[:term], {:fields => :company_or_main_full_name}
+          with :builder_id, session[:builder_id]
+          with :status, "Active"
+          paginate :page => 1, :per_page => Client.count
+        }.results
+        @people <<  Vendor.search {
+          fulltext params[:term], {:fields => :company_or_main_full_name}
+          with :builder_id, session[:builder_id]
+          paginate :page => 1, :per_page => Vendor.count
+        }.results
+        @people << Contact.search {
+          fulltext params[:term], {:fields => :company_or_main_full_name}
+          with :builder_id, session[:builder_id]
+          paginate :page => 1, :per_page => Contact.count
+        }.results
       end
       render :json => @people.flatten.map { |p|
-        label = p.company.present? ? "#{p.company} <br/> <span class=\"autocomplete-sublabel\">#{p.full_name}</span>" : p.full_name
+        label = p.company.present? ? "#{p.company} <br/> <span class=\"autocomplete-sublabel\">#{p.main_full_name}</span>" : p.main_full_name
         {:id => p.id, :label => label, :value => p.display_name, :type => p.class.name}
       }.to_json
     end

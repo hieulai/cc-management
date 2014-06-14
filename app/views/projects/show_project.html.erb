@@ -12,67 +12,62 @@
     <div class="zurb-row">
         <div class="columns margin-bottom">
             <% @client.projects.each do |project| %>
-                <h2>Lead Details For: <%= project.name %></h2>
-                <table summary="Lead detail view">
-                    <tr>
-                        <th>Project Name</th>
-                        <td><%= project.name %>
-                    </tr>
-                    <tr>
-                        <th>Created</th>
-                        <td><%= project.created_at %>
-                    </tr>
-                    <tr>
-                        <th>Last Updated</th>
-                        <td><%= project.updated_at %>
-                    </tr>
-                    <tr>
-                        <th>Lead Stage</th>
-                        <td><%= project.lead_stage %>
-                    </tr>
-                    <tr>
-                        <th>Project Type</th>
-                        <td><%= project.project_type %>
-                    </tr>
+              <h2>Lead Details For: <%= project.name %></h2>
 
-                    <tr>
-                        <th>Date Last Contacted</th>
-                        <td><%= @client.last_contacted %>
-                    </tr>
-                    <tr>
-                        <th>First Name</th>
-                        <td><%= @client.first_name %>
-                    </tr>
-                    <tr>
-                        <th>Last Name</th>
-                        <td><%= @client.last_name %>
-                    </tr>
-                    <tr>
-                        <th>Primary Phone</th>
-                        <td><%= @client.primary_phone %>
-                    </tr>
-                    <tr>
-                        <th>Secondary Phone</th>
-                        <td><%= @client.secondary_phone %>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td><%= @client.email %>
-                    </tr>
-                    <tr>
-                        <th>Anticipated Revenue</th>
-                        <td><%= project.revenue %>
-                    </tr>
-                    <tr>
-                        <th>Lead Source</th>
-                        <td><%= @client.lead_source %>
-                    </tr>
-                    <tr>
-                        <th>Notes</th>
-                        <td><%= project.lead_notes %>
-                    </tr>
+              <p>
+                  <b>Project Name:</b>
+                  <%= project.name %>
+              </p>
+
+              <p>
+                  <b>Created:</b>
+                  <%= project.created_at %>
+              </p>
+
+              <p>
+                  <b>Last Updated:</b>
+                  <%= project.updated_at %>
+              </p>
+
+              <p>
+                  <b>Lead Stage:</b>
+                  <%= project.lead_stage %>
+              </p>
+
+              <p>
+                  <b>Project Type:</b>
+                  <%= project.project_type %>
+              </p>
+
+              <h3>Client info:</h3>
+
+              <p>
+                  <b>Date Last Contacted:</b>
+                  <%= @client.last_contacted %>
+              </p>
+
+
+              <h4>Primary Contact's Info:</h4>
+              <%= render(:partial => "shared/profile_details", :locals => {:object => @client.profiles[0] || @client.profiles.build}) %>
+
+              <h4>Secondary Contact's Info:</h4>
+              <%= render(:partial => "shared/profile_details", :locals => {:object => @client.profiles[1] || @client.profiles.build}) %>
+              <p>
+                  <b>Lead Source:</b>
+                  <%= @client.lead_source %>
+              </p>
+
+              <p>
+                  <b>Anticipated Revenue:</b>
+                  <%= project.revenue %>
+              </p>
+
+              <p>
+                  <b>Notes:</b>
+                  <%= project.lead_notes %>
+              </p>
+
             <% end %>
-            </table>
         </div>
     </div>
 </div>

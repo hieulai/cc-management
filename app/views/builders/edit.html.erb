@@ -1,6 +1,15 @@
 <div>
     <%= render(:partial => "layouts/company_sub_menu") %>
-    <h2>Edit Company Info</h2>
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Show", {:action => 'show', :id => @builder.id}, :title => 'Show', :class => 'view-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h2 class="center">Edit Company Info</h2>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
 
     <%= form_for @builder, :url => {:action => 'update', :id => @builder.id}, html: {class: 'form-horizontal'} do |f| %>
 

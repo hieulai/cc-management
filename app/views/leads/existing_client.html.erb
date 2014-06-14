@@ -37,7 +37,7 @@
                 <div class="control-group">
                     <%= label :client, :id, 'Client Name', :class => 'col-lg-2 control-label' %>
                     <div class="controls">
-                        <%= select(:client, :id, @builder.clients.active.collect { |s| [s.full_name, s.id] }, {:include_blank => true}) %>
+                        <%= select(:client, :id, @builder.clients.active.collect { |s| [s.display_name, s.id] }, {:include_blank => true}) %>
                     </div>
                 </div>
                 <div class="control-group">

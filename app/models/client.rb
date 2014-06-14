@@ -1,48 +1,27 @@
 class Client < ActiveRecord::Base
+  include Profileable
   include Billable
 
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :projects, dependent: :destroy
   has_many :invoices, :through => :projects
-  has_many :receipts, as: :payer
 
-  attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone,
-                  :address, :city, :state, :zipcode, :status, :notes, :last_contacted, :lead_source, :primary_phone_tag, :secondary_phone_tag
+  attr_accessible :first_name, :last_name, :email, :primary_phone, :secondary_phone,
+                  :status, :last_contacted, :lead_source, :primary_phone_tag, :secondary_phone_tag
 
-  default_scope order("first_name ASC")
   scope :active, where(status: "Active")
-  scope :search_by_name, lambda { |q|
-    (q ? where(["first_name ILIKE ? or last_name ILIKE ? or concat(first_name, ' ', last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%', '%'+ q + '%']) : {})
-  }
   scope :has_unbilled_invoices, joins(:invoices).where("invoices.remaining_amount is NULL OR invoices.remaining_amount > 0")
   scope :has_unbilled_receipts, joins(:receipts).where("receipts.remaining_amount is NULL OR receipts.remaining_amount > 0")
 
-  after_save :update_indexes
-
   searchable do
-    string :status
     integer :builder_id
-    string :company
-    string :full_name do
-      full_name
-    end
-    string :primary_phone
-    string :email
-    string :project_names do
-      project_names
-    end
+    string :status
     string :type do
       type
     end
-
     string :lead_source
-    string :notes
-
-    text :company, :first_name, :last_name, :primary_phone, :email, :lead_source, :notes
-    text :project_names do
-      projects.pluck(:name)
-    end
-    text :client_type do
+    text :lead_source
+    text :type do
       type
     end
   end
@@ -51,27 +30,7 @@ class Client < ActiveRecord::Base
     "Client"
   end
 
-  def display_name
-    full_name
-  end
-
-  def primary_phone
-    read_attribute(:primary_phone).to_s
-  end
-      
-  def full_name
-     "#{first_name} #{last_name}"
-  end
-
-  def project_names
-    projects.pluck(:name).join(" ")
-  end
-
   def notes
     read_attribute(:notes).to_s
-  end
-
-  def update_indexes
-    Sunspot.delay.index receipts
   end
 end

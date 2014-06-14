@@ -7,12 +7,7 @@
         </div>
         <div class="large-6 medium-6 columns">
             <h1 class="center">
-                <%= @vendor.vendor_type %> -
-                <% if @vendor.company == '' %>
-                    <%= @vendor.full_name %>
-                <% else %>
-                    <%= @vendor.company %>
-                <% end %>
+                <%= @vendor.vendor_type %> - <%= @vendor.display_name %>
             </h1>
         </div>
         <div class="large-3 medium-2 columns">
@@ -59,67 +54,25 @@
                 <%= @vendor.zipcode %>
             </p>
 
-            <h2>Primary Contact's Info:</h2>
-
-            <p>
-                <b><%= "First Name:" %></b>
-                <%= @vendor.primary_first_name %>
-            </p>
-
-            <p>
-                <b><%= "Last Name:" %></b>
-                <%= @vendor.primary_last_name %>
-            </p>
-
-            <p>
-                <b><%= "Primary Phone:" %></b>
-                <%= number_to_phone(@vendor.primary_phone1, :area_code => true) %>
-                - <%= @vendor.primary_phone1_tag %>
-            </p>
-
-            <p>
-                <b><%= "Secondary Phone:" %></b>
-                <%= number_to_phone(@vendor.primary_phone2, :area_code => true) %>
-                - <%= @vendor.primary_phone2_tag %>
-            </p>
-
-            <p>
-                <b><%= "Email:" %></b>
-                <%= @vendor.primary_email %>
-            </p>
-
-            <h2>Secondary Contact's Info:</h2>
-
-            <p>
-                <b><%= "First Name:" %></b>
-                <%= @vendor.secondary_first_name %>
-            </p>
-
-            <p>
-                <b><%= "Last Name:" %></b>
-                <%= @vendor.secondary_last_name %>
-            </p>
-
-            <p>
-                <b><%= "Primary Phone:" %></b>
-                <%= number_to_phone(@vendor.secondary_phone1, :area_code => true) %>
-                - <%= @vendor.secondary_phone1_tag %>
-            </p>
-
-            <p>
-                <b><%= "Secondary Phone:" %></b>
-                <%= number_to_phone(@vendor.secondary_phone2, :area_code => true) %>
-                - <%= @vendor.secondary_phone2_tag %>
-            </p>
-
-            <p>
-                <b><%= "Email:" %></b>
-                <%= @vendor.secondary_email %>
-            </p>
-
             <p>
                 <b><%= "Notes:" %></b>
                 <%= @vendor.notes %>
+            </p>
+
+            <h2>Primary Contact's Info:</h2>
+            <%= render(:partial => "shared/profile_details", :locals => {:object => @vendor.profiles[0] || @vendor.profiles.build}) %>
+
+            <h2>Secondary Contact's Info:</h2>
+            <%= render(:partial => "shared/profile_details", :locals => {:object => @vendor.profiles[1] || @vendor.profiles.build}) %>
+
+            <h2>Associated Projects:</h2>
+
+            <p>
+                <ul>
+                    <% @vendor.project_names.split(",").each do |name| %>
+                      <li><%= name %></li>
+                    <% end %>
+                </ul>
             </p>
 
             <p>

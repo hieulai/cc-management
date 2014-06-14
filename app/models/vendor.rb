@@ -1,19 +1,12 @@
 class Vendor < ActiveRecord::Base
-  include Importable
   include Billable
+  include Profileable
 
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :bid, :dependent => :destroy
-  has_many :payments
-  has_many :purchase_orders
-  has_many :receipts, as: :payer
-  
-  attr_accessible :company,:vendor_type,:trade,:primary_first_name,:primary_last_name,:primary_email,:primary_phone1,:primary_phone2,:secondary_first_name,:secondary_last_name,:secondary_email,
-  :secondary_phone1,:secondary_phone2,:website,:address,:city,:state,:zipcode,:notes, :primary_phone1_tag,:primary_phone2_tag, :secondary_phone1_tag, :secondary_phone2_tag
 
-  scope :search_by_name, lambda { |q|
-    (q ? where(["company ILIKE ? or primary_first_name ILIKE ? or primary_last_name ILIKE ? or concat(primary_first_name, ' ', primary_last_name) ILIKE ?", '%'+ q + '%', '%'+ q + '%','%'+ q + '%' ,'%'+ q + '%' ])  : {})
-  }
+  attr_accessible :vendor_type, :trade, :service_provided, :primary_first_name, :primary_last_name, :email, :primary_phone1, :primary_phone2, :secondary_first_name, :secondary_last_name, :secondary_email,
+                  :secondary_phone1, :secondary_phone2, :primary_phone1_tag, :primary_phone2_tag, :secondary_phone1_tag, :secondary_phone2_tag
 
   validates :vendor_type, presence: true
   validates :trade, presence: {message: "cannot be blank for Subcontractors. Consider entering something such as: Framer, Plumber, Electrician, etc."}, :if => Proc.new { |v| v.vendor_type == "Subcontractor" }
@@ -27,70 +20,38 @@ class Vendor < ActiveRecord::Base
       vendor_type
     end
     string :trade
-    string :company
-    string :full_name do
-      full_name
+    text :trade
+    text :type do
+      vendor_type
     end
-    string :project_names do
-
-    end
-    string :primary_phone do
-      primary_phone
-    end
-    string :email do
-      email
-    end
-    string :notes
-
-    text :company, :vendor_type, :trade, :primary_first_name, :primary_last_name, :primary_email, :primary_phone1, :notes
-  end
-  
-  HEADERS = ["Vendor_Type", "Trade", "Company", "Primary_First_Name", "Primary_Last_Name", "Primary_Email", "Primary_Phone1","Primary_Phone1_Tag", "Primary_Phone2","Primary_Phone2_Tag",
-       "Secondary_First_Name", "Secondary_Last_Name", "Secondary_Email","Secondary_Phone1", "Secondary_Phone1_Tag", "Secondary_Phone2", "Secondary_Phone2_Tag", 
-       "Website", "Address", "City", "State", "Zipcode", 
-                 "Notes"]
-
-  def email
-    primary_email
   end
 
-  def display_name
-    company.presence || full_name
-  end
-
-  def full_name
-     "#{primary_first_name} #{primary_last_name}"
-  end
+  HEADERS = ["Vendor Type", "Trade", "Company", "Primary First Name", "Primary Last Name", "Email", "Primary Phone1", "Primary Phone1 Tag", "Primary Phone2", "Primary Phone2 Tag",
+             "Secondary First Name", "Secondary Last Name", "Secondary Email", "Secondary Phone1", "Secondary Phone1 Tag", "Secondary Phone2", "Secondary Phone2 Tag",
+             "Website", "Address", "City", "State", "Zipcode", "Notes"]
 
   def type
     vendor_type
   end
 
-  def primary_phone
-    primary_phone1.to_s
-  end
-
-  def project_names
-    ""
-  end
-
   def notes
     read_attribute(:notes).to_s
   end
-  
-  def self.to_csv
+
+  def self.to_csv (vendors)
     CSV.generate do |csv|
       csv << HEADERS
-      all.each do |vendor|
-        csv << vendor.attributes.values_at(*HEADERS)
+      vendors.each do |vendor|
+        csv << [vendor.vendor_type, vendor.trade, vendor.company,
+                vendor.profiles[0].try(:first_name), vendor.profiles[0].try(:last_name), vendor.profiles[0].try(:email), vendor.profiles[0].try(:phone1), vendor.profiles[0].try(:phone1_tag), vendor.profiles[0].try(:phone2), vendor.profiles[0].try(:phone2_tag),
+                vendor.profiles[1].try(:first_name), vendor.profiles[1].try(:last_name), vendor.profiles[1].try(:email), vendor.profiles[1].try(:phone1), vendor.profiles[1].try(:phone1_tag), vendor.profiles[1].try(:phone2), vendor.profiles[1].try(:phone2_tag),
+                vendor.website, vendor.address, vendor.city, vendor.state, vendor.zipcode, vendor.notes]
       end
     end
   end
 
   def update_indexes
-    Sunspot.delay.index bills
     Sunspot.delay.index purchase_orders
-    Sunspot.delay.index payments
   end
   
 end

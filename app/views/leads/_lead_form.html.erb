@@ -57,38 +57,7 @@
         <%= c.text_field(:company) %>
     </div>
 </div>
-<div class="control-group">
-    <%= c.label :first_name, 'First Name', :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= c.text_field(:first_name) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= c.label :last_name, 'Last Name', :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= c.text_field(:last_name) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= c.label :primary_phone, 'Primary Phone', :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= c.text_field(:primary_phone) %>
-        <%= c.select(:primary_phone_tag, ["Cell", "Office", "Home"]) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= c.label :secondary_phone, 'Secondary Phone', :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= c.text_field(:secondary_phone) %>
-        <%= c.select(:secondary_phone_tag, ["Cell", "Office", "Home"]) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= c.label :email, 'Email', :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= c.text_field(:email) %>
-    </div>
-</div>
+
 <div class="control-group">
     <%= c.label :address, 'Address', :class => 'col-lg-2 control-label' %>
     <div class="controls">
@@ -113,3 +82,9 @@
         <%= c.text_field(:zipcode) %>
     </div>
 </div>
+
+<h4>Primary Contact's Info:</h4>
+<%= render(:partial => "shared/profile_fields", :locals => {:f => c, :object => @client.profiles[0] || @client.profiles.build}) %>
+
+<h4>Secondary Contact's Info:</h4>
+<%= render(:partial => "shared/profile_fields", :locals => {:f => c, :object => @client.profiles[1] || @client.profiles.build}) %>

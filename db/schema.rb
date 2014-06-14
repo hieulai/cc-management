@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140602153354) do
+ActiveRecord::Schema.define(:version => 20140613161808) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -67,28 +67,6 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
     t.integer "account_id"
     t.integer "invoices_item_id"
   end
-
-  create_table "architects", :force => true do |t|
-    t.integer  "builder_id"
-    t.string   "company"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
-    t.string   "primary_phone"
-    t.string   "secondary_phone"
-    t.string   "website"
-    t.string   "address"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zipcode"
-    t.text     "notes"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-    t.string   "primary_phone_tag"
-    t.string   "secondary_phone_tag"
-  end
-
-  add_index "architects", ["builder_id"], :name => "index_architects_on_builder_id"
 
   create_table "bids", :force => true do |t|
     t.integer  "project_id"
@@ -159,22 +137,6 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
   end
 
   add_index "bills_items", ["bills_categories_template_id"], :name => "index_bills_items_on_bills_ct_id"
-
-  create_table "builders", :force => true do |t|
-    t.string   "company_name"
-    t.integer  "year_founded"
-    t.string   "office_phone"
-    t.string   "website"
-    t.string   "address"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zipcode"
-    t.string   "tax_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-    t.string   "slogan"
-    t.string   "logo"
-  end
 
   create_table "categories", :force => true do |t|
     t.integer  "builder_id"
@@ -262,15 +224,33 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
     t.string   "status",              :default => "Lead"
     t.string   "primary_phone_tag"
     t.string   "secondary_phone_tag"
+    t.string   "website"
   end
 
   add_index "clients", ["builder_id"], :name => "index_clients_on_builder_id"
+
+  create_table "companies", :force => true do |t|
+    t.string   "company_name"
+    t.integer  "year_founded"
+    t.string   "office_phone"
+    t.string   "website"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zipcode"
+    t.string   "tax_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.string   "slogan"
+    t.string   "logo"
+    t.string   "type"
+  end
 
   create_table "contacts", :force => true do |t|
     t.integer  "builder_id"
     t.string   "primary_first_name"
     t.string   "primary_last_name"
-    t.string   "primary_email"
+    t.string   "email"
     t.string   "primary_phone1"
     t.string   "primary_phone2"
     t.string   "primary_phone1_tag"
@@ -283,6 +263,7 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
     t.text     "notes"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+    t.string   "company"
   end
 
   add_index "contacts", ["builder_id"], :name => "index_contacts_on_builder_id"
@@ -495,6 +476,32 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
   add_index "payments_bills", ["bill_id"], :name => "index_payments_bills_on_bill_id"
   add_index "payments_bills", ["payment_id"], :name => "index_payments_bills_on_payment_id"
 
+  create_table "people", :force => true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "primary_phone"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "profiles", :force => true do |t|
+    t.integer  "person_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "phone1"
+    t.string   "phone1_tag"
+    t.string   "phone2"
+    t.string   "phone2_tag"
+    t.integer  "profileable_id"
+    t.string   "profileable_type"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "profiles", ["person_id"], :name => "index_profiles_on_person_id"
+
   create_table "projects", :force => true do |t|
     t.integer  "client_id"
     t.string   "name"
@@ -519,6 +526,17 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
 
   add_index "projects", ["builder_id"], :name => "index_projects_on_builder_id"
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"
+
+  create_table "projects_payers", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "payer_id"
+    t.string   "payer_type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "projects_payers", ["payer_id"], :name => "index_projects_payers_on_payer_id"
+  add_index "projects_payers", ["project_id"], :name => "index_projects_payers_on_project_id"
 
   create_table "prospects", :force => true do |t|
     t.integer  "builder_id"
@@ -642,54 +660,6 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
 
   add_index "specifications", ["project_id"], :name => "index_specifications_on_project_id"
 
-  create_table "subcontractors", :force => true do |t|
-    t.integer  "builder_id"
-    t.string   "company"
-    t.string   "trade"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
-    t.string   "primary_phone"
-    t.string   "secondary_phone"
-    t.string   "website"
-    t.string   "address"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zipcode"
-    t.text     "notes"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-    t.string   "primary_phone_tag"
-    t.string   "secondary_phone_tag"
-  end
-
-  add_index "subcontractors", ["builder_id"], :name => "index_subcontractors_on_builder_id"
-
-  create_table "suppliers", :force => true do |t|
-    t.integer  "builder_id"
-    t.string   "company"
-    t.string   "primary_first_name"
-    t.string   "primary_last_name"
-    t.string   "primary_email"
-    t.string   "primary_phone"
-    t.string   "secondary_first_name"
-    t.string   "secondary_last_name"
-    t.string   "secondary_email"
-    t.string   "secondary_phone"
-    t.string   "website"
-    t.string   "address"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zipcode"
-    t.text     "notes"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
-    t.string   "primary_phone_tag"
-    t.string   "secondary_phone_tag"
-  end
-
-  add_index "suppliers", ["builder_id"], :name => "index_suppliers_on_builder_id"
-
   create_table "tasklists", :force => true do |t|
     t.integer  "builder_id"
     t.integer  "project_id"
@@ -783,7 +753,7 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
     t.string   "trade"
     t.string   "primary_first_name"
     t.string   "primary_last_name"
-    t.string   "primary_email"
+    t.string   "email"
     t.string   "primary_phone1"
     t.string   "primary_phone2"
     t.string   "primary_phone1_tag"
@@ -803,6 +773,7 @@ ActiveRecord::Schema.define(:version => 20140602153354) do
     t.text     "notes"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+    t.string   "service_provided"
   end
 
   add_index "vendors", ["builder_id"], :name => "index_vendors_on_builder_id"

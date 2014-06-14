@@ -56,79 +56,26 @@
         <%= f.text_field(:zipcode) %>
     </div>
 </div>
-<h2>Primary Contact's Info:</h2>
-<div class="control-group">
-    <%= f.label :primary_first_name, "First Name", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:primary_first_name) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :primary_last_name, "Last Name", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:primary_last_name) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :primary_phone1, "Primary Phone", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:primary_phone1) %>
 
-        <%= f.select(:primary_phone1_tag, ["Cell", "Office", "Home"]) %>
+<div class="control-group">
+    <%= f.label :service_provided, "Service provided", :class => 'col-lg-2 control-label' %>
+    <div class="controls">
+        <%= f.text_field(:service_provided) %>
     </div>
 </div>
-<div class="control-group">
-    <%= f.label :primary_phone2, "Secondary Phone", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:primary_phone2) %>
 
-        <%= f.select(:primary_phone2_tag, ["Cell", "Office", "Home"]) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :primary_email, "Email", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:primary_email) %>
-    </div>
-</div>
-<h2>Secondary Contact's Info:</h2>
-<div class="control-group">
-    <%= f.label :secondary_first_name, "First Name", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:secondary_first_name) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :secondary_last_name, "Last Name", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:secondary_last_name) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :secondary_phone1, "Primary Phone", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:secondary_phone1) %>
-
-        <%= f.select(:secondary_phone1_tag, ["Cell", "Office", "Home"]) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :secondary_phone2, "Secondary Phone", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:secondary_phone2) %>
-
-        <%= f.select(:secondary_phone2_tag, ["Cell", "Office", "Home"]) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :secondary_email, "Email", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:secondary_email) %>
-    </div>
-</div>
 <div class="control-group">
     <%= f.label :notes, "Notes", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_area(:notes, :size => '40x5') %>
     </div>
 </div>
+
+<h2>Primary Contact's Info:</h2>
+<%= render(:partial => "shared/profile_fields", :locals => {:f => f, :object => @vendor.profiles[0] || @vendor.profiles.build}) %>
+
+<h2>Secondary Contact's Info:</h2>
+<%= render(:partial => "shared/profile_fields", :locals => {:f => f, :object => @vendor.profiles[1] || @vendor.profiles.build}) %>
+
+<h2>Associated Projects</h2>
+<%= render(:partial => "shared/associated_projects_fields", :locals => {:f => f, :object => @vendor}) %>

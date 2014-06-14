@@ -7,11 +7,7 @@
         </div>
         <div class="large-6 medium-6 columns">
             <h1 class="center">
-                <% if @client.company == '' %>
-                    <%= @client.full_name %>
-                <% else %>
-                    <%= @client.company %>
-                <% end %>
+                <%= @client.display_name %>
             </h1>
         </div>
         <div class="large-3 medium-2 columns">
@@ -19,36 +15,10 @@
     </div>
     <div class="zurb-row">
         <div class="columns margin-bottom">
+            <h2>Company Info</h2>
             <p>
                 <b><%= "Company:" %></b>
                 <%= @client.company %>
-            </p>
-
-            <p>
-                <b><%= "First Name:" %></b>
-                <%= @client.first_name %>
-            </p>
-
-            <p>
-                <b><%= "Last Name:" %></b>
-                <%= @client.last_name %>
-            </p>
-
-            <p>
-                <b><%= "Primary Phone:" %></b>
-                <%= number_to_phone(@client.primary_phone, :area_code => true) %>
-                <%= @client.primary_phone_tag %>
-            </p>
-
-            <p>
-                <b><%= "Secondary Phone:" %></b>
-                <%= number_to_phone(@client.secondary_phone, :area_code => true) %>
-                <%= @client.secondary_phone_tag %>
-            </p>
-
-            <p>
-                <b><%= "Email:" %></b>
-                <%= @client.email %>
             </p>
 
             <p>
@@ -77,17 +47,24 @@
             </p>
 
             <p>
-                <b><%= "Associated Projects:" %></b>
-                <% @client.projects.each do |project| %>
-                    <br/>
-                    <li><%= project.name %></li>
-                <% end %>
-            </p>
-
-            <p>
                 <b><%= "Notes:" %></b>
                 </br>
                 <%= @client.notes %>
+            </p>
+
+            <h2>Primary Contact's Info</h2>
+            <%= render(:partial => "shared/profile_details", :locals => {:object => @client.profiles[0] || @client.profiles.build}) %>
+
+            <h2>Secondary Contact's Info</h2>
+            <%= render(:partial => "shared/profile_details", :locals => {:object => @client.profiles[1] || @client.profiles.build}) %>
+
+            <h2>Associated Projects:</h2>
+            <p>
+                <ul>
+                    <% @client.project_names.split(",").each do |name| %>
+                      <li><%= name %></li>
+                    <% end %>
+                </ul>
             </p>
 
             <p>

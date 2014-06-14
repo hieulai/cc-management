@@ -6,7 +6,7 @@
             <%= form_for(:contact, :url => {:action => 'destroy_contact', :id => @contact.id}) do |f| %>
                 <p>Are you sure you want to delete this contact?</p>
 
-                <p class="reference-name"><%= @contact.full_name %></p>
+                <p class="reference-name"><%= @contact.display_name %></p>
 
                 <div class="control-group">
                     <div class='controls'>

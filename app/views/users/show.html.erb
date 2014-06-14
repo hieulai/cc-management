@@ -1,35 +1,59 @@
 <div>
-  <%= render(:partial => "layouts/user_sub_menu")%>
-	
-	<h2>Details For: <%= @user.first_name %> </h2>
-	<p>
-		<%= "Authority:" %>
-		<%= @user.authority %>
-	</p>
-	<p>
-		<%= "First Name:" %>
-		<%= @user.first_name %>
-	</p>
-	<p>
-		<%= "Last Name:" %>
-		<%= @user.last_name %>
-	</p>
-	<p>
-		<%= "Primary Phone:" %>
-		<%= @user.primary_phone %>
-	</p>
-	<p>
-		<%= "Email:" %>
-		<%= @user.email %>
-	</p>
-	<p>
-		<%= "Created:" %>
-		<%= @user.created_at %>
-	</p>
-	<p>
-		<%= "Last Updated:" %>
-		<%= @user.updated_at %>
-	</p>
+    <%= render(:partial => "layouts/user_sub_menu") %>
 
-	
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Edit >>", {:action => 'edit', :id => @user.id}, :title => 'Edit', :class => 'edit-large action-button') %>
+            <%= link_to("Delete >>", {:action => 'delete', :id => @user.id}, :title => 'Edit', :class => 'delete-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1 class="center">
+                Details For: <%= @user.first_name %>
+            </h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+
+    <div class="zurb-row">
+        <div class="columns">
+
+
+            <p>
+                <%= "Authority:" %>
+                <%= @user.authority %>
+            </p>
+
+            <p>
+                <%= "First Name:" %>
+                <%= @user.first_name %>
+            </p>
+
+            <p>
+                <%= "Last Name:" %>
+                <%= @user.last_name %>
+            </p>
+
+            <p>
+                <%= "Primary Phone:" %>
+                <%= @user.primary_phone %>
+            </p>
+
+            <p>
+                <%= "Email:" %>
+                <%= @user.email %>
+            </p>
+
+            <p>
+                <%= "Created:" %>
+                <%= @user.created_at %>
+            </p>
+
+            <p>
+                <%= "Last Updated:" %>
+                <%= @user.updated_at %>
+            </p>
+        </div>
+    </div>
+
 </div>

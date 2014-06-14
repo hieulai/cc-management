@@ -1,71 +1,89 @@
 <div>
-	<%= render(:partial => "layouts/prospecting_sub_menu")%>
-	<h1 class="center">
-		<% if @prospect.company == '' %>
-			<%= @prospect.full_name %>
-		<% else %>
-			<%= @prospect.company %>
-		<% end %>
-	</h1>
-	
-	<%= link_to("Edit >>", {:action => 'edit', :id => @prospect.id}) %>
-	</br>
-	</br>
-	<%= link_to("Delete >>", {:action => 'delete', :id => @prospect.id}) %>
-		<p>
-			<b><%= "Company:" %></b>
-			<%= @prospect.company %>
-		</p>
-		<p>
-			<b><%= "First Name:" %></b>
-			<%= @prospect.first_name %>
-		</p>
-		<p>
-			<b><%= "Last Name:" %></b>
-			<%= @prospect.last_name %>
-		</p>
-		<p>
-			<b><%= "Primary Phone:" %></b>
-			<%= number_to_phone(@prospect.primary_phone, area_code: true) %>
-			<%= @prospect.primary_phone_tag %>
-		</p>
-		<p>
-			<b><%= "Secondary Phone:" %></b>
-			<%= number_to_phone(@prospect.secondary_phone, area_code: true) %>
-			<%= @prospect.secondary_phone_tag %>
-		</p>
-		<p>
-			<b><%= "Email:" %></b>
-			<%= @prospect.email %>
-		</p>
-		
-		<p>
-			<b><%= "Address:" %></b>
-			<%= @prospect.address %>
-		</p>
-		<p>
-			<b><%= "City:" %></b>
-			<%= @prospect.city %>
-		</p>
-		<p>
-			<b><%= "State:" %></b>
-			<%= @prospect.state %>
-		</p>
-		<p>
-			<b><%= "Zipcode:" %></b>
-			<%= @prospect.zipcode %>
-		</p>
-		<p>
-			<b><%= "Notes:" %></b>
-			</br>
-			<%= @prospect.notes %>
-		</p>
-		<p>
-			<b><%= "Created At:" %></b>
-			<%= @prospect.created_at %>
-		</p>
-		<p>
-			<b><%= "Last Updated:" %></b>
-			<%= @prospect.updated_at %>
-		</p>
+    <%= render(:partial => "layouts/prospecting_sub_menu") %>
+
+    <div class="zurb-row main-action-bar">
+        <div class="large-3 medium-4 columns">
+            <%= link_to("Edit >>", {:action => 'edit', :id => @prospect.id}, :title => 'Edit', :class => 'edit-large action-button') %>
+            <%= link_to("Delete >>", {:action => 'delete', :id => @prospect.id}, :title => 'Edit', :class => 'delete-large action-button') %>
+        </div>
+        <div class="large-6 medium-6 columns">
+            <h1 class="center">
+                Prospecting
+            </h1>
+        </div>
+        <div class="large-3 medium-2 columns">
+        </div>
+    </div>
+
+    <div class="zurb-row">
+        <div class="columns">
+            <p>
+                <b><%= "Company:" %></b>
+                <%= @prospect.company %>
+            </p>
+
+            <p>
+                <b><%= "First Name:" %></b>
+                <%= @prospect.first_name %>
+            </p>
+
+            <p>
+                <b><%= "Last Name:" %></b>
+                <%= @prospect.last_name %>
+            </p>
+
+            <p>
+                <b><%= "Primary Phone:" %></b>
+                <%= number_to_phone(@prospect.primary_phone, area_code: true) %>
+                <%= @prospect.primary_phone_tag %>
+            </p>
+
+            <p>
+                <b><%= "Secondary Phone:" %></b>
+                <%= number_to_phone(@prospect.secondary_phone, area_code: true) %>
+                <%= @prospect.secondary_phone_tag %>
+            </p>
+
+            <p>
+                <b><%= "Email:" %></b>
+                <%= @prospect.email %>
+            </p>
+
+            <p>
+                <b><%= "Address:" %></b>
+                <%= @prospect.address %>
+            </p>
+
+            <p>
+                <b><%= "City:" %></b>
+                <%= @prospect.city %>
+            </p>
+
+            <p>
+                <b><%= "State:" %></b>
+                <%= @prospect.state %>
+            </p>
+
+            <p>
+                <b><%= "Zipcode:" %></b>
+                <%= @prospect.zipcode %>
+            </p>
+
+            <p>
+                <b><%= "Notes:" %></b>
+                </br>
+                <%= @prospect.notes %>
+            </p>
+
+            <p>
+                <b><%= "Created At:" %></b>
+                <%= @prospect.created_at %>
+            </p>
+
+            <p>
+                <b><%= "Last Updated:" %></b>
+                <%= @prospect.updated_at %>
+            </p>
+        </div>
+    </div>
 </div>

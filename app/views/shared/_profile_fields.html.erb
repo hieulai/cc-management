@@ -1,0 +1,34 @@
+<%= f.fields_for :profiles, object do |profile_fields| %>
+  <div class="control-group">
+      <%= profile_fields.label :first_name, "First Name", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= profile_fields.text_field(:first_name) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= profile_fields.label :last_name, "Last Name", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= profile_fields.text_field(:last_name) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= profile_fields.label :phone1, "Primary Phone", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= profile_fields.text_field(:phone1) %>
+          <%= profile_fields.select(:phone1_tag, ["Cell", "Office", "Home"]) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= profile_fields.label :phone2, "Secondary Phone", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= profile_fields.text_field(:phone2) %>
+          <%= profile_fields.select(:phone2_tag, ["Cell", "Office", "Home"]) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= profile_fields.label :email, "Email", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= profile_fields.text_field(:email) %>
+      </div>
+  </div>
+<% end %>

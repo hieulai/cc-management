@@ -1,6 +1,5 @@
 module Base
-  class Builder < ActiveRecord::Base
-    has_one :image, as: :imageable, dependent: :destroy
+  class Builder < Company
 
     #Relations
     has_many :architects
@@ -24,9 +23,6 @@ module Base
     has_many :deposits
     has_many :subcontractors
     has_many :suppliers
-
-    attr_accessible :company_name, :year_founded, :office_phone, :website, :address, :city, :state, :zipcode, :tax_id, :logo, :slogan, :image_attributes
-    accepts_nested_attributes_for :image
 
     after_create :create_default_accounts
 

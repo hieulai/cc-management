@@ -1,0 +1,24 @@
+<% if !object.new_record? && object.project_names_from_checks.present? %>
+  <div class="control-group">
+      <%= f.label :from_check, "From check", class: 'col-lg-2 control-label' %>
+      <div class="controls">
+          <ul>
+              <% object.project_names_from_checks.split(",").each do |name| %>
+                <li>
+                    <%= name %>
+                </li>
+              <% end %>
+          </ul>
+      </div>
+  </div>
+<% end %>
+
+
+<%= f.fields_for :projects_payers do |ct| %>
+  <%= render('shared/projects_payers', f: ct) %>
+<% end %>
+<div class="control-group">
+    <div class="controls">
+        <%= link_to_add_association 'Add More', f, :projects_payers, partial: 'shared/projects_payers' %>
+    </div>
+</div>

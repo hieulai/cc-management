@@ -487,14 +487,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def autocomplete_vendor_name
-    @vendors = @builder.vendors.search_by_name(params[:term]).order(:company)
-    render :json => @vendors.map { |v|
-      label = v.company.present? ? "#{v.company} <br/> <span class=\"autocomplete-sublabel\">#{v.full_name}</span>" : v.full_name
-      {:id => v.id, :label => label, :value => v.display_name}
-    }.to_json
-  end
-
   def search_category_by_name
     categories_templates = []
     raw_categories = []

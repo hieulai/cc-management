@@ -16,44 +16,44 @@
             <h3>Project Info</h3>
 
             <p>
-                <b><%= "Project Name:" %></b>
+                <b>Project Name:</b>
                 <%= @project.name %>
             </p>
 
             <p>
-                <b><%= "Project Type:" %></b>
+                <b>Project Type:</b>
                 <%= @project.project_type %>
             </p>
 
             <p>
-                <b><%= "Lead Stage:" %></b>
+                <b>Lead Stage:</b>
                 <%= @project.lead_stage %>
             </p>
 
             <p>
-                <b><%= "Lead Source:" %></b>
+                <b>Lead Source</b>
                 <%= @client.lead_source %>
             </p>
 
             <p>
-                <b><%= "Anticipated Revenue:" %></b>
+                <b>Anticipated Revenue:</b>
                 <%= @project.revenue %>
             </p>
 
             <p>
-                <b><%= "Lead Notes:" %></b>
+                <b>Lead Notes:</b>
                 </br>
                 <%= @project.lead_notes %>
 
             </p>
 
             <p>
-                <b><%= "Created At:" %></b>
+                <b>Created At</b>
                 <%= @project.created_at %>
             </p>
 
             <p>
-                <b><%= "Last Updated:" %></b>
+                <b>Last Updated:</b>
                 <%= @project.updated_at %>
             </p>
 
@@ -61,56 +61,35 @@
             <h3>Client Info</h3>
 
             <p>
-                <b><%= "Last Contaced:" %></b>
+                <b>Last Contacted:</b>
                 <%= @client.last_contacted %>
             </p>
 
             <p>
-                <b><%= "First Name:" %></b>
-                <%= @client.first_name %>
-            </p>
-
-            <p>
-                <b><%= "Last Name:" %></b>
-                <%= @client.last_name %>
-            </p>
-
-            <p>
-                <b><%= "Primary Phone:" %></b>
-                <%= number_to_phone(@client.primary_phone, :area_code => true) %>
-                <%= @client.primary_phone_tag %>
-            </p>
-
-            <p>
-                <b><%= "Secondary Phone:" %></b>
-                <%= number_to_phone(@client.secondary_phone, :area_code => true) %>
-                <%= @client.secondary_phone_tag %>
-            </p>
-
-            <p>
-                <b><%= "Email:" %></b>
-                <%= @client.email %>
-            </p>
-
-            <p>
-                <b><%= "Address:" %></b>
+                <b>Address:</b>
                 <%= @client.address %>
             </p>
 
             <p>
-                <b><%= "City:" %></b>
+                <b>City:</b>
                 <%= @client.city %>
             </p>
 
             <p>
-                <b><%= "State:" %></b>
+                <b>State:</b>
                 <%= @client.state %>
             </p>
 
             <p>
-                <b><%= "Zipcode:" %></b>
+                <b>Zipcode:</b>
                 <%= @client.zipcode %>
             </p>
+
+            <h4>Primary Contact's Info:</h4>
+            <%= render(:partial => "shared/profile_details", :locals => {:object => @client.profiles[0] || @client.profiles.build}) %>
+
+            <h4>Secondary Contact's Info:</h4>
+            <%= render(:partial => "shared/profile_details", :locals => {:object => @client.profiles[1] || @client.profiles.build}) %>
         </div>
     </div>
 </div>

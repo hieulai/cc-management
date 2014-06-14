@@ -3,7 +3,7 @@
     <div class="zurb-row">
         <div class="columns">
             <h2>New User</h2>
-            <%= form_for @user, :url => {:action => 'create'}, :html => {:class => 'form-horizontal'} do |u| %>
+            <%= form_for @user, :url => {:action => 'create'}, :html => {:class => 'form-horizontal'} do |f| %>
                 <% if @user.errors.any? %>
                     <div id="errorExplanation">
                         <h2><%= pluralize(@user.errors.count, "Error") %> prohibited
@@ -15,7 +15,7 @@
                         </ul>
                     </div>
                 <% end %>
-                <%= render(:partial => "new_form", :locals => {:u => u}) %>
+                <%= render(:partial => "form", :locals => {:f => f}) %>
                 <div class="control-group">
                     <div class='controls'>
                         <%= submit_tag("Create", :class => 'btn') %>

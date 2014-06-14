@@ -5,7 +5,7 @@ class Payment < ActiveRecord::Base
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account
   belongs_to :vendor
-  belongs_to :payer, polymorphic: true
+  belongs_to :payer, polymorphic: true, touch: true
   has_many :payments_bills, :dependent => :destroy
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
   has_many :bills, :through => :payments_bills

@@ -1,3 +1,4 @@
+<h2>Company Info</h2>
 <div class="control-group">
     <%= f.label :company, "Company", class: 'col-lg-2 control-label' %>
     <div class="controls">
@@ -5,35 +6,9 @@
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :first_name, "First Name", class: 'col-lg-2 control-label' %>
+    <%= f.label :website, "Website", :class => 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.text_field(:first_name) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :last_name, "Last Name", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:last_name) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :primary_phone, "Primary Phone", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:primary_phone) %>
-        <%= f.select(:primary_phone_tag, ["Cell", "Office", "Home"]) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :secondary_phone, "Secondary Phone", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:secondary_phone) %>
-    	<%= f.select(:secondary_phone_tag, ["Cell", "Office", "Home"]) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :email, "Email", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:email) %>
+        <%= f.text_field(:website) %>
     </div>
 </div>
 <div class="control-group">
@@ -60,12 +35,14 @@
         <%= f.text_field(:zipcode) %>
     </div>
 </div>
+
 <div class="control-group">
     <%= f.label :lead_source, "Lead Source", class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:lead_source) %>
     </div>
 </div>
+
 <div class="control-group">
     <%= f.label :notes, "Notes", class: 'col-lg-2 control-label' %>
     <div class="controls">
@@ -73,4 +50,12 @@
     </div>
 </div>
 
+<h2>Primary Contact's Info</h2>
+<%= render(:partial => "shared/profile_fields", :locals => {:f => f, :object => @client.profiles[0] || @client.profiles.build}) %>
+
+<h2>Secondary Contact's Info</h2>
+<%= render(:partial => "shared/profile_fields", :locals => {:f => f, :object => @client.profiles[1] || @client.profiles.build}) %>
+
+<h2>Associated Projects</h2>
+<%= render(:partial => "shared/associated_projects_fields", :locals => {:f => f, :object => @client}) %>
 

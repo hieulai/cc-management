@@ -6,7 +6,7 @@
             <%= form_for @project, :url => {:action => 'destroy', :id => @project.id} do |f| %>
                 <p>Are you sure you want to delete this lead?</p>
 
-                <p class="reference-name"><%= %></p>
+                <p class="reference-name"><%= @project.name %></p>
 
                 <div class="control-group">
                     <div class="controls">

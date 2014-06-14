@@ -12,7 +12,7 @@ class Receipt < ActiveRecord::Base
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :client
-  belongs_to :payer, polymorphic: true
+  belongs_to :payer, polymorphic: true, touch: true
   has_many :receipts_invoices, :dependent => :destroy
   has_many :invoices, :through => :receipts_invoices
   has_many :deposits_receipts, :dependent => :destroy
@@ -103,7 +103,7 @@ class Receipt < ActiveRecord::Base
   end
 
   def payer_name
-    uninvoiced ? payer.try(:display_name) : client.try(:full_name)
+    uninvoiced ? payer.try(:display_name) : client.try(:display_name)
   end
 
   def check_readonly

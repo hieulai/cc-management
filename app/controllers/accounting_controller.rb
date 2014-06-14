@@ -379,6 +379,7 @@ class AccountingController < ApplicationController
     # Destroy all old payments_bills_attributes if payer changed
     if (params[:payment][:payer_id].present? && params[:payment][:payer_id] != @payment.payer_id.to_s) ||
         (params[:payment][:payer_type].present? && params[:payment][:payer_type] != @payment.payer_type.to_s)
+      params[:payment][:payments_bills_attributes] ||= []
       @payment.payments_bills.each do  |pb|
         params[:payment][:payments_bills_attributes] << {id: pb.id, _destroy: true}.with_indifferent_access
       end

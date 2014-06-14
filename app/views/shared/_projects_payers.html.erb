@@ -1,0 +1,9 @@
+<div class="nested-fields">
+    <div class="control-group">
+        <%= f.label :project_id, "Project", class: 'col-lg-2 control-label' %>
+        <div class='controls'>
+            <%= f.select :project_id, @builder.projects.map { |project| [project.name, project.id] }, {prompt: "Select"}, class: "projects_payers" %>
+            <%= link_to_remove_association("Delete", f, style: "margin-left: 30px") %>
+        </div>
+    </div>
+</div>

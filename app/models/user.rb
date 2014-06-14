@@ -13,11 +13,6 @@ class User < ActiveRecord::Base
 
   devise :database_authenticatable, :registerable, :recoverable
 
-  #public methods
-  def full_name
-     "#{first_name} #{last_name}"
-  end
-
   def self.make_salt(email="")
     Digest::SHA1.hexdigest("Use #{email} with #{Time.now} to make salt")
   end
@@ -38,15 +33,6 @@ class User < ActiveRecord::Base
       end
     end
     super(password)
-  end
-
-  def self.authenticate(email="",password="")
-    user = User.find_by_email(email)
-    if user && user.password_match?(password)
-      return user
-    else
-      return false
-    end
   end
 
   def password_match?(password="")
