@@ -29,6 +29,7 @@
       <%= profile_fields.label :email, "Email", :class => 'col-lg-2 control-label' %>
       <div class="controls">
           <%= profile_fields.text_field(:email) %>
+          <%= profile_fields.hidden_field(:builder_id, :value => @builder.id) %>
       </div>
   </div>
 <% end %>

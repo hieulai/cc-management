@@ -1,3 +1,15 @@
+<% if @client.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@client.errors.count, "Error") %> prohibited
+          this vendor from being saved:</h2>
+      <ul>
+          <% @client.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+
 <h2>Company Info</h2>
 <div class="control-group">
     <%= f.label :company, "Company", class: 'col-lg-2 control-label' %>

@@ -6,8 +6,13 @@ module Profileable
     has_many :payments, :as => :payer
     has_many :receipts, as: :payer
     has_many :projects_payers, :as => :payer, :dependent => :destroy
-
-    accepts_nested_attributes_for :profiles, :projects_payers, :allow_destroy => true, reject_if: :all_blank
+    accepts_nested_attributes_for :profiles, :projects_payers, :allow_destroy => true,
+                                  reject_if: proc { |attributes|
+                                        attributes['first_name'].blank? &&
+                                        attributes['last_name'].blank? &&
+                                        attributes['email'].blank? &&
+                                        attributes['phone1'].blank? &&
+                                        attributes['phone2'].blank? }
     attr_accessible :profiles_attributes, :projects_payers_attributes, :company, :website, :address, :city, :state, :zipcode, :notes
 
     after_touch :index

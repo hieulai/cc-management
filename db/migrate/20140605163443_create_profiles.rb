@@ -2,6 +2,7 @@ class CreateProfiles < ActiveRecord::Migration
   def change
     create_table :profiles do |t|
       t.belongs_to :person
+      t.belongs_to :builder
       t.string   :first_name
       t.string   :last_name
       t.string   :email
@@ -15,5 +16,6 @@ class CreateProfiles < ActiveRecord::Migration
       t.timestamps
     end
     add_index :profiles, :person_id
+    add_index :profiles, :builder_id
   end
 end

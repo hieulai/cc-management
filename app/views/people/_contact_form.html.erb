@@ -1,3 +1,15 @@
+<% if @contact.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@contact.errors.count, "Error") %> prohibited
+          this contact from being saved:</h2>
+      <ul>
+          <% @contact.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+
 <h2>Company Info:</h2>
 <div class="control-group">
     <%= f.label :company, "Company Name", :class => 'col-lg-2 control-label' %>
