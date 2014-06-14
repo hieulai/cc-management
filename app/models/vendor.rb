@@ -3,7 +3,7 @@ class Vendor < ActiveRecord::Base
   include Profileable
 
   belongs_to :builder, :class_name => "Base::Builder"
-  has_many :bid, :dependent => :destroy
+  has_many :bids, :dependent => :destroy
 
   attr_accessible :vendor_type, :trade, :service_provided, :primary_first_name, :primary_last_name, :email, :primary_phone1, :primary_phone2, :secondary_first_name, :secondary_last_name, :secondary_email,
                   :secondary_phone1, :secondary_phone2, :primary_phone1_tag, :primary_phone2_tag, :secondary_phone1_tag, :secondary_phone2_tag
@@ -52,6 +52,7 @@ class Vendor < ActiveRecord::Base
 
   def update_indexes
     Sunspot.delay.index purchase_orders
+    Sunspot.delay.index bids
   end
   
 end

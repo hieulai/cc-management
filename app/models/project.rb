@@ -1,4 +1,5 @@
 class Project < ActiveRecord::Base
+
   belongs_to :client
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :estimates, :dependent => :destroy
@@ -76,7 +77,7 @@ class Project < ActiveRecord::Base
     Sunspot.delay.index bills
     Sunspot.delay.index purchase_orders
     Sunspot.delay.index invoices
-    Sunspot.index projects_payers.map { |pp| pp.payer }
+    projects_payers.each { |pp| pp.touch }
   end
   
 end

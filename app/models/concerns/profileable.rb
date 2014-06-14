@@ -11,7 +11,9 @@ module Profileable
     attr_accessible :profiles_attributes, :projects_payers_attributes, :company, :website, :address, :city, :state, :zipcode, :notes
 
     after_touch :index
+
     after_save :update_profileable_indexes
+    after_destroy :update_profileable_indexes
 
     searchable do
       string :main_email do
