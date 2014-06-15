@@ -69,5 +69,19 @@
 <%= render(:partial => "shared/profile_fields", :locals => {:f => f, :object => @client.profiles[1] || @client.profiles.build}) %>
 
 <h2>Associated Projects</h2>
+<% if @client.project_children_names.present? %>
+  <div class="control-group">
+      <%= f.label :from_check, "Owner of", class: 'col-lg-2 control-label' %>
+      <div class="controls">
+          <ul>
+              <% @client.project_children_names.split(",").each do |name| %>
+                <li>
+                    <%= name %>
+                </li>
+              <% end %>
+          </ul>
+      </div>
+  </div>
+<% end %>
 <%= render(:partial => "shared/associated_projects_fields", :locals => {:f => f, :object => @client}) %>
 

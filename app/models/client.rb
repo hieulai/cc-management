@@ -13,6 +13,8 @@ class Client < ActiveRecord::Base
   scope :has_unbilled_invoices, joins(:invoices).where("invoices.remaining_amount is NULL OR invoices.remaining_amount > 0")
   scope :has_unbilled_receipts, joins(:receipts).where("receipts.remaining_amount is NULL OR receipts.remaining_amount > 0")
 
+  after_touch :index
+
   searchable do
     integer :builder_id
     string :status
@@ -24,6 +26,21 @@ class Client < ActiveRecord::Base
     text :type do
       type
     end
+  end
+
+  def project_children_names
+    names = []
+    projects.each do |p|
+      names << p.name
+    end
+    names.flatten.uniq.join(",")
+  end
+
+  def project_names
+    names = []
+    names << super if super.present?
+    names << project_children_names if project_children_names.present?
+    names.flatten.uniq.join(",")
   end
 
   def type

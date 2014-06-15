@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base
 
-  belongs_to :client
+  belongs_to :client, touch: true
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :estimates, :dependent => :destroy
   has_many :bids, :dependent => :destroy
