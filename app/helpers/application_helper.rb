@@ -12,10 +12,20 @@ module ApplicationHelper
   end
 
   def active_page(page_name, menu_type, act_name = nil)
-    menu_bar_1, menu_bar_2 = 'nav', 'subnav'
-    if page_name.include?(controller_name) && menu_bar_1.eql?(menu_type) && act_name.nil?
+    if page_name.include?(controller_name) && act_name.nil?
       'active'
     elsif (controller_name.eql?(page_name)) && action_name.eql?(act_name)
+      'active'
+    else
+      ''
+    end
+  end
+
+  def active_nav(page_name, c_name= nil, act_name = nil)
+    root_path = request.path.split('/')[1]
+    if page_name.include?(root_path) &&
+        (c_name.nil? || (c_name.include?(controller_name) &&
+            (act_name.nil? || act_name.include?(action_name))))
       'active'
     else
       ''

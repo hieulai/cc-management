@@ -1,9 +1,8 @@
 <div>
-    <%= render(:partial => "layouts/estimating_sub_menu") %>
+    <%= render(:partial => "submenu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
-            <%= link_to("+ New Item", {:action => 'new'}, :class => 'add action-button') %>
-            <%= link_to("Instructions >>", {:action => 'show'}, :class => 'help action-button') %>
+            <%= link_to("+ New Item", url_for([:new, @scope.to_sym, :item]), :class => 'add action-button') %>
         </div>
         <div class="large-6 medium-6 columns">
             <h1>Items List</h1>
@@ -13,7 +12,7 @@
     </div>
     <div class="zurb-row">
         <div class="columns">
-            <%= form_tag('list', :method => 'get', :class => 'form-inline') do %>
+            <%= form_tag(url_for([@scope.to_sym, :items]), :method => 'get', :class => 'form-inline') do %>
                 <p>
                     <%= label_tag :query, "Search" %>
                     <%= text_field_tag(:query, @query) %>
@@ -36,8 +35,8 @@
                 <% @items.each do |item| %>
                     <tr>
                         <td class="center">
-                            <%= link_to("Edit", {:action => 'edit', :id => item.id}, :title => 'Edit', :class => 'edit table-action') %>
-                            <%= link_to("Delete", {:action => 'delete', :id => item.id}, :title => 'Delete', :class => 'delete table-action') %>
+                            <%= link_to("Edit", url_for([:edit, @scope.to_sym, item]), :title => 'Edit', :class => 'edit table-action') %>
+                            <%= link_to("Delete", url_for([:delete, @scope.to_sym, item]), :title => 'Delete', :class => 'delete table-action') %>
                         </td>
                         <td><%= item.name %></td>
                         <td><%= item.description %></td>

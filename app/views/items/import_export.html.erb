@@ -1,5 +1,5 @@
 <div>
-    <%= render(:partial => "layouts/estimating_sub_menu") %>
+    <%= render(:partial => "submenu") %>
     <div class="zurb-row">
         <div class="columns">
             <h2>Import / Export</h2>
@@ -8,8 +8,8 @@
                 <h3> Export Items: </h3>
 
                 <p>
-                    <%= link_to "CSV", {:controller => 'items', :action => 'list', :format => 'csv'} %> |
-                    <%= link_to "Excel", {:controller => 'items', :action => 'list', :format => 'xls'} %>
+                    <%= link_to "CSV", {:action => 'index', :format => 'csv'} %> |
+                    <%= link_to "Excel", {:action => 'index', :format => 'xls'} %>
                 </p>
             </div>
             <h3> Import Items: </h3>

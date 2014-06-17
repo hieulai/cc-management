@@ -1,8 +1,13 @@
 class ItemsController < ApplicationController
   include ItemsHelper
   before_filter :authenticate_user!
+  before_filter :set_scope
 
-  def list
+  def set_scope
+    @scope = request.path.split('/')[1]
+  end
+
+  def index
     respond_to do |format|
       format.html do
         @query = params[:query]
@@ -31,7 +36,7 @@ class ItemsController < ApplicationController
     if @item.save
       @item.categories << @category if @category
       @builder.items << @item
-      redirect_to(action: 'list')
+      redirect_to url_for([@scope.to_sym, :items])
     else
       #if save fails, redisplay form to user can fix problems
       render action: 'new', notice: "failed."
@@ -48,7 +53,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     respond_to do |format|
       if @item.update_attributes(params[:item])
-        format.html { redirect_to(:action => 'list') }
+        format.html { redirect_to url_for([@scope.to_sym, :items]) }
         format.json { render json: @item.to_json(:methods => [:amount, :price]) }
       else
         format.html { render('edit') }
@@ -73,7 +78,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     respond_to do |format|
       if @item.destroy
-        format.html { redirect_to(:action => 'list') }
+        format.html { redirect_to url_for([@scope.to_sym, :items]) }
         format.js
       else
         format.html { render('edit') }
@@ -100,7 +105,7 @@ class ItemsController < ApplicationController
         unless result[:errors].empty?
           msg = result[:errors].join(",")
         end
-        redirect_to action: 'list', notice: msg
+        redirect_to  url_for([@scope.to_sym, :items]), notice: msg
       rescue StandardError => e
         redirect_to action: 'import_export', notice: e
       end

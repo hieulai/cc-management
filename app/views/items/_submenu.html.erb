@@ -1,0 +1,5 @@
+<% if @scope == 'estimates' %>
+  <%= render(:partial => "layouts/estimating_sub_menu") %>
+<% else %>
+  <%= render(:partial => "layouts/accounting_sub_menu") %>
+<% end %>

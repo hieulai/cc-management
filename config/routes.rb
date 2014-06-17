@@ -52,6 +52,20 @@ Cc::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
 
+  scopes = ['estimates', 'accounting']
+
+  scopes.each do |s|
+    scope s, as: s do
+      resources :items do
+        get :delete, on: :member
+        collection do
+          get :import_export
+          post :import
+        end
+      end
+    end
+  end
+
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   match ':controller(/:action(/:id))(.:format)'

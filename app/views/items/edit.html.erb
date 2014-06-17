@@ -1,9 +1,9 @@
 <div>
-    <%= render(:partial => "layouts/estimating_sub_menu") %>
+    <%= render(:partial => "submenu") %>
     <div class="zurb-row">
         <div class="columns">
             <h2>Edit Item</h2>
-            <%= form_for @item, :url => {:action => 'update', :id => @item.id}, :html => {:id => 'items_form', :class => 'form-horizontal'} do |f| %>
+            <%= form_for @item, :url => url_for([@scope.to_sym, @item]), :html => {:method => :put, :id => 'items_form', :class => 'form-horizontal'} do |f| %>
                 <%= render(:partial => "new_form", :locals => {:f => f}) %>
                 <div class="control-group">
                     <div class='controls'>

@@ -13,10 +13,10 @@
             <%= link_to("Categories", {:controller => 'categories', :action => 'list'}, :class => active_page('categories', 'nav')) %>
         </li>
         <li>
-            <%= link_to("Items", {:controller => 'items', :action => 'list'}, :class => active_page('items', 'nav')) %>
+            <%= link_to("Items", estimates_items_path, :class => active_nav('estimates', 'items', ['index', 'show', 'new', 'edit', 'delete'])) %>
         </li>
         <li>
-            <%= link_to("Import/Export", {:controller => 'items', :action => 'import_export'}, :class => active_page('estimates', 'nav', 'import_export')) %>
+            <%= link_to("Import/Export", {:controller => 'items', :action => 'import_export'}, :class => active_nav('estimates', 'items', 'import_export')) %>
         </li>
     </ul>
 </div>

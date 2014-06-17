@@ -8,7 +8,7 @@
             <%= link_to("Leads", {:controller => 'leads', :action => 'list_current_leads'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
-        <li class="<%= active_page(['estimates', 'items', 'categories', 'templates'], 'nav') %>">
+        <li class="<%= active_nav(['estimates', 'templates', 'categories']) %>">
             <%= link_to("Estimating", {:controller => 'estimates', :action => 'list_current'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
@@ -24,7 +24,7 @@
             <%= link_to("People", {:controller => 'people', :action => 'all'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
-        <li class="<%= active_page(['accounting'], 'nav') %>">
+        <li class="<%= active_nav(['accounting']) %>">
             <%= link_to("Accounting", {:controller => 'accounting', :action => 'index'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
