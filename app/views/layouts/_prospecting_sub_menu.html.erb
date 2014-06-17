@@ -1,6 +1,6 @@
 <div class='zurb-row' id='submenu'>
     <ul>
-        <li><%= link_to("Prospects", {:controller => 'prospecting', :action => 'list'}) %>
-        <li><%= link_to("Import/Export") %>
+        <li><%= link_to("Prospects", {:controller => 'prospecting', :action => 'list'}, :class => active_nav('prospecting', 'prospecting')) %>
+        <li><%= link_to("Import/Export", "#") %>
     </ul>
 </div>

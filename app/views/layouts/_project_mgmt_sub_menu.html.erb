@@ -1,8 +1,8 @@
 <div class='zurb-row' id='submenu'>
     <ul>
-        <li><%= link_to("Current Projects", {:controller => 'projects', :action => 'list_current_projects'}, :class => active_page('projects', 'nav', 'list_current_projects')) %>
-        <li><%= link_to("Past Projects", {:controller => 'projects', :action => 'list_past_projects'}, :class => active_page('projects', 'nav', 'list_past_projects')) %>
-        <li><%= link_to("Task Lists", {:controller => 'tasklists', :action => 'list'}, :class => active_page('tasklists', 'nav', 'list')) %>
-        <li><%= link_to("Import/Export") %>
+        <li><%= link_to("Current Projects", {:controller => 'projects', :action => 'list_current_projects'}, :class => active_nav('projects', 'projects', 'list_current_projects')) %>
+        <li><%= link_to("Past Projects", {:controller => 'projects', :action => 'list_past_projects'}, :class => active_nav('projects', 'projects', 'list_past_projects')) %>
+        <li><%= link_to("Task Lists", {:controller => 'tasklists', :action => 'list'}, :class => active_nav('tasklists', 'tasklists')) %>
+        <li><%= link_to("Import/Export", "#") %>
     </ul>
 </div>

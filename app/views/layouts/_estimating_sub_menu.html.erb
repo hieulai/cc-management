@@ -1,16 +1,16 @@
 <div class='zurb-row' id='submenu'>
     <ul>
         <li>
-            <%= link_to("Current Estimates", {:controller => 'estimates', :action => 'list_current'}, :class => active_page('estimates', 'nav', 'list_current')) %>
+            <%= link_to("Current Estimates", {:controller => 'estimates', :action => 'list_current'}, :class => active_nav('estimates', 'estimates', 'list_current')) %>
         </li>
         <li>
-            <%= link_to("Past Estimates", {:controller => 'estimates', :action => 'list_past'}, :class => active_page('estimates', 'nav', 'list_past')) %>
+            <%= link_to("Past Estimates", {:controller => 'estimates', :action => 'list_past'}, :class => active_nav('estimates', 'estimates', 'list_past')) %>
         </li>
         <li>
-            <%= link_to("Templates", {:controller => 'templates', :action => 'list'}, :class => active_page('templates', 'nav')) %>
+            <%= link_to("Templates", {:controller => 'templates', :action => 'list'}, :class => active_nav('templates', 'templates')) %>
         </li>
         <li>
-            <%= link_to("Categories", {:controller => 'categories', :action => 'list'}, :class => active_page('categories', 'nav')) %>
+            <%= link_to("Categories", {:controller => 'categories', :action => 'list'}, :class => active_nav('categories', 'categories')) %>
         </li>
         <li>
             <%= link_to("Items", estimates_items_path, :class => active_nav('estimates', 'items', ['index', 'show', 'new', 'edit', 'delete'])) %>

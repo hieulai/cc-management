@@ -1,8 +1,8 @@
 <div class='zurb-row' id='submenu'>
     <ul>
-        <li><%= link_to("Current Leads", {:action => 'list_current_leads'}, :class => active_page('leads', 'nav', 'list_current_leads')) %></li>
-        <li><%= link_to("Past Leads", {:action => 'list_past_leads'}, :class => active_page('leads', 'nav', 'list_past_leads')) %></li>
-        <li><%= link_to("Import/Export", "#" , :class => active_page('leads', 'nav')) %></li>
+        <li><%= link_to("Current Leads", {:action => 'list_current_leads'}, :class => active_nav('leads', 'leads', 'list_current_leads')) %></li>
+        <li><%= link_to("Past Leads", {:action => 'list_past_leads'}, :class => active_nav('leads', 'leads', 'list_past_leads')) %></li>
+        <li><%= link_to("Import/Export", "#", :class => active_nav('leads', 'leads', 'import_export')) %></li>
     </ul>
 </div>
 

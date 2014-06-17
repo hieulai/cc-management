@@ -1,6 +1,6 @@
 <div class='zurb-row' id='submenu'>
     <ul>
-        <li><%= link_to("Company Details", {:controller => 'builders', :action => 'show'}) %>
-        <li><%= link_to("Users", {:controller => 'users', :action => 'list'}) %>
+        <li><%= link_to("Company Details", {:controller => 'builders', :action => 'show'}, :class => active_nav(['builders'])) %>
+        <li><%= link_to("Users", {:controller => 'users', :action => 'list'}, :class => active_nav('users')) %>
     </ul>
 </div>

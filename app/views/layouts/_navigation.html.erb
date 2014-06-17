@@ -1,10 +1,10 @@
 <div class='zurb-row' id="mainmenu">
     <ul>
-        <li class="<%= active_page('list', 'nav') %>">
+        <li class="<%= active_nav('prospecting') %>">
             <%= link_to("Prospecting", {:controller => 'prospecting', :action => 'list'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
-        <li class="<%= active_page('list_current_leads, new, list_past_leads', 'nav') %>">
+        <li class="<%= active_nav('leads') %>">
             <%= link_to("Leads", {:controller => 'leads', :action => 'list_current_leads'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
@@ -12,15 +12,15 @@
             <%= link_to("Estimating", {:controller => 'estimates', :action => 'list_current'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
-        <li class="<%= active_page('undifiend', 'nav') %>">
+        <li class="<%= active_nav('contracts') %>">
             <%= link_to("Contracts", '#', {:action => 'show'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
-        <li class="<%= active_page(['projects', 'tasklists'], 'nav') %>">
+        <li class="<%= active_nav(['projects', 'tasklists']) %>">
             <%= link_to("Project Mgmt", {:controller => 'projects', :action => 'list_current_projects'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
-        <li class="<%= active_page(['clients'], 'nav') %>">
+        <li class="<%= active_nav(['people', 'clients']) %>">
             <%= link_to("People", {:controller => 'people', :action => 'all'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
@@ -28,11 +28,11 @@
             <%= link_to("Accounting", {:controller => 'accounting', :action => 'index'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
-        <li class="<%= active_page(['preferences'], 'nav') %>">
-            <%= link_to("Preferences", {:controller => 'users', :action => 'show'}, :class => 'menu item') %>
+        <li class="<%= active_nav('preferences') %>">
+            <%= link_to("Preferences", {:controller => 'users', :action => 'show', :id => current_user.id}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
-        <li class="<%= active_page('company', 'nav') %>">
+        <li class="<%= active_nav(['builders', 'users']) %>">
             <%= link_to("Company", {:controller => 'builders', :action => 'show'}, :class => 'menu item') %>
             <div class="arrow"></div>
         </li>
