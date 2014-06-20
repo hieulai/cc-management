@@ -291,7 +291,7 @@ class AccountingController < ApplicationController
   def bills
     @type = params[:type]
     @query = params[:query]
-    params[:sort_field] ||= "billed_date"
+    params[:sort_field] ||= "bcreailled_date"
     params[:sort_dir] ||= "desc"
     @bills = Bill.search {
       fulltext params[:query]
@@ -362,10 +362,16 @@ class AccountingController < ApplicationController
     @payment = Payment.new(params[:payment])
     @payment.builder_id = session[:builder_id]
     if @payment.save
-      redirect_to(params[:original_url].presence ||url_for(:action => "payments"))
+      respond_to do |format|
+        format.html { redirect_to(params[:original_url].presence ||url_for(:action => "payments")) }
+        format.js { render :js => "window.location = '#{ params[:original_url].presence ||url_for(:action => "payments")}'" }
+      end
     else
       @bills = []
-      render('new_payment')
+      respond_to do |format|
+        format.html { render("new_payment") }
+        format.js { render "payment_response" }
+      end
     end
   end
   
@@ -385,10 +391,16 @@ class AccountingController < ApplicationController
       end
     end
     if @payment.update_attributes(params[:payment])
-      redirect_to(:action => "payments")
+      respond_to do |format|
+        format.html { redirect_to(:action => "payments") }
+        format.js { render :js => "window.location = '#{ url_for(:action => "payments")}'" }
+      end
     else
       @bills = (@payment.bills + @payment.payer.bills.unpaid).uniq
-      render('edit_payment')
+      respond_to do |format|
+        format.html { render("edit_payment") }
+        format.js { render "payment_response" }
+      end
     end
   end
   

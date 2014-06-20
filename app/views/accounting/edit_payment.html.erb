@@ -4,7 +4,7 @@
         <div class="columns">
             <h1 class="center">Edit Payment</h1>
             <%= link_to("Delete", {:action => 'delete_payment', :id => @payment.id}, :class => 'btn btn-danger f-right') %>
-            <%= form_for(@payment, :url => {:action => 'update_payment', :id => @payment.id}, :html => {:class => 'form-horizontal'}) do |f| %>
+            <%= form_for(@payment, :url => {:action => 'update_payment', :id => @payment.id}, :remote => true, :html => {:class => 'form-horizontal'}) do |f| %>
                 <%= render(:partial => "new_payment_form", :locals => {:f => f}) %>
                 <div class="form-buttons margin-bottom">
                     <%= submit_tag("Save", :class => 'btn') %>
