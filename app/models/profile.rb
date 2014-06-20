@@ -8,7 +8,7 @@ class Profile < ActiveRecord::Base
 
   default_scope order("created_at ASC")
   after_save :create_person, :if => Proc.new { |p| p.email.present? }
-  validates_uniqueness_of :email, scope: [:builder_id]
+  validates_uniqueness_of :email, scope: [:builder_id], :allow_blank => :true
 
   private
   def create_person
