@@ -291,7 +291,7 @@ class AccountingController < ApplicationController
   def bills
     @type = params[:type]
     @query = params[:query]
-    params[:sort_field] ||= "bcreailled_date"
+    params[:sort_field] ||= "billed_date"
     params[:sort_dir] ||= "desc"
     @bills = Bill.search {
       fulltext params[:query]
