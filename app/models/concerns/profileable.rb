@@ -3,10 +3,6 @@ module Profileable
 
   included do
     has_many :profiles, as: :profileable, dependent: :destroy
-    has_many :payments, :as => :payer
-    has_many :receipts, as: :payer
-    has_many :projects_payers, :as => :payer, :dependent => :destroy
-
     accepts_nested_attributes_for :profiles, :allow_destroy => true,
                                   reject_if: proc { |attributes|
                                     attributes['first_name'].blank? &&
@@ -14,10 +10,7 @@ module Profileable
                                         attributes['email'].blank? &&
                                         attributes['phone1'].blank? &&
                                         attributes['phone2'].blank? }
-    accepts_nested_attributes_for :projects_payers, :allow_destroy => true, reject_if: :all_blank
-
-    attr_accessible :profiles_attributes, :projects_payers_attributes, :company, :website, :address, :city, :state, :zipcode, :notes
-
+    attr_accessible :profiles_attributes
     after_touch :index
 
     after_save :update_profileable_indexes
@@ -36,14 +29,7 @@ module Profileable
       string :company_or_main_full_name do
         "#{company.to_s} #{main_full_name}"
       end
-      string :company
-      string :notes
-      string :website
-      string :project_names do
-        project_names
-      end
 
-      text :company, :website, :notes
       text :main_email do
         main_email
       end
@@ -55,10 +41,6 @@ module Profileable
       end
       text :company_or_main_full_name do
         "#{company.to_s} #{main_full_name}"
-      end
-
-      text :project_names do
-        project_names
       end
     end
   end
@@ -91,22 +73,6 @@ module Profileable
     company.presence || main_full_name
   end
 
-  def project_names_from_checks
-    names = []
-    payments.each do |p|
-      names << p.bills.map { |b| b.project.try(:name) }
-    end
-    names.flatten.uniq.join(",")
-  end
-
-  def project_names
-    names = []
-    names << project_names_from_checks if project_names_from_checks.present?
-    projects_payers.each do |pp|
-      names << pp.project.name
-    end
-    names.flatten.uniq.join(",")
-  end
 
   def update_profileable_indexes
     Sunspot.delay.index payments

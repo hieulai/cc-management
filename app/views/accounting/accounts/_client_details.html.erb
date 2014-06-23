@@ -1,0 +1,69 @@
+<% if client %>
+  <div class="zurb-row">
+      <div class="large-6 medium-6 columns">
+          <p>
+              <strong>Company</strong>
+              <%= client.company %>
+          </p>
+
+          <p>
+              <strong>Website</strong>
+              <%= client.website %>
+          </p>
+
+          <p>
+              <strong>Lead Source</strong>
+              <%= client.lead_source %>
+          </p>
+
+          <p>
+              <strong>Address</strong>
+              <%= client.address %>
+          </p>
+
+          <p>
+              <strong>City</strong>
+              <%= client.city %>
+          </p>
+
+          <p>
+              <strong>State</strong>
+              <%= client.state %>
+          </p>
+
+          <p>
+              <strong>Zipcode</strong>
+              <%= client.zipcode %>
+          </p>
+      </div>
+      <div class="large-6 medium-6 columns">
+          <%= render(:partial => "shared/profile_account_details", :locals => {:object => client.profiles[0] || client.profiles.build}) %>
+      </div>
+  </div>
+  <div class="zurb-row">
+      <div class="columns">
+          <p>
+              <strong>Notes</strong>
+              <%= client.notes %>
+          </p>
+      </div>
+  </div>
+  <div class="zurb-row">
+
+      <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
+      <table class="grid-view responsive" summary="Payment List">
+          <tr class="header">
+              <th>Date</th>
+              <th>Type</th>
+              <th>Reference #</th>
+              <th>Payor/Payee</th>
+              <th>Memo</th>
+              <th>Amount</th>
+              <th>R</th>
+              <th>Balance</th>
+          </tr>
+          <%= render(:partial => "shared/transactions/tr_transactions", :locals => {:transactions => transactions, :balance => account_balance(client, project_id, params[:page])}) %>
+      </table>
+      <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
+  </div>
+<% end %>

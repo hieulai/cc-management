@@ -60,7 +60,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def project_name
-    estimate.try(:project).try(:name)
+    project.name
   end
 
   def billed?
@@ -91,8 +91,12 @@ class Invoice < ActiveRecord::Base
     invoice_date
   end
 
-  def display_priority
-    1
+  def personables
+    [estimate.project.client]
+  end
+
+  def project
+    estimate.project
   end
 
   private
@@ -146,5 +150,6 @@ class Invoice < ActiveRecord::Base
 
   def update_transactions
     accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
+    Sunspot.delay.index accounting_transactions
   end
 end

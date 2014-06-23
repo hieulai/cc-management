@@ -188,6 +188,7 @@ class Bill < ActiveRecord::Base
 
   def update_transactions
     accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: total_amount.to_f})
+    Sunspot.delay.index accounting_transactions
   end
 
   def date
@@ -200,6 +201,10 @@ class Bill < ActiveRecord::Base
       r << b_ct.bills_items
     end
     r.flatten
+  end
+
+  def personables
+    [payer]
   end
 
   private

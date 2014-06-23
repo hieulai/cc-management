@@ -208,11 +208,15 @@ var Application = (function ($) {
         });
     };
 
-    var setupTrClickable = function(){
-        $(document).on('click', 'tr.clickable', function () {
-            var href = $(this).find("a.clickable-link").attr("href");
-            if (href) {
-                window.location = href;
+    var setupTrClickable = function () {
+        $(document).on('click', 'tr.clickable', function (e) {
+            var $link = $(this).find("a.clickable-link");
+            if ($link.data('remote') != null) {
+                $link.click();
+                $(this).closest("table").find("tr.selected").removeClass("selected");
+                $(this).addClass("selected");
+            } else {
+                window.location = $link.attr("href");
             }
         })
     };

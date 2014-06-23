@@ -13,7 +13,7 @@ class Project < ActiveRecord::Base
   has_many :invoices, :through => :estimates
 
   attr_accessible :name, :first_name, :last_name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
-  :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes
+                  :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes
   default_scope order("first_name asc, last_name asc")
   scope :current_lead, where(status: "Current Lead")
   scope :past_lead, where(status: "Past Lead")

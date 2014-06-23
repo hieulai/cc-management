@@ -1,0 +1,34 @@
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+      Accounting.initAccounts();
+    })
+  </script>
+<% end %>
+
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu") %>
+    <div class="zurb-row splitterable">
+        <div class="large-3 medium-3 columns" id="sidebar">
+            <h3>Clients</h3>
+
+            <div id="client-list" class="full-height">
+                <%= render(:partial => "accounting/accounts/clients", :locals => {:clients => @clients}) %>
+            </div>
+        </div>
+        <div id="dragbar" class="full-height">
+            <div id="dragbar-button">
+            </div>
+        </div>
+        <div class="columns" id="details">
+
+            <h3>Client Information</h3>
+
+            <div id="client-details" class="full-height zurb-row">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

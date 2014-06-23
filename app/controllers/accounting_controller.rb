@@ -545,6 +545,61 @@ class AccountingController < ApplicationController
     redirect_to controller: "reports", action: "pl_report", from_date: params[:from_date], to_date: params[:to_date], project_id: params[:project_id], format: "pdf"
   end
 
+  def client_accounts
+    @clients = Client.search {
+      with :builder_id, session[:builder_id]
+      order_by :display_name
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
+    respond_to do |format|
+      format.html {}
+      format.js do
+        render 'accounting/accounts/clients'
+      end
+    end
+  end
+
+  def vendor_accounts
+    @vendors = Vendor.search {
+      with :builder_id, session[:builder_id]
+      order_by :display_name
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
+    respond_to do |format|
+      format.html {}
+      format.js do
+        render 'accounting/accounts/vendors'
+      end
+    end
+  end
+
+  def list_projects
+    @object = params[:type].constantize.find(params["id"])
+    respond_to do |format|
+      format.js do
+        render 'accounting/shared/list_projects'
+      end
+    end
+  end
+
+  def show_account
+    @type = params[:type]
+    @object = @builder.send(@type.underscore.pluralize.to_sym).find(params[:id])
+    @project_id = params[:project_id]
+    @transactions = AccountingTransaction.search {
+      with :payer_types, params[:type]
+      with :payer_ids, params[:id]
+      with :project_id, params[:project_id] if params[:project_id]
+      order_by :date, :desc
+      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
+    }.results
+    respond_to do |format|
+      format.js do
+        render 'accounting/accounts/show_account'
+      end
+    end
+  end
+
   private
   def create_purchasable(type)
     klass =  type.to_s.constantize

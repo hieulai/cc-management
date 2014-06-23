@@ -1,5 +1,6 @@
 class Contact < ActiveRecord::Base
   include Profileable
+  include Personable
   include Billable
 
   belongs_to :builder, :class_name => "Base::Builder"

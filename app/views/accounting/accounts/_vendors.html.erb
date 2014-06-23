@@ -1,0 +1,26 @@
+<%= paginate vendors, :remote => true, params: {action: "vendor_accounts"} %>
+<table class="grid-view responsive" summary="Vendor List">
+    <tr class="header">
+        <th>Name</th>
+        <th>Balance</th>
+    </tr>
+
+    <% vendors.each do |vendor| %>
+      <tr class="clickable person" id="<%= vendor.id %>">
+          <td>
+              <% if vendor.associated_projects.any? %>
+                <%= link_to "", {:action => "list_projects", :id => vendor.id, type: Vendor.name}, {:remote => true, :class => 'expander collapsed'} %>
+              <% else %>
+                <div class="indent">&nbsp;</div>
+              <% end %>
+              <%= vendor.display_name %>
+              <%= link_to "Show Vendor", {:action => "show_account", :id => vendor.id, type: Vendor.name}, {:remote => true, :style => 'display: none', :class => 'clickable-link'} %>
+          </td>
+          <td class="right">
+              <%= number_to_currency(account_balance(vendor)) %>
+          </td>
+      </tr>
+
+    <% end %>
+</table>
+<%= paginate vendors, :remote => true, params: {action: "vendor_accounts"} %>

@@ -1,0 +1,26 @@
+<%= paginate clients, :remote => true, params: {action: "client_accounts"} %>
+<table class="grid-view responsive" summary="Client List">
+    <tr class="header">
+        <th>Name</th>
+        <th>Balance</th>
+    </tr>
+
+    <% clients.each do |client| %>
+      <tr class="clickable person" id="<%= client.id %>">
+          <td>
+              <% if client.associated_projects.any? %>
+                <%= link_to "", {:action => "list_projects", :id => client.id, type: Client.name}, {:remote => true, :class => 'expander collapsed'} %>
+              <% else %>
+                <div class="indent">&nbsp;</div>
+              <% end %>
+              <%= client.display_name %>
+              <%= link_to "", {:action => "show_account", :id => client.id, type: Client.name}, {:remote => true, :style => 'display: none', :class => 'clickable-link'} %>
+          </td>
+          <td class="right">
+              <%= number_to_currency(account_balance(client)) %>
+          </td>
+      </tr>
+
+    <% end %>
+</table>
+<%= paginate clients, :remote => true, params: {action: "client_accounts"} %>

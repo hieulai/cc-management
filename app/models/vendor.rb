@@ -1,6 +1,7 @@
 class Vendor < ActiveRecord::Base
-  include Billable
   include Profileable
+  include Personable
+  include Billable
 
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :bids, :dependent => :destroy

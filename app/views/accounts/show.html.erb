@@ -42,7 +42,7 @@
                         <th>R</th>
                         <th>Balance</th>
                     </tr>
-                <%= render(:partial => "tr_transactions", :locals => {:transactions => @transactions}) %>
+                <%= render(:partial => "shared/transactions/tr_transactions", :locals => {:transactions => @transactions, :balance => @balance}) %>
                 </table>
             <%= paginate @transactions %>
         </div>

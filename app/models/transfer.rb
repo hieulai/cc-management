@@ -54,6 +54,7 @@ class Transfer < ActiveRecord::Base
     to_account = Account.find(self.to_account_id)
     accounting_transactions.where(account_id: from_account_id_was || from_account_id).first_or_create.update_attributes({account_id: from_account_id, date: date, amount: absolute_amount(amount, from_account, to_account, true)})
     accounting_transactions.where(account_id: to_account_id_was|| to_account_id ).first_or_create.update_attributes({account_id: to_account_id, date: date, amount: absolute_amount(amount, from_account, to_account, false)})
+    Sunspot.delay.index accounting_transactions
   end
 
   def check_top_accounts

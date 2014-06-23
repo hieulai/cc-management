@@ -106,6 +106,10 @@ class Receipt < ActiveRecord::Base
     uninvoiced ? payer.try(:display_name) : client.try(:display_name)
   end
 
+  def personables
+    self.uninvoiced ? [payer] : [client]
+  end
+
   def check_readonly
     if billed?
       errors[:base] << "This receipt is already paid and can not be modified."
@@ -155,5 +159,6 @@ class Receipt < ActiveRecord::Base
     elsif client_credit
       accounting_transactions.where(account_id: builder.client_credit_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
     end
+    Sunspot.delay.index accounting_transactions
   end
 end

@@ -13,13 +13,11 @@
 </p>
 <p>
     <b><%= "Primary Phone:" %></b>
-    <%= number_to_phone(object.phone1, :area_code => true) %>
-    - <%= object.phone1_tag %>
+    <%= number_to_phone(object.phone1, :area_code => true) %> <%= object.phone1_tag %>
 </p>
 
 <p>
     <b><%= "Secondary Phone:" %></b>
-    <%= number_to_phone(object.phone2, :area_code => true) %>
-    - <%= object.phone2_tag %>
+    <%= number_to_phone(object.phone2, :area_code => true) %> <%= object.phone2_tag %>
 </p>
 

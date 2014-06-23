@@ -1,5 +1,6 @@
 class Client < ActiveRecord::Base
   include Profileable
+  include Personable
   include Billable
 
   belongs_to :builder, :class_name => "Base::Builder"
@@ -28,19 +29,16 @@ class Client < ActiveRecord::Base
     end
   end
 
-  def project_children_names
-    names = []
-    projects.each do |p|
-      names << p.name
-    end
-    names.flatten.uniq.join(",")
+  def associated_projects
+    [super, projects].flatten.uniq
+  end
+
+  def children_project_names
+    projects.map(&:name).join(",")
   end
 
   def project_names
-    names = []
-    names << super if super.present?
-    names << project_children_names if project_children_names.present?
-    names.flatten.uniq.join(",")
+    associated_projects.map(&:name).join(",")
   end
 
   def type

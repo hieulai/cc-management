@@ -1,0 +1,79 @@
+<% if vendor %>
+  <div class="zurb-row">
+      <div class="large-6 medium-6 columns">
+          <p>
+              <strong>Company</strong>
+              <%= vendor.company %>
+          </p>
+
+          <p>
+              <strong>Website</strong>
+              <%= vendor.website %>
+          </p>
+
+          <p>
+              <strong>Trade</strong>
+              <%= vendor.type %>
+          </p>
+
+          <p>
+              <strong>Vendor Type</strong>
+              <%= vendor.type %>
+          </p>
+
+          <p>
+              <strong>Service provided</strong>
+              <%= vendor.service_provided %>
+          </p>
+
+          <p>
+              <strong>Address</strong>
+              <%= vendor.address %>
+          </p>
+
+          <p>
+              <strong>City</strong>
+              <%= vendor.city %>
+          </p>
+
+          <p>
+              <strong>State</strong>
+              <%= vendor.state %>
+          </p>
+
+          <p>
+              <strong>Zipcode</strong>
+              <%= vendor.zipcode %>
+          </p>
+      </div>
+      <div class="large-6 medium-6 columns">
+          <%= render(:partial => "shared/profile_account_details", :locals => {:object => vendor.profiles[0] || vendor.profiles.build}) %>
+      </div>
+  </div>
+  <div class="zurb-row">
+      <div class="columns">
+          <p>
+              <strong>Notes</strong>
+              <%= vendor.notes %>
+          </p>
+      </div>
+  </div>
+  <div class="zurb-row">
+
+      <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
+      <table class="grid-view pageless" summary="Payment List">
+          <tr class="header">
+              <th>Date</th>
+              <th>Type</th>
+              <th>Reference #</th>
+              <th>Payor/Payee</th>
+              <th>Memo</th>
+              <th>Amount</th>
+              <th>R</th>
+              <th>Balance</th>
+          </tr>
+          <%= render(:partial => "shared/transactions/tr_transactions", :locals => {:transactions => transactions, :balance => account_balance(vendor, project_id, params[:page])}) %>
+      </table>
+      <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
+  </div>
+<% end %>

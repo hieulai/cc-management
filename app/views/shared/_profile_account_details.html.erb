@@ -1,0 +1,17 @@
+<p>
+    <strong>Full name</strong>
+    <%= "#{object.first_name} #{object.last_name}" %>
+</p>
+<p>
+    <strong>Email</strong>
+    <%= object.email %>
+</p>
+<p>
+    <strong>Primary Phone</strong>
+    <%= number_to_phone(object.phone1, :area_code => true) %>  <%= object.phone1_tag %>
+</p>
+<p>
+    <strong>Secondary Phone</strong>
+    <%= number_to_phone(object.phone2, :area_code => true) %>  <%= object.phone2_tag %>
+</p>
+

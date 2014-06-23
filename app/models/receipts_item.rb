@@ -34,6 +34,7 @@ class ReceiptsItem < ActiveRecord::Base
     end
     rat = receipt.accounting_transactions.where(account_id: account_id).first_or_create
     rat.update_attributes({date: date, amount: rat.amount.to_f + account_amount(amount, account)})
+    Sunspot.delay.index receipt.accounting_transactions
   end
 
   def destroy_transactions

@@ -30,6 +30,10 @@ ul#tasksContainer li label:hover{
     background: gainsboro;
 }
 
+.pagination{
+    float: right;
+}
+
 .login-box {
     border: 1px solid #000000;
     margin: 30px auto;padding: 25px 67px;
@@ -122,6 +126,14 @@ table.report td {
     padding: 0 20px 9px 0;
 }
 
+th.medium{
+    min-width: 150px;
+}
+
+tr.selected {
+    background: #E5F1F4;
+}
+
 td.amount {
     text-align: right;
 }
@@ -144,17 +156,17 @@ td.calculate {
 }
 
 .expanded.expander {
-    padding-left: 13px;
+    padding-left: 20px;
     background-position: left center;
     background-repeat: no-repeat;
-    background-image: url(/assets/expanded.gif);
+    background-image: url(/assets/minus.png);
 }
 
 .collapsed.expander {
-    padding-left: 13px;
+    padding-left: 20px;
     background-position: left center;
     background-repeat: no-repeat;
-    background-image: url(/assets/collapsed.gif);
+    background-image: url(/assets/plus.png);
 }
 
 .clearboth{
@@ -165,6 +177,29 @@ td.calculate {
     white-space: nowrap;
 }
 
-th.medium{
-    min-width: 150px;
+#dragbar{
+    background-color: #808080;
+    width: 5px;
+    cursor: col-resize;
+
 }
+
+#dragbar-button{
+    width: 5px;
+    height: 15px;
+    position: relative;
+    top: 50%;
+    left: 0px;
+    background-color: black;
+}
+
+#details{
+    float: right;
+    width: 74%;
+    overflow: scroll;
+}
+
+.full-height{
+    float: left;
+}
+

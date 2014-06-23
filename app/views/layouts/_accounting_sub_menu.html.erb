@@ -1,11 +1,12 @@
 <div class='zurb-row' id='submenu'>
     <ul>
-        <li><%= link_to("Receivables", {:controller => 'accounting', :action => 'receivables'}, :class => active_nav('accounting', 'accounting', 'receivables')) %></li>
         <li><%= link_to("Payables", {:controller => 'accounting', :action => 'payables'}, :class => active_nav('accounting', 'accounting', 'payables')) %></li>
+        <li><%= link_to("Receivables", {:controller => 'accounting', :action => 'receivables'}, :class => active_nav('accounting', 'accounting', 'receivables')) %></li>
+        <li><%= link_to("Vendor Accounts", {:controller => 'accounting', :action => 'vendor_accounts'}, :class => active_nav('accounting', 'accounting', 'vendor_accounts')) %></li>
+        <li><%= link_to("Client Accounts", {:controller => 'accounting', :action => 'client_accounts'}, :class => active_nav('accounting', 'accounting', 'client_accounts')) %></li>
         <li><%= link_to("Payroll", {:controller => 'accounting', :action => 'payroll'}, :class => active_nav('accounting', 'accounting', 'payroll')) %></li>
-        <li><%= link_to("Accounts", {:controller => 'accounts', :action => 'list'}, :class => active_nav('accounts', 'accounts')) %></li>
         <li><%= link_to("Items", accounting_items_path, :class => active_nav('accounting', 'items')) %></li>
+        <li><%= link_to("GL Accounts", {:controller => 'accounts', :action => 'list'}, :class => active_nav('accounts', 'accounts')) %></li>
         <li><%= link_to("Reports", {:controller => 'accounting', :action => 'reports'}, :class => active_nav('accounting', 'accounting', ['reports', 'profit_loss_report'])) %></li>
-        <li><%= link_to("Import/Export", {:controller => 'accounting', :action => 'import_export'}, :class => active_nav('accounting', 'accounting', 'import_export')) %></li>
     </ul>
 </div>
