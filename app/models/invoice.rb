@@ -67,7 +67,7 @@ class Invoice < ActiveRecord::Base
     self.receipts_invoices.any?
   end
 
-  def amount
+  def amount(project_id = nil)
     if invoices_items.any?
       invoices_items.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     elsif invoices_bills_categories_templates.any?
@@ -91,8 +91,12 @@ class Invoice < ActiveRecord::Base
     invoice_date
   end
 
-  def personables
+  def personables(transaction)
     [estimate.project.client]
+  end
+
+  def personable_projects
+    [estimate.project]
   end
 
   def project

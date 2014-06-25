@@ -63,16 +63,21 @@ class Payment < ActiveRecord::Base
     payer.try(:display_name)
   end
 
-  def amount
-    payments_bills.map(&:amount).compact.sum if payments_bills.any?
+  def amount(project_id=nil)
+    collection = project_id ? payments_bills.project(project_id) : payments_bills
+    collection.map(&:amount).compact.sum if collection.any?
   end
 
   def total_amount
     amount
   end
 
-  def personables
-    [payer]
+  def personables(transaction)
+    transaction.account_id == self.account_id ? [payer] : nil
+  end
+
+  def personable_projects
+    bills.flat_map(&:personable_projects)
   end
 
   def update_transactions

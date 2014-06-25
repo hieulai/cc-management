@@ -80,11 +80,12 @@ class Receipt < ActiveRecord::Base
     received_at
   end
 
-  def amount
+  def amount(project_id=nil)
     if self.uninvoiced
       receipts_items.reject(&:marked_for_destruction?).map(&:amount).compact.sum if receipts_items.any?
     elsif self.invoiced
-      receipts_invoices.reject(&:marked_for_destruction?).map(&:amount).compact.sum if receipts_invoices.any?
+      collection = project_id ? receipts_invoices.project(project_id) : receipts_invoices
+      collection.reject(&:marked_for_destruction?).map(&:amount).compact.sum if collection.any?
     else
       read_attribute(:credit_amount)
     end
@@ -106,8 +107,12 @@ class Receipt < ActiveRecord::Base
     uninvoiced ? payer.try(:display_name) : client.try(:display_name)
   end
 
-  def personables
-    self.uninvoiced ? [payer] : [client]
+  def personables(transaction)
+    self.uninvoiced ? [payer] : (transaction.account_id == builder.accounts_receivable_account.id ? [client] : nil)
+  end
+
+  def personable_projects
+    invoices.flat_map(&:personable_projects)
   end
 
   def check_readonly

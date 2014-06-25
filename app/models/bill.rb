@@ -168,7 +168,7 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  def amount
+  def amount(project_id = nil)
     cached_total_amount
   end
 
@@ -203,8 +203,12 @@ class Bill < ActiveRecord::Base
     r.flatten
   end
 
-  def personables
+  def personables(transaction)
     [payer]
+  end
+
+  def personable_projects
+    [project]
   end
 
   private

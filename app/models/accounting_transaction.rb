@@ -10,7 +10,6 @@ class AccountingTransaction < ActiveRecord::Base
   scope :date_range, lambda { |from_date, to_date| where('date >= ? AND date <= ?', from_date, to_date) }
 
   PERSONABLE_CLASS = [Bill, Payment, Invoice, Receipt]
-  PROJECTABLE_CLASS = [Bill, Invoice]
 
   searchable do
     text :payer_ids do
@@ -19,8 +18,8 @@ class AccountingTransaction < ActiveRecord::Base
     text :payer_types do
       payer_types
     end
-    text :project_id do
-      project_id
+    text :project_ids do
+      project_ids
     end
     date :date
 
@@ -30,9 +29,13 @@ class AccountingTransaction < ActiveRecord::Base
     string :payer_types, :multiple => true do
       payer_types
     end
-    string :project_id do
-      project_id
+    string :project_ids, :multiple => true do
+      project_ids
     end
+  end
+
+  def amount(project_id = nil)
+    project_id ? transactionable.amount(project_id) * (read_attribute(:amount) > 0 ? 1 : -1) : read_attribute(:amount)
   end
 
   def payer_ids
@@ -44,10 +47,15 @@ class AccountingTransaction < ActiveRecord::Base
   end
 
   def personables
-    transactionable.personables.try(:compact) if PERSONABLE_CLASS.include? transactionable.class
+    if PERSONABLE_CLASS.include? transactionable.class
+      transactionable.personables(self).try(:compact)
+    end
   end
 
-  def project_id
-    transactionable.try(:project).try(:id) if PROJECTABLE_CLASS.include? transactionable.class
+  def project_ids
+    if PERSONABLE_CLASS.include? transactionable.class
+      personable_projects = transactionable.personable_projects
+      personable_projects.compact.map(&:id)
+    end
   end
 end

@@ -6,10 +6,6 @@
     <td>Receipt</td>
     <td class="center"><%= t.transactionable.reference %></td>
     <td></td>
-    <td></td>
-    <td class="right"><%= price_tag(t.amount) %></td>
-    <td class="center action-container">
-        <%= check_box_tag("#{t.class.name}_#{t.id}", t.id, t.reconciled, :data => {:remote => true, :url => url_for(:action => "reconcile", :id => t.id)}) %>
-    </td>
+    <td class="right"><%= price_tag(t.amount(project_id)) %></td>
     <td class="right"><%= price_tag(balance) %></td>
 </tr>

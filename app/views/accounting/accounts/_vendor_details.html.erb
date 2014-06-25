@@ -66,13 +66,11 @@
               <th>Date</th>
               <th>Type</th>
               <th>Reference #</th>
-              <th>Payor/Payee</th>
               <th>Memo</th>
               <th>Amount</th>
-              <th>R</th>
               <th>Balance</th>
           </tr>
-          <%= render(:partial => "shared/transactions/tr_transactions", :locals => {:transactions => transactions, :balance => account_balance(vendor, project_id, params[:page])}) %>
+          <%= render(:partial => "accounting/accounts/tr_transactions", :locals => {:transactions => transactions, :balance => account_balance(vendor, project_id, params[:page]), :project_id => project_id}) %>
       </table>
       <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
   </div>

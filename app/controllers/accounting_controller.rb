@@ -589,7 +589,7 @@ class AccountingController < ApplicationController
     @transactions = AccountingTransaction.search {
       with :payer_types, params[:type]
       with :payer_ids, params[:id]
-      with :project_id, params[:project_id] if params[:project_id]
+      with :project_ids, params[:project_id] if params[:project_id]
       order_by :date, :desc
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
