@@ -52,9 +52,9 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       format.html do
         if @category.errors.any?
-          redirect_to(:action => 'list')
-        else
           render :delete
+        else
+          redirect_to(:action => 'list')
         end
       end
       format.js
