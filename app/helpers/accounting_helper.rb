@@ -57,7 +57,7 @@ module AccountingHelper
       order_by :date, :desc
       paginate :offset => (page_param.to_i - 1) * Kaminari.config.default_per_page, :per_page => AccountingTransaction.count
     }.results
-    ats.map { |t| t.amount(project_id) }.sum
+    ats.map { |t| t.people_amount(project_id) }.sum
   end
 
 end

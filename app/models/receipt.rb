@@ -108,7 +108,12 @@ class Receipt < ActiveRecord::Base
   end
 
   def personables(transaction)
-    self.uninvoiced ? [payer] : (transaction.account_id == builder.accounts_receivable_account.id ? [client] : nil)
+    if self.uninvoiced
+      [payer]
+    elsif (invoiced && transaction.account_id == builder.accounts_receivable_account.id) ||
+        (client_credit && transaction.account_id == builder.client_credit_account.id)
+      [client]
+    end
   end
 
   def personable_projects

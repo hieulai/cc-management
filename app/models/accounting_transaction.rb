@@ -34,8 +34,12 @@ class AccountingTransaction < ActiveRecord::Base
     end
   end
 
-  def amount(project_id = nil)
-    project_id ? transactionable.amount(project_id) * (read_attribute(:amount) > 0 ? 1 : -1) : read_attribute(:amount)
+  def people_amount(project_id = nil)
+    sign = amount > 0 ? 1 : -1
+    if transactionable.instance_of?(Receipt) && transactionable.client_credit
+      sign = -1
+    end
+    (project_id ? transactionable.amount(project_id) : amount).abs * sign
   end
 
   def payer_ids

@@ -6,6 +6,6 @@
     <td>Receipt</td>
     <td class="center"><%= t.transactionable.reference %></td>
     <td></td>
-    <td class="right"><%= price_tag(t.amount(project_id)) %></td>
+    <td class="right"><%= price_tag(t.people_amount(project_id)) %></td>
     <td class="right"><%= price_tag(balance) %></td>
 </tr>
