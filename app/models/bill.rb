@@ -128,6 +128,10 @@ class Bill < ActiveRecord::Base
     self.payments_bills.any?
   end
 
+  def invoiced?
+    self.bills_categories_templates.flat_map(&:invoices_bills_categories_templates).any?
+  end
+
   def remaining_amount
     unless paid?
       cached_total_amount
@@ -213,8 +217,8 @@ class Bill < ActiveRecord::Base
 
   private
   def check_readonly
-    if self.paid?
-      errors[:base] << "This bill is already paid and can not be deleted."
+    if self.paid? || self.invoiced?
+      errors[:base] << "This bill is already paid or added to an invoice and can not be deleted."
       false
     end
   end
