@@ -14,4 +14,11 @@ class AccountingTransaction < ActiveRecord::Base
   scope :accounts, lambda { |account_ids, transactionable_ids, transactionable_type| where('account_id IN (?) OR transactionable_id IN (?) AND transactionable_type = ?', account_ids, transactionable_ids, transactionable_type) }
   scope :payer_accounts, lambda { |payer_id, payer_type| where(:payer_id => payer_id, :payer_type => payer_type) }
   scope :project_accounts, lambda { |project_id| where(:project_id => project_id) }
+
+  after_destroy :update_indexes
+  after_save :update_indexes
+
+  def update_indexes
+    Sunspot.delay.index(payer) if payer
+  end
 end
