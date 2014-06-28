@@ -49,13 +49,13 @@ class Account < ActiveRecord::Base
   validate :disallow_self_reference
 
   def transactions
-    AccountingTransaction.where('account_id IN (?) OR transactionable_id IN (?) AND transactionable_type = ?', tree_ids, tree_ids, Account.name)
+    AccountingTransaction.accounts(tree_ids, tree_ids, Account.name)
   end
 
   def balance(options ={})
     options ||= {}
     options[:recursive] = true if options[:recursive].nil?
-    r = AccountingTransaction.where('account_id IN (?) OR transactionable_id IN (?) AND transactionable_type = ?', tree_ids(options[:recursive]), tree_ids(options[:recursive]), Account.name)
+    r = AccountingTransaction.accounts(tree_ids(options[:recursive]), tree_ids(options[:recursive]), Account.name)
     if options[:from_date] && options[:to_date]
       r = r.date_range(options[:from_date], options[:to_date])
     end

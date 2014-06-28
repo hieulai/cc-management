@@ -67,7 +67,7 @@ class Invoice < ActiveRecord::Base
     self.receipts_invoices.any?
   end
 
-  def amount(project_id = nil)
+  def amount
     if invoices_items.any?
       invoices_items.reject(&:marked_for_destruction?).map(&:amount).compact.sum
     elsif invoices_bills_categories_templates.any?
@@ -91,16 +91,15 @@ class Invoice < ActiveRecord::Base
     invoice_date
   end
 
-  def personables(transaction)
-    [estimate.project.client]
-  end
-
-  def personable_projects
-    [estimate.project]
-  end
-
   def project
     estimate.project
+  end
+
+  def update_transactions
+    accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
+    accounting_transactions.where('payer_id is NOT NULL and payer_type is NOT NULL').destroy_all
+    accounting_transactions.create({payer_id: estimate.project.client_id, payer_type: Client.name, project_id: self.project.id, date: date, amount: amount.to_f})
+    Sunspot.delay.index accounting_transactions
   end
 
   private
@@ -150,10 +149,5 @@ class Invoice < ActiveRecord::Base
 
   def default_values
     self.invoice_date ||= Date.today
-  end
-
-  def update_transactions
-    accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
-    Sunspot.delay.index accounting_transactions
   end
 end

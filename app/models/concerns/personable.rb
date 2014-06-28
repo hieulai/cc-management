@@ -6,6 +6,7 @@ module Personable
     has_many :receipts, as: :payer
     has_many :bills, as: :payer
     has_many :projects_payers, :as => :payer, :dependent => :destroy
+    has_many :accounting_transactions, :as => :payer, :dependent => :destroy
 
     accepts_nested_attributes_for :projects_payers, :allow_destroy => true, reject_if: :all_blank
     attr_accessible :projects_payers_attributes, :company, :website, :address, :city, :state, :zipcode, :notes
@@ -28,6 +29,9 @@ module Personable
       text :display_name do
         display_name
       end
+      float :balance, :trie => true do
+        balance
+      end
     end
   end
 
@@ -49,5 +53,24 @@ module Personable
 
   def project_names
     associated_projects.map(&:name).join(",")
+  end
+
+  def transactions(options ={})
+    options ||= {}
+    if options[:project_id]
+      accounting_transactions.project_accounts(options[:project_id])
+    else
+      accounting_transactions
+    end
+  end
+
+  def balance(options ={})
+    options ||= {}
+    r = transactions(options)
+    if options[:offset]
+      ids = r.offset(options[:offset]).pluck(:id)
+      r = AccountingTransaction.where(id: ids)
+    end
+    r.sum(:amount)
   end
 end

@@ -34,7 +34,7 @@ class Receipt < ActiveRecord::Base
 
   before_save :check_total_amount_changed, :clear_old_data
   after_initialize :default_values
-  after_save :update_transactions, :update_cached_total_amount_for_credit
+  after_save :update_transactions
 
   validates_presence_of :builder, :method, :received_at
   validates_presence_of :client, :if => Proc.new { |r| r.invoiced || r.client_credit }
@@ -107,17 +107,22 @@ class Receipt < ActiveRecord::Base
     uninvoiced ? payer.try(:display_name) : client.try(:display_name)
   end
 
-  def personables(transaction)
-    if self.uninvoiced
-      [payer]
-    elsif (invoiced && transaction.account_id == builder.accounts_receivable_account.id) ||
-        (client_credit && transaction.account_id == builder.client_credit_account.id)
-      [client]
+  def update_transactions
+    accounting_transactions.destroy_all
+    accounting_transactions.where(account_id: builder.deposits_held_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
+    if invoiced
+      accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f * -1})
+      project_ids = invoices.map { |i| i.project.id }.compact.uniq
+      project_ids.each do |project_id|
+        accounting_transactions.create({payer_id: client.id, payer_type: Client.name, project_id: project_id, date: date, amount: amount(project_id).to_f * -1})
+      end
+    elsif uninvoiced
+      accounting_transactions.create({payer_id: payer.id, payer_type: payer.class.name, date: date, amount: amount.to_f * -1})
+    else
+      accounting_transactions.where(account_id: builder.client_credit_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
+      accounting_transactions.create({payer_id: client.id, payer_type: Client.name, date: date, amount: amount.to_f * -1})
     end
-  end
-
-  def personable_projects
-    invoices.flat_map(&:personable_projects)
+    Sunspot.delay.index accounting_transactions
   end
 
   def check_readonly
@@ -154,21 +159,5 @@ class Receipt < ActiveRecord::Base
     if !self.client_credit && !self.invoiced
       self.client = nil
     end
-  end
-
-  def update_cached_total_amount_for_credit
-    self.update_column(:cached_total_amount, self.cached_total_amount.to_f - credit_amount_was.to_f)
-    self.update_column(:cached_total_amount, self.cached_total_amount.to_f + credit_amount.to_f) if self.client_credit
-  end
-
-  def update_transactions
-    accounting_transactions.destroy_all
-    accounting_transactions.where(account_id: builder.deposits_held_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
-    if invoiced
-      accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f * -1})
-    elsif client_credit
-      accounting_transactions.where(account_id: builder.client_credit_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
-    end
-    Sunspot.delay.index accounting_transactions
   end
 end

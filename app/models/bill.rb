@@ -172,7 +172,7 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  def amount(project_id = nil)
+  def amount
     cached_total_amount
   end
 
@@ -190,10 +190,6 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  def update_transactions
-    accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: total_amount.to_f})
-    Sunspot.delay.index accounting_transactions
-  end
 
   def date
     billed_date
@@ -207,12 +203,11 @@ class Bill < ActiveRecord::Base
     r.flatten
   end
 
-  def personables(transaction)
-    [payer]
-  end
-
-  def personable_projects
-    [project]
+  def update_transactions
+    accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: total_amount.to_f})
+    accounting_transactions.where('payer_id is NOT NULL and payer_type is NOT NULL').destroy_all
+    accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: project_id, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type
+    Sunspot.delay.index accounting_transactions
   end
 
   private
@@ -249,5 +244,6 @@ class Bill < ActiveRecord::Base
   def default_values
     self.billed_date ||= Date.today
   end
+
 
 end

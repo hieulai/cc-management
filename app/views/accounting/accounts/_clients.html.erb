@@ -1,4 +1,13 @@
-<%= paginate clients, :remote => true, params: {action: "client_accounts"} %>
+<%= form_tag('client_accounts', :method => 'get', :remote => true, :class => 'form-horizontal search_people') do %>
+  <div class="control-group">
+      <%= label_tag :term, "Search"%>
+      <div class="full-width">
+          <%= select_tag(:type, options_for_select(["All", "Active"], params[:type] || "All")) %>
+          <%= text_field_tag(:term, params[:term]) %>
+      </div>
+  </div>
+<% end %>
+
 <table class="grid-view responsive" summary="Client List">
     <tr class="header">
         <th>Name</th>
@@ -17,7 +26,7 @@
               <%= link_to "", {:action => "show_account", :id => client.id, type: Client.name}, {:remote => true, :style => 'display: none', :class => 'clickable-link'} %>
           </td>
           <td class="right">
-              <%= number_to_currency(account_balance(client)) %>
+              <%= number_to_currency(client.balance) %>
           </td>
       </tr>
 

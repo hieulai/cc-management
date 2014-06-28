@@ -203,3 +203,12 @@ td.calculate {
     float: left;
 }
 
+.full-width {
+    width: 100%;
+}
+
+.search_people input[type="text"] {
+    margin-top: 5px;
+    display: block;
+}
+

@@ -547,7 +547,9 @@ class AccountingController < ApplicationController
 
   def client_accounts
     @clients = Client.search {
+      fulltext params[:term], {:fields => :display_name}
       with :builder_id, session[:builder_id]
+      without(:balance, 0) if params[:type] == "Active"
       order_by :display_name
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
@@ -561,7 +563,9 @@ class AccountingController < ApplicationController
 
   def vendor_accounts
     @vendors = Vendor.search {
+      fulltext params[:term], {:fields => :display_name}
       with :builder_id, session[:builder_id]
+      without(:balance, 0) if params[:type] == "Active"
       order_by :display_name
       paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
     }.results
@@ -586,13 +590,12 @@ class AccountingController < ApplicationController
     @type = params[:type]
     @object = @builder.send(@type.underscore.pluralize.to_sym).find(params[:id])
     @project_id = params[:project_id]
-    @transactions = AccountingTransaction.search {
-      with :payer_types, params[:type]
-      with :payer_ids, params[:id]
-      with :project_ids, params[:project_id] if params[:project_id]
-      order_by :date, :desc
-      paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
-    }.results
+    if params[:page]
+      @balance = @object.balance({project_id: params[:project_id], offset: (params[:page].to_i - 1) * Kaminari.config.default_per_page}).to_f
+    else
+      @balance = @object.balance({project_id: params[:project_id]}).to_f
+    end
+    @transactions = @object.transactions({project_id: params[:project_id]}).page params[:page]
     respond_to do |format|
       format.js do
         render 'accounting/accounts/show_account'

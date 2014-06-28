@@ -1,4 +1,4 @@
 <% transactions.each do |transaction| %>
-  <%= render(:partial => "accounting/accounts/tr_#{transaction.transactionable_type.underscore}", :locals => {:t => transaction, :balance => balance, :project_id => project_id}) %>
-  <% balance -= transaction.people_amount(project_id).to_f %>
+  <%= render(:partial => "accounting/accounts/tr_#{transaction.transactionable_type.underscore}", :locals => {:t => transaction, :balance => balance}) %>
+  <% balance -= transaction.amount.to_f %>
 <% end %>

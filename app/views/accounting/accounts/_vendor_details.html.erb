@@ -70,7 +70,7 @@
               <th>Amount</th>
               <th>Balance</th>
           </tr>
-          <%= render(:partial => "accounting/accounts/tr_transactions", :locals => {:transactions => transactions, :balance => account_balance(vendor, project_id, params[:page]), :project_id => project_id}) %>
+          <%= render(:partial => "accounting/accounts/tr_transactions", :locals => {:transactions => transactions, :balance => balance }) %>
       </table>
       <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
   </div>

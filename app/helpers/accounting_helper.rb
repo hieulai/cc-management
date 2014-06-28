@@ -48,16 +48,4 @@ module AccountingHelper
     json.to_json
   end
 
-  def account_balance(payer, project_id = nil, page_param = nil)
-    page_param ||= 1
-    ats = AccountingTransaction.search {
-      with :payer_types, payer.class.name
-      with :payer_ids, payer.id
-      with :project_ids, project_id if project_id
-      order_by :date, :desc
-      paginate :offset => (page_param.to_i - 1) * Kaminari.config.default_per_page, :per_page => AccountingTransaction.count
-    }.results
-    ats.map { |t| t.people_amount(project_id) }.sum
-  end
-
 end

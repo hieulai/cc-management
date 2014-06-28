@@ -6,6 +6,7 @@ class PaymentsBill < ActiveRecord::Base
   attr_accessible :amount, :bill_id, :payment_id
 
   scope :project, lambda { |project_id| joins(:bill).where('bills.project_id = ?', project_id) }
+  scope :no_project, joins(:bill).where('bills.project_id is NULL')
   before_save :increase_bill_remaining_amount, :unless => :deleted_at_changed?
   before_save :decrease_bill_remaining_amount
   after_destroy :increase_bill_remaining_amount

@@ -61,6 +61,18 @@ var Accounting = (function ($, Shared) {
         $(document).mouseup(function (e) {
             $(document).unbind('mousemove');
         });
+
+        // Since select2 kill onENTER event on form, this workaround is needed in order to submit form
+        $(document).on('keypress', '.search_people input[type="text"]', function (e) {
+            if (e.which == 13) {
+                $(this).closest("form").submit();
+                return false;
+            }
+        });
+
+        $(document).on("change", ".search_people select", function () {
+            $(this).closest("form").submit();
+        })
     };
 
     var calculate = function (parent, child) {

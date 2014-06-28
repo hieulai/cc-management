@@ -103,7 +103,7 @@ class PurchaseOrder < ActiveRecord::Base
 
   def create_default_bill
     self.create_bill({:purchase_order_id => self.id, :builder_id => self.builder_id}) unless bill
-    bill.update_attributes({:payer_id => payer_id, :payer_type => payer_type})
+    bill.update_attributes({:payer_id => payer_id, :payer_type => payer_type, :project_id => project_id})
   end
 
   def check_readonly

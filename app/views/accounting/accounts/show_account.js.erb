@@ -1,5 +1,5 @@
 <% if @type == Client.name %>
-  $("#client-details").html('<%= escape_javascript(render(:partial => "accounting/accounts/client_details", :locals => {:client => @object, :transactions => @transactions, :project_id => @project_id})) %>');
+  $("#client-details").html('<%= escape_javascript(render(:partial => "accounting/accounts/client_details", :locals => {:client => @object, :transactions => @transactions, :balance => @balance})) %>');
 <% elsif @type == Vendor.name %>
-  $("#vendor-details").html('<%= escape_javascript(render(:partial => "accounting/accounts/vendor_details", :locals => {:vendor => @object, :transactions => @transactions, :project_id => @project_id})) %>');
+  $("#vendor-details").html('<%= escape_javascript(render(:partial => "accounting/accounts/vendor_details", :locals => {:vendor => @object, :transactions => @transactions, :balance => @balance})) %>');
 <% end %>

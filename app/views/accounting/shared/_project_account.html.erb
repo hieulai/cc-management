@@ -6,6 +6,6 @@
         <%= link_to "", {:action => "show_account", :id => object.id, :type => object.class.name, :project_id => project.id}, {:remote => true, :style => 'display: none', :class => 'clickable-link'} %>
     </td>
     <td class="right">
-        <%= number_to_currency(account_balance(object, project.id)) %>
+        <%= number_to_currency(object.balance({:project_id => project.id})) %>
     </td>
 </tr>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140605163450) do
+ActiveRecord::Schema.define(:version => 20140627151638) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -24,9 +24,13 @@ ActiveRecord::Schema.define(:version => 20140605163450) do
     t.integer  "display_priority",                                    :default => 1
     t.datetime "created_at",                                                             :null => false
     t.datetime "updated_at",                                                             :null => false
+    t.integer  "payer_id"
+    t.string   "payer_type"
+    t.integer  "project_id"
   end
 
   add_index "accounting_transactions", ["account_id"], :name => "index_accounting_transactions_on_account_id"
+  add_index "accounting_transactions", ["project_id"], :name => "index_accounting_transactions_on_project_id"
 
   create_table "accounts", :force => true do |t|
     t.integer  "builder_id"
