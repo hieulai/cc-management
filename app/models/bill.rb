@@ -207,7 +207,7 @@ class Bill < ActiveRecord::Base
     accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: total_amount.to_f})
     accounting_transactions.where('payer_id is NOT NULL and payer_type is NOT NULL').destroy_all
     accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type
-    accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: project_id, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type
+    accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: project_id, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type && project_id
   end
 
   private
