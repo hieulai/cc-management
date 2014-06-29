@@ -15,10 +15,10 @@ class AccountingTransaction < ActiveRecord::Base
   scope :payer_accounts, lambda { |payer_id, payer_type| where(:payer_id => payer_id, :payer_type => payer_type) }
   scope :project_accounts, lambda { |project_id| where(:project_id => project_id) }
 
-  after_destroy :update_indexes
-  after_save :update_indexes
+  after_destroy :update_indexes, :if => Proc.new { |at| at.payer.present? }
+  after_save :update_indexes, :if => Proc.new { |at| at.payer.present? }
 
   def update_indexes
-    Sunspot.delay.index(payer) if payer
+    Sunspot.delay.index payer
   end
 end

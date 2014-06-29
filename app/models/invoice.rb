@@ -99,7 +99,6 @@ class Invoice < ActiveRecord::Base
     accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
     accounting_transactions.where('payer_id is NOT NULL and payer_type is NOT NULL').destroy_all
     accounting_transactions.create({payer_id: estimate.project.client_id, payer_type: Client.name, project_id: self.project.id, date: date, amount: amount.to_f})
-    Sunspot.delay.index accounting_transactions
   end
 
   private

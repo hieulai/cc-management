@@ -17,7 +17,7 @@
     <% vendors.each do |vendor| %>
       <tr class="clickable person" id="<%= vendor.id %>">
           <td>
-              <% if vendor.associated_projects.any? %>
+              <% if vendor.has_projects? %>
                 <%= link_to "", {:action => "list_projects", :id => vendor.id, type: Vendor.name}, {:remote => true, :class => 'expander collapsed'} %>
               <% else %>
                 <div class="indent">&nbsp;</div>

@@ -122,7 +122,6 @@ class Receipt < ActiveRecord::Base
       accounting_transactions.where(account_id: builder.client_credit_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
       accounting_transactions.create({payer_id: client.id, payer_type: Client.name, date: date, amount: amount.to_f * -1})
     end
-    Sunspot.delay.index accounting_transactions
   end
 
   def check_readonly

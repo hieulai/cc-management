@@ -84,6 +84,5 @@ class Payment < ActiveRecord::Base
     project_ids.each do |project_id|
       accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: project_id, date: date, amount: amount(project_id).to_f * -1})
     end
-    Sunspot.delay.index accounting_transactions
   end
 end

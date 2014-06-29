@@ -29,6 +29,10 @@ class Client < ActiveRecord::Base
     end
   end
 
+  def has_projects?
+    super || projects.any?
+  end
+
   def associated_projects
     [super, projects].flatten.uniq
   end

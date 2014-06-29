@@ -39,6 +39,10 @@ module Personable
     company.presence || main_full_name
   end
 
+  def has_projects?
+    PaymentsBill.joins(:payment).where("payments.id in (?)", payments.pluck(:id)).joins(:bill).where("bills.job_costed = true").any? || projects_payers.any?
+  end
+
   def associated_projects_from_checks
     payments.flat_map { |p| p.bills.job_costed.map { |b| b.project } }.uniq
   end

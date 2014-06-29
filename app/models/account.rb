@@ -160,7 +160,6 @@ class Account < ActiveRecord::Base
   def update_opening_balance_transaction
     create_accounting_transaction unless accounting_transaction
     accounting_transaction.update_attributes({date: opening_balance_updated_at.try(:to_date), amount: opening_balance})
-    Sunspot.delay.index accounting_transactions
   end
 
   def update_indexes

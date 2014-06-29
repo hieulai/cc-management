@@ -34,7 +34,6 @@ class BillsCategoriesTemplate < ActiveRecord::Base
   def update_transactions
     cogs_account_id = CategoriesTemplate.find(categories_template_id).cogs_account.id
     accounting_transactions.where(account_id: cogs_account_id).first_or_create.update_attributes({account_id: cogs_account_id, date: bill.date, amount: amount.to_f})
-    Sunspot.delay.index accounting_transactions
   end
 
   def destroy_purchased_categories_template

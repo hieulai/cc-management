@@ -17,7 +17,7 @@
     <% clients.each do |client| %>
       <tr class="clickable person" id="<%= client.id %>">
           <td>
-              <% if client.associated_projects.any? %>
+              <% if client.has_projects? %>
                 <%= link_to "", {:action => "list_projects", :id => client.id, type: Client.name}, {:remote => true, :class => 'expander collapsed'} %>
               <% else %>
                 <div class="indent">&nbsp;</div>
