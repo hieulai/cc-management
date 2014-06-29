@@ -2,7 +2,7 @@
   <div class="control-group">
       <%= label_tag :term, "Search"%>
       <div class="full-width">
-          <%= select_tag(:type, options_for_select(["All", "Active"], params[:type] || "All")) %>
+          <%= select_tag(:type, options_for_select(["All", "Active"], params[:type])) %>
           <%= text_field_tag(:term, params[:term]) %>
       </div>
   </div>

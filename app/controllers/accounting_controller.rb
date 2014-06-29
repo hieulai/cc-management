@@ -546,6 +546,7 @@ class AccountingController < ApplicationController
   end
 
   def client_accounts
+    params[:type] ||= "Active"
     @clients = Client.search {
       fulltext params[:term], {:fields => :display_name}
       with :builder_id, session[:builder_id]
@@ -562,6 +563,7 @@ class AccountingController < ApplicationController
   end
 
   def vendor_accounts
+    params[:type] ||= "Active"
     @vendors = Vendor.search {
       fulltext params[:term], {:fields => :display_name}
       with :builder_id, session[:builder_id]
