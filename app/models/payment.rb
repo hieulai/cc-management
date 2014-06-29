@@ -77,9 +77,7 @@ class Payment < ActiveRecord::Base
     accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f * -1})
     accounting_transactions.where(account_id: account_id_was || account_id).first_or_create.update_attributes({account_id: account_id, date: date, amount: amount.to_f * -1})
     accounting_transactions.where('payer_id is NOT NULL and payer_type is NOT NULL').destroy_all
-    if payments_bills.no_project.any?
-      accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, date: date, amount: payments_bills.no_project.sum(:amount)})
-    end
+    accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, date: date, amount: amount.to_f * -1})
     project_ids = bills.map(&:project_id).compact.uniq
     project_ids.each do |project_id|
       accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: project_id, date: date, amount: amount(project_id).to_f * -1})

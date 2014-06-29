@@ -104,23 +104,21 @@ class Receipt < ActiveRecord::Base
   end
 
   def payer_name
-    uninvoiced ? payer.try(:display_name) : client.try(:display_name)
+    self_payer.try(:display_name)
   end
 
   def update_transactions
     accounting_transactions.destroy_all
     accounting_transactions.where(account_id: builder.deposits_held_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
+    accounting_transactions.create({payer_id: self_payer.id, payer_type: self_payer.class.name, date: date, amount: amount.to_f * -1})
     if invoiced
       accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f * -1})
       project_ids = invoices.map { |i| i.project.id }.compact.uniq
       project_ids.each do |project_id|
         accounting_transactions.create({payer_id: client.id, payer_type: Client.name, project_id: project_id, date: date, amount: amount(project_id).to_f * -1})
       end
-    elsif uninvoiced
-      accounting_transactions.create({payer_id: payer.id, payer_type: payer.class.name, date: date, amount: amount.to_f * -1})
-    else
+    elsif client_credit
       accounting_transactions.where(account_id: builder.client_credit_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
-      accounting_transactions.create({payer_id: client.id, payer_type: Client.name, date: date, amount: amount.to_f * -1})
     end
   end
 
@@ -158,5 +156,9 @@ class Receipt < ActiveRecord::Base
     if !self.client_credit && !self.invoiced
       self.client = nil
     end
+  end
+
+  def self_payer
+    uninvoiced ? payer : client
   end
 end

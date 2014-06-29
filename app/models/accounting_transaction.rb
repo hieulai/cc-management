@@ -14,6 +14,7 @@ class AccountingTransaction < ActiveRecord::Base
   scope :accounts, lambda { |account_ids, transactionable_ids, transactionable_type| where('account_id IN (?) OR transactionable_id IN (?) AND transactionable_type = ?', account_ids, transactionable_ids, transactionable_type) }
   scope :payer_accounts, lambda { |payer_id, payer_type| where(:payer_id => payer_id, :payer_type => payer_type) }
   scope :project_accounts, lambda { |project_id| where(:project_id => project_id) }
+  scope :non_project_accounts, where(:project_id => nil)
 
   after_destroy :update_indexes, :if => Proc.new { |at| at.payer.present? }
   after_save :update_indexes, :if => Proc.new { |at| at.payer.present? }

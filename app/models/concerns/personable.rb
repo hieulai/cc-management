@@ -64,7 +64,7 @@ module Personable
     if options[:project_id]
       accounting_transactions.project_accounts(options[:project_id])
     else
-      accounting_transactions
+      accounting_transactions.non_project_accounts
     end
   end
 
