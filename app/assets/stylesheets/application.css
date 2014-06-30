@@ -193,10 +193,14 @@ td.calculate {
     background-color: black;
 }
 
+#sidebar{
+    padding-right: 5px;
+}
+
 #details{
     float: right;
     width: 74%;
-    overflow: scroll;
+    padding-right: 0px;
 }
 
 .full-height{

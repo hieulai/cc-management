@@ -41,7 +41,7 @@ var Accounting = (function ($, Shared) {
                 var winHeight = $(window).height();
                 var divHeight = winHeight - divTop;
                 $(this).height(divHeight);
-                $(this).css("overflow", "scroll");
+                $(this).css("overflow", "auto");
             })
         });
         $(window).trigger('resize');
