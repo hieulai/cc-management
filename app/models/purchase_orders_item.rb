@@ -2,6 +2,9 @@ class PurchaseOrdersItem < ActiveRecord::Base
   include Purchasable
 
   belongs_to :purchase_orders_categories_template
+
+  scope :has_actual_cost, where('actual_cost is NOT NULL')
+
   after_destroy :check_to_destroy_payment
 
   private
