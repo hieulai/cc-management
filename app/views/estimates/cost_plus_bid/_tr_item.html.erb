@@ -21,7 +21,7 @@
     <td class="button-container">
         <% unless item.billed? %>
             <%= link_to '+', "#" , :class => 'trigger-add btn'%>
-            <%= link_to '-', {:controller => 'items', :action => 'destroy', :id => item.id}, :remote => true, :class => 'remove-item btn' %>
+            <%= link_to '-', url_for([:estimates, item]), :method => :delete, :remote => true, :class => 'remove-item btn' %>
         <% end %>
     </td>
 </tr>
