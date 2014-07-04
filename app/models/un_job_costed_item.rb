@@ -36,7 +36,6 @@ class UnJobCostedItem < ActiveRecord::Base
     end
     bat = bill.accounting_transactions.where(account_id: account_id).first_or_create
     bat.update_attributes({date: date, amount: bat.amount.to_f + account_amount(amount, account)})
-    Sunspot.delay.index bill.accounting_transactions
   end
 
   def destroy_transactions

@@ -10,8 +10,8 @@ class BillsCategoriesTemplate < ActiveRecord::Base
 
   accepts_nested_attributes_for :bills_items, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :items, :reject_if => :all_blank, :allow_destroy => true
-  attr_accessible :bill_id, :categories_template_id, :category_id, :bills_items_attributes, :items_attributes
-  attr_accessor :category_id
+  attr_accessible :bill_id, :categories_template_id, :category_id, :category_name, :bills_items_attributes, :items_attributes
+  attr_accessor :category_id, :category_name
 
   scope :date_range, lambda { |from_date, to_date| includes(:bill).where('bills.billed_date >= ? AND bills.billed_date <= ?', from_date, to_date) }
 

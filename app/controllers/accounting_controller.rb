@@ -681,9 +681,11 @@ class AccountingController < ApplicationController
     if params[@type.to_sym][:project_id].present? && params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym].present?
       project = Project.find(params[@type.to_sym][:project_id])
       params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym].each do |p_ct|
-        category_template = CategoriesTemplate.where(:category_id => p_ct[:category_id], :template_id => project.estimates.first.template.id).first
+        next if p_ct[:category_id].blank? && p_ct[:_destroy] == true.to_s
+        category_id = p_ct[:category_id].presence || Category.create({name: p_ct[:category_name]}).id
+        category_template = CategoriesTemplate.where(:category_id => category_id, :template_id => project.estimates.first.template.id).first
         unless category_template
-          category = Category.find p_ct[:category_id]
+          category = Category.find(category_id)
           if category
             category_template = category.categories_templates.where(:template_id => project.estimates.first.template.id).first
           end

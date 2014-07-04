@@ -2,6 +2,7 @@ class CategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
   before_destroy :check_destroyable, :destroy_items
   after_destroy :destroy_accounts, :if => Proc.new{|ct| ct.template.estimate.present? }
+  after_destroy :destroy_category
 
   attr_accessible :category_id, :template_id, :items_attributes, :purchased
 
@@ -108,5 +109,9 @@ class CategoriesTemplate < ActiveRecord::Base
   def destroy_accounts
     revenue_account.destroy if revenue_account.has_no_category?
     cogs_account.destroy if cogs_account.has_no_category?
+  end
+
+  def destroy_category
+    category.destroy unless category.undestroyable?
   end
 end

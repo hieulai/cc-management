@@ -78,7 +78,6 @@ if ($("tr.category[data-id]").size() == 0 || type == "<%= PurchaseOrder.name %>"
             },
             dataType: "json",
             success: function (foundItem) {
-              debugger;
               if (foundItem.id) {
                 var addedTr = renderPurchasableItem(trCategory);
                 $(addedTr).attr("id", "item_" + foundItem.id);
@@ -105,7 +104,6 @@ if ($("tr.category[data-id]").size() == 0 || type == "<%= PurchaseOrder.name %>"
                 $(addedTr).find('input[name$="[][description]"]').val(description);
                 $(addedTr).find('textarea[name$="[][bill_memo]"]').val(billMemo);
                 $(addedTr).find('input[name$="[][actual_cost]"]').val(actualCost);
-                debugger;
               }
               $(trItem).remove();
               Shared.calculateSubTotals();
