@@ -7,19 +7,11 @@ class AddEstimateIdToSpecificationsAndBids < ActiveRecord::Migration
     add_index :bids, :estimate_id
 
     Specification.all.each do |s|
-      if s.project
         s.update_column(:estimate_id, s.project.committed_estimate.id)
-      else
-        s.destroy
-      end
     end
 
     Bid.all.each do |b|
-      if b.project
-        b.update_column(:estimate_id, b.project.committed_estimate.id)
-      else
-        b.destroy
-      end
+      b.update_column(:estimate_id, b.project.committed_estimate.id)
     end
   end
 end
