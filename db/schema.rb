@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140705153357) do
+ActiveRecord::Schema.define(:version => 20140706163706) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -81,8 +81,8 @@ ActiveRecord::Schema.define(:version => 20140705153357) do
     t.integer  "vendor_id"
     t.date     "due_date"
     t.integer  "category_id"
-    t.integer  "estimate_id"
     t.integer  "builder_id"
+    t.integer  "estimate_id"
   end
 
   add_index "bids", ["builder_id"], :name => "index_bids_on_builder_id"
@@ -424,17 +424,6 @@ ActiveRecord::Schema.define(:version => 20140705153357) do
   add_index "items", ["purchase_orders_categories_template_id"], :name => "index_items_on_purchase_orders_categories_template_id"
   add_index "items", ["template_id"], :name => "index_items_on_template_id"
 
-  create_table "leads", :force => true do |t|
-    t.date     "check_back"
-    t.date     "last_contacted"
-    t.string   "lead_source"
-    t.integer  "expected_revenue"
-    t.text     "lead_notes"
-    t.text     "project_notes"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-  end
-
   create_table "measurements", :force => true do |t|
     t.integer  "estimate_id"
     t.string   "name"
@@ -667,8 +656,8 @@ ActiveRecord::Schema.define(:version => 20140705153357) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.text     "description"
-    t.integer  "estimate_id"
     t.integer  "builder_id"
+    t.integer  "estimate_id"
   end
 
   add_index "specifications", ["builder_id"], :name => "index_specifications_on_builder_id"
