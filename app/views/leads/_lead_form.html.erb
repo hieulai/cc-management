@@ -6,12 +6,14 @@
         <%= p.text_field(:name) %>
     </div>
 </div>
-<div class="control-group">
-    <%= p.label :status, 'Project Status', :class => 'col-lg-2 control-label' %>
-    <div class='controls'>
-        <%= p.select(:status, ['Current Lead', 'Current Project', 'Past Lead']) %>
-    </div>
-</div>
+<% unless @project.new_record? %>
+  <div class="control-group">
+      <%= p.label :status, 'Project Status', :class => 'col-lg-2 control-label' %>
+      <div class='controls'>
+          <%= p.select(:status, ['Current Lead', 'Current Project', 'Past Lead']) %>
+      </div>
+  </div>
+<% end %>
 <div class="control-group">
     <%= p.label :project_type, 'Project Type', :class => 'col-lg-2 control-label' %>
     <div class="controls">

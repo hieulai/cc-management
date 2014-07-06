@@ -1,13 +1,15 @@
 class Bid < ActiveRecord::Base
 
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :project
+  belongs_to :estimate
   belongs_to :vendor
   belongs_to :category
   has_many :bids_items, :dependent => :destroy
 
   validates_presence_of :category
 
-  attr_accessible :notes, :chosen, :vendor_id, :category_id, :bids_items_attributes
+  attr_accessible :notes, :chosen, :vendor_id, :category_id, :bids_items_attributes, :estimate_id
   accepts_nested_attributes_for :bids_items, :allow_destroy => true, :reject_if => lambda { |x| x[:amount].blank? }
 
   def total_amount
@@ -26,7 +28,7 @@ class Bid < ActiveRecord::Base
     if categories_template
       categories_template.co_items
     elsif category
-      project.co_items(category)
+      estimate.project.co_items(category)
     end
   end
 

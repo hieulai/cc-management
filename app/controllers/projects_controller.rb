@@ -15,76 +15,28 @@ class ProjectsController < ApplicationController
   
   def show_project
     #Passes in parent model of Client
-    @project = Project.find(params[:id])
-    @client = Client.find(@project.client_id)
+    @project = @builder.projects.find(params[:id])
+    @client = @project.client
   end
   
   def edit_project
-    @project = Project.find(params[:id])
-    @client = Client.find(@project.client_id)
+    @project = @builder.projects.find(params[:id])
+    @client = @project.client
   end
   
   def update_project
     #Find object using form parameters
-    @project = Project.find(params[:id])
-    @client = Client.find(@project.client_id)
-    #Update subject
-    if @client.update_attributes(params[:client]) & @project.update_attributes(params[:project])
-      #if save succeeds, convert project and redirect to list action
-      if @project.status == 'Current Project'
-        @project.save
-        #Allows client to display in the People section if the project is won.
-        @client.status = "Active"
-        @client.save
-      elsif @project.status == "Past Project"
-        @project.save
-        #Prevents client from displaying in the People section if the project is not won yet.
-        @client.status = "Active"
-        @client.save
-      elsif @project.status == "Current Lead"
-        @project.save
-        #Prevents client from displaying in the People section if the project is not won yet.
-        @client.status = "Lead"
-        @client.save
-      end
+    @project = @builder.projects.find(params[:id])
+    @client = @project.client
+    if @project.update_attributes(params[:project]) && @client.update_attributes(params[:client])
       redirect_to(:action => 'list_current_projects')
     else
-      #if save fails, redisplay form to user can fix problems
       render('edit')
     end
   end
   
-  def convert_project
-    @project = Project.find(params[:id])
-  end
-  
-  def conversion_project
-    #Find object using form parameters
-    @project = Project.find(params[:id])
-    @client = Client.find(@project.client_id)
-    @project.update_attributes(params[:project])
-    if @project.status == 'Current Project'
-        @project.save
-        #Allows client to display in the People section if the project is won.
-        @client.status = "Active"
-        @client.save
-    elsif @project.status == "Past Project"
-        @project.save
-        #Prevents client from displaying in the People section if the project is not won yet.
-        @client.status = "Active"
-        @client.save
-    elsif @project.status == "Current Lead"
-        @project.save
-        #Prevents client from displaying in the People section if the project is not won yet.
-        @client.status = "Lead"
-        @client.save
-    end
-    redirect_to(:action => 'list_current_projects')
-    
-  end
-  
   def edit_tasklist
-    @project = Project.find(params[:id])
+    @project = @builder.projects.find(params[:id])
     @tasklist = @project.tasklist
   end
   
@@ -125,69 +77,6 @@ class ProjectsController < ApplicationController
       render('edit_tasklist')
     end
   end
-
-  def specifications
-    @project = Project.find(params[:id])
-    @specifications = @project.specifications
-  end
-  
-  def new_specification
-    @project = Project.find(params[:id])
-    @specification = Specification.new
-  end
-  
-  def create_specification
-    #Instantiate a new object using form parameters
-    @project = Project.find(params[:id])
-    @specification = Specification.new(params[:specification])
-    @category = Category.find(params[:category][:id])
-    @specification.category = @category
-    #save subject
-    if @specification.save 
-      
-      @project.specifications << @specification
-      @project.save
-      #@specification.save
-      #if save succeeds, redirect to list action
-      redirect_to(:action => 'specifications', :id => @specification.project_id)
-    else
-      #if save fails, redisplay form to user can fix problems
-      render('new_specification')
-    end
-  end
-  
-  def edit_specification
-    @specification = Specification.find(params[:id])
-    @category = @specification.category
-  end
-  
-  def update_specification
-    #Instantiate a new object using form parameters
-    @specification = Specification.find(params[:id])
-    @category = Category.find(params[:category][:id])
-    @specification.category = @category
-    #save subject
-    if @specification.update_attributes(params[:specification])
-      #if save succeeds, redirect to list action
-      redirect_to(:action => 'specifications', :id => @specification.project_id)
-    else
-      #if save fails, redisplay form to user can fix problems
-      render('new_specification')
-    end
-  end  
-  
-  def delete_specification
-    @specification = Specification.find(params[:id])
-  end
-  
-  def destroy_specification
-    @specification = Specification.find(params[:id])
-    @id = @specification.project_id
-    @specification.destroy
-    redirect_to(:action => 'specifications', :id => @id)
-    
-  end
-  
   
   def change_orders
     @project = Project.find(params[:id])
@@ -400,62 +289,6 @@ class ProjectsController < ApplicationController
     @tasklist.destroy
     redirect_to(:action => 'select_tasklist', id: @project_id)
   end
-  
-  def bids
-    @project = Project.find(params[:id])
-    @bids = @project.bids
-  end
-  
-  def new_bid
-    @project = Project.find(params[:id])
-    @bid = @project.bids.build
-  end
-  
-  def create_bid
-    @project = Project.find(params[:id])
-    @bid = Bid.new(params[:bid])
-    @bid.project = @project
-    if @bid.save
-      redirect_to(:action => 'bids', :id => @bid.project_id)
-    else
-      render('new_bid')
-    end
-  end
-  
-  def edit_bid
-    @bid = Bid.find(params[:id])
-    @project = @bid.project
-  end
-
-  def update_bid
-    @bid = Bid.find(params[:id])
-    @project = @bid.project
-    # Destroy all old bids_items if category changed
-    if params[:bid][:category_id].present? && @bid.category_id.to_s != params[:bid][:category_id]
-      @bid.bids_items.each do |bi|
-        params[:bid][:bids_items_attributes] << {id: bi.id, _destroy: true}.with_indifferent_access
-      end
-    end
-    if @bid.update_attributes(params[:bid])
-      redirect_to(:action => 'bids', :id => @bid.project_id)
-    else
-      render('edit_bid')
-    end
-  end
-
-  def delete_bid
-    @bid = Bid.find(params[:id])
-  end
-
-  def destroy_bid
-    @bid = Bid.find(params[:id])
-    @id = @bid.project_id
-    if @bid.destroy
-      redirect_to(:action => 'bids', :id => @id)
-    else
-      render('delete_bid')
-    end
-  end
 
   def budget
     @project = Project.find(params[:id])
@@ -471,34 +304,14 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def show_project_items
-    @project = Project.find(params[:project_id])
-    @bid = params[:bid_id].present? ? Bid.find(params[:bid_id]) : Bid.new
-    categories_template = CategoriesTemplate.where(:category_id => params[:bid][:category_id], :template_id => @project.estimates.first.template.id).first
-    if categories_template
-      @items = categories_template.items
-      @co_items = @project.co_items(categories_template.category)
-    else
-      change_orders_categories = ChangeOrdersCategory.where('category_id = ? AND change_order_id in (?)', params[:bid][:category_id], @project.change_orders.pluck(:id))
-      @co_items = change_orders_categories.map(&:items).flatten
-    end
-    respond_to do |format|
-      format.js {}
-    end
-  end
-
   def search_category_by_name
     categories_templates = []
     raw_categories = []
     unless params[:project_id].blank?
-      original_categories = []
       project = Project.find(params[:project_id])
-      if project.estimates.any?
-        project.estimates.each do |e|
-          categories_templates+= e.template.categories_templates
-          original_categories+= e.template.categories_templates.map { |c| c.category }
-        end
-      end
+      categories_templates= project.committed_estimate.template.categories_templates
+      original_categories= project.committed_estimate.template.categories_templates.map { |c| c.category }
+
       raw_categories = @builder.categories.raw.reject { |c| original_categories.map { |c| c[:name] }.include? c.name }
       categories_templates.select! { |ct| ct.category.name == params[:name] }
       raw_categories.select! { |c| c.name == params[:name] }

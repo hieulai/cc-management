@@ -3,12 +3,8 @@ module AccountingHelper
     project = purchasable.project
     return [] unless project
     result = []
-    original_categories = []
-    if project.estimates.any?
-      project.estimates.each do |e|
-        original_categories+= e.template.categories_templates.sort_by { |c| c.category.name }.map { |c| c.category }
-      end
-    end
+    original_categories= project.committed_estimate.template.categories_templates.sort_by { |c| c.category.name }.map { |c| c.category }
+
     raw_categories = @builder.categories.raw.reject { |c| original_categories.map { |c| c[:name] }.include? c.name }
     original_categories = original_categories.reject { |c| purchasable.categories_templates.pluck(:category_id).include? c.id }
     result << ['From estimate', original_categories.map { |c| [c.name, c.id] }] if original_categories.any?

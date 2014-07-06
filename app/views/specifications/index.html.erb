@@ -2,7 +2,7 @@
     <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
-            <%= link_to("+ New Specification", {:action => 'new_specification', :id => @project.id}, :class => 'add action-button') %>
+            <%= link_to("+ New Specification", {:action => 'new', :estimate_id => @estimate.id}, :class => 'add action-button') %>
             <span class="trigger help action-button">Instructions >></span>
 
             <div class="instructions">
@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="large-6 medium-6 columns">
-            <h1>Specifications for: <%= @project.name %></h1>
+            <h1>Specifications for: <%= @estimate.project.name %></h1>
         </div>
         <div class="large-3 medium-2 columns">
         </div>
@@ -27,8 +27,8 @@
                 <% @specifications.each do |spec| %>
                     <tr>
                         <td class="center">
-                            <%= link_to("Edit", {:action => 'edit_specification', :id => spec.id}, :class => 'table-action edit') %>
-                            <%= link_to("Delete", {:action => 'delete_specification', :id => spec.id}, :class => 'table-action delete') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => spec.id}, :class => 'table-action edit') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => spec.id}, :class => 'table-action delete') %>
                         </td>
                         <td><%= spec.category.name %></td>
                         <td><%= spec.name %></td>

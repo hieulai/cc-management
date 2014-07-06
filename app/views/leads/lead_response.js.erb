@@ -1,0 +1,18 @@
+<% if @project.estimates.commitments.empty?  %>
+  <% if @project.estimates.empty? %>
+      $.rails.createConfirmDialog('Information', 'An estimate must be created before a project can be made active.', true);
+  <% else %>
+    if ($(".modal").size() > 0) {
+      $(".modal").remove();
+    }
+    var content = '<%= escape_javascript(render :partial =>  'estimates', :locals => {:estimates => @project.estimates}) %>';
+    $.rails.createConfirmDialog('Information', content, false, true);
+    $('#confirmation-dialog .confirm').on('click', function () {
+      var $form = $("form#commit_estimate");
+      $form.submit();
+    });
+
+  <% end %>
+<% else %>
+  $.rails.createConfirmDialog('Information', '<%= escape_javascript(@project.errors.full_messages.join(".<br/>").html_safe) %>', true);
+<% end %>

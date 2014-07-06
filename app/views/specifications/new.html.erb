@@ -3,7 +3,7 @@
     <div class="zurb-row">
         <div class="columns">
             <h2>Add New Specification</h2>
-            <%= form_for @specification, :url => {:action => 'create_specification', :id => @project.id}, :html => {:class => 'form-horizontal'} do |f| %>
+            <%= form_for @specification, :method => :post, :html => {:class => 'form-horizontal'} do |f| %>
                 <% if @specification.errors.any? %>
                     <div id="errorExplanation">
                         <h2><%= pluralize(@specification.errors.count, "Error") %> prohibited
@@ -15,7 +15,7 @@
                         </ul>
                     </div>
                 <% end %>
-                <%= render(:partial => "spec_form", :locals => {:f => f}) %>
+                <%= render(:partial => "form", :locals => {:f => f}) %>
                 <div class="control-group">
                     <div class='controls'>
                         <%= submit_tag("Create", :class => 'btn') %>

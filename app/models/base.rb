@@ -2,7 +2,6 @@ module Base
   class Builder < Company
 
     #Relations
-    has_many :architects
     has_many :clients
     has_many :projects
     has_many :estimates
@@ -21,8 +20,8 @@ module Base
     has_many :payments
     has_many :invoices
     has_many :deposits
-    has_many :subcontractors
-    has_many :suppliers
+    has_many :bids
+    has_many :specifications
 
     after_create :create_default_accounts
 

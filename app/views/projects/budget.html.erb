@@ -10,12 +10,10 @@
     <div class="zurb-row">
         <div class="columns">
             <h2>Budget for <%= @project.name %> </h2>
-            <%- @project.estimates.each do |e| %>
-              <% if e.kind =="Cost Plus Bid" %>
-                <%= render :partial => 'projects/cost_plus_bid/template', :locals => {:template => e.template} %>
-              <% else %>
-                <%= render :partial => 'template', :locals => {:template => e.template} %>
-              <% end %>
+            <% if @project.committed_estimate.kind =="Cost Plus Bid" %>
+              <%= render :partial => 'projects/cost_plus_bid/template', :locals => {:template => @project.committed_estimate.template} %>
+            <% else %>
+              <%= render :partial => 'template', :locals => {:template => @project.committed_estimate.template} %>
             <% end %>
         </div>
     </div>

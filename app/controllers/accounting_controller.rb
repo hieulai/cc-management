@@ -495,7 +495,7 @@ class AccountingController < ApplicationController
     @purchasable.project = project
     category = params[:category_select].present? ? Category.find(params[:category_select]) : nil
     if project && category
-      @categories_template = CategoriesTemplate.where(:category_id => category.id, :template_id => project.estimates.first.template.id).first_or_initialize
+      @categories_template = CategoriesTemplate.where(:category_id => category.id, :template_id => project.committed_estimate.template.id).first_or_initialize
       @p_ct = @categories_template.send("#{@type.pluralize}_categories_templates".to_sym).where("#{@type}_id".to_sym => @purchasable.id).first_or_initialize
     else
       @categories_template = nil
@@ -683,14 +683,14 @@ class AccountingController < ApplicationController
       params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym].each do |p_ct|
         next if p_ct[:category_id].blank? && p_ct[:_destroy] == true.to_s
         category_id = p_ct[:category_id].presence || Category.create({name: p_ct[:category_name]}).id
-        category_template = CategoriesTemplate.where(:category_id => category_id, :template_id => project.estimates.first.template.id).first
+        category_template = CategoriesTemplate.where(:category_id => category_id, :template_id => project.committed_estimate.template.id).first
         unless category_template
           category = Category.find(category_id)
           if category
-            category_template = category.categories_templates.where(:template_id => project.estimates.first.template.id).first
+            category_template = category.categories_templates.where(:template_id => project.committed_estimate.template.id).first
           end
           unless category_template
-            category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.estimates.first.template.id, :purchased => true)
+            category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.committed_estimate.template.id, :purchased => true)
           end
         end
         p_ct[:categories_template_id] = category_template.id

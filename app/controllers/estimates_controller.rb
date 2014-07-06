@@ -13,7 +13,7 @@ class EstimatesController < ApplicationController
     end
 
     def show
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
       respond_to do |format|
         format.html
         format.pdf do
@@ -26,23 +26,22 @@ class EstimatesController < ApplicationController
     end
 
     def show_email
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
     end
 
     def send_email
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
       Mailer.delay.send_estimate(params[:to], params[:subject], params[:body], @estimate)
       redirect_to :action => 'show_email', :id => @estimate.id, :notice => "Email was sent."
     end
 
     def new
-      @estimate = Estimate.new
+      @estimate = @builder.estimates.new
     end
 
     def create
-      @builder = Base::Builder.find(session[:builder_id])
-      @template = Template.find(params[:template][:id])
-      @estimate = Estimate.new(params[:estimate].merge(:builder_id => @builder.id))
+      @template = @builder.templates.find(params[:template][:id])
+      @estimate = @builder.estimates.new(params[:estimate].merge(:builder_id => @builder.id))
       @estimate.template = @template.clone_with_associations
       if @estimate.save
         #Assigns all appropriate measurements to the Estimate
@@ -59,29 +58,29 @@ class EstimatesController < ApplicationController
     end
 
     def edit
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
     end
 
-    def update
-      #Find object using form parameters
-      @estimate = Estimate.find(params[:id])
-      if @estimate.update_attributes(params[:estimate])
-        #if save succeeds, redirect to list action
-        redirect_to(:action => 'list_current')
-      else
-        #if save fails, redisplay form to user can fix problems
-        render('edit')
-      end
+  def update
+    #Find object using form parameters
+    @estimate = @builder.estimates.find(params[:id])
+    if @estimate.update_attributes(params[:estimate])
+      #if save succeeds, redirect to list action
+      redirect_to(:action => 'list_current')
+    else
+      #if save fails, redisplay form to user can fix problems
+      render('edit')
     end
+  end
 
     def edit_measurements
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
       @measurements = @estimate.measurements
     end
 
     def update_measurements
       #Find object using form parameters
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
       #Update subject
       if @estimate.update_attributes(params[:estimate])
         #if save succeeds, redirect to list action
@@ -93,7 +92,7 @@ class EstimatesController < ApplicationController
     end
 
     def edit_templates
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
       @template = @estimate.template
       @items = Item.where(builder_id: session[:builder_id]).order(:name)
       @categories = Category.where(builder_id: session[:builder_id]).order(:name)
@@ -101,7 +100,7 @@ class EstimatesController < ApplicationController
 
     def update_templates
       #Find object using form parameters
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
       #Update subject
       if @estimate.update_attributes(params[:estimate])
         #if save succeeds, redirect to list action
@@ -113,12 +112,12 @@ class EstimatesController < ApplicationController
     end
 
     def convert
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
     end
 
     def conversion
       #Find object using form parameters
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
       #Update subject
       if @estimate.update_attributes(params[:estimate])
         #if save succeeds, redirect to list action
@@ -130,11 +129,11 @@ class EstimatesController < ApplicationController
     end
 
     def delete
-      @estimate = Estimate.find(params[:id])
+      @estimate = @builder.estimates.find(params[:id])
     end
 
   def destroy
-    @estimate = Estimate.find(params[:id])
+    @estimate = @builder.estimates.find(params[:id])
     if @estimate.destroy_with_associations
       redirect_to(:action => 'list_current')
     else
@@ -143,7 +142,7 @@ class EstimatesController < ApplicationController
   end
 
   def switch_type
-    @estimate = Estimate.find(params[:id])
+    @estimate = @builder.estimates.find(params[:id])
     @estimate.kind = params[:estimate][:kind]
     respond_to do |format|
       format.js {}
@@ -171,5 +170,4 @@ class EstimatesController < ApplicationController
         format.js {}
       end
     end
-
 end

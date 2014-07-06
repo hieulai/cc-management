@@ -8,7 +8,7 @@
 
 <div class="control-group">
     <%= label :project_id, 'Project Name', class: 'col-lg-2 control-label' %>
-    <div class="controls"><%= f.select(:project_id, Project.where("builder_id = ? AND status in ('Current Lead', 'Current Project')", session[:builder_id]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %></div>
+    <div class="controls"><%= f.select(:project_id, @builder.projects.where(status: [Project::CURRENT, Project::CURRENT_LEAD]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %></div>
 </div>
 <div class="control-group">
     <%= label :template_id, 'Template', class: 'col-lg-2 control-label' %>

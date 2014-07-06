@@ -1,0 +1,31 @@
+<div>
+    An estimate must be chosen before a project can be made active.
+    <%= form_tag url_for({:controller => 'leads', :action => 'commit_estimate'}), :remote => true, id: 'commit_estimate' do |p| %>
+      <table class="grid-view margin-bottom responsive" summary="Estimate List">
+          <tr class="header">
+              <th></th>
+              <th>ID</th>
+              <th>Template</th>
+              <th>Status</th>
+              <th>Due Date</th>
+              <th>Exp. Revenue</th>
+              <th>Exp. Profit</th>
+              <th>Notes</th>
+          </tr>
+          <% estimates.each_with_index do |estimate, i| %>
+            <tr class="clickable  <%= i == 0 ? "selected" : "" %>">
+                <td class="center">
+                    <%= radio_button_tag 'id', estimate.id, i == 0, class: 'clickable-link' %>
+                </td>
+                <td><%= estimate.id %></td>
+                <td><%= estimate.template.name %></td>
+                <td><%= estimate.progress %></td>
+                <td><%= estimate.deadline %></td>
+                <td><%= price_tag(estimate.revenue) %></td>
+                <td><%= price_tag(estimate.profit) %></td>
+                <td><%= estimate.notes %></td>
+            </tr>
+          <% end %>
+      </table>
+    <% end %>
+</div>

@@ -7,15 +7,19 @@ class Estimate < ActiveRecord::Base
   has_many :measurements , :dependent => :destroy
   has_one :template, :dependent => :destroy
   has_many :invoices, :dependent => :destroy
+  has_many :bids, :dependent => :destroy
+  has_many :specifications, :dependent => :destroy
 
   scope :current, where(status: "Current Estimate")
   scope :past, where(status: "Past Estimate")
+  scope :commitments, where(committed: true)
 
+  attr_accessible :progress, :status, :deadline, :revenue, :profit, :margin, :notes, :project_id, :measurements_attributes, :builder_id, :kind, :committed
   accepts_nested_attributes_for :measurements
 
-  attr_accessible :progress, :status, :deadline, :revenue, :profit, :margin, :notes, :project_id, :measurements_attributes, :builder_id, :kind
-
   validates_presence_of :project, :builder
+
+  before_save :check_commitment, :if => Proc.new { |e| e.committed && !e.committed_was }
 
   def undestroyable?
     template.undestroyable?
@@ -27,6 +31,13 @@ class Estimate < ActiveRecord::Base
 
   def cost_plus_bid?
     kind == "Cost Plus Bid"
+  end
+
+  def cos_categories
+    categories = Category.where(:id => template.categories_templates.pluck(:category_id))
+    co_categories = ChangeOrdersCategory.where(:change_order_id => project.change_orders.approved.pluck(:id)).uniq
+    cos_categories = co_categories.map(&:category).uniq
+    cos_categories.reject! { |c| categories.pluck(:name).include? c.name } || Array.new
   end
 
   def destroy_with_associations
@@ -81,4 +92,12 @@ class Estimate < ActiveRecord::Base
       false
     end
   end
+
+  def check_commitment
+    if self.project.estimates.commitments.any?
+      errors.add(:committed, "can not be set more than one estimate")
+      false
+    end
+  end
+
 end

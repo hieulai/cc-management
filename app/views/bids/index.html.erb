@@ -1,8 +1,8 @@
 <div>
-    <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
+    <%= render(:partial => "layouts/estimating_sub_menu") %>
     <div class="zurb-row main-action-bar">
         <div class="large-3 medium-4 columns">
-            <%= link_to("+ New Bid", {:action => 'new_bid', :id => @project.id}, :class => 'add action-button') %>
+            <%= link_to("+ New Bid", {:action => 'new', :estimate_id => @estimate.id}, :class => 'add action-button') %>
             <span class="trigger help action-button">Instructions >></span>
 
             <div class="instructions">
@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="large-6 medium-6 columns">
-            <h1>Bids for: <%= @project.name %></h1>
+            <h1>Bids for: <%= @estimate.project.name %></h1>
         </div>
         <div class="large-3 medium-2 columns">
         </div>
@@ -30,8 +30,8 @@
                 <% @bids.each do |bid| %>
                     <tr>
                         <td class="center">
-                            <%= link_to("Edit", {:action => 'edit_bid', :id => bid.id}, :class => 'edit table-action') %>
-                            <%= link_to("Delete", {:action => 'delete_bid', :id => bid.id}, :class => 'delete table-action') %>
+                            <%= link_to("Edit", {:action => 'edit', :id => bid.id}, :class => 'edit table-action') %>
+                            <%= link_to("Delete", {:action => 'delete', :id => bid.id}, :class => 'delete table-action') %>
                         </td>
                         <td><%= bid.category.name %></td>
                         <td><%= bid.vendor.try(:display_name) %></td>

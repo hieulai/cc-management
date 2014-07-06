@@ -32,10 +32,8 @@
                     <tr id="project_<%= project.id %>" class="project-rows">
                         <td class="center">
                             <%= link_to("Tasks", {:action => 'tasklist', :id => project.id}, :title => 'Tasks', :class => 'task-list table-action') %>
-                            <%= link_to("Bids", {:action => 'bids', :id => project.id}, :title => 'Bids', :class => 'bid table-action') %>
                             <%= link_to("Budget", {:action => 'budget', :id => project.id}, :title => 'Budget', :class => 'budget table-action') %>
                             <%= link_to("COs", {:action => 'change_orders', :id => project.id}, :title => 'COs', :class => 'change-order table-action') %>
-                            <%= link_to("Specs", {:action => 'specifications', :id => project.id}, :title => 'Specs', :class => 'specs table-action') %>
                             <%= link_to("Edit", {:action => 'edit_project', :id => project.id}, :title => 'Edit', :class => 'edit table-action', :style => 'display: none;') %>
                         </td>
                         <td><a href='<%= project.id %>'></a><%= project.name %></td>

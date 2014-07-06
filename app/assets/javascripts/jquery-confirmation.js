@@ -23,7 +23,7 @@ $.rails.showConfirmDialog = function (link) {
 };
 
 
-$.rails.createConfirmDialog = function (title, message, isInfo) {
+$.rails.createConfirmDialog = function (title, message, isInfo, showOnConfirm) {
     var header, body, footer, dialog;
 
     header = "<div class=\"modal-header\">";
@@ -39,10 +39,10 @@ $.rails.createConfirmDialog = function (title, message, isInfo) {
     } else {
         footer = "<div class=\"modal-footer\">";
         footer += "<a data-dismiss=\"modal\" class=\"btn\" id=\"cancel_btn\">Cancel</a>";
-        footer += "<a data-dismiss=\"modal\" class=\"btn btn-primary confirm\" id=\"confirm_btn\">OK</a>";
+        footer += "<a " + (showOnConfirm ? "" : "data-dismiss=\"modal\"") + "class=\"btn btn-primary confirm\" id=\"confirm_btn\">OK</a>";
         footer += "</div>";
     }
     dialog = "<div class=\"modal\" id=\"confirmation-dialog\">" + header + body + footer + "</div>";
 
-    $(dialog).modal();
+    return $(dialog).modal();
 }

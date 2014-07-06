@@ -2,7 +2,7 @@
     <%= render(:partial => "layouts/project_mgmt_sub_menu") %>
     <h2>Edit Specification</h2>
 
-    <%= form_for @specification, :url => {:action => 'update_specification', :id => @specification.id}, html: {class: 'form-horizontal'} do |f| %>
+    <%= form_for @specification, :method => :put, html: {class: 'form-horizontal'} do |f| %>
 
       <% if @specification.errors.any? %>
         <div id="errorExplanation">
@@ -15,7 +15,7 @@
             </ul>
         </div>
       <% end %>
-      <%= render(:partial => "spec_form", :locals => {:f => f}) %>
+      <%= render(:partial => "form", :locals => {:f => f}) %>
 
       <div class="control-group">
           <div class='controls'>

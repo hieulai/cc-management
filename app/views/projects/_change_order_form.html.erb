@@ -25,7 +25,7 @@
     <%= f.label :notes, 'Notes', class: 'col-lg-2 control-label' %>
     <div class="controls"><%= f.text_area :notes, size: '40x5' %></div>
 </div>
-<% estimate = @change_order.project.estimates.first %>
+<% estimate = @change_order.project.committed_estimate %>
 <% if estimate.kind =="Cost Plus Bid" %>
   <%= render('projects/cost_plus_bid/change_order_table_items', f: f) %>
 <% else %>

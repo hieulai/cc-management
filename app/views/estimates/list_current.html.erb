@@ -27,6 +27,8 @@
                     <tr>
                         <td class="center">
                             <%= link_to("Meas", {:action => 'edit_measurements', :id => estimate.id}, :title => 'Meas', :class => 'measure table-action') %>
+                            <%= link_to("Bids", bids_path(:estimate_id => estimate.id), :title => 'Bids', :class => 'bid table-action') %>
+                            <%= link_to("Specs", specifications_path(:estimate_id => estimate.id), :title => 'Specs', :class => 'specs table-action') %>
                             <%= link_to("Edit", {:action => 'edit', :id => estimate.id}, :title => 'Edit', :class => 'edit table-action') %>
                             <%= link_to("Delete", {:action => 'delete', :id => estimate.id}, :title => 'Delete', :class => 'delete table-action') %>
                         </td>

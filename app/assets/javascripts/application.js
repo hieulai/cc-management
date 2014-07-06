@@ -210,11 +210,13 @@ var Application = (function ($) {
 
     var setupTrClickable = function () {
         $(document).on('click', 'tr.clickable', function (e) {
-            var $link = $(this).find("a.clickable-link");
-            if ($link.data('remote') != null) {
+            $(this).closest("table").find("tr.selected").removeClass("selected");
+            $(this).addClass("selected");
+            var $link = $(this).find(".clickable-link");
+            if ($link.prop('tagName') == 'INPUT') {
+                $link.prop('checked', true);
+            } else if ($link.prop('tagName') == 'A' && $link.data('remote') != null) {
                 $link.click();
-                $(this).closest("table").find("tr.selected").removeClass("selected");
-                $(this).addClass("selected");
             } else {
                 window.location = $link.attr("href");
             }

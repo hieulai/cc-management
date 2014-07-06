@@ -66,6 +66,14 @@ Cc::Application.routes.draw do
     end
   end
 
+  resources :bids do
+    collection do
+      get :show_estimate_items
+    end
+  end
+
+  resources :specifications
+
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   match ':controller(/:action(/:id))(.:format)'

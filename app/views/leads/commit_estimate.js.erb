@@ -1,0 +1,6 @@
+<% if @estimate.errors.any? %>
+  alert(<%= @estimate.errors.full_messages.join(".") %>);
+<% else %>
+  $(".modal").data("modal").hide();
+  $(".lead-form").submit();
+<% end %>

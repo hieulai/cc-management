@@ -7,10 +7,12 @@
 <% end %>
 <h2>Bid Info:</h2>
 
+<%= f.hidden_field(:estimate_id) %>
+
 <div class="control-group">
     <%= f.label :categories_template, "Category", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.select(:category_id, grouped_bid_category_options(project), {:selected => @bid.category.try(:id), :include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_project_items", :project_id => project.id, :bid_id => @bid.id)}) %>
+        <%= f.select(:category_id, grouped_bid_category_options(@bid.estimate), {:selected => @bid.category.try(:id), :include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_estimate_items", :estimate_id => @bid.estimate.id, :id => @bid.id)}) %>
     </div>
 </div>
 <div class="control-group">
@@ -39,13 +41,11 @@
     </div>
 </div>
 <div id="item-placeholder">
-    <% if @bid.project.estimates.any? %>
-      <% if @bid.project.estimates.first.kind =="Cost Plus Bid" %>
-        <%= render(:partial => "projects/cost_plus_bid/bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
+      <% if @bid.estimate.kind =="Cost Plus Bid" %>
+        <%= render(:partial => "bids/cost_plus_bid/bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
       <% else %>
         <%= render(:partial => "bid_item", :locals => {:bid => @bid, :items => @bid.items, :co_items => @bid.co_items}) %>
       <% end %>
-    <% end %>
 </div>
 
 

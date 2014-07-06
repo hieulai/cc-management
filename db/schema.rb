@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140627151638) do
+ActiveRecord::Schema.define(:version => 20140705153357) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -81,9 +81,13 @@ ActiveRecord::Schema.define(:version => 20140627151638) do
     t.integer  "vendor_id"
     t.date     "due_date"
     t.integer  "category_id"
+    t.integer  "estimate_id"
+    t.integer  "builder_id"
   end
 
+  add_index "bids", ["builder_id"], :name => "index_bids_on_builder_id"
   add_index "bids", ["category_id"], :name => "index_bids_on_category_id"
+  add_index "bids", ["estimate_id"], :name => "index_bids_on_estimate_id"
   add_index "bids", ["project_id"], :name => "index_bids_on_project_id"
   add_index "bids", ["vendor_id"], :name => "index_bids_on_vendor_id"
 
@@ -323,6 +327,7 @@ ActiveRecord::Schema.define(:version => 20140627151638) do
     t.datetime "created_at",                                                                :null => false
     t.datetime "updated_at",                                                                :null => false
     t.string   "kind"
+    t.boolean  "committed"
   end
 
   add_index "estimates", ["builder_id"], :name => "index_estimates_on_builder_id"
@@ -662,8 +667,12 @@ ActiveRecord::Schema.define(:version => 20140627151638) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.text     "description"
+    t.integer  "estimate_id"
+    t.integer  "builder_id"
   end
 
+  add_index "specifications", ["builder_id"], :name => "index_specifications_on_builder_id"
+  add_index "specifications", ["estimate_id"], :name => "index_specifications_on_estimate_id"
   add_index "specifications", ["project_id"], :name => "index_specifications_on_project_id"
 
   create_table "tasklists", :force => true do |t|
