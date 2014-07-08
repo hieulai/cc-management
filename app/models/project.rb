@@ -124,11 +124,14 @@ class Project < ActiveRecord::Base
   end
 
   def update_estimate_status
-    return true unless committed_estimate
-    if [Project::PAST].include?(self.status)
-      committed_estimate.update_attribute(:status, Estimate::PAST)
-    elsif [Project::CURRENT].include?(self.status)
-      committed_estimate.update_attribute(:status, Estimate::CURRENT)
+    if ["Past Project"].include?(self.status)
+      estimates.each do |e|
+        e.update_attribute(:status, Estimate::PAST)
+      end
+    elsif ["Current Project"].include?(self.status)
+      estimates.each do |e|
+        e.update_attribute(:status, Estimate::CURRENT)
+      end
     end
   end
 
