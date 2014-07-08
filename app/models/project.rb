@@ -26,6 +26,7 @@ class Project < ActiveRecord::Base
   before_save :toggle_committed_estimate, :if => :status_changed?
   after_initialize :default_values
   after_save :update_client_status, :if => :status_changed?
+  after_save :update_estimate_status, :if => :status_changed?
   after_save :update_indexes
   after_destroy :destroy_client, :if => Proc.new { |p| p.client.projects.empty? }
 
@@ -119,6 +120,15 @@ class Project < ActiveRecord::Base
         errors[:base] << "An estimate must be created before a project can be made active."
         false
       end
+    end
+  end
+
+  def update_estimate_status
+    return true unless committed_estimate
+    if [Project::CURRENT, Project::CURRENT_LEAD].include?(self.status_was) && [Project::PAST, Project::PAST_LEAD].include?(self.status)
+      committed_estimate.update_attribute(:status, Estimate::PAST)
+    elsif [Project::PAST, Project::PAST_LEAD].include?(self.status_was) && [Project::CURRENT, Project::CURRENT_LEAD].include?(self.status)
+      committed_estimate.update_attribute(:status, Estimate::CURRENT)
     end
   end
 

@@ -1,4 +1,6 @@
 class Estimate < ActiveRecord::Base
+  CURRENT = 'Current Estimate'
+  PAST =  'Past Estimate'
   before_destroy :check_destroyable
 
   # mount_uploader :data, DataUploader
@@ -10,8 +12,8 @@ class Estimate < ActiveRecord::Base
   has_many :bids, :dependent => :destroy
   has_many :specifications, :dependent => :destroy
 
-  scope :current, where(status: "Current Estimate")
-  scope :past, where(status: "Past Estimate")
+  scope :current, where(status: CURRENT)
+  scope :past, where(status: PAST)
   scope :commitments, where(committed: true)
 
   attr_accessible :progress, :status, :deadline, :revenue, :profit, :margin, :notes, :project_id, :measurements_attributes, :builder_id, :kind, :committed
