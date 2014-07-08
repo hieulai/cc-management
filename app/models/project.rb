@@ -125,9 +125,9 @@ class Project < ActiveRecord::Base
 
   def update_estimate_status
     return true unless committed_estimate
-    if [Project::CURRENT, Project::CURRENT_LEAD].include?(self.status_was) && [Project::PAST, Project::PAST_LEAD].include?(self.status)
+    if [Project::PAST].include?(self.status)
       committed_estimate.update_attribute(:status, Estimate::PAST)
-    elsif [Project::PAST, Project::PAST_LEAD].include?(self.status_was) && [Project::CURRENT, Project::CURRENT_LEAD].include?(self.status)
+    elsif [Project::CURRENT].include?(self.status)
       committed_estimate.update_attribute(:status, Estimate::CURRENT)
     end
   end

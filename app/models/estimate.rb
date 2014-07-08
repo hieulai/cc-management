@@ -13,6 +13,7 @@ class Estimate < ActiveRecord::Base
   has_many :specifications, :dependent => :destroy
 
   scope :current, where(status: CURRENT)
+  scope :current_project, joins(:project).where("projects.status = ?", Project::CURRENT)
   scope :past, where(status: PAST)
   scope :commitments, where(committed: true)
 

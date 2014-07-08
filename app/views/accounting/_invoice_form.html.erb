@@ -22,7 +22,7 @@
     <div class="control-group">
         <%= f.label :estimate_id, "Estimate", class: 'col-lg-2 control-label' %>
         <div class="controls">
-            <%= f.select(:estimate_id, @estimates = @builder.estimates.current.collect { |s| [s.project.name, s.id] }, {:include_blank => true}) %>
+            <%= f.select(:estimate_id, @estimates = @builder.estimates.current.current_project.collect { |s| [s.project.name, s.id] }, {:include_blank => true}) %>
             <%= link_to "", url_for(:action => "show_estimate_items", :invoice_id => @invoice.id), :id => "hidden_estimate_link", :remote => true, :style => "display: none" %>
         </div>
     </div>
