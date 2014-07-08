@@ -31,7 +31,7 @@ class ProjectsController < ApplicationController
     if @project.update_attributes(params[:project]) && @client.update_attributes(params[:client])
       redirect_to(:action => 'list_current_projects')
     else
-      render('edit')
+      render('edit_project')
     end
   end
   
