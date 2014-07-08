@@ -2,9 +2,9 @@ module Personable
   extend ActiveSupport::Concern
 
   included do
-    has_many :payments, :as => :payer
-    has_many :receipts, as: :payer
-    has_many :bills, as: :payer
+    has_many :payments, :as => :payer, :dependent => :destroy
+    has_many :receipts, as: :payer, :dependent => :destroy
+    has_many :bills, as: :payer, :dependent => :destroy
     has_many :projects_payers, :as => :payer, :dependent => :destroy
     has_many :accounting_transactions, :as => :payer, :dependent => :destroy
 

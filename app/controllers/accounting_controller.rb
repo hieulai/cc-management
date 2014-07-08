@@ -377,7 +377,7 @@ class AccountingController < ApplicationController
   
   def edit_payment
     @payment = Payment.find(params[:id])
-    @bills = (@payment.bills + @payment.payer.bills.unpaid).uniq
+    @bills = (@payment.bills + (@payment.payer.try(:bills).try(:unpaid) || [])).uniq
   end
 
   def update_payment
