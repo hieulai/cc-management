@@ -658,7 +658,7 @@ class AccountingController < ApplicationController
     assign_categories_templates
 
     # Destroy all old po_cts if project changed
-    if params[@type.to_sym][:project_id].present? && params[@type.to_sym][:project_id] != @purchasable.project_id.to_s
+    if params[@type.to_sym][:project_id].present? && params[@type.to_sym][:project_id] != @purchasable.project_id.to_s && @purchasable.project
       @purchasable.send("#{@type.pluralize}_categories_templates".to_sym).each do |p_ct|
         params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym] << {id: p_ct.id, _destroy: true}.with_indifferent_access
       end

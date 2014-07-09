@@ -5,6 +5,8 @@ var type = "<%= Bill.name %>";
 
 if ($("tr.category[data-id]").size() == 0 || type == "<%= PurchaseOrder.name %>") {
   $('#table-placeholder').html('<%= escape_javascript(render(:partial => "#{@purchasable.class.name.underscore}_table", :locals => {:purchase_order => @purchasable, :bill => @purchasable})) %>');
+  Shared.calculateSubTotals();
+  Shared.calculateTotals();
 
 } else {
   // Restore bill's state on new selected project
