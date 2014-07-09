@@ -56,7 +56,7 @@ module Personable
   end
 
   def project_names
-    associated_projects.map(&:name).join(",")
+    associated_projects.compact.map(&:name).join(",")
   end
 
   def transactions(options ={})
