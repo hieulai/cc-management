@@ -1,5 +1,5 @@
 class Tasklist < ActiveRecord::Base
-
+  acts_as_paranoid
   belongs_to :project
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :tasks, dependent: :destroy

@@ -1,4 +1,5 @@
 class Invoice < ActiveRecord::Base
+  acts_as_paranoid
   include Cacheable
   before_destroy :check_readonly
 

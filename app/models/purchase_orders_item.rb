@@ -1,4 +1,5 @@
 class PurchaseOrdersItem < ActiveRecord::Base
+  acts_as_paranoid
   include Purchasable
 
   belongs_to :purchase_orders_categories_template

@@ -1,4 +1,5 @@
 class ReceiptsInvoice < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :receipt
   belongs_to :invoice
   attr_accessible :amount, :receipt_id, :invoice_id

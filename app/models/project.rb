@@ -3,6 +3,7 @@ class Project < ActiveRecord::Base
   PAST =  "Past Project"
   CURRENT_LEAD = 'Current Lead'
   PAST_LEAD = 'Past Lead'
+  acts_as_paranoid
 
   belongs_to :client, touch: true
   belongs_to :builder, :class_name => "Base::Builder"

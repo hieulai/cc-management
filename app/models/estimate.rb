@@ -1,6 +1,7 @@
 class Estimate < ActiveRecord::Base
   CURRENT = 'Current Estimate'
   PAST =  'Past Estimate'
+  acts_as_paranoid
   before_destroy :check_destroyable
 
   # mount_uploader :data, DataUploader

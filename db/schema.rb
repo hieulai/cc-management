@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.integer  "payer_id"
     t.string   "payer_type"
     t.integer  "project_id"
+    t.time     "deleted_at"
   end
 
   add_index "accounting_transactions", ["account_id"], :name => "index_accounting_transactions_on_account_id"
@@ -45,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.integer  "parent_id"
     t.datetime "opening_balance_updated_at"
     t.decimal  "opening_balance",            :precision => 10, :scale => 2
+    t.time     "deleted_at"
   end
 
   add_index "accounts", ["builder_id"], :name => "index_accounts_on_builder_id"
@@ -81,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.integer  "vendor_id"
     t.date     "due_date"
     t.integer  "category_id"
+    t.time     "deleted_at"
     t.integer  "builder_id"
     t.integer  "estimate_id"
   end
@@ -97,6 +100,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "amount",     :precision => 10, :scale => 2
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.time     "deleted_at"
   end
 
   create_table "bills", :force => true do |t|
@@ -125,6 +129,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.integer  "categories_template_id"
     t.datetime "created_at",             :null => false
     t.datetime "updated_at",             :null => false
+    t.time     "deleted_at"
   end
 
   add_index "bills_categories_templates", ["bill_id"], :name => "index_bills_categories_templates_on_bill_id"
@@ -157,6 +162,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "created_at",                                      :null => false
     t.datetime "updated_at",                                      :null => false
     t.integer  "specification_id"
+    t.time     "deleted_at"
   end
 
   add_index "categories", ["builder_id"], :name => "index_categories_on_builder_id"
@@ -197,6 +203,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.boolean  "approved"
+    t.time     "deleted_at"
   end
 
   add_index "change_orders", ["builder_id"], :name => "index_change_orders_on_builder_id"
@@ -207,6 +214,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.integer  "category_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.time     "deleted_at"
   end
 
   add_index "change_orders_categories", ["category_id"], :name => "index_change_orders_categories_on_category_id"
@@ -233,6 +241,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.string   "primary_phone_tag"
     t.string   "secondary_phone_tag"
     t.string   "website"
+    t.time     "deleted_at"
   end
 
   add_index "clients", ["builder_id"], :name => "index_clients_on_builder_id"
@@ -252,6 +261,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.string   "slogan"
     t.string   "logo"
     t.string   "type"
+    t.time     "deleted_at"
   end
 
   create_table "contacts", :force => true do |t|
@@ -272,6 +282,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.string   "company"
+    t.time     "deleted_at"
   end
 
   add_index "contacts", ["builder_id"], :name => "index_contacts_on_builder_id"
@@ -301,6 +312,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "updated_at",                                         :null => false
     t.string   "reference"
     t.decimal  "cached_total_amount", :precision => 10, :scale => 2
+    t.time     "deleted_at"
   end
 
   create_table "deposits_receipts", :force => true do |t|
@@ -309,6 +321,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "amount",     :precision => 10, :scale => 2
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.time     "deleted_at"
   end
 
   add_index "deposits_receipts", ["deposit_id"], :name => "index_deposits_receipts_on_deposit_id"
@@ -327,6 +340,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "created_at",                                                                :null => false
     t.datetime "updated_at",                                                                :null => false
     t.string   "kind"
+    t.time     "deleted_at"
     t.boolean  "committed"
   end
 
@@ -353,6 +367,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.date     "bill_from_date"
     t.date     "bill_to_date"
     t.decimal  "cached_total_amount", :precision => 10, :scale => 2
+    t.time     "deleted_at"
   end
 
   add_index "invoices", ["builder_id"], :name => "index_invoices_on_builder_id"
@@ -365,6 +380,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "amount",     :precision => 10, :scale => 2
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.time     "deleted_at"
   end
 
   add_index "invoices_accounts", ["account_id"], :name => "index_invoices_accounts_on_account_id"
@@ -376,6 +392,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "amount",                       :precision => 10, :scale => 2
     t.datetime "created_at",                                                  :null => false
     t.datetime "updated_at",                                                  :null => false
+    t.time     "deleted_at"
   end
 
   add_index "invoices_bills_categories_templates", ["bills_categories_template_id"], :name => "index_ibs_cts_on_bills_categories_template_id"
@@ -387,6 +404,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "amount",     :precision => 10, :scale => 2
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.time     "deleted_at"
   end
 
   create_table "items", :force => true do |t|
@@ -438,6 +456,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.boolean  "RR"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+    t.time     "deleted_at"
   end
 
   add_index "measurements", ["estimate_id"], :name => "index_measurements_on_estimate_id"
@@ -481,6 +500,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.string   "primary_phone"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.time     "deleted_at"
   end
 
   create_table "profiles", :force => true do |t|
@@ -497,6 +517,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.string   "profileable_type"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.time     "deleted_at"
   end
 
   add_index "profiles", ["builder_id"], :name => "index_profiles_on_builder_id"
@@ -522,6 +543,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.integer  "builder_id"
     t.integer  "first_name"
     t.string   "last_name"
+    t.time     "deleted_at"
   end
 
   add_index "projects", ["builder_id"], :name => "index_projects_on_builder_id"
@@ -533,6 +555,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.string   "payer_type"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.time     "deleted_at"
   end
 
   add_index "projects_payers", ["payer_id"], :name => "index_projects_payers_on_payer_id"
@@ -557,6 +580,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.text     "notes"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
+    t.time     "deleted_at"
   end
 
   add_index "prospects", ["builder_id"], :name => "index_prospects_on_builder_id"
@@ -576,6 +600,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "cached_total_amount", :precision => 10, :scale => 2
     t.integer  "payer_id"
     t.string   "payer_type"
+    t.time     "deleted_at"
   end
 
   add_index "purchase_orders", ["builder_id"], :name => "index_purchase_orders_on_builder_id"
@@ -587,6 +612,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.integer  "categories_template_id"
     t.datetime "created_at",             :null => false
     t.datetime "updated_at",             :null => false
+    t.time     "deleted_at"
   end
 
   add_index "purchase_orders_categories_templates", ["categories_template_id"], :name => "index_pos_cts_on_categories_template_id"
@@ -603,6 +629,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "updated_at",                                                            :null => false
     t.text     "memo"
     t.integer  "purchase_orders_categories_template_id"
+    t.time     "deleted_at"
   end
 
   add_index "purchase_orders_items", ["purchase_orders_categories_template_id"], :name => "index_pos_items_on_pos_ct_id"
@@ -623,6 +650,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "cached_total_amount", :precision => 10, :scale => 2
     t.string   "kind"
     t.decimal  "credit_amount",       :precision => 10, :scale => 2
+    t.time     "deleted_at"
   end
 
   create_table "receipts_invoices", :force => true do |t|
@@ -631,6 +659,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "amount",     :precision => 10, :scale => 2
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.time     "deleted_at"
   end
 
   add_index "receipts_invoices", ["invoice_id"], :name => "index_receipts_invoices_on_invoice_id"
@@ -644,6 +673,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.decimal  "amount",      :precision => 10, :scale => 2
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+    t.time     "deleted_at"
   end
 
   add_index "receipts_items", ["account_id"], :name => "index_receipts_items_on_account_id"
@@ -656,6 +686,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.text     "description"
+    t.time     "deleted_at"
     t.integer  "builder_id"
     t.integer  "estimate_id"
   end
@@ -673,6 +704,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.boolean  "default"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.time     "deleted_at"
   end
 
   add_index "tasklists", ["builder_id"], :name => "index_tasklists_on_builder_id"
@@ -687,6 +719,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
     t.integer  "position",         :default => 0
+    t.time     "deleted_at"
   end
 
   add_index "tasks", ["tasklist_id"], :name => "index_tasks_on_tasklist_id"
@@ -701,6 +734,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.boolean  "default"
     t.datetime "created_at",                                  :null => false
     t.datetime "updated_at",                                  :null => false
+    t.time     "deleted_at"
   end
 
   add_index "templates", ["builder_id"], :name => "index_templates_on_builder_id"
@@ -716,6 +750,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
     t.string   "kind"
+    t.time     "deleted_at"
   end
 
   create_table "un_job_costed_items", :force => true do |t|
@@ -746,6 +781,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.string   "encrypted_password",     :default => "", :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
+    t.time     "deleted_at"
   end
 
   add_index "users", ["builder_id"], :name => "index_users_on_builder_id"
@@ -778,6 +814,7 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
     t.string   "service_provided"
+    t.time     "deleted_at"
   end
 
   add_index "vendors", ["builder_id"], :name => "index_vendors_on_builder_id"

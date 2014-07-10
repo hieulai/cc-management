@@ -15,6 +15,7 @@ class Account < ActiveRecord::Base
   TOP = [REVENUE, EXPENSES, ASSETS, LIABILITIES, EQUITY]
   DEFAULTS = TOP + [ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS, COST_OF_GOODS_SOLD, RETAINED_EARNINGS, DEPOSITS_HELD, OPERATING_EXPENSES, CLIENT_CREDIT]
 
+  acts_as_paranoid
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :parent, class_name: "Account"
 

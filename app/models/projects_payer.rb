@@ -1,4 +1,5 @@
 class ProjectsPayer < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :payer, polymorphic: true
   belongs_to :project
 

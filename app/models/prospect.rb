@@ -1,4 +1,5 @@
 class Prospect < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :builder, :class_name => "Base::Builder"
   
   attr_accessible :company, :first_name, :last_name, :email, :primary_phone, :secondary_phone, 

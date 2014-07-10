@@ -7,6 +7,7 @@ class Receipt < ActiveRecord::Base
            ["uninvoiced", UNINVOICED],
            ["client_credit", CLIENT_CREDIT]]
   NEGATIVES = [Account::ACCOUNTS_RECEIVABLE]
+  acts_as_paranoid
   include Cacheable
   before_destroy :check_readonly
 

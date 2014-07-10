@@ -1,4 +1,5 @@
 class Deposit < ActiveRecord::Base
+  acts_as_paranoid
   include Cacheable
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :account

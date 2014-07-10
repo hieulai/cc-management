@@ -1,4 +1,5 @@
 class Transfer < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :from_account, :foreign_key => "from_account_id", :class_name => Account.name
   belongs_to :to_account, :foreign_key => "to_account_id", :class_name => Account.name
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy

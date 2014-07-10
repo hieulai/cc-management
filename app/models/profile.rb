@@ -1,5 +1,5 @@
 class Profile < ActiveRecord::Base
-
+  acts_as_paranoid
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :profileable, polymorphic: true, touch: true
   belongs_to :person

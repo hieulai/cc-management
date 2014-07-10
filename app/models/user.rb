@@ -1,5 +1,6 @@
 require 'digest/sha1'
 class User < ActiveRecord::Base
+  acts_as_paranoid
 
   #relations
   belongs_to :builder, :class_name => "Base::Builder"

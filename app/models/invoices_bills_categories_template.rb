@@ -1,4 +1,5 @@
 class InvoicesBillsCategoriesTemplate < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :invoice
   belongs_to :bills_categories_template
   has_and_belongs_to_many :accounts

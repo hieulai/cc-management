@@ -1,0 +1,41 @@
+class AddDeletedAtToAllModels < ActiveRecord::Migration
+  def change
+    add_column :accounts, :deleted_at, :time
+    add_column :accounting_transactions, :deleted_at, :time
+    add_column :companies, :deleted_at, :time
+    add_column :bids, :deleted_at, :time
+    add_column :bids_items, :deleted_at, :time
+    add_column :bills_categories_templates, :deleted_at, :time
+    add_column :categories, :deleted_at, :time
+    add_column :change_orders, :deleted_at, :time
+    add_column :change_orders_categories, :deleted_at, :time
+    add_column :clients, :deleted_at, :time
+    add_column :contacts, :deleted_at, :time
+    add_column :vendors, :deleted_at, :time
+    add_column :deposits, :deleted_at, :time
+    add_column :deposits_receipts, :deleted_at, :time
+    add_column :estimates, :deleted_at, :time
+    add_column :invoices, :deleted_at, :time
+    add_column :invoices_accounts, :deleted_at, :time
+    add_column :invoices_bills_categories_templates, :deleted_at, :time
+    add_column :invoices_items, :deleted_at, :time
+    add_column :measurements, :deleted_at, :time
+    add_column :people, :deleted_at, :time
+    add_column :profiles, :deleted_at, :time
+    add_column :projects, :deleted_at, :time
+    add_column :projects_payers, :deleted_at, :time
+    add_column :prospects, :deleted_at, :time
+    add_column :purchase_orders, :deleted_at, :time
+    add_column :purchase_orders_items, :deleted_at, :time
+    add_column :purchase_orders_categories_templates, :deleted_at, :time
+    add_column :receipts, :deleted_at, :time
+    add_column :receipts_invoices, :deleted_at, :time
+    add_column :receipts_items, :deleted_at, :time
+    add_column :specifications, :deleted_at, :time
+    add_column :tasks, :deleted_at, :time
+    add_column :tasklists, :deleted_at, :time
+    add_column :templates, :deleted_at, :time
+    add_column :transfers, :deleted_at, :time
+    add_column :users, :deleted_at, :time
+  end
+end

@@ -1,4 +1,5 @@
 class Company < ActiveRecord::Base
+  acts_as_paranoid
   has_one :image, as: :imageable, dependent: :destroy
 
   attr_accessible :type, :company_name, :year_founded, :office_phone, :website, :address, :city, :state, :zipcode, :tax_id, :logo, :slogan, :image_attributes

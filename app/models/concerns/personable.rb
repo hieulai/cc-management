@@ -2,6 +2,7 @@ module Personable
   extend ActiveSupport::Concern
 
   included do
+    acts_as_paranoid
     has_many :payments, :as => :payer, :dependent => :destroy
     has_many :receipts, as: :payer, :dependent => :destroy
     has_many :bills, as: :payer, :dependent => :destroy

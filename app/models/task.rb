@@ -1,4 +1,5 @@
 class Task < ActiveRecord::Base
+  acts_as_paranoid
   include Importable
 
   belongs_to :tasklist

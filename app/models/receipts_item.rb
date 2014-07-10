@@ -1,4 +1,5 @@
 class ReceiptsItem < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :receipt
   belongs_to :account
   attr_accessible :name, :description, :amount, :receipt_id, :account_id

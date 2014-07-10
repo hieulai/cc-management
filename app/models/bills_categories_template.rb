@@ -1,4 +1,5 @@
 class BillsCategoriesTemplate < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :bill
   include Invoiceable
 

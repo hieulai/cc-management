@@ -1,4 +1,5 @@
 class PurchaseOrdersCategoriesTemplate < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :purchase_order
   belongs_to :categories_template
   has_many :items, :dependent => :destroy

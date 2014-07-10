@@ -1,4 +1,5 @@
 class AccountingTransaction < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :transactionable, polymorphic: true
   belongs_to :payer, polymorphic: true
   belongs_to :account

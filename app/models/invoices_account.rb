@@ -1,4 +1,5 @@
 class InvoicesAccount < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :account
   belongs_to :invoice
   has_many :invoices_items

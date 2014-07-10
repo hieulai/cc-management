@@ -1,4 +1,5 @@
 class DepositsReceipt < ActiveRecord::Base
+  acts_as_paranoid
   belongs_to :deposit
   belongs_to :receipt
   attr_accessible :amount, :receipt_id, :deposit_id

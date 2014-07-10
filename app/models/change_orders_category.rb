@@ -1,4 +1,5 @@
 class ChangeOrdersCategory < ActiveRecord::Base
+  acts_as_paranoid
   before_destroy :check_destroyable
   after_destroy :destroy_accounts
 

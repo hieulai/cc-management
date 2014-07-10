@@ -1,4 +1,5 @@
 class ChangeOrder < ActiveRecord::Base
+  acts_as_paranoid
   before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
