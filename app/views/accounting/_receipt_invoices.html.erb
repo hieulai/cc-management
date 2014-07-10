@@ -29,7 +29,7 @@
               <%= hidden_field_tag "receipt[receipts_invoices_attributes][][invoice_id]", i.id %>
               <%= hidden_field_tag 'receipt[receipts_invoices_attributes][][_destroy]', !i.receipt_invoice(@receipt.id).present? %>
           </td>
-          <td class="center"><%= i.id %></td>
+          <td class="center"><%= i.reference %></td>
           <td class="center"><%= i.sent_date %></td>
           <td><%= i.estimate.project.name %></td>
           <td class="right unpaid-amount">
