@@ -28,8 +28,10 @@ class Project < ActiveRecord::Base
   after_initialize :default_values
   after_save :update_client_status, :if => :status_changed?
   after_save :update_estimate_status, :if => :status_changed?
+
   after_save :update_indexes
   after_destroy :destroy_client, :if => Proc.new { |p| p.client.projects.empty? }
+  after_save :update_transactions, :if => :client_id_changed?
 
   def next_tasks n
     incomplete_tasks[0..n-1]
@@ -125,11 +127,11 @@ class Project < ActiveRecord::Base
   end
 
   def update_estimate_status
-    if ["Past Project"].include?(self.status)
+    if [PAST].include?(self.status)
       estimates.each do |e|
         e.update_attribute(:status, Estimate::PAST)
       end
-    elsif ["Current Project"].include?(self.status)
+    elsif [CURRENT].include?(self.status)
       estimates.each do |e|
         e.update_attribute(:status, Estimate::CURRENT)
       end
@@ -138,5 +140,13 @@ class Project < ActiveRecord::Base
 
   def default_values
     status ||= CURRENT_LEAD
+  end
+
+  def update_transactions
+    invoices.each { |i| i.save }
+    receipts = invoices.map(&:receipts).flatten.compact.uniq
+    receipts.each do |r|
+      r.update_attribute(:client_id, r.invoices.project(self.id).first.project.client_id)
+    end
   end
 end

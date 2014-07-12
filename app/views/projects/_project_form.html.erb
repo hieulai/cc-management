@@ -1,7 +1,10 @@
+<h3>Project Info</h3>
+
 <div class="control-group">
     <%= p.label :name, 'Project Name', :class => 'col-lg-2 control-label' %>
     <div class='controls'><%= p.text_field(:name) %></div>
 </div>
+
 <div class="control-group">
     <%= p.label :status, 'Project Status', :class => 'col-lg-2 control-label' %>
     <div class='controls'><%= p.select(:status, ['Current Project', 'Past Project', 'Current Lead']) %></div>
@@ -31,5 +34,13 @@
 <div class="control-group">
     <%= p.label :project_notes, 'Notes', :class => 'col-lg-2 control-label' %>
     <div class='controls'><%= p.text_area(:project_notes, :size => '40x5') %></div>
+</div>
+
+<h3>Client Info</h3>
+<div class="control-group">
+    <%= p.label :client_id, 'Client', :class => 'col-lg-2 control-label' %>
+    <div class='controls'>
+        <%= p.select(:client_id, @builder.clients.active.collect { |s| [s.main_full_name, s.id] }, {:include_blank => true}) %>
+    </div>
 </div>
 	
