@@ -223,11 +223,6 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
   create_table "clients", :force => true do |t|
     t.integer  "builder_id"
     t.string   "company"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
-    t.string   "primary_phone"
-    t.string   "secondary_phone"
     t.string   "address"
     t.string   "city"
     t.string   "state"
@@ -235,11 +230,9 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.string   "lead_source"
     t.date     "last_contacted"
     t.text     "notes"
-    t.datetime "created_at",                              :null => false
-    t.datetime "updated_at",                              :null => false
-    t.string   "status",              :default => "Lead"
-    t.string   "primary_phone_tag"
-    t.string   "secondary_phone_tag"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.string   "status",         :default => "Lead"
     t.string   "website"
     t.time     "deleted_at"
   end
@@ -266,21 +259,14 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
 
   create_table "contacts", :force => true do |t|
     t.integer  "builder_id"
-    t.string   "primary_first_name"
-    t.string   "primary_last_name"
-    t.string   "email"
-    t.string   "primary_phone1"
-    t.string   "primary_phone2"
-    t.string   "primary_phone1_tag"
-    t.string   "primary_phone2_tag"
     t.string   "website"
     t.string   "address"
     t.string   "city"
     t.string   "state"
     t.string   "zipcode"
     t.text     "notes"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.string   "company"
     t.time     "deleted_at"
   end
@@ -791,28 +777,14 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.string   "company"
     t.string   "vendor_type"
     t.string   "trade"
-    t.string   "primary_first_name"
-    t.string   "primary_last_name"
-    t.string   "email"
-    t.string   "primary_phone1"
-    t.string   "primary_phone2"
-    t.string   "primary_phone1_tag"
-    t.string   "primary_phone2_tag"
-    t.string   "secondary_first_name"
-    t.string   "secondary_last_name"
-    t.string   "secondary_email"
-    t.string   "secondary_phone1"
-    t.string   "secondary_phone2"
-    t.string   "secondary_phone1_tag"
-    t.string   "secondary_phone2_tag"
     t.string   "website"
     t.string   "address"
     t.string   "city"
     t.string   "state"
     t.string   "zipcode"
     t.text     "notes"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.string   "service_provided"
     t.time     "deleted_at"
   end
