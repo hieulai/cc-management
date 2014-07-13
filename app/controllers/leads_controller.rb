@@ -25,7 +25,7 @@ class LeadsController < ApplicationController
     if @project.save
       redirect_to(:action => 'list_current_leads')
     else
-      render('new')
+      render('new_client')
     end
   end
   
@@ -35,7 +35,7 @@ class LeadsController < ApplicationController
     if @project.save
       redirect_to(:action => 'list_current_leads')
     else
-      render('new')
+      render('existing_client')
     end
   end
   
