@@ -30,7 +30,7 @@ class Estimate < ActiveRecord::Base
   before_save :check_commitment, :if => Proc.new { |e| e.committed && !e.committed_was }
 
   def undestroyable?
-    template.undestroyable?
+    template.undestroyable? || bills.any? || invoices.any?
   end
 
   def kind
@@ -96,7 +96,7 @@ class Estimate < ActiveRecord::Base
   private
   def check_destroyable
     if undestroyable?
-      errors[:base] << "Estimate #{id} cannot be deleted once containing items which are added to an invoice"
+      errors[:base] << "This estimate has bills, invoices, or receipts attached to it. These items must be reallocated to another estimate before this one can be deleted."
       false
     end
   end

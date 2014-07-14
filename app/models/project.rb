@@ -11,12 +11,13 @@ class Project < ActiveRecord::Base
   has_many :change_orders, :dependent => :destroy
   has_many :projects_payers, :dependent => :destroy
   has_one :tasklist, :dependent => :destroy
+  has_many :invoices, :through => :estimates
 
   attr_accessible :name, :first_name, :last_name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
                   :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes, :client_id
   default_scope order("first_name asc, last_name asc")
   scope :current_lead, where(status: CURRENT_LEAD)
-  scope :past_lead, where(status: PAST_LEAD)
+  scope :past_lead, where(sgtatus: PAST_LEAD)
   scope :current_project, where(status: CURRENT)
   scope :past_project, where(status: PAST)
   scope :has_estimate, includes(:estimates).where("estimates.id IS NOT NULL")

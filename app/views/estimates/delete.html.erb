@@ -16,7 +16,7 @@
                         </ul>
                     </div>
                 <% end %>
-                <p class="reference-name"><%= @estimate.id %></p>
+                <p class="reference-name"><%= @estimate.project.name %></p>
 
                 <div class="control-group">
                     <%= submit_tag("Delete Estimate", :class => 'btn') %>
