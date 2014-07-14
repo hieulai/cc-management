@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140706163706) do
+ActiveRecord::Schema.define(:version => 20140713162035) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -118,9 +118,11 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.time     "deleted_at"
     t.integer  "payer_id"
     t.string   "payer_type"
+    t.integer  "estimate_id"
   end
 
   add_index "bills", ["builder_id"], :name => "index_bills_on_builder_id"
+  add_index "bills", ["estimate_id"], :name => "index_bills_on_estimate_id"
   add_index "bills", ["project_id"], :name => "index_bills_on_project_id"
   add_index "bills", ["purchase_order_id"], :name => "index_bills_on_purchase_order_id"
 
@@ -587,9 +589,11 @@ ActiveRecord::Schema.define(:version => 20140706163706) do
     t.integer  "payer_id"
     t.string   "payer_type"
     t.time     "deleted_at"
+    t.integer  "estimate_id"
   end
 
   add_index "purchase_orders", ["builder_id"], :name => "index_purchase_orders_on_builder_id"
+  add_index "purchase_orders", ["estimate_id"], :name => "index_purchase_orders_on_estimate_id"
   add_index "purchase_orders", ["project_id"], :name => "index_purchase_orders_on_project_id"
   add_index "purchase_orders", ["vendor_id"], :name => "index_purchase_orders_on_vendor_id"
 

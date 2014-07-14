@@ -9,7 +9,7 @@ if ($("tr.category[data-id]").size() == 0 || type == "<%= PurchaseOrder.name %>"
   Shared.calculateTotals();
 
 } else {
-  // Restore bill's state on new selected project
+  // Restore bill's state on new selected estimate
   var renderBilledItem = function (element) {
     return $($(element).nextAll(".subtotal")[0]).before('<%= escape_javascript(render :partial => @purchasable.instance_of?(Bill) ? 'billed_item' : 'purchased_item', :locals => {:item => Item.new, :category_id => 0}) %>').prev();
   }
@@ -24,9 +24,9 @@ if ($("tr.category[data-id]").size() == 0 || type == "<%= PurchaseOrder.name %>"
     cNames.push(cName);
 
     $.ajax({
-      url: "<%= url_for({:controller => "projects", :action => "search_category_by_name"}) %>",
+      url: "<%= url_for({:controller => "estimates", :action => "search_category_by_name"}) %>",
       data: {
-        project_id: "<%= @purchasable.project_id %>",
+        estimate: "<%= @purchasable.estimate_id %>",
         name: cName
       },
       dataType: "json",
@@ -121,7 +121,7 @@ if ($("tr.category[data-id]").size() == 0 || type == "<%= PurchaseOrder.name %>"
 
   $('#add-category').html('<%= escape_javascript(select_tag("category_select",
                          grouped_options_for_select(grouped_category_options(@purchasable)),
-                         {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => @purchasable.id, :type => @purchasable.class.name, :project_id => @purchasable.project.try(:id))}})) %>');
+                         {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => @purchasable.id, :type => @purchasable.class.name, :estimate_id => @purchasable.estimate_id)}})) %>');
 
   $("#category_select option").each(function () {
     if (cNames.indexOf($(this).text()) > 0) {

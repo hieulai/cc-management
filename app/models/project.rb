@@ -9,11 +9,8 @@ class Project < ActiveRecord::Base
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :estimates, :dependent => :destroy
   has_many :change_orders, :dependent => :destroy
-  has_many :purchase_orders, :dependent => :destroy
   has_many :projects_payers, :dependent => :destroy
-  has_many :bills, :dependent => :destroy
   has_one :tasklist, :dependent => :destroy
-  has_many :invoices, :through => :estimates
 
   attr_accessible :name, :first_name, :last_name, :project_type, :status, :lead_stage, :progress, :revenue, :start_date, :completion_date,
                   :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes, :client_id
@@ -88,9 +85,11 @@ class Project < ActiveRecord::Base
   end
 
   def update_indexes
-    Sunspot.delay.index bills
-    Sunspot.delay.index purchase_orders
-    Sunspot.delay.index invoices
+    estimates.each do |e|
+      Sunspot.delay.index e.bills
+      Sunspot.delay.index e.purchase_orders
+      Sunspot.delay.index e.invoices
+    end
     projects_payers.each { |pp| pp.touch }
   end
 

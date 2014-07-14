@@ -1,6 +1,8 @@
 class Estimate < ActiveRecord::Base
   CURRENT = 'Current Estimate'
   PAST =  'Past Estimate'
+  GUARANTEED = 'Guaranteed Bid'
+  COST_PLUS ='Cost Plus Bid'
   acts_as_paranoid
   before_destroy :check_destroyable
 
@@ -12,6 +14,8 @@ class Estimate < ActiveRecord::Base
   has_many :invoices, :dependent => :destroy
   has_many :bids, :dependent => :destroy
   has_many :specifications, :dependent => :destroy
+  has_many :bills, :dependent => :destroy
+  has_many :purchase_orders, :dependent => :destroy
 
   scope :current, where(status: CURRENT)
   scope :current_project, joins(:project).where("projects.status = ?", Project::CURRENT)
@@ -30,11 +34,11 @@ class Estimate < ActiveRecord::Base
   end
 
   def kind
-    read_attribute(:kind) || "Guaranteed Bid"
+    read_attribute(:kind) || GUARANTEED
   end
 
   def cost_plus_bid?
-    kind == "Cost Plus Bid"
+    kind == COST_PLUS
   end
 
   def cos_categories

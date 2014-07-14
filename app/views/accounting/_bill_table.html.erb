@@ -11,8 +11,8 @@
     </tr>
     </thead>
     <tbody>
-    <% if bill.project %>
-      <%= render(:partial => "bill_project", :locals => {:bill => bill}) %>
+    <% if bill.estimate %>
+      <%= render(:partial => "bill_estimate", :locals => {:bill => bill}) %>
     <% end %>
     </tbody>
 </table>

@@ -478,12 +478,12 @@ class AccountingController < ApplicationController
     end
   end
 
-  def show_project_categories_template
+  def show_estimate_categories_template
     klass = params[:type].to_s.constantize
     @type = params[:type].to_s.underscore
     @purchasable = params[:id].present? ? klass.find(params[:id]) : klass.new
-    @project = params[@type.to_sym][:project_id].present? ? Project.find(params[@type.to_sym][:project_id]) : nil
-    @purchasable.project = @project
+    @estimate = params[@type.to_sym][:estimate_id].present? ? @builder.estimates.find(params[@type.to_sym][:estimate_id]) : nil
+    @purchasable.estimate = @estimate
     respond_to do |format|
       format.js {}
     end
@@ -493,11 +493,11 @@ class AccountingController < ApplicationController
     klass =  params[:type].to_s.constantize
     @type = params[:type].to_s.underscore
     @purchasable = params[:id].present? ? klass.find(params[:id]) : klass.new
-    project = Project.find(params[:project_id])
-    @purchasable.project = project
+    estimate = @builder.estimates.find(params[:estimate_id])
+    @purchasable.estimate = estimate
     category = params[:category_select].present? ? Category.find(params[:category_select]) : nil
-    if project && category
-      @categories_template = CategoriesTemplate.where(:category_id => category.id, :template_id => project.committed_estimate.template.id).first_or_initialize
+    if estimate && category
+      @categories_template = CategoriesTemplate.where(:category_id => category.id, :template_id => estimate.template.id).first_or_initialize
       @p_ct = @categories_template.send("#{@type.pluralize}_categories_templates".to_sym).where("#{@type}_id".to_sym => @purchasable.id).first_or_initialize
     else
       @categories_template = nil
@@ -658,7 +658,7 @@ class AccountingController < ApplicationController
     assign_categories_templates
 
     # Destroy all old po_cts if project changed
-    if params[@type.to_sym][:project_id].present? && params[@type.to_sym][:project_id] != @purchasable.project_id.to_s && @purchasable.project
+    if params[@type.to_sym][:estimate_id].present? && params[@type.to_sym][:estimate_id] != @purchasable.estimate_id.to_s && @purchasable.estimate
       @purchasable.send("#{@type.pluralize}_categories_templates".to_sym).each do |p_ct|
         params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym] << {id: p_ct.id, _destroy: true}.with_indifferent_access
       end
@@ -680,19 +680,19 @@ class AccountingController < ApplicationController
   end
 
   def assign_categories_templates
-    if params[@type.to_sym][:project_id].present? && params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym].present?
-      project = Project.find(params[@type.to_sym][:project_id])
+    if params[@type.to_sym][:estimate_id].present? && params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym].present?
+      estimate = @builder.estimates.find(params[@type.to_sym][:estimate_id])
       params[@type.to_sym]["#{@type.pluralize}_categories_templates_attributes".to_sym].each do |p_ct|
         next if p_ct[:category_id].blank? && p_ct[:_destroy] == true.to_s
         category_id = p_ct[:category_id].presence || Category.create({name: p_ct[:category_name]}).id
-        category_template = CategoriesTemplate.where(:category_id => category_id, :template_id => project.committed_estimate.template.id).first
+        category_template = CategoriesTemplate.where(:category_id => category_id, :template_id => estimate.template.id).first
         unless category_template
           category = Category.find(category_id)
           if category
-            category_template = category.categories_templates.where(:template_id => project.committed_estimate.template.id).first
+            category_template = category.categories_templates.where(:template_id => estimate.template.id).first
           end
           unless category_template
-            category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => project.committed_estimate.template.id, :purchased => true)
+            category_template = CategoriesTemplate.create(:category_id => category.id, :template_id => estimate.template.id, :purchased => true)
           end
         end
         p_ct[:categories_template_id] = category_template.id

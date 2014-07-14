@@ -170,4 +170,28 @@ class EstimatesController < ApplicationController
         format.js {}
       end
     end
+
+  def search_category_by_name
+    categories_templates = []
+    raw_categories = []
+    unless params[:estimate_id].blank?
+      estimate = @builder.estimates.find(params[:estimate_id])
+      categories_templates= estimate.template.categories_templates
+      original_categories= estimate.template.categories_templates.map { |c| c.category }
+
+      raw_categories = @builder.categories.raw.reject { |c| original_categories.map { |c| c[:name] }.include? c.name }
+      categories_templates.select! { |ct| ct.category.name == params[:name] }
+      raw_categories.select! { |c| c.name == params[:name] }
+    end
+    if categories_templates.size > 0
+      render :json => {:categories_template => {:id => categories_templates[0].id,
+                                                :category_id => categories_templates[0].category_id,
+                                                :name => categories_templates[0].category.name}}.to_json
+    elsif raw_categories.size > 0
+      render :json => {:category => {:id => raw_categories[0].id,
+                                     :name => raw_categories[0].name}}.to_json
+    else
+      render :json => {}.to_json
+    end
+  end
 end

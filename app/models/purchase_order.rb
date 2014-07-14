@@ -3,7 +3,7 @@ class PurchaseOrder < ActiveRecord::Base
   include Cacheable
   before_destroy :check_readonly
 
-  belongs_to :project
+  belongs_to :estimate
   belongs_to :vendor
   belongs_to :payer, polymorphic: true
   belongs_to :builder, :class_name => "Base::Builder"
@@ -14,7 +14,7 @@ class PurchaseOrder < ActiveRecord::Base
 
   default_scope order("date DESC")
 
-  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :cached_total_amount, :builder_id, :project_id,
+  attr_accessible :chosen, :sales_tax_rate, :shipping, :date, :notes, :cached_total_amount, :builder_id, :project_id, :estimate_id,
                   :vendor_id, :due_date, :payer_id, :payer_type, :purchase_orders_categories_templates_attributes
   accepts_nested_attributes_for :purchase_orders_categories_templates, :allow_destroy => true
 
@@ -22,7 +22,7 @@ class PurchaseOrder < ActiveRecord::Base
   before_save :check_zero_amount, :check_total_amount_changed
   after_save :create_default_bill, :update_indexes
 
-  validates_presence_of :payer_id, :payer_type, :project
+  validates_presence_of :payer_id, :payer_type, :estimate
 
   searchable do
     integer :id
@@ -61,6 +61,10 @@ class PurchaseOrder < ActiveRecord::Base
     text :category_names do
       category_names
     end
+  end
+
+  def project
+    estimate.try(:project)
   end
 
   def project_name

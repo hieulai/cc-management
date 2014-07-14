@@ -18,7 +18,7 @@
 <div class="control-group">
     <%= f.label :type, 'Type', class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.collection_radio_buttons(:kind, [["Guaranteed Bid", "Guaranteed Bid"], ["Cost Plus Bid", "Cost Plus Bid"]],
+        <%= f.collection_radio_buttons(:kind, [[Estimate::GUARANTEED, Estimate::GUARANTEED], [Estimate::COST_PLUS, Estimate::COST_PLUS]],
                                        :first, :last, {}, {:data => {:remote => true, :url => url_for(:action => "switch_type", id: @estimate.id)}}) %>
     </div>
 </div>

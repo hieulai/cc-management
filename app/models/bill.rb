@@ -4,7 +4,7 @@ class Bill < ActiveRecord::Base
 
   before_destroy :check_readonly
 
-  belongs_to :project
+  belongs_to :estimate
   belongs_to :payer, polymorphic: true
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :purchase_order
@@ -17,7 +17,7 @@ class Bill < ActiveRecord::Base
   has_many :categories_templates, :through => :bills_categories_templates
 
   attr_accessible :purchase_order_id, :remaining_amount, :cached_total_amount, :create_payment, :notes, :builder_id,
-                  :project_id, :job_costed, :due_date, :billed_date,
+                  :project_id, :estimate_id, :job_costed, :due_date, :billed_date,
                   :un_job_costed_items_attributes, :payer_id, :payer_type, :bills_categories_templates_attributes
 
   accepts_nested_attributes_for :un_job_costed_items, :reject_if => :all_blank, :allow_destroy => true
@@ -29,7 +29,7 @@ class Bill < ActiveRecord::Base
   scope :paid, where('remaining_amount = 0')
   scope :job_costed, where(job_costed: true)
   scope :date_range, lambda { |from_date, to_date| where('billed_date >= ? AND billed_date <= ?', from_date, to_date) }
-  scope :project, lambda { |project_id| where('project_id = ?', project_id) }
+  scope :project, lambda { |project_id| joins(:estimate).where('estimates.project_id = ?', project_id) }
   scope :late, lambda { where('remaining_amount != ? AND due_date < ?', 0, Date.today) || joins(:purchase_order).where('purchase_orders.due_date < ?', Date.today) }
 
   after_initialize :default_values
@@ -40,7 +40,7 @@ class Bill < ActiveRecord::Base
 
   validates_presence_of :billed_date, :builder
   validates_presence_of :payer_id, :payer_type, :if => Proc.new { |b| b.purchase_order_id.nil? }
-  validates_presence_of :project, :if => Proc.new { |b| b.job_costed? && b.purchase_order_id.nil? }
+  validates_presence_of :estimate, :if => Proc.new { |b| b.job_costed? && b.purchase_order_id.nil? }
 
   searchable do
     integer :id
@@ -97,6 +97,10 @@ class Bill < ActiveRecord::Base
     text :vnotes do
       vnotes
     end
+  end
+
+  def project
+    estimate.try(:project)
   end
 
   def project_name
@@ -207,7 +211,7 @@ class Bill < ActiveRecord::Base
     accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: total_amount.to_f})
     accounting_transactions.where('payer_id is NOT NULL and payer_type is NOT NULL').destroy_all
     accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type
-    accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: project_id, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type && project_id
+    accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: estimate.project.id, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type && self.estimate
   end
 
   private

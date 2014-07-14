@@ -1,5 +1,5 @@
 <% bill.bills_categories_templates.each do |p_ct| %>
-  <% if p_ct.categories_template.template.estimate.project_id == bill.project_id %>
+  <% if p_ct.categories_template.template.estimate_id == bill.estimate_id %>
     <%= render(:partial => "bill_categories_template", :locals => {:bill => bill, :p_ct => p_ct, :categories_template => p_ct.categories_template}) %>
   <% end %>
 <% end %>
@@ -10,7 +10,7 @@
         <div id="add-category">
           <%= select_tag("category_select",
                                    grouped_options_for_select(grouped_category_options(bill)),
-                                   {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => bill.id, :type => Bill.name, :project_id => bill.project.try(:id))}}) %>
+                                   {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => bill.id, :type => Bill.name, :estimate_id => bill.estimate_id)}}) %>
         </div>
     </td>
 </tr>

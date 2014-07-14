@@ -1,5 +1,5 @@
 <% purchase_order.purchase_orders_categories_templates.each do |p_ct| %>
-  <% if p_ct.categories_template.template.estimate.project_id == purchase_order.project_id %>
+  <% if p_ct.categories_template.template.estimate_id == purchase_order.estimate_id %>
     <%= render(:partial => "purchase_order_categories_template", :locals => {:purchase_order => purchase_order, :p_ct => p_ct, :categories_template => p_ct.categories_template}) %>
   <% end %>
 <% end %>
@@ -10,7 +10,7 @@
         <div id="add-category">
             <%= select_tag("category_select",
                            grouped_options_for_select(grouped_category_options(purchase_order)),
-                           {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => purchase_order.id, :type => PurchaseOrder.name, :project_id => purchase_order.project.try(:id))}}) %>
+                           {:include_blank => true, :data => {:remote => true, :url => url_for(:action => "show_categories_template", :id => purchase_order.id, :type => PurchaseOrder.name, :estimate_id => purchase_order.estimate_id)}}) %>
         </div>
     </td>
 </tr>

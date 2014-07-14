@@ -14,8 +14,8 @@
     </tr>
     </thead>
     <tbody>
-      <% if purchase_order.project %>
-        <%= render(:partial => "purchase_order_project", :locals => {:purchase_order => purchase_order}) %>
+      <% if purchase_order.estimate %>
+        <%= render(:partial => "purchase_order_estimate", :locals => {:purchase_order => purchase_order}) %>
       <% end %>
     </tbody>
 
