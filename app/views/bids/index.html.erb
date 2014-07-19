@@ -33,7 +33,7 @@
                             <%= link_to("Edit", {:action => 'edit', :id => bid.id}, :class => 'edit table-action') %>
                             <%= link_to("Delete", {:action => 'delete', :id => bid.id}, :class => 'delete table-action') %>
                         </td>
-                        <td><%= bid.category.name %></td>
+                        <td><%= bid.category.try(:name) %></td>
                         <td><%= bid.vendor.try(:display_name) %></td>
                         <td class="right"><%= number_to_currency(bid.total_amount) %></td>
                         <td class="center"><%= bid.chosen %></td>
