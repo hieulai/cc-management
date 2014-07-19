@@ -34,7 +34,7 @@ class ReceiptsItem < ActiveRecord::Base
       end
     end
     rat = receipt.accounting_transactions.where(account_id: account_id).first_or_create
-    rat.update_attributes({date: date, amount: rat.amount.to_f + account_amount(amount, account)})
+    rat.update_attributes({payer_id: receipt.payer.id, payer_type: receipt.payer.class.name, date: date, amount: rat.amount.to_f + account_amount(amount, account)})
   end
 
   def destroy_transactions

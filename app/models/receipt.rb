@@ -33,7 +33,7 @@ class Receipt < ActiveRecord::Base
   scope :billed, where('remaining_amount = 0')
   scope :date_range, lambda { |from_date, to_date| where('received_at >= ? AND received_at <= ?', from_date, to_date) }
 
-  before_save :check_total_amount_changed, :clear_old_data
+  before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
   after_initialize :default_values
   after_save :update_transactions
 
@@ -109,7 +109,6 @@ class Receipt < ActiveRecord::Base
   end
 
   def update_transactions
-    accounting_transactions.destroy_all
     accounting_transactions.where(account_id: builder.deposits_held_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
     accounting_transactions.create({payer_id: self_payer.id, payer_type: self_payer.class.name, date: date, amount: amount.to_f * -1})
     if invoiced
@@ -121,6 +120,10 @@ class Receipt < ActiveRecord::Base
     elsif client_credit
       accounting_transactions.where(account_id: builder.client_credit_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
     end
+  end
+
+  def remove_old_transactions
+    accounting_transactions.destroy_all
   end
 
   def check_readonly

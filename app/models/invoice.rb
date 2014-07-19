@@ -24,8 +24,8 @@ class Invoice < ActiveRecord::Base
   scope :project, lambda { |project_id| joins(:estimate).where('estimates.project_id = ?', project_id) }
 
   after_initialize :default_values
-  before_save :check_total_amount_changed, :check_reference
-  before_update :clear_old_data
+  before_save :check_reference
+  before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
   after_save :update_transactions
 
   validates_presence_of :estimate, :builder
@@ -97,10 +97,13 @@ class Invoice < ActiveRecord::Base
   end
 
   def update_transactions
-    accounting_transactions.destroy_all
     accounting_transactions.create({account_id: builder.accounts_receivable_account.id, date: date, amount: amount.to_f})
     accounting_transactions.create({payer_id: estimate.project.client_id, payer_type: Client.name, date: date, amount: amount.to_f})
     accounting_transactions.create({payer_id: estimate.project.client_id, payer_type: Client.name, project_id: self.project.id, date: date, amount: amount.to_f})
+  end
+
+  def remove_old_transactions
+    accounting_transactions.destroy_all
   end
 
   private
