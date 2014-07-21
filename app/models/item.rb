@@ -82,7 +82,7 @@ class Item < ActiveRecord::Base
   def actual_cost
     if bills_items.any? || purchase_orders_items.any?
       bills_items.has_actual_cost.sum(:actual_cost).to_f + purchase_orders_items.has_actual_cost.sum(:actual_cost).to_f
-    elsif purchased?
+    elsif new_record? || purchased?
       read_attribute(:actual_cost)
     end
   end
