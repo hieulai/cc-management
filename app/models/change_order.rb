@@ -37,6 +37,6 @@ class ChangeOrder < ActiveRecord::Base
   end
 
   def default_values
-    self.approved||= true
+    approved||= true
   end
 end
