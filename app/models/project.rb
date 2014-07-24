@@ -77,7 +77,7 @@ class Project < ActiveRecord::Base
     template = committed_estimate.template
     categories = Category.where(:id => template.categories_templates.pluck(:category_id))
     co_categories = ChangeOrdersCategory.where(:change_order_id => change_orders.approved.pluck(:id)).uniq
-    cos_categories = co_categories.map(&:category).uniq
+    cos_categories = co_categories.map(&:category).compact.uniq
     cos_categories.reject! { |c| categories.pluck(:name).include? c.name } || Array.new
   end
 
