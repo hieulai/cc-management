@@ -7,7 +7,7 @@ class TasklistsController < ApplicationController
   end
   
   def show
-    @tasklist = Tasklist.find(params[:id])
+    @tasklist = @builder.tasklists.find(params[:id])
     respond_to do |format|
       format.html
       format.csv { send_data @tasklist.to_csv, filename: "Tasklist-#{@tasklist.name}.csv"  }
@@ -16,43 +16,34 @@ class TasklistsController < ApplicationController
   end
   
   def new
-    @tasklist = Tasklist.new
+    @tasklist = @builder.tasklists.new
     @tasklist.tasks.build
   end
-  
+
   def create
-    @builder = Base::Builder.find(session[:builder_id])
-    @tasklist = Tasklist.new(params[:tasklist])
-    #saves creation of Estimate
+    @tasklist = @builder.tasklists.new(params[:tasklist])
     if @tasklist.save
-      @builder.tasklists << @tasklist
-      #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
-      #if save fails, redisplay form to user can fix problems
       render('new')
     end
   end
   
   def edit
-    @tasklist = Tasklist.find(params[:id])
+    @tasklist = @builder.tasklists.find(params[:id])
   end
   
   def update
-    #Find object using form parameters
-    @tasklist = Tasklist.find(params[:id])
-    #Update subject
+    @tasklist = @builder.tasklists.find(params[:id])
     if @tasklist.update_attributes(params[:tasklist])
-      #if save succeeds, redirect to list action
       redirect_to(:action => 'list')
     else
-      #if save fails, redisplay form to user can fix problems
       render('edit')
     end
   end
 
   def show_import
-    @tasklist = Tasklist.new
+    @tasklist = @builder.tasklists.new
   end
 
   def import
@@ -60,7 +51,7 @@ class TasklistsController < ApplicationController
       redirect_to action: 'show_import', notice: "No file to import."
     else
       begin
-        tasklist = Tasklist.create(name: params[:tasklist][:name], builder_id: session[:builder_id])
+        tasklist = @builder.tasklists.create(name: params[:tasklist][:name])
         result = Task.import(params[:tasklist][:data])
         tasklist.tasks << result[:objects]
         msg = "Tasklist imported."
@@ -75,11 +66,11 @@ class TasklistsController < ApplicationController
   end
 
   def delete
-    @tasklist = Tasklist.find(params[:id])
+    @tasklist = @builder.tasklists.find(params[:id])
   end
 
   def destroy
-    Tasklist.find(params[:id]).destroy
+    @tasklist = @builder.tasklists.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
 end

@@ -13,11 +13,11 @@ class ClientsController < ApplicationController
   end
 
   def show
-    @client = Client.find(params[:id])
+    @client = @builder.clients.find(params[:id])
   end
 
   def new
-    @client =  Client.new
+    @client =  @builder.clients.new
   end
 
   def create
@@ -30,11 +30,11 @@ class ClientsController < ApplicationController
   end
 
   def edit
-    @client = Client.find(params[:id])
+    @client = @builder.clients.find(params[:id])
   end
 
   def update
-    @client = Client.find(params[:id])
+    @client = @builder.clients.find(params[:id])
     if @client.update_attributes(params[:client])
       redirect_to(:action => 'list')
     else
@@ -43,11 +43,11 @@ class ClientsController < ApplicationController
   end
 
   def delete
-    @client= Client.find(params[:id])
+    @client = @builder.clients.find(params[:id])
   end
 
   def destroy
-    Client.find(params[:id]).destroy
+    @client = @builder.clients.find(params[:id]).destroy
     redirect_to(:action => 'list')
   end
 

@@ -6,13 +6,11 @@ class CategoriesController < ApplicationController
   end
 
   def new
-    @category = Category.new
+    @category = @builder.categories.new
   end
 
   def create
-    @builder = Base::Builder.find(session[:builder_id])
-    @category = Category.new(params[:category])
-
+    @category = @builder.categories.new(params[:category])
     if @category.save
       @builder.categories << @category
       redirect_to(:action => 'list')
@@ -23,12 +21,11 @@ class CategoriesController < ApplicationController
   end
 
   def edit
-    @category= Category.find(params[:id])
+    @category= @builder.categories.find(params[:id])
   end
 
   def update
-    #Find object using form parameters
-    @category = Category.find(params[:id])
+    @category= @builder.categories.find(params[:id])
     #Update subject
     respond_to do |format|
       if @category.update_attributes(params[:category])
@@ -42,11 +39,11 @@ class CategoriesController < ApplicationController
   end
 
   def delete
-    @category= Category.find(params[:id])
+    @category= @builder.categories.find(params[:id])
   end
 
   def destroy
-    @category = Category.find(params[:id])
+    @category= @builder.categories.find(params[:id])
     @id = params[:id]
     params[:with_associations].present? ? @category.destroy_with_associations : @category.destroy
     respond_to do |format|

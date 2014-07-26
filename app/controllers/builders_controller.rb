@@ -8,20 +8,15 @@ class BuildersController < ApplicationController
   
   #User actions
   def show
-    @builder = Base::Builder.find(session[:builder_id])
   end
   
   #Creation of a builder happens in User->Registration
   
   def edit
-    @builder = Base::Builder.find(session[:builder_id])
     @builder.build_image unless @builder.image.present?
   end
   
   def update
-    #Find object using form parameters
-    @builder = Base::Builder.find(session[:builder_id])
-    #Update subject
     if @builder.update_attributes(params[:base_builder])
       #if save succeeds, redirect to list action
       redirect_to(:action => 'show')
@@ -32,11 +27,10 @@ class BuildersController < ApplicationController
   end
   
   def delete
-    @account = Account.find(params[:id])
   end
 
   def destroy
-    Account.find(params[:id]).destroy
+    @builder.destroy
     redirect_to(:action => 'list')
   end
   

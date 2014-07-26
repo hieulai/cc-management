@@ -3,28 +3,14 @@ class PeopleController < ApplicationController
 
     def all
       @query = params[:query]
-      clients = Client.search {
+      params[:sort_field] ||= "main_full_name"
+      params[:sort_dir] ||= "asc"
+      @people = Sunspot.search([Client, Vendor, Contact]){
         fulltext params[:query]
         with :builder_id, session[:builder_id]
-        with :status, "Active"
-        paginate :page => 1, :per_page => Client.count
+        order_by params[:sort_field].to_sym, params[:sort_dir].to_sym if params[:sort_field] && params[:sort_dir]
+        paginate :page => params[:page], :per_page => Kaminari.config.default_per_page
       }.results
-      vendors = Vendor.search {
-        fulltext params[:query]
-        with :builder_id, session[:builder_id]
-        paginate :page => 1, :per_page => Vendor.count
-      }.results
-      contacts = Contact.search {
-        fulltext params[:query]
-        with :builder_id, session[:builder_id]
-        paginate :page => 1, :per_page => Contact.count
-      }.results
-      results = clients + vendors + contacts
-      if params[:sort_field] && params[:sort_dir]
-        results = results.sort_by { |r| r.try(params[:sort_field]).to_s }
-        results = results.reverse if params[:sort_dir] == "desc"
-      end
-      @people = Kaminari.paginate_array(results).page(params[:page])
     end
     
     def list_vendors
@@ -81,8 +67,12 @@ class PeopleController < ApplicationController
     end
 
     def destroy_vendor
-      @builder.vendors.find(params[:id]).destroy
-      redirect_to(:action => 'list_vendors')
+      @builder.vendors.find(params[:id])
+      if @vendor.destroy
+        redirect_to(:action => 'list_vendors')
+      else
+        render 'delete_vendor'
+      end
     end
     
     def list_contacts
@@ -130,8 +120,12 @@ class PeopleController < ApplicationController
     end
 
     def destroy_contact
-      @contact = @builder.contacts.find(params[:id]).destroy
-      redirect_to(:action => 'list_contacts')
+      @contact = @builder.contacts.find(params[:id])
+      if @contact.destroy
+        redirect_to(:action => 'list_contacts')
+      else
+        redirect_to(:action => 'delete_contact')
+      end
     end
     
     def import_export
@@ -156,34 +150,14 @@ class PeopleController < ApplicationController
     end
 
     def autocomplete_name
-      @people = []
-      if params[:type].present?
-        klass = params[:type].constantize
-        @people << klass.search {
-          fulltext params[:term], {:fields => :company_or_main_full_name}
-          with :builder_id, session[:builder_id]
-          with :status, "Active" if params[:type] == Client.name
-          paginate :page => 1, :per_page => klass.count
-        }.results
-      else
-        @people << Client.search {
-          fulltext params[:term], {:fields => :company_or_main_full_name}
-          with :builder_id, session[:builder_id]
-          with :status, "Active"
-          paginate :page => 1, :per_page => Client.count
-        }.results
-        @people <<  Vendor.search {
-          fulltext params[:term], {:fields => :company_or_main_full_name}
-          with :builder_id, session[:builder_id]
-          paginate :page => 1, :per_page => Vendor.count
-        }.results
-        @people << Contact.search {
-          fulltext params[:term], {:fields => :company_or_main_full_name}
-          with :builder_id, session[:builder_id]
-          paginate :page => 1, :per_page => Contact.count
-        }.results
-      end
-      render :json => @people.flatten.map { |p|
+      klasses = params[:type].present? ? params[:type].constantize : [Client, Vendor, Contact]
+      @people = Sunspot.search(klasses) {
+        fulltext params[:term], {:fields => :company_or_main_full_name}
+        with :builder_id, session[:builder_id]
+        paginate :page => 1, :per_page => Kaminari.config.default_per_page
+      }.results
+
+      render :json => @people.map { |p|
         label = p.company.present? ? "#{p.company} <br/> <span class=\"autocomplete-sublabel\">#{p.main_full_name}</span>" : p.main_full_name
         {:id => p.id, :label => label, :value => p.display_name, :type => p.class.name}
       }.to_json

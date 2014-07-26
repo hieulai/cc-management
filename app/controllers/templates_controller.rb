@@ -106,8 +106,11 @@ class TemplatesController < ApplicationController
   end
 
   def destroy
-    @template.destroy
-    redirect_to(action: 'list')
+    if @template.destroy
+      redirect_to(action: 'list')
+    else
+      render 'delete'
+    end
   end
 
   private

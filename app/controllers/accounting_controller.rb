@@ -21,12 +21,11 @@ class AccountingController < ApplicationController
   end
 
   def new_deposit
-    @deposit = Deposit.new
+    @deposit = @builder.deposits.new
   end
 
   def create_deposit
-    @deposit = Deposit.new(params[:deposit])
-    @deposit.builder_id = session[:builder_id]
+    @deposit = @builder.deposits.new(params[:deposit])
     if @deposit.save
       redirect_to(params[:original_url].presence ||url_for(:action => 'deposits'))
     else
@@ -35,11 +34,11 @@ class AccountingController < ApplicationController
   end
 
   def edit_deposit
-    @deposit = Deposit.find(params[:id])
+    @deposit = @builder.deposits.find(params[:id])
   end
 
   def update_deposit
-    @deposit = Deposit.find(params[:id])
+    @deposit = @builder.deposits.find(params[:id])
     # Destroy all old deposits_receipts_attributes if account changed
     if params[:deposit][:client_id].present? && params[:deposit][:client_id] != @deposit.client_id.to_s
       @deposit.deposits_receipts.each do  |dr|
@@ -54,11 +53,11 @@ class AccountingController < ApplicationController
   end
 
   def delete_deposit
-    @deposit = Deposit.find(params[:id])
+    @deposit = @builder.deposits.find(params[:id])
   end
 
   def destroy_deposit
-    @deposit = Deposit.find(params[:id])
+    @deposit = @builder.deposits.find(params[:id])
     @deposit.destroy
     redirect_to(:action => "deposits")
   end
@@ -77,15 +76,13 @@ class AccountingController < ApplicationController
   end
 
   def new_receipt
-    @receipt = Receipt.new
+    @receipt = @builder.receipts.new
   end
 
   def create_receipt
-    @receipt = Receipt.new(params[:receipt])
-    @receipt.builder_id = session[:builder_id]
-
+    @receipt = @builder.receipts.new(params[:receipt])
     if params[:receipt][:create_deposit] == "1"
-      deposit = Deposit.new(params[:deposit].merge(:builder_id => session[:builder_id]))
+      deposit = @builder.deposits.new(params[:deposit])
       unless deposit.valid?
         @receipt.errors[:base] << "Deposit information invalid: <br/> #{deposit.errors.full_messages.join("<br/>")}"
         respond_to do |format|
@@ -115,11 +112,11 @@ class AccountingController < ApplicationController
   end
 
   def edit_receipt
-    @receipt = Receipt.find(params[:id])
+    @receipt = @builder.receipts.find(params[:id])
   end
 
   def update_receipt
-    @receipt = Receipt.find(params[:id])
+    @receipt = @builder.receipts.find(params[:id])
     # Destroy all old receipts_invoices_attributes if client changed
     if params[:receipt][:client_id].present? && params[:receipt][:client_id] != @receipt.client_id.to_s
       @receipt.receipts_invoices.each do |ri|
@@ -140,11 +137,11 @@ class AccountingController < ApplicationController
   end
 
   def delete_receipt
-    @receipt = Receipt.find(params[:id])
+    @receipt = @builder.receipts.find(params[:id])
   end
 
   def destroy_receipt
-    @receipt = Receipt.find(params[:id])
+    @receipt = @builder.receipts.find(params[:id])
     if @receipt.destroy
       redirect_to(:action => "receipts")
     else
@@ -165,7 +162,7 @@ class AccountingController < ApplicationController
   end
 
   def invoice
-    @invoice = Invoice.find(params[:id])
+    @invoice = @builder.invoices.find(params[:id])
     respond_to do |format|
       format.pdf do
         render :pdf => "Invoice-#{@invoice.id}",
@@ -177,22 +174,21 @@ class AccountingController < ApplicationController
   end
 
   def invoice_email
-    @invoice = Invoice.find(params[:id])
+    @invoice = @builder.invoices.find(params[:id])
   end
 
   def send_invoice_email
-    @invoice = Invoice.find(params[:id])
+    @invoice = @builder.invoices.find(params[:id])
     Mailer.delay.send_invoice(params[:to], params[:subject], params[:body], @invoice)
     redirect_to :action => 'invoice_email', :id => @invoice.id, :notice => "Email was sent."
   end
 
  def new_invoice
-    @invoice = Invoice.new
+   @invoice = @builder.invoices.new
  end
 
   def create_invoice
-    @invoice = Invoice.new(params[:invoice])
-    @invoice.builder_id = session[:builder_id]
+    @invoice = @builder.invoices.new(params[:invoice])
     if @invoice.save
       redirect_to(params[:original_url].presence ||url_for(:action => 'invoices'))
     else
@@ -201,11 +197,11 @@ class AccountingController < ApplicationController
   end
 
   def edit_invoice
-    @invoice = Invoice.find(params[:id])
+    @invoice = @builder.invoices.find(params[:id])
   end
 
   def update_invoice
-    @invoice = Invoice.find(params[:id])
+    @invoice = @builder.invoices.find(params[:id])
     # Destroy all old invoices_items_attributes if estimate changed
     if params[:invoice][:estimate_id].present? && params[:invoice][:estimate_id] != @invoice.estimate_id.to_s
       if @invoice.estimate.cost_plus_bid?
@@ -228,11 +224,11 @@ class AccountingController < ApplicationController
   end
 
   def delete_invoice
-    @invoice = Invoice.find(params[:id])
+    @invoice = @builder.invoices.find(params[:id])
   end
 
   def destroy_invoice
-    @invoice = Invoice.find(params[:id])
+    @invoice = @builder.invoices.find(params[:id])
     if @invoice.destroy
       redirect_to(:action => "invoices")
     else
@@ -251,7 +247,7 @@ class AccountingController < ApplicationController
   end
 
   def new_purchase_order
-    @purchase_order = PurchaseOrder.new
+    @purchase_order = @builder.purchase_orders.new
   end
 
   def create_purchase_order
@@ -259,7 +255,7 @@ class AccountingController < ApplicationController
   end
 
   def edit_purchase_order
-    @purchase_order = PurchaseOrder.find(params[:id])
+    @purchase_order = @builder.purchase_orders.find(params[:id])
   end
 
   def update_purchase_order
@@ -267,11 +263,11 @@ class AccountingController < ApplicationController
   end
 
   def delete_purchase_order
-    @purchase_order = PurchaseOrder.find(params[:id])
+    @purchase_order = @builder.purchase_orders.find(params[:id])
   end
 
   def destroy_purchase_order
-    @purchase_order = PurchaseOrder.find(params[:id])
+    @purchase_order = @builder.purchase_orders.find(params[:id])
     if @purchase_order.destroy
       redirect_to(:action => "purchase_orders")
     else
@@ -312,8 +308,7 @@ class AccountingController < ApplicationController
   end
 
   def new_bill
-    @bill = Bill.new
-    @bill.job_costed = true
+    @bill = @builder.bills.new({job_costed: true})
   end
 
   def create_bill
@@ -321,7 +316,7 @@ class AccountingController < ApplicationController
   end
 
   def edit_bill
-    @bill = Bill.find(params[:id])
+    @bill = @builder.bills.find(params[:id])
   end
 
   def update_bill
@@ -329,11 +324,11 @@ class AccountingController < ApplicationController
   end
 
   def delete_bill
-    @bill = Bill.find(params[:id])
+    @bill = @builder.bills.find(params[:id])
   end
 
   def destroy_bill
-    @bill = Bill.find(params[:id])
+    @bill = @builder.bills.find(params[:id])
     if @bill.destroy
       redirect_to(:action => "bills")
     else
@@ -354,13 +349,12 @@ class AccountingController < ApplicationController
   end
 
   def new_payment
-    @payment =  Payment.new
+    @payment =  @builder.payments.new
     @bills = []
   end
 
   def create_payment
-    @payment = Payment.new(params[:payment])
-    @payment.builder_id = session[:builder_id]
+    @payment = @builder.payments.new(params[:payment])
     if @payment.save
       respond_to do |format|
         format.html { redirect_to(params[:original_url].presence ||url_for(:action => "payments")) }
@@ -376,14 +370,14 @@ class AccountingController < ApplicationController
   end
 
   def edit_payment
-    @payment = Payment.find(params[:id])
+    @payment = @builder.payments.find(params[:id])
     @bills = @payment.bills
     @bills += @payment.payer.bills.unpaid if @payment.payer
     @bills.uniq!
   end
 
   def update_payment
-    @payment = Payment.find(params[:id])
+    @payment = @builder.payments.find(params[:id])
     # Destroy all old payments_bills_attributes if payer changed
     if (params[:payment][:payer_id].present? && params[:payment][:payer_id] != @payment.payer_id.to_s) ||
         (params[:payment][:payer_type].present? && params[:payment][:payer_type] != @payment.payer_type.to_s)
@@ -407,41 +401,17 @@ class AccountingController < ApplicationController
   end
   
   def delete_payment
-    @payment = Payment.find(params[:id])
+    @payment = @builder.payments.find(params[:id])
   end
   
   def destroy_payment
-    @payment = Payment.find(params[:id])
+    @payment = @builder.payments.find(params[:id])
     @payment.destroy
     redirect_to(:action => "payments")
   end
-  
-  def show
-    
-  end
-
-
-  def payables
-  end
-
-  def payroll
-
-  end
-  
-  def accounts
-
-  end
-  
-  def reports
-
-  end
-  
-  def import_export
-
-  end
 
   def show_estimate_items
-    @invoice = params[:invoice_id].present? ? Invoice.find(params[:invoice_id]) : Invoice.new
+    @invoice = params[:invoice_id].present? ? @builder.invoices.find(params[:invoice_id]) : @builder.invoices.new
     @from_date = params[:from_date]
     @to_date = params[:to_date]
     if params[:invoice].present? && params[:invoice][:estimate_id].present?
@@ -455,7 +425,7 @@ class AccountingController < ApplicationController
 
   def show_people_bills
     @bills = []
-    @payment = params[:payment_id].present? ? Payment.find(params[:payment_id]) : Payment.new
+    @payment = params[:payment_id].present? ? @builder.payments.find(params[:payment_id]) : @builder.payments.new
     if params[:payment].present? && params[:payment][:payer_id].present? && params[:payment][:payer_type].present?
       @payer = params[:payment][:payer_type].constantize.find params[:payment][:payer_id]
       @bills = @payer.bills.unpaid
@@ -468,7 +438,7 @@ class AccountingController < ApplicationController
 
   def show_client_invoices
     @invoices = []
-    @receipt = params[:receipt_id].present? ? Receipt.find(params[:receipt_id]) : Receipt.new
+    @receipt = params[:receipt_id].present? ? @builder.receipts.find(params[:receipt_id]) : @builder.receipts.new
     if params[:receipt].present? && params[:receipt][:client_id].present?
       @client = Client.find params[:receipt][:client_id]
       @invoices = @client == @receipt.client ? @client.invoices : @client.invoices.unbilled

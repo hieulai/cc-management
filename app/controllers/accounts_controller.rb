@@ -6,7 +6,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @account = Account.find(params[:id])
+    @account = @builder.accounts.find(params[:id])
     if params[:page]
       @balance = @account.balance({offset: (params[:page].to_i - 1) * Kaminari.config.default_per_page}).to_f
     else
@@ -16,13 +16,11 @@ class AccountsController < ApplicationController
   end
 
   def new
-    @account =  Account.new
+    @account =  @builder.accounts.new
   end
 
   def create
-    @builder = Base::Builder.find(session[:builder_id])
-    @account = Account.new(params[:account])
-    @account.builder = @builder
+    @account = @builder.accounts.new(params[:account])
     if @account.save
       redirect_to(:action => 'list')
     else
@@ -31,11 +29,11 @@ class AccountsController < ApplicationController
   end
 
   def edit
-    @account = Account.find(params[:id])
+    @account = @builder.accounts.find(params[:id])
   end
 
   def update
-    @account = Account.find(params[:id])
+    @account = @builder.accounts.find(params[:id])
     if @account.update_attributes(params[:account])
       redirect_to(:action => 'list')
     else
@@ -44,11 +42,11 @@ class AccountsController < ApplicationController
   end
 
   def delete
-    @account = Account.find(params[:id])
+    @account = @builder.accounts.find(params[:id])
   end
 
   def destroy
-    @account = Account.find(params[:id])
+    @account = @builder.accounts.find(params[:id])
     if @account.destroy
       redirect_to(:action => 'list')
     else
