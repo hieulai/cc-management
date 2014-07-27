@@ -32,14 +32,27 @@ class Category < ActiveRecord::Base
     template_id.nil? && builder_id
   end
 
-  def undestroyable?
+  def has_billed_categories?
     categories_templates.select { |ct| ct.undestroyable? }.any?
+  end
+
+  def has_billed_change_orders?
+    change_orders_categories.select { |ct| ct.undestroyable? }.any?
+  end
+
+  def has_chosen_bids?
+    bids.chosen.any?
+  end
+
+  def undestroyable?
+    has_billed_categories? || has_billed_change_orders? || has_chosen_bids?
   end
 
   private
   def check_destroyable
     if undestroyable?
-      errors[:invoice] << "Category #{name} cannot be deleted once containing items or change orders which are added to an invoice"
+      errors[:base] << "This Category contains items which are added to an invoice" if has_billed_categories? || has_billed_change_orders?
+      errors[:base] << "This Category contains commited bids" if has_chosen_bids?
       false
     end
   end

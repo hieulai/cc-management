@@ -4,6 +4,7 @@ class Project < ActiveRecord::Base
   CURRENT_LEAD = 'Current Lead'
   PAST_LEAD = 'Past Lead'
   acts_as_paranoid
+  before_destroy :check_destroyable
 
   belongs_to :client, touch: true
   belongs_to :builder, :class_name => "Base::Builder"
@@ -23,13 +24,20 @@ class Project < ActiveRecord::Base
   scope :has_estimate, includes(:estimates).where("estimates.id IS NOT NULL")
 
   before_save :toggle_committed_estimate, :if => :status_changed?
+
   after_initialize :default_values
   after_save :update_client_status, :if => :status_changed?
   after_save :update_estimate_status, :if => :status_changed?
-
   after_save :update_indexes
-  after_destroy :destroy_client, :if => Proc.new { |p| p.client.projects.empty? }
   after_save :update_transactions, :if => :client_id_changed?
+
+  after_destroy :destroy_client, :if => Proc.new { |p| p.client.projects.empty? }
+
+  validates :name, presence: true
+
+  def undestroyable?
+    estimates.select { |e| e.undestroyable? }.any?
+  end
 
   def next_tasks n
     incomplete_tasks[0..n-1]
@@ -147,6 +155,15 @@ class Project < ActiveRecord::Base
     receipts = invoices.map(&:receipts).flatten.compact.uniq
     receipts.each do |r|
       r.update_attribute(:client_id, r.invoices.project(self.id).first.project.client_id)
+    end
+  end
+
+  def check_destroyable
+    if undestroyable?
+      errors[:base] << "This project cannot be deleted once containing undestroyable estimates."
+      false
+    else
+      true
     end
   end
 end

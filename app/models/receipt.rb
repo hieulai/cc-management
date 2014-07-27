@@ -9,7 +9,7 @@ class Receipt < ActiveRecord::Base
   NEGATIVES = [Account::ACCOUNTS_RECEIVABLE]
   acts_as_paranoid
   include Cacheable
-  before_destroy :check_readonly
+  before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :client
@@ -126,7 +126,7 @@ class Receipt < ActiveRecord::Base
     accounting_transactions.destroy_all
   end
 
-  def check_readonly
+  def check_destroyable
     if billed?
       errors[:base] << "This receipt is already paid and can not be modified."
       false

@@ -1,7 +1,7 @@
 class Invoice < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable
-  before_destroy :check_readonly
+  before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :estimate
@@ -17,6 +17,7 @@ class Invoice < ActiveRecord::Base
   accepts_nested_attributes_for :invoices_bills_categories_templates, :allow_destroy => true, reject_if: :unbillable_bills_categories_template
   attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount,
                   :bill_from_date, :bill_to_date, :cached_total_amount, :invoices_bills_categories_templates_attributes
+
   default_scope order("created_at DESC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
   scope :billed, where('remaining_amount = 0')
@@ -65,7 +66,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def billed?
-    self.receipts_invoices.any?
+    self.receipts.any?
   end
 
   def amount
@@ -115,7 +116,7 @@ class Invoice < ActiveRecord::Base
     attributes['bills_categories_template_id'].blank? || !BillsCategoriesTemplate.find(attributes['bills_categories_template_id'].to_i).billable?(self.id)
   end
 
-  def check_readonly
+  def check_destroyable
     if billed?
       errors[:base] << "This invoice is already paid and can not be deleted."
       false

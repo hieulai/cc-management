@@ -14,6 +14,7 @@ class Account < ActiveRecord::Base
   CLIENT_CREDIT = "Client Credit"
   TOP = [REVENUE, EXPENSES, ASSETS, LIABILITIES, EQUITY]
   DEFAULTS = TOP + [ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS, COST_OF_GOODS_SOLD, RETAINED_EARNINGS, DEPOSITS_HELD, OPERATING_EXPENSES, CLIENT_CREDIT]
+  before_destroy :check_destroyable
 
   acts_as_paranoid
   belongs_to :builder, :class_name => "Base::Builder"
@@ -47,7 +48,12 @@ class Account < ActiveRecord::Base
   after_save :update_opening_balance_transaction, :update_indexes
 
   validates_uniqueness_of :name, scope: [:builder_id, :parent_id]
+  validates_presence_of :name
   validate :disallow_self_reference
+
+  def undestroyable?
+    accounting_transactions.any?
+  end
 
   def transactions
     AccountingTransaction.accounts(tree_ids, tree_ids, Account.name)
@@ -87,6 +93,10 @@ class Account < ActiveRecord::Base
   def default_account?
     Base::Builder.method_defined?("#{self.name.parameterize.underscore}_account".to_sym) &&
         self.builder.send("#{self.name.parameterize.underscore}_account".to_sym) == self
+  end
+
+  def top?
+    TOP.include?(name) && parent_id.nil?
   end
 
   def kind_of?(names)
@@ -155,6 +165,13 @@ class Account < ActiveRecord::Base
     if categories_templates.any?
       errors.add(:base, 'Cannot delete an account has categories')
       return false
+    end
+  end
+
+  def check_destroyable
+    if undestroyable?
+      errors[:base] << "This GL Account has accounting items associated with it. You must reallocate these items to another account before deleting this one."
+      false
     end
   end
 

@@ -1,0 +1,18 @@
+<% if @category.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@category.errors.count, "Error") %> prohibited
+          this category from being saved:</h2>
+      <ul>
+          <% @category.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+<div class="control-group">
+    <%= f.label :name, 'Category Name', class: 'col-lg-2 control-label' %>
+    <div class='controls'>
+        <%= f.text_field(:name) %>
+    </div>
+</div>
+	

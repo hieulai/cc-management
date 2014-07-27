@@ -78,7 +78,8 @@ class LeadsController < ApplicationController
   end
   
   def destroy
-    if @builder.projects.find(params[:id]).destroy
+    @project = @builder.projects.find(params[:id])
+    if @project.destroy
       redirect_to(:action => 'list_current_leads')
     else
       render('delete')

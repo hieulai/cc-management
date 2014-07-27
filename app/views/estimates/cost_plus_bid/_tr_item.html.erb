@@ -1,4 +1,4 @@
-<% link_class = item.billed? ? 'uneditable' : ''  %>
+<% link_class = item.undestroyable? ? 'uneditable' : ''  %>
 <tr class="item item_category_<%= category_template.category.id %> <% if item.from_change_order? %> change_order <% end%> <% unless item.billable? %> unclickable <% end %>" id="item_<%= item.id %>">
     <td>
 	</td>	
@@ -19,7 +19,7 @@
         <%= price_tag(item.amount, "amount") %>
     </td>
     <td class="button-container">
-        <% unless item.billed? %>
+        <% unless item.undestroyable? %>
             <%= link_to '+', "#" , :class => 'trigger-add btn'%>
             <%= link_to '-', url_for([:estimates, item]), :method => :delete, :remote => true, :class => 'remove-item btn' %>
         <% end %>

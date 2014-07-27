@@ -4,13 +4,25 @@
         <div class="columns">
             <h2>Delete Lead</h2>
             <%= form_for @project, :url => {:action => 'destroy', :id => @project.id} do |f| %>
+              <% if @project.errors.any? %>
+                <div id="errorExplanation">
+                    <h2><%= pluralize(@project.errors.count, "Error") %> prohibited
+                        this project from being deleled:</h2>
+                    <ul>
+                        <% @project.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                        <% end %>
+                    </ul>
+                </div>
+              <% end %>
                 <p>Are you sure you want to delete this lead?</p>
 
                 <p class="reference-name"><%= @project.name %></p>
 
                 <div class="control-group">
                     <div class="controls">
-                        <%= submit_tag("Delete Lead", :class => 'btn') %>
+                        <%= submit_tag("Delete Lead", :class => 'btn',
+                                       :data => @project.estimates.any? ? {:title => "Confirmation", :confirm => "This project has estimates attached to it. Deleting the project will also delete the attached estimates?"} : {}) %>
                     </div>
                 </div>
             <% end %>

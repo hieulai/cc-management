@@ -3,6 +3,8 @@ module Personable
 
   included do
     acts_as_paranoid
+    before_destroy :check_destroyable
+
     has_many :payments, :as => :payer, :dependent => :destroy
     has_many :receipts, as: :payer, :dependent => :destroy
     has_many :bills, as: :payer, :dependent => :destroy
@@ -34,6 +36,10 @@ module Personable
         balance
       end
     end
+  end
+
+  def undestroyable?
+    payments.any? || receipts.any? || bills.any? || purchase_orders.any?
   end
 
   def display_name
@@ -77,5 +83,23 @@ module Personable
       r = AccountingTransaction.where(id: ids)
     end
     r.sum(:amount)
+  end
+
+  def check_destroyable
+    if undestroyable?
+      errors[:base] << "This #{self.class.name} has #{dependencies.join(", ")} associated with it. You must reallocate these #{dependencies.join(", ")}  to a different #{self.class.name} before you can delete this #{self.class.name}"
+      false
+    else
+      true
+    end
+  end
+
+  def dependencies
+    dependencies = []
+    dependencies << "payments" if payments.any?
+    dependencies << "receipts" if receipts.any?
+    dependencies << "bills" if bills.any?
+    dependencies << "purchase orders" if purchase_orders.any?
+    dependencies
   end
 end

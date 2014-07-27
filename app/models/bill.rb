@@ -1,8 +1,7 @@
 class Bill < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable
-
-  before_destroy :check_readonly
+  before_destroy :check_destroyable
 
   belongs_to :estimate
   belongs_to :payer, polymorphic: true
@@ -214,9 +213,13 @@ class Bill < ActiveRecord::Base
     accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: estimate.project.id, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type && self.estimate
   end
 
+  def undestroyable?
+    paid? || invoiced?
+  end
+
   private
-  def check_readonly
-    if self.paid? || self.invoiced?
+  def check_destroyable
+    if undestroyable?
       errors[:base] << "This bill is already paid or added to an invoice and can not be deleted."
       false
     end
@@ -246,8 +249,7 @@ class Bill < ActiveRecord::Base
   end
 
   def default_values
-    self.billed_date ||= Date.today
+    billed_date ||= Date.today
   end
-
 
 end

@@ -1,9 +1,9 @@
 class Item < ActiveRecord::Base
   acts_as_paranoid
+  before_destroy :check_destroyable
+
   include Importable
   include Invoiceable
-
-  before_destroy :check_readonly
 
   # belongs_to :template
   belongs_to :builder, :class_name => "Base::Builder"
@@ -18,13 +18,14 @@ class Item < ActiveRecord::Base
   has_many :bills_items, :dependent => :destroy
   has_many :purchase_orders_items, :dependent => :destroy
   has_many :bids_items, :dependent => :destroy
+  has_many :bids, :through => :bids_items
   has_and_belongs_to_many :categories_templates
 
   attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file,
                   :change_order, :client_billed, :markup, :bill_memo, :builder_id, :bills_categories_template_id, :purchase_orders_categories_template_id
   validates :name, presence: true
 
-  before_save :check_readonly, :if => :changed? , :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
+  before_save :check_destroyable, :if => :changed? , :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
   before_save :reset_markup
   after_initialize :default_values
 
@@ -61,6 +62,10 @@ class Item < ActiveRecord::Base
     text :price_t do
       sprintf('%.2f', price.to_f)
     end
+  end
+
+  def undestroyable?
+    has_bills? || has_invoices? || has_bids?
   end
 
   def margin
@@ -140,10 +145,31 @@ class Item < ActiveRecord::Base
     self.estimated_cost ||= 0
   end
 
-  def check_readonly
-    if self.billed?
-      errors[:base] << "Item #{name} cannot be edited/deleted once added to an invoice. Please delete invoice to edit item details"
+  def check_destroyable
+    if undestroyable?
+      errors[:base] << "This item cannot be edited/deleted once added to #{dependencies.join(", ")}. Please delete them to edit item details"
       false
     end
+  end
+
+  def dependencies
+    dependencies = []
+    dependencies << "invoices" if has_invoices?
+    dependencies << "bills" if has_bills?
+    dependencies << "bids" if has_bids?
+    dependencies
+  end
+
+  def has_bills?
+    bills_categories_template || purchase_orders_categories_template ||
+        bills_items.any? || purchase_orders_items.any?
+  end
+
+  def has_invoices?
+    invoices.any?
+  end
+
+  def has_bids?
+    bids.any?
   end
 end

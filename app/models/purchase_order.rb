@@ -1,7 +1,7 @@
 class PurchaseOrder < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable
-  before_destroy :check_readonly
+  before_destroy :check_destroyable
 
   belongs_to :estimate
   belongs_to :vendor
@@ -111,7 +111,7 @@ class PurchaseOrder < ActiveRecord::Base
     bill.update_attributes({:payer_id => payer_id, :payer_type => payer_type, :project_id => project_id})
   end
 
-  def check_readonly
+  def check_destroyable
     if has_bill_paid?
       errors[:base] << "This purchase order is already paid and can not be deleted."
       false

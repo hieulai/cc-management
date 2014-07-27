@@ -40,7 +40,7 @@
 <div class="control-group">
     <%= p.label :client_id, 'Client', :class => 'col-lg-2 control-label' %>
     <div class='controls'>
-        <%= p.select(:client_id, @builder.clients.active.collect { |s| [s.main_full_name, s.id] }, {:include_blank => true}) %>
+        <%= p.select(:client_id, @builder.clients.active.collect { |s| [s.display_name, s.id] }, {:include_blank => true}) %>
     </div>
 </div>
 	

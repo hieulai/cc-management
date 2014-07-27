@@ -67,7 +67,7 @@ class PeopleController < ApplicationController
     end
 
     def destroy_vendor
-      @builder.vendors.find(params[:id])
+      @vendor = @builder.vendors.find(params[:id])
       if @vendor.destroy
         redirect_to(:action => 'list_vendors')
       else

@@ -134,7 +134,7 @@ class EstimatesController < ApplicationController
 
   def destroy
     @estimate = @builder.estimates.find(params[:id])
-    if @estimate.destroy_with_associations
+    if @estimate.destroy
       redirect_to(:action => 'list_current')
     else
       render :delete

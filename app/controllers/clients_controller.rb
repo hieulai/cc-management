@@ -47,8 +47,13 @@ class ClientsController < ApplicationController
   end
 
   def destroy
-    @client = @builder.clients.find(params[:id]).destroy
-    redirect_to(:action => 'list')
+    @client = @builder.clients.find(params[:id])
+    if @client.destroy
+      redirect_to(:action => 'list')
+    else
+      render('delete')
+    end
+
   end
 
 end

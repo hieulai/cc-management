@@ -5,7 +5,7 @@ class Transfer < ActiveRecord::Base
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
   attr_accessible :date, :amount, :reference, :memo, :kind, :from_account_id, :to_account_id
 
-  before_save :check_top_accounts, :if => Proc.new { |i| Account::TOP.include?(i.from_account.name) || Account::TOP.include?(i.to_account.name) }
+  before_save :check_top_accounts, :if => Proc.new { |i| i.from_account.top? || i.to_account.top? }
   after_initialize :default_values
   after_save :update_transactions
 

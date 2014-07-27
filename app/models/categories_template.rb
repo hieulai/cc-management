@@ -1,10 +1,6 @@
 class CategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
-  before_destroy :check_destroyable, :destroy_items
-  after_destroy :destroy_accounts, :if => Proc.new{|ct| ct.template.estimate.present? }
-  after_destroy :destroy_category
-
-  attr_accessible :category_id, :template_id, :items_attributes, :purchased
+  before_destroy :check_destroyable
 
   belongs_to :template
   belongs_to :category
@@ -15,9 +11,14 @@ class CategoriesTemplate < ActiveRecord::Base
 
   has_and_belongs_to_many :items
   has_and_belongs_to_many :accounts
+
+  attr_accessible :category_id, :template_id, :items_attributes, :purchased
   accepts_nested_attributes_for :items, allow_destroy: true
 
   after_create :create_accounts, :if => Proc.new{|ct| ct.template.estimate.present? }
+  after_destroy :destroy_items
+  after_destroy :destroy_accounts, :if => Proc.new{|ct| ct.template.estimate.present? }
+  after_destroy :destroy_category
 
   validates_presence_of :template, :category
 
@@ -47,7 +48,7 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def undestroyable?
-    items.select { |i| i.billed? }.any? || co_items.select { |i| i.billed? }.any?
+    bills.select { |i| i.undestroyable? }.any?
   end
 
   def estimated_amount
@@ -92,7 +93,7 @@ class CategoriesTemplate < ActiveRecord::Base
   private
   def check_destroyable
     if self.undestroyable?
-      errors[:base] << "Category Template #{id} cannot be deleted once containing items which are added to an invoice"
+      errors[:base] << "This Category Template cannot be deleted once containing items which are added to an invoice"
       false
     end
   end

@@ -4,6 +4,17 @@
         <div class="columns">
             <h2>Delete Category</h2>
             <%= form_for(:category, :url => {:action => 'destroy', :id => @category.id}) do |f| %>
+              <% if @category.errors.any? %>
+                <div id="errorExplanation">
+                    <h2><%= pluralize(@category.errors.count, "Error") %> prohibited
+                        this category from being deleted:</h2>
+                    <ul>
+                        <% @category.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                        <% end %>
+                    </ul>
+                </div>
+              <% end %>
                 <p>Are you sure you want to delete this category?</p>
 
                 <p class="reference-name"><%= @category.name %></p>

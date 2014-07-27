@@ -8,10 +8,11 @@ class Bid < ActiveRecord::Base
   belongs_to :category
   has_many :bids_items, :dependent => :destroy
 
-  validates_presence_of :category
-
   attr_accessible :notes, :chosen, :vendor_id, :category_id, :bids_items_attributes, :estimate_id
   accepts_nested_attributes_for :bids_items, :allow_destroy => true, :reject_if => lambda { |x| x[:amount].blank? }
+
+  scope :chosen, where(chosen: true)
+  validates_presence_of :category
 
   def total_amount
     bids_items.map(&:amount).compact.sum if bids_items.any?

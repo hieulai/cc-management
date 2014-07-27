@@ -30,7 +30,7 @@ class Estimate < ActiveRecord::Base
   before_save :check_commitment, :if => Proc.new { |e| e.committed && !e.committed_was }
 
   def undestroyable?
-    template.undestroyable? || bills.any? || invoices.any?
+    bills.any? || invoices.any?
   end
 
   def kind
@@ -50,7 +50,6 @@ class Estimate < ActiveRecord::Base
 
   def destroy_with_associations
     return false if check_destroyable == false
-    return false if template.check_destroyable == false
     template.categories_templates.each do |ct|
       ct.items.each do |i|
         i.destroy
@@ -96,7 +95,7 @@ class Estimate < ActiveRecord::Base
   private
   def check_destroyable
     if undestroyable?
-      errors[:base] << "This estimate has bills, invoices, or receipts attached to it. These items must be reallocated to another estimate before this one can be deleted."
+      errors[:base] << "This estimate has bills, invoices or receipts attached to it. These items must be reallocated to another estimate before this one can be deleted."
       false
     end
   end

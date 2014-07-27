@@ -10,7 +10,7 @@ class Vendor < ActiveRecord::Base
 
   validates :vendor_type, presence: true
   validates :trade, presence: {message: "cannot be blank for Subcontractors. Consider entering something such as: Framer, Plumber, Electrician, etc."}, :if => Proc.new { |v| v.vendor_type == "Subcontractor" }
-  validates :company, presence: { message: "and Primary First Name cannot both be blank."}, :if => Proc.new { |v| v.   primary_first_name == "Subcontractor" }
+  validates :company, presence: { message: "and Primary First Name cannot both be blank."}, :if => Proc.new { |v| v.primary_first_name == "Subcontractor" }
 
   after_save :update_indexes
 
@@ -29,6 +29,16 @@ class Vendor < ActiveRecord::Base
   HEADERS = ["Vendor Type", "Trade", "Company", "Primary First Name", "Primary Last Name", "Email", "Primary Phone1", "Primary Phone1 Tag", "Primary Phone2", "Primary Phone2 Tag",
              "Secondary First Name", "Secondary Last Name", "Secondary Email", "Secondary Phone1", "Secondary Phone1 Tag", "Secondary Phone2", "Secondary Phone2 Tag",
              "Website", "Address", "City", "State", "Zipcode", "Notes"]
+
+  def undestroyable?
+    super || bids.any?
+  end
+
+  def dependencies
+    dependencies = super
+    dependencies << "bids" if bids.any?
+    dependencies
+  end
 
   def type
     vendor_type

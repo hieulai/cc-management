@@ -31,6 +31,16 @@ class Client < ActiveRecord::Base
     end
   end
 
+  def undestroyable?
+    super || has_projects?
+  end
+
+  def dependencies
+    dependencies = super
+    dependencies << "projects" if has_projects?
+    dependencies
+  end
+
   def has_projects?
     super || projects.any?
   end

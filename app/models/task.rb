@@ -9,6 +9,8 @@ class Task < ActiveRecord::Base
 
   after_save :convert_project
 
+  validates :name, presence: true
+
   HEADERS = ["Name", "Completed", "Time to complete", "Department"]
 
   private

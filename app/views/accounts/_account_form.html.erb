@@ -1,4 +1,17 @@
 <% uneditabled = Account::DEFAULTS.include? @account.name %>
+
+<% if @account.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@account.errors.count, "Error") %> prohibited
+          this account from being saved:</h2>
+      <ul>
+          <% @account.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+
 <div class="control-group">
     <%= f.label :name, "Account Name", class: 'col-lg-2 control-label' %>
     <div class="controls">

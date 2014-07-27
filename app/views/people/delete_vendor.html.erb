@@ -4,15 +4,26 @@
         <div class="columns">
             <h2>Delete Vendor</h2>
             <%= form_for(:vendor, :url => {:action => 'destroy_vendor', :id => @vendor.id}) do |f| %>
-                <p>Are you sure you want to delete this vendor?</p>
-
-                <p class="reference-name"><%= @vendor.display_name %></p>
-
-                <div class="control-group">
-                    <div class='controls'>
-                        <%= submit_tag("Delete", :class => 'btn') %>
-                    </div>
+              <% if @vendor.errors.any? %>
+                <div id="errorExplanation">
+                    <h2><%= pluralize(@vendor.errors.count, "Error") %> prohibited
+                        this vendor from being deleled:</h2>
+                    <ul>
+                        <% @vendor.errors.full_messages.each do |msg| %>
+                          <li><%= msg %></li>
+                        <% end %>
+                    </ul>
                 </div>
+              <% end %>
+              <p>Are you sure you want to delete this vendor?</p>
+
+              <p class="reference-name"><%= @vendor.display_name %></p>
+
+              <div class="control-group">
+                  <div class='controls'>
+                      <%= submit_tag("Delete", :class => 'btn') %>
+                  </div>
+              </div>
             <% end %>
         </div>
     </div>

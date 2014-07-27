@@ -6,6 +6,18 @@
   </script>
 <% end %>
 
+<% if @estimate.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(@estimate.errors.count, "Error") %> prohibited
+          this estimate from being saved:</h2>
+      <ul>
+          <% @estimate.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>
+
 <div class="control-group">
     <%= f.label :project_id, 'Project Name', :class => 'col-lg-2 control-label' %>
     <div class="controls"><%= f.select(:project_id, @builder.projects.where(status: [Project::CURRENT, Project::CURRENT_LEAD]).collect { |s| [s.name, s.id] }, {:include_blank => true}) %></div>
