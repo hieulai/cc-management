@@ -584,23 +584,32 @@ class AccountingController < ApplicationController
     assign_categories_templates
     @purchasable = klass.new(params[@type.to_sym])
     @purchasable.builder_id = session[:builder_id]
-    # Checking for valid payment
+
+    failed = false
+    unless @purchasable.valid?
+      failed = true
+    end
     if @purchasable.instance_of? Bill
       if params[:bill][:create_payment] == "1"
         payment = Payment.new(params[:payment].merge(:builder_id => session[:builder_id],
-                                                      :payer_id => @purchasable.payer_id,
-                                                      :payer_type => @purchasable.payer_type))
+                                                     :payer_id => @purchasable.payer_id,
+                                                     :payer_type => @purchasable.payer_type,
+                                                     :date => @purchasable.billed_date))
         unless payment.valid?
           @bill = @purchasable
           @bill.errors[:base] << "Payment information invalid: <br/> #{payment.errors.full_messages.join("<br/>")}"
-          respond_to do |format|
-            format.html { render("new_bill") }
-            format.js { render "purchasable_response" }
-          end
-          return
+          failed = true
         end
       end
     end
+    if failed
+      respond_to do |format|
+        format.html { render("new_bill") }
+        format.js { render "purchasable_response" }
+      end
+      return
+    end
+
     if @purchasable.save
       # Create payment simultaneously for bills
       if @purchasable.instance_of?(Bill) && payment

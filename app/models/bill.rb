@@ -31,15 +31,14 @@ class Bill < ActiveRecord::Base
   scope :project, lambda { |project_id| joins(:estimate).where('estimates.project_id = ?', project_id) }
   scope :late, lambda { where('remaining_amount != ? AND due_date < ?', 0, Date.today) || joins(:purchase_order).where('purchase_orders.due_date < ?', Date.today) }
 
-  after_initialize :default_values
   before_update :clear_old_data
   before_save :check_zero_amount, :check_total_amount_changed
   after_save :update_transactions
   after_touch :index
 
-  validates_presence_of :billed_date, :builder
-  validates_presence_of :payer_id, :payer_type, :if => Proc.new { |b| b.purchase_order_id.nil? }
+  validates_presence_of :payer, :if => Proc.new { |b| b.purchase_order_id.nil? }
   validates_presence_of :estimate, :if => Proc.new { |b| b.job_costed? && b.purchase_order_id.nil? }
+  validates_presence_of :billed_date, :builder
 
   searchable do
     integer :id
@@ -246,10 +245,6 @@ class Bill < ActiveRecord::Base
       self.project_id = nil
       self.bills_categories_templates.destroy_all
     end
-  end
-
-  def default_values
-    billed_date ||= Date.today
   end
 
 end
