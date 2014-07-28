@@ -1,0 +1,28 @@
+<div>
+    <% bug||= Bug.new %>
+    <%= form_for bug, :url => {:controller => 'report_bug', :action => 'report'}, :remote => true, :html => {:id => 'report-bug-form', :class => 'form-horizontal'} do |f| %>
+      <div id="errorExplanation">
+          <ul>
+              <% bug.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+          </ul>
+      </div>
+      <div class="control-group">
+          <%= f.label :title, 'Title', class: 'col-lg-2 control-label' %>
+          <div class='controls'>
+              <%= f.text_field(:title) %>
+          </div>
+      </div>
+      <div class="control-group">
+          <%= f.label :description, 'Description', class: 'col-lg-2 control-label' %>
+          <div class='controls'>
+              <%= f.text_area(:description, :size => "40x6") %>
+          </div>
+      </div>
+      <div class="control-group">
+          <div class='controls'>
+          </div>
+      </div>
+    <% end %>
+</div>

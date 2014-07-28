@@ -19,7 +19,15 @@
             <div id='username'>
                 <%= (session[:builder_name]) if session[:builder_name] %>
                 </br>
-                <%= (session[:username]) if session[:username] %> <%= link_to("Logout", destroy_user_session_url, :method => :delete, :class => "logout") %>
+                <%= (session[:username]) if session[:username] %>
+                </br>
+                <div class="header-actions">
+                    <%= link_to "Report a Bug", "#", :id => "report-bug", :title => "Report a Bug" %>
+                    <script id="report-bug-template" type="text/html">
+                        <%= render :partial => 'layouts/report_bug' %>
+                    </script>
+                    <%= link_to("Logout", destroy_user_session_url, :method => :delete, :class => "logout", :title => "Logout" ) %>
+                </div>
             </div>
         </div>
     </div>

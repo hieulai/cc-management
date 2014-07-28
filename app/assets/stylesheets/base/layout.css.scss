@@ -207,8 +207,8 @@ form {
   text-decoration: none;
 }
 
-.logout {
-  background-image: url(image_path('logout.png'));
+.header-actions a {
+
   background-position: 0 0;
   background-repeat: no-repeat;
   background-size: 1em 1em;
@@ -220,6 +220,15 @@ form {
   text-align: left;
   text-indent: -9000em;
   width: 1em;
+  margin-left: 0.3em ;
+}
+
+#report-bug{
+  background-image: url(image_path('bug.png'));
+}
+
+.logout {
+  background-image: url(image_path('logout.png'));
 }
 
 #footer {

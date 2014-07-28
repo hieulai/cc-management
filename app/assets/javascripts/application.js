@@ -39,6 +39,7 @@ var Application = (function ($) {
         setupTrClickable();
         setupFormSubmit();
         setupCocoonBehavior();
+        setupReportBug();
     };
 
     var loadCheckAll = function(){
@@ -183,15 +184,29 @@ var Application = (function ($) {
         });
     };
 
+    var setupReportBug = function(){
+        $('#report-bug').bind('click', function() {
+            var content = $("#report-bug-template").html();
+            $(".modal").remove();
+            $.rails.createConfirmDialog('Send us problem details', content, false, true);
+            $('#confirmation-dialog .confirm').on('click', function () {
+                var $form = $("form#report-bug-form");
+                $form.submit();
+            });
+        });
+    };
+
     var setupAjaxBehavior = function(){
         $(document).ajaxStart(function () {
             $(".loader").show();
             $('input[type="submit"]').attr('disabled', true);
+            $('a.btn').attr('disabled', true);
         });
 
         $(document).ajaxStop(function () {
             $(".loader").hide();
             $('input[type="submit"]').removeAttr('disabled');
+            $('a.btn').removeAttr('disabled');
             transformToDatePickerFor();
             transformToSelect2For();
             transformToDateRangePickerFor();

@@ -1,0 +1,5 @@
+<% if @bug.errors.any? %>
+  $(".modal-body").html('<%= escape_javascript(render(:partial => "layouts/report_bug", :locals => {bug: @bug})) %>');
+<% else %>
+  $(".modal").data("modal").hide();
+<% end %>
