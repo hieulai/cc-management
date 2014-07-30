@@ -201,6 +201,7 @@ class Bill < ActiveRecord::Base
     r = []
     bills_categories_templates.each do |b_ct|
       r << b_ct.bills_items
+      r << b_ct.items
     end
     r.flatten
   end

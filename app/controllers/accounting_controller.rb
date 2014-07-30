@@ -593,8 +593,7 @@ class AccountingController < ApplicationController
       if params[:bill][:create_payment] == "1"
         payment = Payment.new(params[:payment].merge(:builder_id => session[:builder_id],
                                                      :payer_id => @purchasable.payer_id,
-                                                     :payer_type => @purchasable.payer_type,
-                                                     :date => @purchasable.billed_date))
+                                                     :payer_type => @purchasable.payer_type))
         unless payment.valid?
           @bill = @purchasable
           @bill.errors[:base] << "Payment information invalid: <br/> #{payment.errors.full_messages.join("<br/>")}"

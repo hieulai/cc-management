@@ -25,7 +25,7 @@ class Item < ActiveRecord::Base
                   :change_order, :client_billed, :markup, :bill_memo, :builder_id, :bills_categories_template_id, :purchase_orders_categories_template_id
   validates :name, presence: true
 
-  before_save :check_destroyable, :if => :changed? , :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
+  before_update :check_destroyable, :if => :changed?, :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
   before_save :reset_markup
   after_initialize :default_values
 

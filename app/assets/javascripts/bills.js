@@ -17,6 +17,10 @@ var Bill = (function ($, Shared, Accounting, Purchasable) {
             $(".job_costed").toggle();
             $(".un_job_costed").toggle();
         });
+
+        $("#bill-form").on('change', 'input[name="bill[billed_date]"]', function () {
+            $(this).closest("form").find('input[name="payment[date]"]').datepicker("setDate", $(this).val());
+        });
     };
 
     return {
