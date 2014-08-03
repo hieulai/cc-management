@@ -18,16 +18,6 @@ class Category < ActiveRecord::Base
 
   validates :name, presence: true
 
-  def destroy_with_associations
-    return false if check_destroyable == false
-    categories_templates.each do |ct|
-      ct.items.each do |i|
-        i.destroy
-      end
-    end
-    destroy
-  end
-
   def raw?
     template_id.nil? && builder_id
   end

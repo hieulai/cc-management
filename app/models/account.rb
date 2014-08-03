@@ -14,7 +14,7 @@ class Account < ActiveRecord::Base
   CLIENT_CREDIT = "Client Credit"
   TOP = [REVENUE, EXPENSES, ASSETS, LIABILITIES, EQUITY]
   DEFAULTS = TOP + [ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS, COST_OF_GOODS_SOLD, RETAINED_EARNINGS, DEPOSITS_HELD, OPERATING_EXPENSES, CLIENT_CREDIT]
-  before_destroy :check_destroyable
+  before_destroy :check_destroyable, :check_if_default
 
   acts_as_paranoid
   belongs_to :builder, :class_name => "Base::Builder"
@@ -42,14 +42,13 @@ class Account < ActiveRecord::Base
   scope :top, where(:parent_id => nil)
   scope :undefault, where('name not in (?)', DEFAULTS)
 
-  before_save :check_opening_balance_changed
+  before_save :check_opening_balance_changed, :disallow_self_reference
   before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
-  before_destroy :check_if_default
-  after_save :update_opening_balance_transaction, :update_indexes
+  after_save :update_opening_balance_transaction, :if => Proc.new { |i| i.kind_of? [BANK_ACCOUNTS] }
+  after_save :update_indexes
 
-  validates_uniqueness_of :name, scope: [:builder_id, :parent_id]
+  validates_uniqueness_of :name, scope: [:builder_id, :parent_id, :deleted_at]
   validates_presence_of :name
-  validate :disallow_self_reference
 
   def undestroyable?
     accounting_transactions.any?
@@ -91,8 +90,9 @@ class Account < ActiveRecord::Base
 
 
   def default_account?
-    Base::Builder.method_defined?("#{self.name.parameterize.underscore}_account".to_sym) &&
-        self.builder.send("#{self.name.parameterize.underscore}_account".to_sym) == self
+    current_name = name_was || name
+    Base::Builder.method_defined?("#{current_name.parameterize.underscore}_account".to_sym) &&
+        self.builder.send("#{current_name.parameterize.underscore}_account".to_sym) == self
   end
 
   def top?
@@ -142,6 +142,7 @@ class Account < ActiveRecord::Base
   def disallow_self_reference
     if self.id && self.parent_id == self.id
       errors.add(:base, 'Cannot set current account as sub account of it')
+      false
     end
   end
 

@@ -31,7 +31,7 @@ class ChangeOrder < ActiveRecord::Base
   private
   def check_destroyable
     if  undestroyable?
-      errors[:base] << "This change order cannot be disapproved/deleted once containing items which are added to an invoice"
+      errors[:base] << "This change order cannot be disapproved/deleted once containing items which are added to an invoice or a bill"
       false
     end
   end

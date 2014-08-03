@@ -12,7 +12,7 @@ class Bid < ActiveRecord::Base
   accepts_nested_attributes_for :bids_items, :allow_destroy => true, :reject_if => lambda { |x| x[:amount].blank? }
 
   scope :chosen, where(chosen: true)
-  validates_presence_of :category
+  validates_presence_of :category, :project, :builder
 
   def total_amount
     bids_items.map(&:amount).compact.sum if bids_items.any?

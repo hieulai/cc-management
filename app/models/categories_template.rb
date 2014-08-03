@@ -15,10 +15,8 @@ class CategoriesTemplate < ActiveRecord::Base
   attr_accessible :category_id, :template_id, :items_attributes, :purchased
   accepts_nested_attributes_for :items, allow_destroy: true
 
-  after_create :create_accounts, :if => Proc.new{|ct| ct.template.estimate.present? }
-  after_destroy :destroy_items
-  after_destroy :destroy_accounts, :if => Proc.new{|ct| ct.template.estimate.present? }
-  after_destroy :destroy_category
+  after_create :create_accounts
+  after_destroy :destroy_items, :destroy_accounts, :destroy_category
 
   validates_presence_of :template, :category
 
@@ -57,8 +55,7 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def revenue_account
-    return nil unless self.template.estimate
-    builder = self.template.estimate.builder
+    builder = self.template.builder || self.template.estimate.builder
     r_account = builder.revenue_account
     ct_account = r_account.children.where(:name => self.category.name).first
     unless ct_account
@@ -72,8 +69,7 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def cogs_account
-    return nil unless self.template.estimate
-    builder = self.template.estimate.builder
+    builder = self.template.builder || self.template.estimate.builder
     cogs_account = builder.cost_of_goods_sold_account
     ct_account = cogs_account.children.where(:name => self.category.name).first
     unless ct_account
@@ -108,8 +104,9 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def destroy_accounts
-    revenue_account.destroy if revenue_account.has_no_category?
-    cogs_account.destroy if cogs_account.has_no_category?
+    accounts.each do |account|
+      account.destroy if account.has_no_category?
+    end
   end
 
   def destroy_category

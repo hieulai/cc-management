@@ -17,11 +17,15 @@ class ChangeOrdersCategory < ActiveRecord::Base
   end
 
   def undestroyable?
-    items.select { |i| i.billed? }.any?
+    has_paid_item? || has_invoiced_item?
   end
 
   def has_paid_item?
     items.select { |i| i.bills_items.any? || i.purchase_orders_items.any? }.any?
+  end
+
+  def has_invoiced_item?
+    items.select { |i| i.billed? }.any?
   end
 
   def revenue_account

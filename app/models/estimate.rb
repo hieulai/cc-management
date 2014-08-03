@@ -7,7 +7,7 @@ class Estimate < ActiveRecord::Base
   before_destroy :check_destroyable
 
   # mount_uploader :data, DataUploader
-  belongs_to :builder, :class_name => "Base::Builder", :class_name => "Base::Builder"
+  belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :project
   has_many :measurements , :dependent => :destroy
   has_one :template, :dependent => :destroy

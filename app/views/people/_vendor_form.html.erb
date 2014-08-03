@@ -15,14 +15,10 @@
     <%= f.label :vendor_type, "Vendor Type", :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <div class="form-inline">
-            <%= f.radio_button(:vendor_type, "Architect") %>
-            <%= f.label :company, "Architect" %>
-            <%= f.radio_button(:vendor_type, "Engineer") %>
-            <%= f.label :company, "Engineer" %>
-            <%= f.radio_button(:vendor_type, "Subcontractor") %>
-            <%= f.label :company, "Subcontractor" %>
-            <%= f.radio_button(:vendor_type, "Supplier") %>
-            <%= f.label :company, "Supplier" %>
+            <% Vendor::TYPES.each do |type| %>
+              <%= f.radio_button(:vendor_type, type) %>
+              <%= f.label :company, type %>
+            <% end %>
         </div>
     </div>
 </div>

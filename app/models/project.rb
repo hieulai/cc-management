@@ -31,8 +31,6 @@ class Project < ActiveRecord::Base
   after_save :update_indexes
   after_save :update_transactions, :if => :client_id_changed?
 
-  after_destroy :destroy_client, :if => Proc.new { |p| p.client.projects.empty? }
-
   validates :name, presence: true
 
   def undestroyable?
@@ -100,10 +98,6 @@ class Project < ActiveRecord::Base
       Sunspot.delay.index e.invoices
     end
     projects_payers.each { |pp| pp.touch }
-  end
-
-  def destroy_client
-    client.destroy
   end
 
   def update_client_status
