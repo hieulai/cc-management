@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Base::Builder do
-
+  it_behaves_like "a paranoid"
   describe "Associations" do
     it { expect(subject).to have_many :clients }
     it { expect(subject).to have_many :projects }
@@ -25,19 +25,17 @@ describe Base::Builder do
     it { expect(subject).to have_many :specifications }
   end
 
-  let(:builder) { FactoryGirl.create :builder }
+  subject { FactoryGirl.create :builder }
   describe "Accounts" do
-    it "generate Default accounts" do
-      expect(builder.accounts).to have(Account::DEFAULTS.size).item
+    it "should generate Default accounts" do
+      expect(subject.accounts).to have(Account::DEFAULTS.size).item
     end
 
     Account::DEFAULTS.each do |n|
       it "has #{n} account" do
-        expect(builder.send("#{n.parameterize.underscore}_account".to_sym)).to_not be_nil
-        expect(builder.send("#{n.parameterize.underscore}_account").name).to eq(n)
+        expect(subject.send("#{n.parameterize.underscore}_account".to_sym)).to_not be_nil
+        expect(subject.send("#{n.parameterize.underscore}_account").name).to eq(n)
       end
     end
   end
-
-  it_behaves_like "a paranoid"
 end

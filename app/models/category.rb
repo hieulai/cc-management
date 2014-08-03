@@ -3,7 +3,6 @@ class Category < ActiveRecord::Base
   before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
-  belongs_to :specifications
   has_many :categories_templates, :dependent => :destroy
   has_many :change_orders_categories, :dependent => :destroy
   has_many :templates, through: :categories_templates

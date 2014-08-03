@@ -3,24 +3,83 @@ FactoryGirl.define do
     "Foo bar #{n}"
   end
 
+  sequence :date do |n|
+    Date.new(2000,12,31) + n.days
+  end
+
   sequence :email do |n|
-    "person#{n}@example.com"
+    "object#{n}@example.com"
   end
 
-  factory :builder, :class => Base::Builder do
-    company_name { generate(:name) }
+  sequence :payment_method do |n|
+    Payment::METHODS[n % Payment::METHODS.length]
   end
 
-  factory :user do
-    builder
-    email
+  sequence :receipt_method do |n|
+    Receipt::METHODS[n % Receipt::METHODS.length]
   end
 
-  factory :client do
-    builder
+  sequence :vendor_type do |n|
+    Vendor::TYPES[n % Vendor::TYPES.length]
   end
 
-  factory :vendor do
-    builder
+  trait :has_projects do
+    after(:create) do |object, evaluator|
+      object.projects << FactoryGirl.build(:project)
+    end
+  end
+
+  trait :has_payments do
+    after(:create) do |object, evaluator|
+      object.payments << FactoryGirl.build(:payment)
+    end
+  end
+
+  trait :has_bills do
+    after(:create) do |object, evaluator|
+      object.bills << FactoryGirl.build(:bill)
+    end
+  end
+
+  trait :has_paid_bills do
+    after(:build) do |object, evaluator|
+      object.bills << FactoryGirl.build(:paid_bill)
+    end
+  end
+
+  trait :has_invoiced_bills do
+    after(:build) do |object, evaluator|
+      object.bills << FactoryGirl.build(:invoiced_bill)
+    end
+  end
+
+  trait :has_payments_bills do
+    after(:create) do |object, evaluator|
+      object.payments_bills << FactoryGirl.build(:payments_bill)
+    end
+  end
+
+  trait :has_receipts do
+    after(:create) do |object, evaluator|
+      object.receipts << FactoryGirl.build(:receipt)
+    end
+  end
+
+  trait :has_invoices do
+    after(:create) do |object, evaluator|
+      object.invoices << FactoryGirl.build(:invoice)
+    end
+  end
+
+  trait :has_purchase_orders do
+    after(:create) do |object, evaluator|
+      object.purchase_orders << FactoryGirl.build(:purchase_order)
+    end
+  end
+
+  trait :has_bids do
+    after(:create) do |object, evaluator|
+      object.bids << FactoryGirl.build(:bid)
+    end
   end
 end
