@@ -9,4 +9,8 @@ FactoryGirl.define do
       chosen true
     end
   end
+
+  factory :bids_item do
+    bid
+  end
 end

@@ -27,7 +27,6 @@ describe Bill do
       it "should not be saved" do
         expect(subject.save).to be_false
       end
-
     end
 
     context "when paid" do
@@ -36,7 +35,7 @@ describe Bill do
         expect(subject.destroy).to be_false
       end
 
-      it "should not be change amount lower than paid amount" do
+      it "should not be changed amount lower than paid amount" do
         bct = subject.bills_categories_templates.first
         bi = bct.bills_items.first
         expect(subject.update_attributes(

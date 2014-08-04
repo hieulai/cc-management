@@ -11,8 +11,6 @@ class Item < ActiveRecord::Base
   belongs_to :bills_categories_template
   belongs_to :purchase_orders_categories_template
 
-  has_many :categories_templates, through: :categories_templates_items
-  has_many :templates, through: :categories_templates_items
   has_many :invoices_items, :dependent => :destroy
   has_many :invoices, :through => :invoices_items
   has_many :bills_items, :dependent => :destroy

@@ -124,8 +124,8 @@ class Invoice < ActiveRecord::Base
   end
 
   def check_total_amount_changed
-    if !self.new_record? && self.billed? && self.amount!= self.read_attribute(:cached_total_amount)
-      errors[:base] << "This invoice has already been paid in the amount of $#{self.read_attribute(:cached_total_amount)}. Editing a paid invoice requires that all item amounts continue to add up to the original receipt amount. If the original receipt was made for the wrong amount, correct the receipt first and then come back and edit the invoice."
+    if !self.new_record? && self.billed? && self.amount < self.billed_amount
+      errors[:base] << "This invoice has already been paid in the amount of $#{self.billed_amount}. Editing a paid invoice requires that all item amounts continue to add up to the original receipt amount. If the original receipt was made for the wrong amount, correct the receipt first and then come back and edit the invoice."
       return false
     end
   end
@@ -133,7 +133,8 @@ class Invoice < ActiveRecord::Base
   def check_reference
     if self.reference
       return true unless reference_changed?
-      if self.class.where('id != ? and reference = ?', id, reference).any?
+      reference_invoice = Invoice.where(:reference => reference).first
+      if reference_invoice.present? && reference_invoice.id != id
         errors[:base] << "Invoice # #{reference} is already used"
         return false
       end

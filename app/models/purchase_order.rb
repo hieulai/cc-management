@@ -22,7 +22,7 @@ class PurchaseOrder < ActiveRecord::Base
   before_save :check_zero_amount, :check_total_amount_changed
   after_save :create_default_bill, :update_indexes
 
-  validates_presence_of :payer_id, :payer_type, :estimate
+  validates_presence_of :payer_id, :payer_type, :estimate, :date
 
   searchable do
     integer :id
@@ -107,8 +107,8 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def create_default_bill
-    self.create_bill({:purchase_order_id => self.id, :builder_id => self.builder_id}) unless bill
-    bill.update_attributes({:payer_id => payer_id, :payer_type => payer_type, :project_id => project_id})
+    self.create_bill({:purchase_order_id => self.id, :builder_id => self.builder_id, :billed_date => self.date}) unless bill
+    bill.update_attributes({:payer_id => payer_id, :payer_type => payer_type, :project_id => project_id, :billed_date => self.date})
   end
 
   def check_destroyable

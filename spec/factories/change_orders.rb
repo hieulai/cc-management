@@ -35,7 +35,7 @@ FactoryGirl.define do
     factory :has_invoiced_items_change_orders_category do
       after(:build) do |object, evaluator|
         invoice = FactoryGirl.create(:guaranteed_bid_invoice)
-        invoices_item = FactoryGirl.build(:invoices_item)
+        invoices_item = FactoryGirl.build(:has_item_invoices_item)
         invoice.invoices_items << invoices_item
         object.items.first.invoices_items << invoices_item
       end

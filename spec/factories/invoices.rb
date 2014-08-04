@@ -4,6 +4,10 @@ FactoryGirl.define do
   factory :invoice do
     builder
     estimate
+
+    after(:build) do |object, evaluator|
+      object.invoices_items << FactoryGirl.build(:has_item_invoices_item)
+    end
     factory :guaranteed_bid_invoice do
       estimate :factory => :guaranteed_bid_estimate
     end
@@ -20,8 +24,14 @@ FactoryGirl.define do
   end
 
   factory :invoices_item do
-    item
     amount 100.0
+    factory :has_invoice_invoices_item do
+      invoice
+    end
+
+    factory :has_item_invoices_item do
+      item
+    end
   end
 
   factory :receipts_invoice do
