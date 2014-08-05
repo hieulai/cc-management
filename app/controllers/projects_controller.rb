@@ -55,7 +55,7 @@ class ProjectsController < ApplicationController
   def complete_task
     tasks = Task.find(params[:task_ids].keys)
     tasks.each do |task|
-      task.update_attribute(:completed, true)
+      task.update_attributes(:completed => true)
     end
     @project = tasks.first.tasklist.project
     respond_to do |format|

@@ -16,8 +16,8 @@ class Task < ActiveRecord::Base
   private
   def convert_project
     if self.tasklist.project && self.tasklist.project.status != Project::PAST && self.tasklist.project.incomplete_tasks.empty?
-      self.tasklist.project.update_attribute(:status, Project::PAST)
-      self.tasklist.project.committed_estimate.update_attribute(:status, "Past Estimate")
+      self.tasklist.project.update_attributes(:status => Project::PAST)
+      self.tasklist.project.committed_estimate.update_attributes(:status => Estimate::PAST)
     end
     true
   end

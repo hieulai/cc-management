@@ -10,7 +10,6 @@ class TemplatesController < ApplicationController
   def new
     @template = Template.new
     @template.categories.build
-    # Category.all.each { |category| category.update_attribute(:template_id, nil) if category.template.nil? }
     @categories = @builder.categories.raw
     @items = @builder.items
   end

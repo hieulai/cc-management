@@ -104,22 +104,22 @@ class Project < ActiveRecord::Base
     case self.status
       when Project::CURRENT, Project::PAST
         #Allows client to display in the People section if the project is won.
-        client.update_attribute(:status, Client::ACTIVE)
+        client.update_attributes(:status => Client::ACTIVE)
       when Project::CURRENT_LEAD, Project::PAST_LEAD
         #Prevents client from displaying in the People section if the project is not won yet.
-        client.update_attribute(:status, Client::LEAD)
+        client.update_attributes(:status => Client::LEAD)
     end
   end
 
   def toggle_committed_estimate
     if [Project::CURRENT, Project::PAST].include?(self.status_was) &&
         [Project::CURRENT_LEAD, Project::PAST_LEAD].include?(self.status)
-      committed_estimate.update_attribute(:committed, nil)
+      committed_estimate.update_attributes(:committed => nil)
       true
     elsif [Project::CURRENT_LEAD, Project::PAST_LEAD].include?(self.status_was) &&
         [Project::CURRENT, Project::PAST].include?(self.status)
       if self.estimates.size == 1
-        estimates.first.update_attribute(:committed, true)
+        estimates.first.update_attributes(:committed => true)
         true
       elsif estimates.commitments.empty?
         errors[:base] << "An estimate must be created before a project can be made active."
@@ -131,11 +131,11 @@ class Project < ActiveRecord::Base
   def update_estimate_status
     if [PAST].include?(self.status)
       estimates.each do |e|
-        e.update_attribute(:status, Estimate::PAST)
+        e.update_attributes(:status => Estimate::PAST)
       end
     elsif [CURRENT].include?(self.status)
       estimates.each do |e|
-        e.update_attribute(:status, Estimate::CURRENT)
+        e.update_attributes(:status => Estimate::CURRENT)
       end
     end
   end
@@ -148,7 +148,7 @@ class Project < ActiveRecord::Base
     invoices.each { |i| i.save }
     receipts = invoices.map(&:receipts).flatten.compact.uniq
     receipts.each do |r|
-      r.update_attribute(:client_id, r.invoices.project(self.id).first.project.client_id)
+      r.update_attributes(:client_id => r.invoices.project(self.id).first.project.client_id)
     end
   end
 

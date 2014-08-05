@@ -67,7 +67,7 @@ class LeadsController < ApplicationController
 
   def commit_estimate
     @estimate = @builder.estimates.find(params[:id])
-    @estimate.update_attribute(:committed, true)
+    @estimate.update_attributes(:committed => true)
     respond_to do |format|
       format.js {}
     end
