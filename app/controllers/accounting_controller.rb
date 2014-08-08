@@ -410,6 +410,23 @@ class AccountingController < ApplicationController
     redirect_to(:action => "payments")
   end
 
+  def print_check
+    @payment = Payment.find(params[:id])
+    respond_to do |format|
+      format.pdf do
+        render :pdf => "Check-#{@payment.id}",
+               :layout => false,
+               :show_as_html => params[:debug].present?,
+               :page_size => 'Letter',
+               :margin => {:top                => 0,
+                           :bottom             => 0,
+                           :left               => 0,
+                           :right              => 0
+               }
+      end
+    end
+  end
+
   def show_estimate_items
     @invoice = params[:invoice_id].present? ? @builder.invoices.find(params[:invoice_id]) : @builder.invoices.new
     @from_date = params[:from_date]
