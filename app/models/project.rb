@@ -18,7 +18,7 @@ class Project < ActiveRecord::Base
                   :deadline, :schedule_variance, :next_tasks, :check_back, :lead_source, :lead_notes, :project_notes, :client_id
   default_scope order("first_name asc, last_name asc")
   scope :current_lead, where(status: CURRENT_LEAD)
-  scope :past_lead, where(sgtatus: PAST_LEAD)
+  scope :past_lead, where(status: PAST_LEAD)
   scope :current_project, where(status: CURRENT)
   scope :past_project, where(status: PAST)
   scope :has_estimate, includes(:estimates).where("estimates.id IS NOT NULL")
