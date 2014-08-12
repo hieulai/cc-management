@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :bid do
     builder
-    project
+    estimate
     category
     factory :chosen_bid do
       chosen true
