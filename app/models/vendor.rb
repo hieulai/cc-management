@@ -61,7 +61,6 @@ class Vendor < ActiveRecord::Base
 
   def update_indexes
     Sunspot.delay.index purchase_orders
-    Sunspot.delay.index bids
   end
   
 end
