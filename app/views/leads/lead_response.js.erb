@@ -1,4 +1,4 @@
-<% if @project.estimates.commitments.empty?  %>
+<% if @project.errors[:committed_estimate].any?  %>
   <% if @project.estimates.empty? %>
       $.rails.createConfirmDialog('Information', 'An estimate must be created before a project can be made active.', true);
   <% else %>
@@ -13,6 +13,7 @@
     });
 
   <% end %>
-<% else %>
-  $.rails.createConfirmDialog('Information', '<%= escape_javascript(@project.errors.full_messages.join(".<br/>").html_safe) %>', true);
+<% else
+  errors_msg = (@project.errors.full_messages + @client.errors.full_messages).flatten.join(".<br/>").html_safe %>
+  $.rails.createConfirmDialog('Information', '<%= escape_javascript(errors_msg) %>', true);
 <% end %>

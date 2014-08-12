@@ -122,7 +122,7 @@ class Project < ActiveRecord::Base
         estimates.first.update_attributes(:committed => true)
         true
       elsif estimates.commitments.empty?
-        errors[:base] << "An estimate must be created before a project can be made active."
+        errors[:committed_estimate] << "An estimate must be created before a project can be made active."
         false
       end
     end

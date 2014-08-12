@@ -54,7 +54,9 @@ class LeadsController < ApplicationController
   def update
     @project = @builder.projects.find(params[:id])
     @client = @project.client
-    if  @project.update_attributes(params[:project]) && @client.update_attributes(params[:client])
+    @client.attributes = params[:client]
+    @client.company = ClientCompany.lookup(params[:client_company]) if params[:client_company][:company_name].present?
+    if  @project.update_attributes(params[:project]) && @client.save
       respond_to do |format|
         format.html { redirect_to(url_for(:action => 'list_current_leads')) }
         format.js { render :js => "window.location = '#{ url_for(:action => "list_current_leads")}'" }
