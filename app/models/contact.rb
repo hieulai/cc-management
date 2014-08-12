@@ -3,8 +3,6 @@ class Contact < ActiveRecord::Base
   include Personable
   include Billable
 
-  belongs_to :builder, :class_name => "Base::Builder"
-
   searchable do
     integer :builder_id
     string :type do

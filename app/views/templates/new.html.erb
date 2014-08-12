@@ -5,17 +5,6 @@
             <h2>Create Template</h2>
             <input type="hidden" id="site_url" value="<%= "http://#{request.raw_host_with_port}" %>">
             <%= form_for @template, :url => {:action => 'create'}, :html => {:class => 'form-horizontal'} do |f| %>
-                <% if @template.errors.any? %>
-                    <div id="errorExplanation">
-                        <h2><%= pluralize(@template.errors.count, "Error") %> prohibited
-                            this template from being saved:</h2>
-                        <ul>
-                            <% @template.errors.full_messages.each do |msg| %>
-                                <li><%= msg %></li>
-                            <% end %>
-                        </ul>
-                    </div>
-                <% end %>
                 <%= render(:partial => "new_form", :locals => {:f => f}) %>
                 <div class="control-group">
                     <div class="controls">

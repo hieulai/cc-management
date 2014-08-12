@@ -20,9 +20,11 @@ class LeadsController < ApplicationController
   end
   
   def create_from_new
-    @client = @builder.clients.create(params[:client])
-    @project = @builder.projects.new(params[:project].merge(:client_id => @client.id))
-    if @project.save
+    @client = @builder.clients.new(params[:client])
+    @project = @builder.projects.new(params[:project])
+    @client.projects << @project
+    @client.company = ClientCompany.lookup(params[:client_company]) if params[:client_company][:company_name].present?
+    if @client.save
       redirect_to(:action => 'list_current_leads')
     else
       render('new_client')
@@ -41,12 +43,12 @@ class LeadsController < ApplicationController
   
   def show
     @project = @builder.projects.find(params[:id])
-    @client = @builder.clients.find(@project.client_id)
+    @client = @project.client
   end
   
   def edit
     @project = @builder.projects.find(params[:id])
-    @client = @builder.clients.find(@project.client_id)
+    @client = @project.client
   end
 
   def update

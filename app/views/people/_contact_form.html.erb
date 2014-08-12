@@ -1,28 +1,26 @@
-<% if @contact.errors.any? %>
-  <div id="errorExplanation">
-      <h2><%= pluralize(@contact.errors.count, "Error") %> prohibited
-          this contact from being saved:</h2>
-      <ul>
-          <% @contact.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-      </ul>
-  </div>
-<% end %>
+<%= render :partial => 'shared/errors', :locals => {:obj => @contact} %>
 
 <h2>Company Info:</h2>
-<div class="control-group">
-    <%= f.label :company, "Company Name", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:company) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :website, "Website", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:website) %>
-    </div>
-</div>
+<%= fields_for @contact.company || ContactCompany.new do |co| %>
+  <div class="control-group">
+      <%= co.label :company_name, "Company Name", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:company_name) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= co.label :city, "City", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:city) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= co.label :state, "State", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:state) %>
+      </div>
+  </div>
+<% end %>
 <div class="control-group">
     <%= f.label :address, "Address", :class => 'col-lg-2 control-label' %>
     <div class="controls">
@@ -30,15 +28,9 @@
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :city, "City", :class => 'col-lg-2 control-label' %>
+    <%= f.label :website, "Website", :class => 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.text_field(:city) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :state, "State", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:state) %>
+        <%= f.text_field(:website) %>
     </div>
 </div>
 <div class="control-group">

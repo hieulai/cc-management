@@ -2,6 +2,17 @@ class Company < ActiveRecord::Base
   acts_as_paranoid
   has_one :image, as: :imageable, dependent: :destroy
 
-  attr_accessible :type, :company_name, :year_founded, :office_phone, :website, :address, :city, :state, :zipcode, :tax_id, :logo, :slogan, :image_attributes
+  attr_accessible :type, :company_name, :year_founded, :office_phone, :website, :address, :city, :state, :zipcode, :tax_id, :logo, :slogan, :image_attributes, :notes
   accepts_nested_attributes_for :image
+
+  validates_uniqueness_of :company_name, scope: [:city, :state, :type]
+  validates_presence_of :company_name
+
+  def self.lookup(params)
+    query = {}
+    query[:company_name] = params[:company_name]
+    query[:city] = params[:city] if params[:city]
+    query[:state] = params[:city] if params[:state]
+    self.where(query).first_or_create
+  end
 end

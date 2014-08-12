@@ -7,17 +7,7 @@
 <% end %>
 
 <%= form_for(@receipt, :url => {:action => @receipt.new_record? ? 'create_receipt' : 'update_receipt', :id => @receipt.id}, :remote => true, :html => {:class => 'form-horizontal'}) do |f| %>
-  <% if @receipt.errors.any? %>
-    <div id="errorExplanation">
-        <h2><%= pluralize(@receipt.errors.count, "Error") %> prohibited
-            this receipt from being saved:</h2>
-        <ul>
-            <% @receipt.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-        </ul>
-    </div>
-  <% end %>
+  <%= render :partial => 'shared/errors', :locals => {:obj => @receipt} %>
   <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
 
   <%

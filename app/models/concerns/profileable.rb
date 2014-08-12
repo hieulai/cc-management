@@ -17,27 +17,27 @@ module Profileable
     after_destroy :update_profileable_indexes
 
     searchable do
-      string :main_email do
-        main_email
+      string :primary_email do
+        primary_email
       end
       string :main_full_name do
         main_full_name
       end
-      string :main_primary_phone do
-        main_primary_phone
+      string :primary_phone1 do
+        primary_phone1
       end
       string :company_or_main_full_name do
         "#{company.to_s} #{main_full_name}"
       end
 
-      text :main_email do
-        main_email
+      text :primary_email do
+        primary_email
       end
       text :main_full_name do
         main_full_name
       end
-      text :main_primary_phone do
-        main_primary_phone
+      text :primary_phone1 do
+        primary_phone1
       end
       text :company_or_main_full_name do
         "#{company.to_s} #{main_full_name}"
@@ -49,30 +49,27 @@ module Profileable
     profiles.first
   end
 
-  def main_email
-    primary_contact.try :email
-  end
-
-  def main_first_name
-    primary_contact.try :first_name
-  end
-
-  def main_last_name
-    primary_contact.try :last_name
+  def secondary_contact
+    profiles.last
   end
 
   def main_full_name
-    "#{main_first_name} #{main_last_name}"
-  end
-
-  def main_primary_phone
-    primary_contact.try :phone1
+    "#{primary_first_name} #{primary_last_name}"
   end
 
   def display_name
     company.presence || main_full_name
   end
 
+  [:first_name, :last_name, :email, :phone1, :phone1_tag, :phone2, :phone2_tag].each do |a|
+    define_method("primary_#{a.to_s}") do
+      primary_contact.try a
+    end
+
+    define_method("secondary_#{a.to_s}") do
+      secondary_contact.try a
+    end
+  end
 
   def update_profileable_indexes
     Sunspot.delay.index payments

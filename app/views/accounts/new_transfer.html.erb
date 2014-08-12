@@ -8,17 +8,6 @@
     <div class="zurb-row">
         <div class="columns">
             <%= form_for @transfer, :url => {:action => 'create_transfer'}, :html => {:class => 'form-horizontal transfer-form'} do |f| %>
-              <% if @transfer.errors.any? %>
-                <div id="errorExplanation">
-                    <h2><%= pluralize(@transfer.errors.count, "Error") %> prohibited
-                        this transfer from being saved:</h2>
-                    <ul>
-                        <% @transfer.errors.full_messages.each do |msg| %>
-                          <li><%= msg %></li>
-                        <% end %>
-                    </ul>
-                </div>
-              <% end %>
               <%= render(:partial => "transfer_form", :locals => {:f => f}) %>
 
             <% end %>

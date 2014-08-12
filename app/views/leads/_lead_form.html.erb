@@ -1,5 +1,4 @@
 <h3>Project Info</h3>
-
 <div class="control-group">
     <%= p.label :name, 'Project Name', :class => 'col-lg-2 control-label' %>
     <div class="controls">
@@ -53,29 +52,32 @@
         <%= c.hidden_field(:last_contacted, :id => 'lead_last_contacted_hidden', :value => c.object.try(:last_contacted).try(:strftime, '%Y-%m-%d')) %>
     </div>
 </div>
-<div class="control-group">
-    <%= c.label :company, 'Company', :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= c.text_field(:company) %>
-    </div>
-</div>
+
+<%= fields_for @client.company || ClientCompany.new do |co| %>
+  <div class="control-group">
+      <%= co.label :company_name, 'Company', :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:company_name) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= co.label :city, 'City', :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:city) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= co.label :state, 'State', :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:state) %>
+      </div>
+  </div>
+<% end %>
 
 <div class="control-group">
     <%= c.label :address, 'Address', :class => 'col-lg-2 control-label' %>
     <div class="controls">
         <%= c.text_field(:address) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= c.label :city, 'City', :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= c.text_field(:city) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= c.label :state, 'State', :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= c.text_field(:state) %>
     </div>
 </div>
 <div class="control-group">

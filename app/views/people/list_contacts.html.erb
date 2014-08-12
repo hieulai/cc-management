@@ -28,7 +28,7 @@
             <table class="grid-view margin-bottom responsive" summary="Project List">
                 <tr class="header">
                     <%= sorted_ths [["Type", "type"],
-                                    ["Company", "company"],
+                                    ["Company", "company_name"],
                                     ["Main Contact", "main_full_name", "medium"],
                                     ["Primary Phone", "main_primary_phone", "medium"],
                                     ["Email", "main_email"],
@@ -38,10 +38,10 @@
                 <% @contacts.each do |c| %>
                     <tr class="contact-rows">
                         <td><a href='<%= c.id %>'></a>Other</td>
-                        <td><%= c.company %></td>
+                        <td><%= c.company_name %></td>
                         <td><%= c.main_full_name %></td>
-                        <td><%= number_to_phone(c.main_primary_phone, :area_code => true) %></td>
-                        <td><%= c.main_email %></td>
+                        <td><%= number_to_phone(c.primary_phone1, :area_code => true) %></td>
+                        <td><%= c.primary_email %></td>
                         <td>
                             <ul>
                                 <% c.project_names.split(",").each do |name| %>

@@ -21,7 +21,7 @@ class Project < ActiveRecord::Base
   scope :past_lead, where(status: PAST_LEAD)
   scope :current_project, where(status: CURRENT)
   scope :past_project, where(status: PAST)
-  scope :has_estimate, includes(:estimates).where("estimates.id IS NOT NULL")
+  scope :has_estimate, includes(:estimates).where("estimates.id IS NOT NULL AND estimates.deleted_at IS NULL")
 
   before_save :toggle_committed_estimate, :if => :status_changed?
 

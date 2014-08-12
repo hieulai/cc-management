@@ -3,18 +3,6 @@
     <h2>Edit Specification</h2>
 
     <%= form_for @specification, :method => :put, html: {class: 'form-horizontal'} do |f| %>
-
-      <% if @specification.errors.any? %>
-        <div id="errorExplanation">
-            <h2><%= pluralize(@specification.errors.count, "Error") %> prohibited
-                this specification from being saved:</h2>
-            <ul>
-                <% @specification.errors.full_messages.each do |msg| %>
-                  <li><%= msg %></li>
-                <% end %>
-            </ul>
-        </div>
-      <% end %>
       <%= render(:partial => "form", :locals => {:f => f}) %>
 
       <div class="control-group">

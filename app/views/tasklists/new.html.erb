@@ -4,17 +4,6 @@
         <div class="columns">
             <h2>New Task List</h2>
             <%= form_for @tasklist, :url => {:action => 'create'}, :html => {:class => 'tasklist form-horizontal'} do |f| %>
-                <% if @tasklist.errors.any? %>
-                    <div id="errorExplanation">
-                        <h2><%= pluralize(@tasklist.errors.count, "Error") %> prohibited
-                            this tasklist from being saved:</h2>
-                        <ul>
-                            <% @tasklist.errors.full_messages.each do |msg| %>
-                                <li><%= msg %></li>
-                            <% end %>
-                        </ul>
-                    </div>
-                <% end %>
                 <%= render(:partial => "form", :locals => {:f => f}) %>
                 <div class="control-group">
                     <div class='controls'>

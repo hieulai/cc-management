@@ -1,0 +1,11 @@
+<% if obj.errors.any? %>
+  <div id="errorExplanation">
+      <h2><%= pluralize(obj.errors.count, "Error") %> prohibited
+          this <%= obj.class.name.demodulize.underscore.humanize %> from being saved:</h2>
+      <ul>
+          <% obj.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+      </ul>
+  </div>
+<% end %>

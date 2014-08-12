@@ -28,7 +28,7 @@
             <table class="grid-view margin-bottom responsive" summary="Project List">
                 <tr class="header">
                     <th>Actions</th>
-                    <%= sorted_ths [["Company", "company"],
+                    <%= sorted_ths [["Company", "company_name"],
                                     ["Client Name", "main_full_name", "medium"],
                                     ["Primary Phone", "main_primary_phone", "medium"],
                                     ["Email", "main_email"],
@@ -42,10 +42,10 @@
                             <%= link_to("Edit", {:action => 'edit', :id => client.id}, :title => 'Edit', :class => 'edit table-action', :style => 'display: none;') %>
                             <%= link_to("Delete", {:action => 'delete', :id => client.id}, :title => 'Delete', :class => 'delete table-action') %>
                         </td>
-                        <td><%= client.company %></td>
+                        <td><%= client.company_name %></td>
                         <td><%= client.main_full_name %></td>
-                        <td><%= number_to_phone(client.main_primary_phone, :area_code => true) %></td>
-                        <td><%= client.main_email %></td>
+                        <td><%= number_to_phone(client.primary_phone1, :area_code => true) %></td>
+                        <td><%= client.primary_email %></td>
                         <td>
                             <ul>
                                 <% client.project_names.split(",").each do |name| %>

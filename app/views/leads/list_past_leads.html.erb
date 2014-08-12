@@ -41,8 +41,8 @@
                         <td><%= lead.name %></td>
                         <td class="center"><%= client.last_contacted %></td>
                         <td><%= client.display_name %></td>
-                        <td><%= number_to_phone(client.main_primary_phone, :area_code => true) %></td>
-                        <td><%= client.main_email %></td>
+                        <td><%= number_to_phone(client.primary_phone1, :area_code => true) %></td>
+                        <td><%= client.primary_email %></td>
                         <td><%= lead.project_type %></td>
                         <td>$<%= number_with_delimiter(lead.revenue) %></td>
                         <td><%= client.lead_source %></td>

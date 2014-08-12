@@ -13,13 +13,13 @@
     <div class="zurb-row">
         <div class="columns margin-bottom">
             <%= form_for @client, :url => {:action => 'create'}, html: {class: 'form-horizontal'} do |f| %>
-              <%= render(:partial => "form", :locals => {:f => f}) %>
-              <div class="control-group">
-                  <div class='controls'>
-                      <%= submit_tag("Create", class: 'btn') %>
-                  </div>
-              </div>
-            <% end %>
+                <%= render(:partial => "form", :locals => {:f => f}) %>
+                <div class="control-group">
+                    <div class='controls'>
+                        <%= submit_tag("Create", class: 'btn') %>
+                    </div>
+                </div>
+              <% end %>
         </div>
     </div>
 </div>

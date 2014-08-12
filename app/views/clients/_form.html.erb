@@ -1,20 +1,31 @@
-<% if @client.errors.any? %>
-  <div id="errorExplanation">
-      <h2><%= pluralize(@client.errors.count, "Error") %> prohibited
-          this vendor from being saved:</h2>
-      <ul>
-          <% @client.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-      </ul>
+<%= render :partial => 'shared/errors', :locals => {:obj => @client} %>
+<h2>Company Info</h2>
+<%= fields_for @client.company || ClientCompany.new do |co| %>
+  <div class="control-group">
+      <%= co.label :company_name, "Company", class: 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:company_name) %>
+      </div>
+  </div>
+
+  <div class="control-group">
+      <%= co.label :city, "City", class: 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:city) %>
+      </div>
+  </div>
+  <div class="control-group">
+      <%= co.label :state, "State", class: 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:state) %>
+      </div>
   </div>
 <% end %>
 
-<h2>Company Info</h2>
 <div class="control-group">
-    <%= f.label :company, "Company", class: 'col-lg-2 control-label' %>
+    <%= f.label :address, "Address", class: 'col-lg-2 control-label' %>
     <div class="controls">
-        <%= f.text_field(:company) %>
+        <%= f.text_field(:address) %>
     </div>
 </div>
 <div class="control-group">
@@ -24,29 +35,12 @@
     </div>
 </div>
 <div class="control-group">
-    <%= f.label :address, "Address", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:address) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :city, "City", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:city) %>
-    </div>
-</div>
-<div class="control-group">
-    <%= f.label :state, "State", class: 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:state) %>
-    </div>
-</div>
-<div class="control-group">
     <%= f.label :zipcode, "Zipcode", class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= f.text_field(:zipcode) %>
     </div>
 </div>
+
 
 <div class="control-group">
     <%= f.label :lead_source, "Lead Source", class: 'col-lg-2 control-label' %>

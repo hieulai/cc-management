@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140713162035) do
+ActiveRecord::Schema.define(:version => 20140805151904) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -237,9 +237,11 @@ ActiveRecord::Schema.define(:version => 20140713162035) do
     t.string   "status",         :default => "Lead"
     t.string   "website"
     t.time     "deleted_at"
+    t.integer  "company_id"
   end
 
   add_index "clients", ["builder_id"], :name => "index_clients_on_builder_id"
+  add_index "clients", ["company_id"], :name => "index_clients_on_company_id"
 
   create_table "companies", :force => true do |t|
     t.string   "company_name"
@@ -271,9 +273,11 @@ ActiveRecord::Schema.define(:version => 20140713162035) do
     t.datetime "updated_at", :null => false
     t.string   "company"
     t.time     "deleted_at"
+    t.integer  "company_id"
   end
 
   add_index "contacts", ["builder_id"], :name => "index_contacts_on_builder_id"
+  add_index "contacts", ["company_id"], :name => "index_contacts_on_company_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -791,8 +795,10 @@ ActiveRecord::Schema.define(:version => 20140713162035) do
     t.datetime "updated_at",       :null => false
     t.string   "service_provided"
     t.time     "deleted_at"
+    t.integer  "company_id"
   end
 
   add_index "vendors", ["builder_id"], :name => "index_vendors_on_builder_id"
+  add_index "vendors", ["company_id"], :name => "index_vendors_on_company_id"
 
 end

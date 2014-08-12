@@ -29,7 +29,7 @@
                 <tr class="header">
                     <%= sorted_ths [["Type", "type"],
                                     ["Trade", "trade"],
-                                    ["Company", "company"],
+                                    ["Company", "company_name"],
                                     ["Main Contact", "main_full_name", "medium"],
                                     ["Primary Phone", "main_primary_phone", "medium"],
                                     ["Email", "main_email"],
@@ -40,10 +40,10 @@
                     <tr class="rows">
                         <td><a href='<%= v.id %>'></a><%= v.vendor_type %></td>
                         <td><%= v.trade %></td>
-                        <td><%= v.company %></td>
+                        <td><%= v.company_name %></td>
                         <td><%= v.main_full_name %></td>
-                        <td><%= number_to_phone(v.main_primary_phone, :area_code => true) %></td>
-                        <td><%= v.main_email %></td>
+                        <td><%= number_to_phone(v.primary_phone1, :area_code => true) %></td>
+                        <td><%= v.primary_email %></td>
                         <td>
                             <ul>
                                 <% v.project_names.split(",").each do |name| %>

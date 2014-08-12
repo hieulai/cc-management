@@ -5,6 +5,9 @@ module Personable
     acts_as_paranoid
     before_destroy :check_destroyable
 
+    belongs_to :builder, :class_name => "Base::Builder"
+    belongs_to :company
+
     has_many :payments, :as => :payer, :dependent => :destroy
     has_many :receipts, as: :payer, :dependent => :destroy
     has_many :bills, as: :payer, :dependent => :destroy
@@ -12,12 +15,18 @@ module Personable
     has_many :accounting_transactions, :as => :payer, :dependent => :destroy
 
     accepts_nested_attributes_for :projects_payers, :allow_destroy => true, reject_if: :all_blank
-    attr_accessible :projects_payers_attributes, :company, :website, :address, :city, :state, :zipcode, :notes
+    attr_accessible :projects_payers_attributes, :address, :website, :zipcode, :notes, :company_id
+    delegate :company_name, :city, :state, to: :company, :allow_nil => true
+
+    validates_uniqueness_of :company_id, scope: [:builder_id], :allow_blank => :true
+
+    # after_save :remove_old_company?
 
     searchable do
-      string :company
+      string :company_name do
+        company_name
+      end
       string :notes
-      string :website
       string :project_names do
         project_names
       end
@@ -25,7 +34,10 @@ module Personable
         display_name
       end
 
-      text :company, :website, :notes
+      text :notes
+      text :company_name do
+        company_name
+      end
       text :project_names do
         project_names
       end
@@ -43,7 +55,7 @@ module Personable
   end
 
   def display_name
-    company.presence || main_full_name
+    company_name.presence || main_full_name
   end
 
   def has_projects?

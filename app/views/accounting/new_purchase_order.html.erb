@@ -4,17 +4,6 @@
         <div class="columns margin-bottom">
             <h2>Add Purchase Order</h2>
             <%= form_for @purchase_order, :url => {:action => 'create_purchase_order'}, :remote => true, :html => {:class => 'purchasable-form form-horizontal'} do |f| %>
-                <% if @purchase_order.errors.any? %>
-                    <div id="errorExplanation">
-                        <h2><%= pluralize(@purchase_order.errors.count, "Error") %> prohibited
-                            this purchase order from being saved:</h2>
-                        <ul>
-                            <% @purchase_order.errors.full_messages.each do |msg| %>
-                                <li><%= msg.html_safe %></li>
-                            <% end %>
-                        </ul>
-                    </div>
-                <% end %>
                 <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
                 <%= render(:partial => "purchase_order_form", :locals => {:f => f, :purchase_order => @purchase_order}) %>
                 <div id="table-placeholder">

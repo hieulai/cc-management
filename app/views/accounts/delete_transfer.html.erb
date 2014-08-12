@@ -4,18 +4,8 @@
         <div class="columns">
             <h2>Delete Transfer</h2>
             <%= form_for(:transfer, :url => {:action => 'destroy_transfer', :id => @transfer.id}) do |f| %>
+              <%= render :partial => 'shared/errors', :locals => {:obj => @transfer} %>
               <p>Are you sure you want to delete this transfer?</p>
-              <% if @transfer.errors.any? %>
-                <div id="errorExplanation">
-                    <h2><%= pluralize(@transfer.errors.count, "Error") %> prohibited
-                        this transfer from being deleted:</h2>
-                    <ul>
-                        <% @transfer.errors.full_messages.each do |msg| %>
-                          <li><%= msg %></li>
-                        <% end %>
-                    </ul>
-                </div>
-              <% end %>
 
               <div class="form-buttons">
                   <%= submit_tag("Delete", :class => 'btn') %>

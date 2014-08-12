@@ -216,3 +216,8 @@ td.calculate {
     display: block;
 }
 
+.controls .form-inline span{
+    display: inline-block;
+    margin: 5px;
+}
+

@@ -25,7 +25,7 @@ class PeopleController < ApplicationController
           }.results
         end
         format.csv {send_data Vendor.to_csv(@builder.vendors)}
-        format.xls { send_data @builder.vendors.to_xls(:headers => Vendor::HEADERS, :columns => [:vendor_type, :trade, :company, :primary_first_name, :primary_last_name, :email,
+        format.xls { send_data @builder.vendors.to_xls(:headers => Vendor::HEADERS, :columns => [:vendor_type, :trade, :company_name, :primary_first_name, :primary_last_name, :primary_email,
           :primary_phone1,:primary_phone1_tag, :primary_phone2,:primary_phone2_tag,:secondary_first_name, :secondary_last_name, :secondary_email, :secondary_phone1, :secondary_phone1_tag, 
           :secondary_phone2, :secondary_phone2_tag, :website, :address, :city, :state, :zipcode, 
           :notes]), content_type: 'application/vnd.ms-excel', filename: 'vendors.xls' }
@@ -42,19 +42,21 @@ class PeopleController < ApplicationController
   
     def create_vendor
       @vendor = @builder.vendors.new(params[:vendor])
+      @vendor.company = VendorCompany.lookup(params[:vendor_company]) if params[:vendor_company][:company_name].present?
       if @vendor.save
         redirect_to(:action => 'list_vendors')
       else
         render('new_vendor')
       end
     end
-  
+
     def edit_vendor
       @vendor = @builder.vendors.find(params[:id])
     end
   
     def update_vendor
       @vendor = @builder.vendors.find(params[:id])
+      @vendor.company = VendorCompany.lookup(params[:vendor_company]) if params[:vendor_company][:company_name].present?
       if @vendor.update_attributes(params[:vendor])
         redirect_to(:action => 'list_vendors')
       else
@@ -95,6 +97,7 @@ class PeopleController < ApplicationController
   
     def create_contact
       @contact = @builder.contacts.new(params[:contact])
+      @contact.company = ContactCompany.lookup(params[:contact_company]) if params[:contact_company][:company_name].present?
       if @contact.save
         redirect_to(:action => 'list_contacts')
       else
@@ -108,6 +111,7 @@ class PeopleController < ApplicationController
   
     def update_contact
       @contact = @builder.contacts.find(params[:id])
+      @contact.company = ContactCompany.lookup(params[:contact_company]) if params[:contact_company][:company_name].present?
       if @contact.update_attributes(params[:contact])
         redirect_to(:action => 'list_contacts')
       else
@@ -158,7 +162,7 @@ class PeopleController < ApplicationController
       }.results
 
       render :json => @people.map { |p|
-        label = p.company.present? ? "#{p.company} <br/> <span class=\"autocomplete-sublabel\">#{p.main_full_name}</span>" : p.main_full_name
+        label = p.company_name.present? ? "#{p.company_name} <br/> <span class=\"autocomplete-sublabel\">#{p.main_full_name}</span>" : p.main_full_name
         {:id => p.id, :label => label, :value => p.display_name, :type => p.class.name}
       }.to_json
     end

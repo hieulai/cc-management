@@ -9,17 +9,6 @@
         <div class="columns">
             <%= link_to("Delete", {:action => 'delete_transfer', :id => @transfer.id}, :class => 'btn btn-danger f-right') %>
             <%= form_for @transfer, :url => {:action => 'update_transfer', :id => @transfer.id}, :html => {:class => 'form-horizontal transfer-form'} do |f| %>
-              <% if @transfer.errors.any? %>
-                <div id="errorExplanation">
-                    <h2><%= pluralize(@transfer.errors.count, "Error") %> prohibited
-                        this transfer from being saved:</h2>
-                    <ul>
-                        <% @transfer.errors.full_messages.each do |msg| %>
-                          <li><%= msg %></li>
-                        <% end %>
-                    </ul>
-                </div>
-              <% end %>
               <%= render(:partial => "transfer_form", :locals => {:f => f}) %>
 
             <% end %>

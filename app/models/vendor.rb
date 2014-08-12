@@ -2,15 +2,12 @@ class Vendor < ActiveRecord::Base
   include Profileable
   include Personable
   include Billable
-
-  belongs_to :builder, :class_name => "Base::Builder"
   has_many :bids, :dependent => :destroy
 
   attr_accessible :vendor_type, :trade, :service_provided
 
   validates :vendor_type, presence: true
   validates :trade, presence: {message: "cannot be blank for Subcontractors. Consider entering something such as: Framer, Plumber, Electrician, etc."}, :if => Proc.new { |v| v.vendor_type == "Subcontractor" }
-  validates :company, presence: { message: "and Primary First Name cannot both be blank."}, :if => Proc.new { |v| v.main_first_name == "Subcontractor" }
 
   after_save :update_indexes
 
@@ -55,8 +52,8 @@ class Vendor < ActiveRecord::Base
       csv << HEADERS
       vendors.each do |vendor|
         csv << [vendor.vendor_type, vendor.trade, vendor.company,
-                vendor.profiles[0].try(:first_name), vendor.profiles[0].try(:last_name), vendor.profiles[0].try(:email), vendor.profiles[0].try(:phone1), vendor.profiles[0].try(:phone1_tag), vendor.profiles[0].try(:phone2), vendor.profiles[0].try(:phone2_tag),
-                vendor.profiles[1].try(:first_name), vendor.profiles[1].try(:last_name), vendor.profiles[1].try(:email), vendor.profiles[1].try(:phone1), vendor.profiles[1].try(:phone1_tag), vendor.profiles[1].try(:phone2), vendor.profiles[1].try(:phone2_tag),
+                vendor.primary_first_name, vendor.primary_last_name, vendor.primary_email, vendor.primary_phone1, vendor.primary_phone1_tag, vendor.primary_phone2, vendor.primary_phone2_tag,
+                vendor.secondary_first_name, vendor.secondary_last_name, vendor.secondary_email, vendor.secondary_phone1, vendor.secondary_phone1_tag, vendor.secondary_phone2, vendor.secondary_phone2_tag,
                 vendor.website, vendor.address, vendor.city, vendor.state, vendor.zipcode, vendor.notes]
       end
     end

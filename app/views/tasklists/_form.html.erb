@@ -5,6 +5,7 @@
     })
   </script>
 <% end %>
+<%= render :partial => 'shared/errors', :locals => {:obj => @tasklist} %>
 <div class="control-group">
     <%= f.label :name, "Task List Name", class: 'col-lg-2 control-label' %>
     <div class='controls'>

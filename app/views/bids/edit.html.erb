@@ -4,17 +4,6 @@
         <div class="columns">
             <h2>Edit Bid</h2>
             <%= form_for @bid, :method => :put, :html => {:class => 'edit_bid form-horizontal'} do |f| %>
-                <% if @bid.errors.any? %>
-                    <div id="errorExplanation">
-                        <h2><%= pluralize(@bid.errors.count, "Error") %> prohibited
-                            this bid from being saved:</h2>
-                        <ul>
-                            <% @bid.errors.full_messages.each do |msg| %>
-                                <li><%= msg %></li>
-                            <% end %>
-                        </ul>
-                    </div>
-                <% end %>
                 <%= render(:partial => "form", :locals => {:f => f}) %>
             <% end %>
             <div class="control-group">
