@@ -1,7 +1,7 @@
 <% content_for :javascript do %>
   <script type='text/javascript'>
     $(document).ready(function () {
-    Receipt.init();
+      Receipt.init();
     })
   </script>
 <% end %>
@@ -11,10 +11,6 @@
   <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
 
   <%
-     all_clients = @builder.clients.active
-     clients = all_clients.has_unbilled_invoices
-     clients << @receipt.client if @receipt.client
-     clients.uniq!
      invoices= @receipt.invoices
      invoices+= @receipt.client.invoices.unbilled if @receipt.client
      invoices.uniq!
@@ -43,13 +39,10 @@
       <div class="control-group invoiced client_credit receipt-kind client-select" style="display: <%= invoiced_client_credit_display %>">
           <%= f.label :client_id, "Client", class: 'col-lg-2 control-label' %>
           <div class="controls">
+              <%= hidden_field_tag "client_name", @receipt.client.try(:display_name), data: {url: people_autocomplete_name_path(type: Client.name)} %>
+              <%= f.hidden_field :client_id, class: 'payer-id' %>
+              <%= link_to "", url_for(:action => "show_client_invoices", :receipt_id => @receipt.id), :id => "hidden_client_link", :remote => true, :style => "display: none" %>
           </div>
-          <script id="invoiced-client-select" type="text/html">
-              <%= f.select(:client_id, clients.collect { |s| [s.main_full_name, s.id] }, {:include_blank => true}, :data => {:remote => true, :url => url_for(:action => "show_client_invoices", :receipt_id => @receipt.id)}) %>
-          </script>
-          <script id="client_credit-client-select" type="text/html">
-              <%= f.select(:client_id, all_clients.collect { |s| [s.main_full_name, s.id] }, {:include_blank => true}) %>
-          </script>
       </div>
       <div class="control-group">
           <%= f.label :method, "Payment Type", class: 'col-lg-2 control-label' %>

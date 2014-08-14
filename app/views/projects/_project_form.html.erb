@@ -1,3 +1,11 @@
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+      Project.init();
+    })
+  </script>
+<% end %>
+
 <h3>Project Info</h3>
 
 <div class="control-group">
@@ -40,7 +48,8 @@
 <div class="control-group">
     <%= p.label :client_id, 'Client', :class => 'col-lg-2 control-label' %>
     <div class='controls'>
-        <%= p.select(:client_id, @builder.clients.active.collect { |s| [s.display_name, s.id] }, {:include_blank => true}) %>
+        <%= hidden_field_tag "client_name", @project.client.try(:display_name), data: {url: people_autocomplete_name_path(type: Client.name)} %>
+        <%= p.hidden_field :client_id, class: 'payer-id' %>
     </div>
 </div>
 	

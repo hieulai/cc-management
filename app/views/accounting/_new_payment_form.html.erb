@@ -9,7 +9,7 @@
 <%= render :partial => 'shared/errors', :locals => {:obj => @payment} %>
 
 <div class="control-group">
-    <%= f.label :vendor_id, "Payor", class: 'col-lg-2 control-label' %>
+    <%= f.label :payer, "Payor", class: 'col-lg-2 control-label' %>
     <div class="controls">
         <%= hidden_field_tag :payer, @payment.payer.try(:display_name), data: {url: people_autocomplete_name_path} %>
         <%= f.hidden_field :payer_id, class: 'payer-id' %>

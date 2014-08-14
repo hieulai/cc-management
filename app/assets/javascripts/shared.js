@@ -117,8 +117,9 @@ var Shared = (function($){
         });
 
         $input.on("select2-selecting", function (e) {
-            $("input.payer-id").val(e.object.id);
-            $("input.payer-type").val(e.object.type);
+            var $container = $(this).closest(".controls");
+            $container.find("input.payer-id").val(e.object.id);
+            $container.find("input.payer-type").val(e.object.type);
             if (callback) {
                 callback(e.object.id, e.object.type );
             }

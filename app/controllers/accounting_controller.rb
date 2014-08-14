@@ -41,6 +41,7 @@ class AccountingController < ApplicationController
     @deposit = @builder.deposits.find(params[:id])
     # Destroy all old deposits_receipts_attributes if account changed
     if params[:deposit][:client_id].present? && params[:deposit][:client_id] != @deposit.client_id.to_s
+      params[:deposit][:deposits_receipts_attributes] ||= []
       @deposit.deposits_receipts.each do  |dr|
         params[:deposit][:deposits_receipts_attributes] << {id: dr.id, _destroy: true}.with_indifferent_access
       end
@@ -119,6 +120,7 @@ class AccountingController < ApplicationController
     @receipt = @builder.receipts.find(params[:id])
     # Destroy all old receipts_invoices_attributes if client changed
     if params[:receipt][:client_id].present? && params[:receipt][:client_id] != @receipt.client_id.to_s
+      params[:receipt][:receipts_invoices_attributes] ||= []
       @receipt.receipts_invoices.each do |ri|
         params[:receipt][:receipts_invoices_attributes] << {id: ri.id, _destroy: true}.with_indifferent_access
       end
@@ -205,13 +207,13 @@ class AccountingController < ApplicationController
     # Destroy all old invoices_items_attributes if estimate changed
     if params[:invoice][:estimate_id].present? && params[:invoice][:estimate_id] != @invoice.estimate_id.to_s
       if @invoice.estimate.cost_plus_bid?
+        params[:invoice][:invoices_bills_categories_templates_attributes] ||= []
         @invoice.invoices_bills_categories_templates.each do |ii|
-          params[:invoice][:invoices_bills_categories_templates_attributes] ||= []
           params[:invoice][:invoices_bills_categories_templates_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
         end
       else
+        params[:invoice][:invoices_items_attributes] ||= []
         @invoice.invoices_items.each do |ii|
-          params[:invoice][:invoices_items_attributes] ||= []
           params[:invoice][:invoices_items_attributes] << {id: ii.id, _destroy: true}.with_indifferent_access
         end
       end

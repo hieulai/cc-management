@@ -22,26 +22,26 @@ var Receipt = (function ($, Shared, Accounting) {
             initChildren();
         });
         Shared.initPeopleSelector(null, "#receipt_payor");
+        Shared.initPeopleSelector(show_invoices, "#client_name");
     };
 
     var initChildren = function () {
         var kind = $("#receipt-kind").attr("data-kind");
         if (kind == "invoiced") {
             Accounting.init("receipt", "invoice");
-            $(".client-select .controls").html($("#invoiced-client-select").html());
         } else if (kind == "client_credit") {
-            $(".client-select .controls").html($("#client_credit-client-select").html());
         } else if (kind == "uninvoiced") {
             Accounting.init("receipt", "item");
-            $(".client-select .controls").html("");
         }
-        $('.client-select select').select2({
-            width: "220px",
-            placeholder: "",
-            allowClear: true
-        });
+    };
 
-    }
+    var show_invoices = function (pId, pType) {
+        var kind = $("#receipt-kind").attr("data-kind");
+        var $clientLink = $("#hidden_client_link");
+        var href = $clientLink.attr("href");
+        href = Shared.updateQueryStringParameter(href, "receipt[client_id]", pId);
+        $clientLink.attr("href", href).click();
+    };
 
     return {
         init: init

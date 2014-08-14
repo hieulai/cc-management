@@ -1,5 +1,9 @@
 var Project = (function ($, Shared) {
     var init = function () {
+        Shared.initPeopleSelector(null, "#client_name");
+    };
+
+    var initBudget = function () {
         calculateBudgetSubtotalsAndTotals();
     };
 
@@ -50,6 +54,7 @@ var Project = (function ($, Shared) {
     };
 
     return {
-        init: init
+        init: init,
+        initBudget: initBudget
     }
 })(jQuery, Shared);
