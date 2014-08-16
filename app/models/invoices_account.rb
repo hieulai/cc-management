@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: invoices_accounts
+#
+#  id         :integer          not null, primary key
+#  account_id :integer
+#  invoice_id :integer
+#  date       :date
+#  amount     :decimal(10, 2)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  deleted_at :time
+#
+
 class InvoicesAccount < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :account

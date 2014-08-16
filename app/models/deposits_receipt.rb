@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: deposits_receipts
+#
+#  id         :integer          not null, primary key
+#  deposit_id :integer
+#  receipt_id :integer
+#  amount     :decimal(10, 2)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  deleted_at :time
+#
+
 class DepositsReceipt < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :deposit

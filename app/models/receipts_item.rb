@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: receipts_items
+#
+#  id          :integer          not null, primary key
+#  receipt_id  :integer
+#  account_id  :integer
+#  name        :string(255)
+#  description :string(255)
+#  amount      :decimal(10, 2)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  deleted_at  :time
+#
+
 class ReceiptsItem < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :receipt

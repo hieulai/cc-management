@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: invoices_bills_categories_templates
+#
+#  id                           :integer          not null, primary key
+#  invoice_id                   :integer
+#  bills_categories_template_id :integer
+#  amount                       :decimal(10, 2)
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  deleted_at                   :time
+#
+
 class InvoicesBillsCategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :invoice

@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: invoices
+#
+#  id                  :integer          not null, primary key
+#  builder_id          :integer
+#  estimate_id         :integer
+#  sent_date           :date
+#  reference           :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  remaining_amount    :decimal(10, 2)
+#  invoice_date        :date
+#  bill_from_date      :date
+#  bill_to_date        :date
+#  cached_total_amount :decimal(10, 2)
+#  deleted_at          :time
+#
+
 class Invoice < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable

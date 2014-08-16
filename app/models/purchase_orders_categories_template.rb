@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: purchase_orders_categories_templates
+#
+#  id                     :integer          not null, primary key
+#  purchase_order_id      :integer
+#  categories_template_id :integer
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  deleted_at             :time
+#
+
 class PurchaseOrdersCategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :purchase_order

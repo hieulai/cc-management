@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: change_orders
+#
+#  id         :integer          not null, primary key
+#  builder_id :integer
+#  project_id :integer
+#  name       :string(255)
+#  notes      :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  approved   :boolean
+#  deleted_at :time
+#
+
 class ChangeOrder < ActiveRecord::Base
   acts_as_paranoid
 

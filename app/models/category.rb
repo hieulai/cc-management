@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: categories
+#
+#  id               :integer          not null, primary key
+#  builder_id       :integer
+#  template_id      :integer
+#  name             :string(255)
+#  cost_total       :integer
+#  margin_total     :integer
+#  price_total      :integer
+#  default          :boolean
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  specification_id :integer
+#  deleted_at       :time
+#
+
 class Category < ActiveRecord::Base
   acts_as_paranoid
 

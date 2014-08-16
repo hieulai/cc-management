@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: projects_payers
+#
+#  id         :integer          not null, primary key
+#  project_id :integer
+#  payer_id   :integer
+#  payer_type :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  deleted_at :time
+#
+
 class ProjectsPayer < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :payer, polymorphic: true

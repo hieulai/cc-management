@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: payments
+#
+#  id                  :integer          not null, primary key
+#  account_id          :integer
+#  date                :date
+#  memo                :string(255)
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  vendor_id           :integer
+#  method              :string(255)
+#  reference           :integer
+#  builder_id          :integer
+#  deleted_at          :time
+#  payer_id            :integer
+#  payer_type          :string(255)
+#  cached_total_amount :decimal(10, 2)
+#
+
 class Payment < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable

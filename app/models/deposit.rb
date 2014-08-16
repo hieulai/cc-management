@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: deposits
+#
+#  id                  :integer          not null, primary key
+#  builder_id          :integer
+#  account_id          :integer
+#  date                :date
+#  notes               :text
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  reference           :string(255)
+#  cached_total_amount :decimal(10, 2)
+#  deleted_at          :time
+#
+
 class Deposit < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable

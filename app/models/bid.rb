@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: bids
+#
+#  id          :integer          not null, primary key
+#  project_id  :integer
+#  notes       :text
+#  chosen      :boolean
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  vendor_id   :integer
+#  due_date    :date
+#  category_id :integer
+#  deleted_at  :time
+#  builder_id  :integer
+#  estimate_id :integer
+#
+
 class Bid < ActiveRecord::Base
 
   acts_as_paranoid

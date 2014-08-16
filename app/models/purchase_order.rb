@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: purchase_orders
+#
+#  id                  :integer          not null, primary key
+#  project_id          :integer
+#  vendor_id           :integer
+#  notes               :text
+#  chosen              :boolean
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  sales_tax_rate      :decimal(10, 4)
+#  shipping            :decimal(10, 2)
+#  date                :date
+#  builder_id          :integer
+#  due_date            :date
+#  cached_total_amount :decimal(10, 2)
+#  payer_id            :integer
+#  payer_type          :string(255)
+#  deleted_at          :time
+#  estimate_id         :integer
+#
+
 class PurchaseOrder < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable

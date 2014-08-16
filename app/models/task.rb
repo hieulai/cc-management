@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id               :integer          not null, primary key
+#  tasklist_id      :integer
+#  name             :string(255)
+#  completed        :boolean
+#  time_to_complete :integer
+#  department       :string(255)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  position         :integer          default(0)
+#  deleted_at       :time
+#
+
 class Task < ActiveRecord::Base
   acts_as_paranoid
   include Importable

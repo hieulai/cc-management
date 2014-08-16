@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: tasklists
+#
+#  id         :integer          not null, primary key
+#  builder_id :integer
+#  project_id :integer
+#  name       :string(255)
+#  completed  :integer
+#  total      :integer
+#  default    :boolean
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  deleted_at :time
+#
+
 class Tasklist < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :project

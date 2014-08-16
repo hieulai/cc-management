@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: clients
+#
+#  id             :integer          not null, primary key
+#  builder_id     :integer
+#  company        :string(255)
+#  address        :string(255)
+#  city           :string(255)
+#  state          :string(255)
+#  zipcode        :string(255)
+#  lead_source    :string(255)
+#  last_contacted :date
+#  notes          :text
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  status         :string(255)      default("Lead")
+#  website        :string(255)
+#  deleted_at     :time
+#  company_id     :integer
+#
+
 class Client < ActiveRecord::Base
   include Profileable
   include Personable

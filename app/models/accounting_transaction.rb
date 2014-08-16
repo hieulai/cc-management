@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: accounting_transactions
+#
+#  id                   :integer          not null, primary key
+#  name                 :string(255)
+#  transactionable_id   :integer
+#  transactionable_type :string(255)
+#  date                 :date
+#  amount               :decimal(10, 2)
+#  reconciled           :boolean          default(FALSE)
+#  account_id           :integer
+#  display_priority     :integer          default(1)
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  payer_id             :integer
+#  payer_type           :string(255)
+#  project_id           :integer
+#  deleted_at           :time
+#
+
 class AccountingTransaction < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :transactionable, polymorphic: true

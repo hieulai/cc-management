@@ -62,6 +62,7 @@ gem 'newrelic_rpm'
 gem "bugsnag"
 
 # Misc
+gem 'annotate'
 gem "acts_as_paranoid"
 gem 'delayed_job_active_record'
 gem "bitbucket_rest_api"

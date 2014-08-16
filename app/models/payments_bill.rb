@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: payments_bills
+#
+#  id         :integer          not null, primary key
+#  payment_id :integer
+#  bill_id    :integer
+#  amount     :decimal(10, 2)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  deleted_at :time
+#
+
 class PaymentsBill < ActiveRecord::Base
   acts_as_paranoid
 

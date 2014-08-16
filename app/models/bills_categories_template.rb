@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: bills_categories_templates
+#
+#  id                     :integer          not null, primary key
+#  bill_id                :integer
+#  categories_template_id :integer
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  deleted_at             :time
+#
+
 class BillsCategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :bill

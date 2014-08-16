@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: invoices_items
+#
+#  id         :integer          not null, primary key
+#  invoice_id :integer
+#  item_id    :integer
+#  amount     :decimal(10, 2)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  deleted_at :time
+#
+
 class InvoicesItem < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :invoice

@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: transfers
+#
+#  id              :integer          not null, primary key
+#  from_account_id :integer
+#  to_account_id   :integer
+#  date            :date
+#  amount          :decimal(10, 2)
+#  reference       :string(255)
+#  memo            :text
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  kind            :string(255)
+#  deleted_at      :time
+#
+
 class Transfer < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :from_account, :foreign_key => "from_account_id", :class_name => Account.name

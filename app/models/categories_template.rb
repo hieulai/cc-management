@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: categories_templates
+#
+#  id          :integer          not null, primary key
+#  category_id :integer
+#  template_id :integer
+#  purchased   :boolean
+#  deleted_at  :time
+#
+
 class CategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
 

@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: un_job_costed_items
+#
+#  id          :integer          not null, primary key
+#  name        :string(255)
+#  description :string(255)
+#  amount      :decimal(10, 2)
+#  bill_id     :integer
+#  account_id  :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  deleted_at  :time
+#
+
 class UnJobCostedItem < ActiveRecord::Base
   acts_as_paranoid
 

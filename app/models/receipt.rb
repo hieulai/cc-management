@@ -1,3 +1,26 @@
+# == Schema Information
+#
+# Table name: receipts
+#
+#  id                  :integer          not null, primary key
+#  builder_id          :integer
+#  client_id           :integer
+#  method              :string(255)
+#  received_at         :date
+#  reference           :integer
+#  notes               :text
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  remaining_amount    :decimal(10, 2)
+#  payor               :string(255)
+#  payer_id            :integer
+#  payer_type          :string(255)
+#  cached_total_amount :decimal(10, 2)
+#  kind                :string(255)
+#  credit_amount       :decimal(10, 2)
+#  deleted_at          :time
+#
+
 class Receipt < ActiveRecord::Base
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
   INVOICED = "Receipt for Invoice"

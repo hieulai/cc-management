@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: bills
+#
+#  id                  :integer          not null, primary key
+#  builder_id          :integer
+#  project_id          :integer
+#  purchase_order_id   :integer
+#  due_date            :date
+#  notes               :text
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  remaining_amount    :decimal(10, 2)
+#  job_costed          :boolean          default(TRUE)
+#  cached_total_amount :decimal(10, 2)
+#  billed_date         :date
+#  deleted_at          :time
+#  payer_id            :integer
+#  payer_type          :string(255)
+#  estimate_id         :integer
+#
+
 class Bill < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable

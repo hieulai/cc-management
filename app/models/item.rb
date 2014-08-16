@@ -1,3 +1,35 @@
+# == Schema Information
+#
+# Table name: items
+#
+#  id                                     :integer          not null, primary key
+#  builder_id                             :integer
+#  template_id                            :integer
+#  category_id                            :integer
+#  name                                   :string(255)
+#  description                            :string(255)
+#  qty                                    :decimal(10, 2)
+#  unit                                   :string(255)
+#  estimated_cost                         :decimal(10, 2)
+#  markup                                 :decimal(10, 2)
+#  default                                :boolean
+#  notes                                  :text
+#  created_at                             :datetime         not null
+#  updated_at                             :datetime         not null
+#  file                                   :string(255)
+#  committed_cost                         :decimal(10, 2)
+#  actual_cost                            :decimal(10, 2)
+#  change_order                           :boolean          default(FALSE), not null
+#  client_billed                          :boolean          default(FALSE), not null
+#  uncommitted_cost                       :decimal(10, 2)
+#  margin                                 :decimal(10, 2)
+#  change_orders_category_id              :integer
+#  bill_memo                              :text
+#  deleted_at                             :time
+#  purchase_orders_categories_template_id :integer
+#  bills_categories_template_id           :integer
+#
+
 class Item < ActiveRecord::Base
   acts_as_paranoid
 

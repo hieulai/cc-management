@@ -1,3 +1,30 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id                :integer          not null, primary key
+#  client_id         :integer
+#  name              :string(255)
+#  project_type      :string(255)
+#  status            :string(255)      default("Current Lead")
+#  lead_stage        :string(255)
+#  progress          :integer
+#  revenue           :integer
+#  start_date        :date
+#  completion_date   :date
+#  deadline          :date
+#  schedule_variance :integer
+#  next_tasks        :string(255)
+#  lead_notes        :text
+#  project_notes     :text
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  builder_id        :integer
+#  first_name        :integer
+#  last_name         :string(255)
+#  deleted_at        :time
+#
+
 class Project < ActiveRecord::Base
   CURRENT = 'Current Project'
   PAST =  "Past Project"

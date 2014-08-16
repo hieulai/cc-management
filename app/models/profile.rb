@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: profiles
+#
+#  id               :integer          not null, primary key
+#  person_id        :integer
+#  builder_id       :integer
+#  first_name       :string(255)
+#  last_name        :string(255)
+#  email            :string(255)
+#  phone1           :string(255)
+#  phone1_tag       :string(255)
+#  phone2           :string(255)
+#  phone2_tag       :string(255)
+#  profileable_id   :integer
+#  profileable_type :string(255)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  deleted_at       :time
+#
+
 class Profile < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :builder, :class_name => "Base::Builder"

@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: bills_items
+#
+#  id                           :integer          not null, primary key
+#  item_id                      :integer
+#  description                  :string(255)
+#  qty                          :decimal(10, 2)
+#  amount                       :decimal(10, 2)
+#  estimated_cost               :decimal(10, 2)
+#  actual_cost                  :decimal(10, 2)
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  memo                         :text
+#  deleted_at                   :time
+#  bills_categories_template_id :integer
+#
+
 class BillsItem < ActiveRecord::Base
   acts_as_paranoid
   include Purchasable

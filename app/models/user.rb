@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  builder_id             :integer
+#  authority              :string(255)
+#  first_name             :string(255)
+#  last_name              :string(255)
+#  email                  :string(255)
+#  primary_phone          :string(255)
+#  legacy_hashed_password :string(255)
+#  legacy_salt            :string(255)
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  encrypted_password     :string(255)      default(""), not null
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  deleted_at             :time
+#
+
 require 'digest/sha1'
 class User < ActiveRecord::Base
   acts_as_paranoid

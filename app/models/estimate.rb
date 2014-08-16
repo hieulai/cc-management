@@ -1,3 +1,24 @@
+# == Schema Information
+#
+# Table name: estimates
+#
+#  id         :integer          not null, primary key
+#  builder_id :integer
+#  project_id :integer
+#  progress   :string(255)
+#  status     :string(255)      default("Current Estimate")
+#  deadline   :date
+#  revenue    :decimal(10, 2)
+#  profit     :decimal(10, 2)
+#  margin     :decimal(10, 2)
+#  notes      :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  kind       :string(255)
+#  deleted_at :time
+#  committed  :boolean
+#
+
 class Estimate < ActiveRecord::Base
   CURRENT = 'Current Estimate'
   PAST =  'Past Estimate'

@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: accounts
+#
+#  id                         :integer          not null, primary key
+#  builder_id                 :integer
+#  name                       :string(255)
+#  balance                    :decimal(10, 2)
+#  number                     :integer
+#  category                   :string(255)
+#  subcategory                :string(255)
+#  prefix                     :string(255)
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  parent_id                  :integer
+#  opening_balance_updated_at :datetime
+#  opening_balance            :decimal(10, 2)
+#  deleted_at                 :time
+#
+
 class Account < ActiveRecord::Base
   REVENUE = "Revenue"
   COST_OF_GOODS_SOLD = "Cost of Goods Sold"

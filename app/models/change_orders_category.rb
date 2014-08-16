@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: change_orders_categories
+#
+#  id              :integer          not null, primary key
+#  change_order_id :integer
+#  category_id     :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  deleted_at      :time
+#
+
 class ChangeOrdersCategory < ActiveRecord::Base
   acts_as_paranoid
 
