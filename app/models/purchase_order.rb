@@ -1,7 +1,6 @@
 class PurchaseOrder < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable
-  before_destroy :check_destroyable
 
   belongs_to :estimate
   belongs_to :vendor
@@ -18,8 +17,9 @@ class PurchaseOrder < ActiveRecord::Base
                   :vendor_id, :due_date, :payer_id, :payer_type, :purchase_orders_categories_templates_attributes
   accepts_nested_attributes_for :purchase_orders_categories_templates, :allow_destroy => true
 
-  after_initialize :default_values
   before_save :check_zero_amount, :check_total_amount_changed
+  before_destroy :check_destroyable, :prepend => true
+  after_initialize :default_values
   after_save :create_default_bill, :update_indexes
 
   validates_presence_of :payer_id, :payer_type, :estimate, :date

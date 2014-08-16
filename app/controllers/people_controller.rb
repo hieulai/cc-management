@@ -156,7 +156,7 @@ class PeopleController < ApplicationController
     def autocomplete_name
       klasses = params[:type].present? ? params[:type].constantize : [Client, Vendor, Contact]
       @people = Sunspot.search(klasses) {
-        fulltext params[:term], {:fields => :company_or_main_full_name}
+        fulltext params[:term], {:fields => [:display_name, :company_name]}
         with :builder_id, session[:builder_id]
         paginate :page => 1, :per_page => Kaminari.config.default_per_page
       }.results

@@ -1,6 +1,5 @@
 class Template < ActiveRecord::Base
   acts_as_paranoid
-  before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :estimate
@@ -15,6 +14,8 @@ class Template < ActiveRecord::Base
   accepts_nested_attributes_for :categories_templates, reject_if: :all_blank, allow_destroy: true
 
   scope :raw, where(estimate_id: nil)
+
+  before_destroy :check_destroyable, :prepend => true
 
   validates :name, presence: true
 

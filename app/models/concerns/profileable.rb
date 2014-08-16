@@ -26,9 +26,6 @@ module Profileable
       string :primary_phone1 do
         primary_phone1
       end
-      string :company_or_main_full_name do
-        "#{company.to_s} #{main_full_name}"
-      end
 
       text :primary_email do
         primary_email

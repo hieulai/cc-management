@@ -1,6 +1,5 @@
 class Category < ActiveRecord::Base
   acts_as_paranoid
-  before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
   has_many :categories_templates, :dependent => :destroy
@@ -13,6 +12,7 @@ class Category < ActiveRecord::Base
   default_scope order("name ASC")
   scope :raw, where(template_id: nil)
 
+  before_destroy :check_destroyable, :prepend => true
   after_save :update_indexes
 
   validates :name, presence: true

@@ -3,7 +3,6 @@ module Personable
 
   included do
     acts_as_paranoid
-    before_destroy :check_destroyable
 
     belongs_to :builder, :class_name => "Base::Builder"
     belongs_to :company
@@ -17,6 +16,8 @@ module Personable
     accepts_nested_attributes_for :projects_payers, :allow_destroy => true, reject_if: :all_blank
     attr_accessible :projects_payers_attributes, :address, :website, :zipcode, :notes, :company_id
     delegate :company_name, :city, :state, to: :company, :allow_nil => true
+
+    before_destroy :check_destroyable, :prepend => true
 
     validates_uniqueness_of :company_id, scope: [:builder_id], :allow_blank => :true
 

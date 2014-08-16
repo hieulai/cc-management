@@ -1,7 +1,5 @@
 class ChangeOrdersCategory < ActiveRecord::Base
   acts_as_paranoid
-  before_destroy :check_destroyable
-  after_destroy :destroy_accounts
 
   belongs_to :change_order
   belongs_to :category
@@ -10,7 +8,9 @@ class ChangeOrdersCategory < ActiveRecord::Base
   attr_accessible :category_id, :change_order_id, :items_attributes
   accepts_nested_attributes_for :items, allow_destroy: true
 
+  before_destroy :check_destroyable, :prepend => true
   after_create :create_accounts
+  after_destroy :destroy_accounts
 
   def amount
     items.map(&:price).compact.sum

@@ -1,6 +1,5 @@
 class Item < ActiveRecord::Base
   acts_as_paranoid
-  before_destroy :check_destroyable
 
   include Importable
   include Invoiceable
@@ -25,6 +24,7 @@ class Item < ActiveRecord::Base
 
   before_update :check_destroyable, :if => :changed?, :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
   before_save :reset_markup
+  before_destroy :check_destroyable, :prepend => true
   after_initialize :default_values
 
   default_scope order("name ASC")

@@ -1,7 +1,6 @@
 class Bill < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable
-  before_destroy :check_destroyable
 
   belongs_to :estimate
   belongs_to :payer, polymorphic: true
@@ -33,6 +32,7 @@ class Bill < ActiveRecord::Base
 
   before_update :clear_old_data
   before_save :check_zero_amount, :check_total_amount_changed
+  before_destroy :check_destroyable, :prepend => true
   after_save :update_transactions
   after_touch :index
 

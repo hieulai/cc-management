@@ -1,7 +1,6 @@
 class Invoice < ActiveRecord::Base
   acts_as_paranoid
   include Cacheable
-  before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :estimate
@@ -27,6 +26,7 @@ class Invoice < ActiveRecord::Base
   after_initialize :default_values
   before_save :check_reference
   before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
+  before_destroy :check_destroyable, :prepend => true
   after_save :update_transactions
 
   validates_presence_of :estimate, :builder

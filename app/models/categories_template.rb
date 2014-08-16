@@ -1,6 +1,5 @@
 class CategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
-  before_destroy :check_destroyable
 
   belongs_to :template
   belongs_to :category
@@ -15,6 +14,7 @@ class CategoriesTemplate < ActiveRecord::Base
   attr_accessible :category_id, :template_id, :items_attributes, :purchased
   accepts_nested_attributes_for :items, allow_destroy: true
 
+  before_destroy :check_destroyable, :prepend => true
   after_create :create_accounts
   after_destroy :destroy_items, :destroy_accounts, :destroy_category
 

@@ -4,7 +4,6 @@ class Estimate < ActiveRecord::Base
   GUARANTEED = 'Guaranteed Bid'
   COST_PLUS ='Cost Plus Bid'
   acts_as_paranoid
-  before_destroy :check_destroyable
 
   # mount_uploader :data, DataUploader
   belongs_to :builder, :class_name => "Base::Builder"
@@ -28,6 +27,7 @@ class Estimate < ActiveRecord::Base
   validates_presence_of :project, :builder
 
   before_save :check_commitment, :if => Proc.new { |e| e.committed && !e.committed_was }
+  before_destroy :check_destroyable, :prepend => true
 
   def undestroyable?
     bills.any? || invoices.any?

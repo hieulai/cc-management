@@ -14,7 +14,6 @@ class Account < ActiveRecord::Base
   CLIENT_CREDIT = "Client Credit"
   TOP = [REVENUE, EXPENSES, ASSETS, LIABILITIES, EQUITY]
   DEFAULTS = TOP + [ACCOUNTS_PAYABLE, ACCOUNTS_RECEIVABLE, BANK_ACCOUNTS, COST_OF_GOODS_SOLD, RETAINED_EARNINGS, DEPOSITS_HELD, OPERATING_EXPENSES, CLIENT_CREDIT]
-  before_destroy :check_destroyable, :check_if_default
 
   acts_as_paranoid
   belongs_to :builder, :class_name => "Base::Builder"
@@ -44,6 +43,7 @@ class Account < ActiveRecord::Base
 
   before_save :check_opening_balance_changed, :disallow_self_reference
   before_update :check_if_default, :if => Proc.new { |i| i.name_changed? || i.parent_id_changed? }
+  before_destroy :check_destroyable, :check_if_default, :prepend => true
   after_save :update_opening_balance_transaction, :if => Proc.new { |i| i.kind_of? [BANK_ACCOUNTS] }
   after_save :update_indexes
 

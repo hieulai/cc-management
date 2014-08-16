@@ -4,7 +4,6 @@ class Project < ActiveRecord::Base
   CURRENT_LEAD = 'Current Lead'
   PAST_LEAD = 'Past Lead'
   acts_as_paranoid
-  before_destroy :check_destroyable
 
   belongs_to :client, touch: true
   belongs_to :builder, :class_name => "Base::Builder"
@@ -24,6 +23,7 @@ class Project < ActiveRecord::Base
   scope :has_estimate, includes(:estimates).where("estimates.id IS NOT NULL AND estimates.deleted_at IS NULL")
 
   before_save :toggle_committed_estimate, :if => :status_changed?
+  before_destroy :check_destroyable, :prepend => true
 
   after_initialize :default_values
   after_save :update_client_status, :if => :status_changed?

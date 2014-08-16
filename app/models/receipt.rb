@@ -9,7 +9,6 @@ class Receipt < ActiveRecord::Base
   NEGATIVES = [Account::ACCOUNTS_RECEIVABLE]
   acts_as_paranoid
   include Cacheable
-  before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :client
@@ -34,6 +33,7 @@ class Receipt < ActiveRecord::Base
   scope :date_range, lambda { |from_date, to_date| where('received_at >= ? AND received_at <= ?', from_date, to_date) }
 
   before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
+  before_destroy :check_destroyable, :prepend => true
   after_initialize :default_values
   after_save :update_transactions
 

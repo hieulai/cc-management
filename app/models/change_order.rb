@@ -1,6 +1,5 @@
 class ChangeOrder < ActiveRecord::Base
   acts_as_paranoid
-  before_destroy :check_destroyable
 
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :project
@@ -12,6 +11,7 @@ class ChangeOrder < ActiveRecord::Base
   accepts_nested_attributes_for :change_orders_categories, reject_if: :all_blank, allow_destroy: true
 
   before_save :check_destroyable, :if => :approved_changed?
+  before_destroy :check_destroyable, :prepend => true
   after_initialize :default_values
 
   validates :name, presence: true
