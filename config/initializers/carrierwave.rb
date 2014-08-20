@@ -1,8 +1,8 @@
 CarrierWave.configure do |config|
   config.fog_credentials = {
       :provider => 'AWS',
-      :aws_access_key_id => ENV['S3_KEY'] || 'AKIAISCTRNITEBPNMKKA',
-      :aws_secret_access_key => ENV['S3_SECRET'] || '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',
+      :aws_access_key_id => ENV['S3_KEY'] || 'AKIAIYSQHLDS5HR24EYQ',
+      :aws_secret_access_key => ENV['S3_SECRET'] || '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',
       :region => ENV['S3_REGION'] || 'us-east-1'
   }
   config.storage = :fog

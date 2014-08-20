@@ -169,7 +169,7 @@ class AccountingController < ApplicationController
       format.pdf do
         render :pdf => "Invoice-#{@invoice.id}",
                :layout => 'pdf.html',
-               #:show_as_html => true,
+               :show_as_html => params[:debug].present?,
                :footer => {:center => 'Page [page]'}
       end
     end

@@ -1,20 +1,6 @@
 <% content_for :head do %>
+  <%= render(:partial => "shared/company_info") %>
   <% project = @builder.projects.find(@project_id) if @project_id.present?  %>
-  <div class="left-header">
-      <%= pdf_image_tag(@builder.image.name_url, :width => "200") if @builder.image.try(:name).present? %>
-      <div class="address">
-          <%= @builder.address %>
-      </div>
-      <div class="phone">
-          <%= @builder.office_phone %>
-      </div>
-      <div class="website">
-          <%= @builder.website %>
-      </div>
-      <div class="slogan">
-          <%= "#{@builder.slogan}" if @builder.slogan.present? %>
-      </div>
-  </div>
   <div class="right-header">
       <table class="top">
           <tr>

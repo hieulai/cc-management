@@ -1,0 +1,19 @@
+<div class="left-header">
+    <% if @builder.image.try(:name).present? %>
+      <%= pdf_image_tag(@builder.image.name_url, :width => "200") %>
+    <% else %>
+      <%= @builder.company_name %>
+    <% end %>
+    <div class="address">
+        <%= @builder.address %>
+    </div>
+    <div class="phone">
+        <%= @builder.office_phone %>
+    </div>
+    <div class="website">
+        <%= @builder.website %>
+    </div>
+    <div class="slogan">
+        <%= "#{@builder.slogan}" if @builder.slogan.present? %>
+    </div>
+</div>
