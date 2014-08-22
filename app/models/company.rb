@@ -34,7 +34,7 @@ class Company < ActiveRecord::Base
     query = {}
     query[:company_name] = params[:company_name]
     query[:city] = params[:city] if params[:city]
-    query[:state] = params[:city] if params[:state]
+    query[:state] = params[:state] if params[:state]
     self.where(query).first_or_create
   end
 end

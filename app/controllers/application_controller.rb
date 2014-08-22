@@ -38,6 +38,7 @@ class ApplicationController < ActionController::Base
       person.company = "#{person.class.name}Company".constantize.lookup(params["#{person.class.name.underscore}_company".to_sym])
       unless person.company.valid?
         result = false
+        person.company.attributes = params["#{person.class.name.underscore}_company".to_sym]
         person.company.errors.full_messages.each do |msg|
           person.errors[:base] << msg
         end
