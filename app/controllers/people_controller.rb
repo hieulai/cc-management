@@ -158,7 +158,7 @@ class PeopleController < ApplicationController
       }.results
 
       render :json => @people.map { |p|
-        label = p.company_name.present? ? "#{p.company_name} <br/> <span class=\"autocomplete-sublabel\">#{p.main_full_name}</span>" : p.main_full_name
+        label = p.p.company_name_with_address.present? ? "#{p.company_name_with_address} <br/> <span class=\"autocomplete-sublabel\">#{p.main_full_name}</span>" : p.main_full_name
         {:id => p.id, :label => label, :value => p.display_name, :type => p.class.name}
       }.to_json
     end

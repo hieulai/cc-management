@@ -15,7 +15,7 @@ module Personable
 
     accepts_nested_attributes_for :projects_payers, :allow_destroy => true, reject_if: :all_blank
     attr_accessible :projects_payers_attributes, :address, :website, :zipcode, :notes, :company_id
-    delegate :company_name, :city, :state, to: :company, :allow_nil => true
+    delegate :company_name, :city, :state, :company_name_with_address, to: :company, :allow_nil => true
 
     before_destroy :check_destroyable, :prepend => true
 

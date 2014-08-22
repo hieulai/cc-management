@@ -37,4 +37,8 @@ class Company < ActiveRecord::Base
     query[:state] = params[:state] if params[:state]
     self.where(query).first_or_create
   end
+
+  def company_name_with_address
+    Company.where('company_name =  ? AND type = ? AND id !=?', company_name, type, id).any? ? "#{company_name} (#{city }, #{state})" : company_name
+  end
 end
