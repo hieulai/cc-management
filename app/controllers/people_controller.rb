@@ -42,8 +42,7 @@ class PeopleController < ApplicationController
   
     def create_vendor
       @vendor = @builder.vendors.new(params[:vendor])
-      @vendor.company = VendorCompany.lookup(params[:vendor_company]) if params[:vendor_company][:company_name].present?
-      if @vendor.save
+      if assign_company(@vendor) && @vendor.save
         redirect_to(:action => 'list_vendors')
       else
         render('new_vendor')
@@ -56,8 +55,7 @@ class PeopleController < ApplicationController
   
     def update_vendor
       @vendor = @builder.vendors.find(params[:id])
-      @vendor.company = VendorCompany.lookup(params[:vendor_company]) if params[:vendor_company][:company_name].present?
-      if @vendor.update_attributes(params[:vendor])
+      if assign_company(@vendor) && @vendor.update_attributes(params[:vendor])
         redirect_to(:action => 'list_vendors')
       else
         render('edit_vendor')
@@ -97,8 +95,7 @@ class PeopleController < ApplicationController
   
     def create_contact
       @contact = @builder.contacts.new(params[:contact])
-      @contact.company = ContactCompany.lookup(params[:contact_company]) if params[:contact_company][:company_name].present?
-      if @contact.save
+      if assign_company(@contact) && @contact.save
         redirect_to(:action => 'list_contacts')
       else
         render('new_contact')
@@ -111,8 +108,7 @@ class PeopleController < ApplicationController
   
     def update_contact
       @contact = @builder.contacts.find(params[:id])
-      @contact.company = ContactCompany.lookup(params[:contact_company]) if params[:contact_company][:company_name].present?
-      if @contact.update_attributes(params[:contact])
+      if assign_company(@contact) && @contact.update_attributes(params[:contact])
         redirect_to(:action => 'list_contacts')
       else
         render('edit_contact')

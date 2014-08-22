@@ -21,8 +21,7 @@ class ClientsController < ApplicationController
 
   def create
     @client = @builder.clients.new(params[:client].merge(:status => Client::ACTIVE))
-    @client.company = ClientCompany.lookup(params[:client_company]) if params[:client_company][:company_name].present?
-    if @client.save
+    if assign_company(@client) && @client.save
       redirect_to(:action => 'list')
     else
       render('new')
@@ -35,8 +34,7 @@ class ClientsController < ApplicationController
 
   def update
     @client = @builder.clients.find(params[:id])
-    @client.company = ClientCompany.lookup(params[:client_company]) if params[:client_company][:company_name].present?
-    if @client.update_attributes(params[:client])
+    if assign_company(@client) && @client.update_attributes(params[:client])
       redirect_to(:action => 'list')
     else
       render('edit')
