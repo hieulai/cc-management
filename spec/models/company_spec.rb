@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Company do
   describe "Validations" do
     it { expect(subject).to validate_presence_of(:company_name) }
+    it { expect(subject).to validate_presence_of(:city) }
+    it { expect(subject).to validate_presence_of(:state) }
     it { expect(subject).to validate_uniqueness_of(:company_name).scoped_to(:city, :state, :type) }
   end
 
