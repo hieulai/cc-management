@@ -28,7 +28,7 @@ class Company < ActiveRecord::Base
   accepts_nested_attributes_for :image
 
   validates_uniqueness_of :company_name, scope: [:city, :state, :type]
-  validates_presence_of :company_name
+  validates_presence_of :company_name, :city, :state
 
   def self.lookup(params)
     query = {}
