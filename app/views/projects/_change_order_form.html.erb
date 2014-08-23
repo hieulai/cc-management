@@ -16,7 +16,7 @@
         <%= f.check_box :approved,  disabled: f.object.undestroyable? %>
         <% if f.object.undestroyable? %>
           <div class="help-block">
-              (Cannot be disapproved once containing items which are added to an invoice)
+              (Cannot be disapproved once containing items which are added to an invoice or a bill)
           </div>
         <% end %>
     </div>
