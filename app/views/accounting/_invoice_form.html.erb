@@ -39,8 +39,8 @@
         <div class="controls">
             <div class="input-group">
                 <input type="text" name="reservation" id="reservation">
-                <%= f.hidden_field :bill_from_date, :value => @invoice.bill_from_date %>
-                <%= f.hidden_field :bill_to_date, :value => @invoice.bill_to_date %>
+                <%= f.hidden_field :bill_from_date, :value => @invoice.bill_from_date.try(:strftime, "%Y-%m-%d") %>
+                <%= f.hidden_field :bill_to_date, :value => @invoice.bill_to_date.try(:strftime, "%Y-%m-%d") %>
             </div>
         </div>
     </div>

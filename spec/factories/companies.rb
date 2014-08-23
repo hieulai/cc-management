@@ -5,7 +5,10 @@ FactoryGirl.define do
     company_name { generate(:name) }
     city { generate(:name) }
     state { generate(:name) }
-    factory :builder, :class => Base::Builder
+    factory :builder, :class => Base::Builder do
+      company_name "Construction Central"
+      initialize_with { Base::Builder.where(:company_name => company_name).first_or_create }
+    end
   end
 
 end

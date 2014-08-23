@@ -24,6 +24,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :estimate
 
+  has_many :invoices_accounts, :dependent => :destroy
   has_many :invoices_items, :dependent => :destroy
   has_many :items, :through => :invoices_items
   has_many :invoices_bills_categories_templates, :dependent => :destroy
@@ -32,7 +33,7 @@ class Invoice < ActiveRecord::Base
   has_many :accounting_transactions, as: :transactionable, :dependent => :destroy
 
   accepts_nested_attributes_for :invoices_items, :allow_destroy => true, reject_if: :unbillable_item
-  accepts_nested_attributes_for :invoices_bills_categories_templates, :allow_destroy => true, reject_if: :unbillable_bills_categories_template
+  accepts_nested_attributes_for :invoices_bills_categories_templates, :allow_destroy => true, reject_if: :invalid_bills_categories_template
   attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount,
                   :bill_from_date, :bill_to_date, :cached_total_amount, :invoices_bills_categories_templates_attributes
 
@@ -131,8 +132,10 @@ class Invoice < ActiveRecord::Base
     attributes['item_id'].blank? || !Item.find(attributes['item_id'].to_i).billable?(self.id)
   end
 
-  def unbillable_bills_categories_template(attributes)
-    attributes['bills_categories_template_id'].blank? || !BillsCategoriesTemplate.find(attributes['bills_categories_template_id'].to_i).billable?(self.id)
+  def invalid_bills_categories_template(attributes)
+    attributes['bills_categories_template_id'].blank? ||
+        BillsCategoriesTemplate.date_range(bill_from_date.presence || '1900-01-01', bill_to_date.presence || '3000-01-01').where(id: attributes['bills_categories_template_id'].to_i).empty? ||
+        !BillsCategoriesTemplate.find(attributes['bills_categories_template_id'].to_i).billable?(id)
   end
 
   def check_destroyable
@@ -143,9 +146,12 @@ class Invoice < ActiveRecord::Base
   end
 
   def check_total_amount_changed
-    if !self.new_record? && self.billed? && self.amount < self.billed_amount
-      errors[:base] << "This invoice has already been paid in the amount of $#{self.billed_amount}. Editing a paid invoice requires that all item amounts continue to add up to the original receipt amount. If the original receipt was made for the wrong amount, correct the receipt first and then come back and edit the invoice."
-      return false
+    if !new_record? && billed?
+      ba = [billed_amount, cached_total_amount].min
+      if amount < ba
+        errors[:base] << "This invoice has already been paid in the amount of $#{billed_amount}. Editing a paid invoice requires that all item amounts continue to add up to the original receipt amount. If the original receipt was made for the wrong amount, correct the receipt first and then come back and edit the invoice."
+        return false
+      end
     end
   end
 
