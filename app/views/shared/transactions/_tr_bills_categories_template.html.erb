@@ -3,7 +3,7 @@
         <%= t.date %>
         <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_bill', :id => t.transactionable.bill_id}, :class => 'action edit clickable-link', :style => 'display: none') %>
     </td>
-    <td>Bill</td>
+    <td>Bill </td>
     <td></td>
     <td><%= t.transactionable.bill.payer.try(:display_name) %></td>
     <td><%= t.transactionable.bill.notes %></td>

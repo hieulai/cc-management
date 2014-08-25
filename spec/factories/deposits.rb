@@ -2,6 +2,12 @@
 
 FactoryGirl.define do
   factory :deposit do
+    builder
+    account
+    date { generate(:date) }
+    after(:build) do |object, evaluator|
+      object.deposits_receipts << FactoryGirl.build(:deposits_receipt)
+    end
   end
 
   factory :deposits_receipt do

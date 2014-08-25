@@ -131,7 +131,7 @@ class PurchaseOrder < ActiveRecord::Base
 
   def create_default_bill
     self.create_bill({:purchase_order_id => self.id, :builder_id => self.builder_id, :billed_date => self.date}) unless bill
-    bill.update_attributes({:payer_id => payer_id, :payer_type => payer_type, :project_id => project_id, :billed_date => self.date})
+    bill.update_attributes({:payer_id => payer_id, :payer_type => payer_type, :estimate_id => estimate_id, :billed_date => self.date})
   end
 
   def check_destroyable

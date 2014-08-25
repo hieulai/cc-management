@@ -45,6 +45,7 @@ class Invoice < ActiveRecord::Base
 
   after_initialize :default_values
   before_save :check_reference
+  before_save :check_date_range, :if => Proc.new { |i| i.estimate.cost_plus_bid? && i.bill_from_date && i.bill_to_date }
   before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
   before_destroy :check_destroyable, :prepend => true
   after_save :update_transactions
@@ -118,9 +119,10 @@ class Invoice < ActiveRecord::Base
   end
 
   def update_transactions
-    accounting_transactions.create({account_id: builder.accounts_receivable_account.id, date: date, amount: amount.to_f})
-    accounting_transactions.create({payer_id: estimate.project.client_id, payer_type: Client.name, date: date, amount: amount.to_f})
-    accounting_transactions.create({payer_id: estimate.project.client_id, payer_type: Client.name, project_id: self.project.id, date: date, amount: amount.to_f})
+    accounting_transactions.create(account_id: builder.accounts_receivable_account.id, date: date, amount: amount.to_f)
+    accounting_transactions.create(account_id: builder.accounts_receivable_account.id, project_id: self.project.id, date: date, amount: amount.to_f)
+    accounting_transactions.create(payer_id: project.client_id, payer_type: Client.name, date: date, amount: amount.to_f)
+    accounting_transactions.create(payer_id: project.client_id, payer_type: Client.name, project_id: self.project.id, date: date, amount: amount.to_f)
   end
 
   def remove_old_transactions
@@ -133,9 +135,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def invalid_bills_categories_template(attributes)
-    attributes['bills_categories_template_id'].blank? ||
-        BillsCategoriesTemplate.date_range(bill_from_date.presence || '1900-01-01', bill_to_date.presence || '3000-01-01').where(id: attributes['bills_categories_template_id'].to_i).empty? ||
-        !BillsCategoriesTemplate.find(attributes['bills_categories_template_id'].to_i).billable?(id)
+    attributes['bills_categories_template_id'].blank? || !BillsCategoriesTemplate.find(attributes['bills_categories_template_id'].to_i).billable?(id)
   end
 
   def check_destroyable
@@ -165,6 +165,12 @@ class Invoice < ActiveRecord::Base
       end
     else
       self.reference = self.class.maximum(:reference).to_f + 1
+    end
+  end
+
+  def check_date_range
+    invoices_bills_categories_templates.each do |ibct|
+      ibct.destroy if !ibct.bills_categories_template.bill.billed_date.between?(bill_from_date, bill_to_date)
     end
   end
 

@@ -5,6 +5,12 @@ FactoryGirl.define do
     builder
     name { generate(:name) }
 
+    factory :has_categories_templates_item do
+      after(:build) do |object, evaluator|
+        object.categories_templates << FactoryGirl.build(:belong_to_estimate_categories_template)
+      end
+    end
+
     factory :has_bills_item do
       bills_categories_template :factory => :has_bill_bills_categories_template
     end

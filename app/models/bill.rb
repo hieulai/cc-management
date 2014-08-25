@@ -52,8 +52,8 @@ class Bill < ActiveRecord::Base
   scope :project, lambda { |project_id| joins(:estimate).where('estimates.project_id = ?', project_id) }
   scope :late, lambda { where('remaining_amount != ? AND due_date < ?', 0, Date.today) || joins(:purchase_order).where('purchase_orders.due_date < ?', Date.today) }
 
-  before_update :clear_old_data
   before_save :check_zero_amount, :check_total_amount_changed
+  before_update :clear_old_data, :remove_old_transactions
   before_destroy :check_destroyable, :prepend => true
   after_save :update_transactions
   after_touch :index
@@ -229,10 +229,16 @@ class Bill < ActiveRecord::Base
   end
 
   def update_transactions
-    accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: total_amount.to_f})
-    accounting_transactions.where('payer_id is NOT NULL and payer_type is NOT NULL').destroy_all
-    accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type
-    accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: estimate.project.id, date: date, amount: total_amount.to_f}) if self.payer_id && self.payer_type && self.estimate
+    accounting_transactions.create(account_id: builder.accounts_payable_account.id, date: date, amount: total_amount.to_f)
+    accounting_transactions.create(account_id: builder.accounts_payable_account.id, project_id: estimate.project.id, date: date, amount: total_amount.to_f) if  self.estimate
+    if self.payer_id && self.payer_type
+      accounting_transactions.create(payer_id: payer_id, payer_type: payer_type, date: date, amount: total_amount.to_f)
+      accounting_transactions.create(payer_id: payer_id, payer_type: payer_type, project_id: estimate.project.id, date: date, amount: total_amount.to_f) if  self.estimate
+    end
+  end
+
+  def remove_old_transactions
+    accounting_transactions.destroy_all
   end
 
   def undestroyable?
@@ -265,7 +271,7 @@ class Bill < ActiveRecord::Base
     if self.job_costed
       self.un_job_costed_items.destroy_all
     else
-      self.project_id = nil
+      self.estimate_id = nil
       self.bills_categories_templates.destroy_all
     end
   end

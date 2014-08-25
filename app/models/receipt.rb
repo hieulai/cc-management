@@ -132,16 +132,18 @@ class Receipt < ActiveRecord::Base
   end
 
   def update_transactions
-    accounting_transactions.where(account_id: builder.deposits_held_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
-    accounting_transactions.create({payer_id: self_payer.id, payer_type: self_payer.class.name, date: date, amount: amount.to_f * -1})
+    accounting_transactions.create(account_id: builder.deposits_held_account.id, date: date, amount: amount.to_f)
+    accounting_transactions.create(payer_id: self_payer.id, payer_type: self_payer.class.name, date: date, amount: amount.to_f * -1)
     if invoiced
-      accounting_transactions.where(account_id: builder.accounts_receivable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f * -1})
+      accounting_transactions.create(account_id: builder.accounts_receivable_account.id, date: date, amount: amount.to_f * -1)
       project_ids = invoices.map { |i| i.project.id }.compact.uniq
       project_ids.each do |project_id|
-        accounting_transactions.create({payer_id: client.id, payer_type: Client.name, project_id: project_id, date: date, amount: amount(project_id).to_f * -1})
+        accounting_transactions.create(payer_id: client.id, payer_type: Client.name, project_id: project_id, date: date, amount: amount(project_id).to_f * -1)
+        accounting_transactions.create(account_id: builder.deposits_held_account.id, project_id: project_id, date: date, amount: amount(project_id).to_f * -1)
+        accounting_transactions.create(account_id: builder.accounts_receivable_account.id, project_id: project_id, date: date, amount: amount(project_id).to_f * -1)
       end
     elsif client_credit
-      accounting_transactions.where(account_id: builder.client_credit_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f})
+      accounting_transactions.create(account_id: builder.client_credit_account.id, date: date, amount: amount.to_f)
     end
   end
 

@@ -30,7 +30,7 @@ FactoryGirl.define do
     end
 
     factory :has_item_invoices_item do
-      item
+      item :factory => :has_categories_templates_item
     end
   end
 

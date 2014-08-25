@@ -81,11 +81,7 @@ module Personable
 
   def transactions(options ={})
     options ||= {}
-    if options[:project_id]
-      accounting_transactions.project_accounts(options[:project_id])
-    else
-      accounting_transactions.non_project_accounts
-    end
+    options[:project_id].present? ? accounting_transactions.project_accounts(options[:project_id]) : accounting_transactions.non_project_accounts
   end
 
   def balance(options ={})

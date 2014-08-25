@@ -74,22 +74,21 @@ class Account < ActiveRecord::Base
     accounting_transactions.any?
   end
 
-  def transactions
-    AccountingTransaction.accounts(tree_ids, tree_ids, Account.name)
-  end
-
-  def balance(options ={})
+  def transactions(options ={})
     options ||= {}
     options[:recursive] = true if options[:recursive].nil?
     r = AccountingTransaction.accounts(tree_ids(options[:recursive]), tree_ids(options[:recursive]), Account.name)
-    if options[:from_date] && options[:to_date]
-      r = r.date_range(options[:from_date], options[:to_date])
-    end
+    r = options[:project_id].present? ? r.project_accounts(options[:project_id]) : r.non_project_accounts
+    r = r.date_range(options[:from_date], options[:to_date]) if options[:from_date] && options[:to_date]
     if options[:offset]
       ids = r.offset(options[:offset]).pluck(:id)
       r = AccountingTransaction.where(id: ids)
     end
-    r.sum(:amount)
+    r
+  end
+
+  def balance(options ={})
+    transactions(options).sum(:amount)
   end
 
   def bank_balance

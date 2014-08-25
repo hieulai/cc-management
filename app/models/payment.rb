@@ -39,6 +39,7 @@ class Payment < ActiveRecord::Base
                   :payments_bills_attributes, :payer_id, :payer_type, :cached_total_amount
   validates_presence_of :payer_id, :payer_type, :account, :builder, :method, :date
 
+  before_update :remove_old_transactions
   after_save :update_transactions
 
   METHODS = ["Check", "Debit Card", "Wire", "EFT"]
@@ -92,15 +93,19 @@ class Payment < ActiveRecord::Base
     amount
   end
 
-
   def update_transactions
-    accounting_transactions.where(account_id: builder.accounts_payable_account.id).first_or_create.update_attributes({date: date, amount: amount.to_f * -1})
-    accounting_transactions.where(account_id: account_id_was || account_id).first_or_create.update_attributes({account_id: account_id, date: date, amount: amount.to_f * -1})
-    accounting_transactions.where('payer_id is NOT NULL and payer_type is NOT NULL').destroy_all
+    accounting_transactions.create(account_id: builder.accounts_payable_account.id, date: date, amount: amount.to_f * -1)
+    accounting_transactions.create(account_id: account_id, date: date, amount: amount.to_f * -1)
     accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, date: date, amount: amount.to_f * -1})
-    project_ids = bills.map(&:project_id).compact.uniq
+    project_ids = bills.map { |b| b.project.try(:id) }.compact.uniq
     project_ids.each do |project_id|
-      accounting_transactions.create({payer_id: payer_id, payer_type: payer_type, project_id: project_id, date: date, amount: amount(project_id).to_f * -1})
+      accounting_transactions.create(account_id: builder.accounts_payable_account.id, project_id: project_id, date: date, amount: amount(project_id).to_f * -1)
+      accounting_transactions.create(account_id: account_id, project_id: project_id, date: date, amount: amount(project_id).to_f * -1)
+      accounting_transactions.create(payer_id: payer_id, payer_type: payer_type, project_id: project_id, date: date, amount: amount(project_id).to_f * -1)
     end
+  end
+
+  def remove_old_transactions
+    accounting_transactions.destroy_all
   end
 end

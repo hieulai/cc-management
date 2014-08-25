@@ -53,12 +53,6 @@ FactoryGirl.define do
     end
   end
 
-  trait :has_payments_bills do
-    after(:create) do |object, evaluator|
-      object.payments_bills << FactoryGirl.build(:payments_bill)
-    end
-  end
-
   trait :has_deposits_receipts do
     after(:create) do |object, evaluator|
       object.deposits_receipts << FactoryGirl.build(:deposits_receipt)

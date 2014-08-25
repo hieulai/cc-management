@@ -11,6 +11,7 @@ describe Invoice do
     it { expect(subject).to belong_to :builder }
     it { expect(subject).to belong_to :estimate }
 
+    it { expect(subject).to have_many :invoices_accounts }
     it { expect(subject).to have_many :invoices_items }
     it { expect(subject).to have_many :items }
     it { expect(subject).to have_many :invoices_bills_categories_templates }
@@ -39,5 +40,52 @@ describe Invoice do
         expect(subject.save).to be_false
       end
     end
+
+    context "after save" do
+      subject { FactoryGirl.create :invoice }
+      it "should create transactions" do
+        expect(subject.accounting_transactions).not_to be_empty
+      end
+
+      it "should create Invoice accounts for categories" do
+        expect(subject.invoices_accounts).not_to be_empty
+        subject.invoices_accounts.each do |ia|
+          expect(ia.account.parent).to eq(subject.builder.revenue_account)
+        end
+      end
+
+      it "should create a transaction for Client" do
+        at = subject.accounting_transactions.payer_accounts(subject.estimate.project.client_id, Client.name).non_project_accounts.first
+        expect(at).not_to be_nil
+      end
+
+      it "should create a transaction for Payer per project" do
+        at = subject.accounting_transactions.payer_accounts(subject.estimate.project.client_id, Client.name).project_accounts(subject.project.id).first
+        expect(at).not_to be_nil
+      end
+
+      it "should create a transaction for Accounts Receivable account" do
+        at = subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).non_project_accounts.first
+        expect(at).not_to be_nil
+      end
+
+      it "should create a transaction for Accounts Receivable account per project" do
+        at = subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).project_accounts(subject.project.id).first
+        expect(at).not_to be_nil
+      end
+
+      it "should create transactions for Revenue accounts" do
+        ia = subject.invoices_accounts.first
+        at = ia.accounting_transactions.non_project_accounts.first
+        expect(at).not_to be_nil
+      end
+
+      it "should create transactions for Revenue accounts per project" do
+        ia = subject.invoices_accounts.first
+        at = ia.accounting_transactions.project_accounts(subject.project.id).first
+        expect(at).not_to be_nil
+      end
+    end
+
   end
 end

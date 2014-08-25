@@ -22,7 +22,7 @@ class BillsItem < ActiveRecord::Base
 
   belongs_to :bills_categories_template
   scope :has_actual_cost, where('actual_cost is NOT NULL')
-
+  scope :bill, lambda { |bill_id| joins(:bills_categories_template).where('bills_categories_templates.bill_id = ?', bill_id) }
   after_destroy :check_to_destroy_payment
 
   private

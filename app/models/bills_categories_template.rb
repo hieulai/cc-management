@@ -28,6 +28,7 @@ class BillsCategoriesTemplate < ActiveRecord::Base
 
   scope :date_range, lambda { |from_date, to_date| includes(:bill).where('bills.billed_date >= ? AND bills.billed_date <= ?', from_date, to_date) }
 
+  before_update :remove_old_transactions
   after_save :update_transactions
   after_destroy :destroy_purchased_categories_template
 
@@ -46,10 +47,15 @@ class BillsCategoriesTemplate < ActiveRecord::Base
 
   def update_transactions
     cogs_account_id = CategoriesTemplate.find(categories_template_id).cogs_account.id
-    accounting_transactions.where(account_id: cogs_account_id).first_or_create.update_attributes({account_id: cogs_account_id, date: bill.date, amount: amount.to_f})
+    accounting_transactions.create(account_id: cogs_account_id, date: bill.date, amount: amount.to_f)
+    accounting_transactions.create(account_id: cogs_account_id, project_id: bill.project.try(:id), date: bill.date, amount: amount.to_f)
+  end
+
+  def remove_old_transactions
+    accounting_transactions.destroy_all
   end
 
   def destroy_purchased_categories_template
-    categories_template.destroy if categories_template.purchased && categories_template.bills_categories_templates.empty?
+    categories_template.destroy if categories_template && categories_template.purchased && categories_template.bills_categories_templates.empty?
   end
 end

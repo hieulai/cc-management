@@ -1,6 +1,6 @@
 <% r_account = @builder.revenue_account
    c_account = @builder.cost_of_goods_sold_account
-   e_account = @builder.expenses_account
+   e_account = @builder.operating_expenses_account
    gross_profit = r_account.balance(options).to_f - c_account.balance(options).to_f
    net_profit = gross_profit -  e_account.balance(options).to_f
 %>

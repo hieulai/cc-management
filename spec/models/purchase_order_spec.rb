@@ -25,6 +25,20 @@ describe PurchaseOrder do
       it "should generate a bill" do
         expect(subject.bill).not_to be_nil
       end
+
+      it "should create transactions for Cost of Goods Sold account" do
+        poct = subject.purchase_orders_categories_templates.first
+        expect(poct.accounting_transactions).not_to be_empty
+        at = poct.accounting_transactions.accounts(poct.categories_template.cogs_account.id).non_project_accounts.first
+        expect(at).not_to be_nil
+      end
+
+      it "should create transactions for Cost of Goods Sold account per project" do
+        poct = subject.purchase_orders_categories_templates.first
+        expect(poct.accounting_transactions).not_to be_empty
+        at = poct.accounting_transactions.accounts(poct.categories_template.cogs_account.id).project_accounts(subject.project.id).first
+        expect(at).not_to be_nil
+      end
     end
 
     context "when amount is $0" do

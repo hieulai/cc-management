@@ -21,9 +21,15 @@ class InvoicesAccount < ActiveRecord::Base
 
   attr_accessible :date, :amount, :account_id, :invoice_id
 
+  before_update :remove_old_transactions
   after_save :update_transactions
 
   def update_transactions
-    accounting_transactions.where(account_id: account_id_was || account_id).first_or_create.update_attributes({account_id: account_id, date: date, amount: amount.to_f})
+    accounting_transactions.create(account_id: account_id, date: date, amount: amount.to_f)
+    accounting_transactions.create(account_id: account_id, project_id: invoice.project.try(:id), date: date, amount: amount.to_f)
+  end
+
+  def remove_old_transactions
+    accounting_transactions.destroy_all
   end
 end

@@ -33,5 +33,56 @@ describe Receipt do
         expect(subject.update_attributes({receipts_items_attributes: [{id: ri.id, amount: ri.amount / 2}]})).to be_false
       end
     end
+
+    context "after create" do
+      subject { FactoryGirl.create :receipt }
+      it "should create a transaction for Payer" do
+        at = subject.accounting_transactions.payer_accounts(subject.payer_id, subject.payer_type).non_project_accounts.first
+        expect(at).not_to be_nil
+      end
+
+      it "should create a transaction for Deposits Held account" do
+        at = subject.accounting_transactions.accounts(subject.builder.deposits_held_account.id).first
+        expect(at).not_to be_nil
+      end
+
+      context "as an uninvoiced account" do
+        subject { FactoryGirl.create :receipt }
+        it "should create transactions for GL accounts" do
+          ri = subject.receipts_items.first
+          at = subject.accounting_transactions.accounts(ri.account.id).first
+          expect(at).not_to be_nil
+          expect(at.payer).not_to be_nil
+        end
+      end
+
+      context "as an invoiced account" do
+        subject { FactoryGirl.create :invoiced_receipt }
+        it "should create a transaction for Accounts Receivable account" do
+          at = subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).non_project_accounts.first
+          expect(at).not_to be_nil
+        end
+
+        it "should create a transaction for Accounts Receivable account per project" do
+          invoice = subject.invoices.first
+          at = subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).project_accounts(invoice.project.id).first
+          expect(at).not_to be_nil
+        end
+
+        it "should create a transaction for Payer per project" do
+          invoice = subject.invoices.first
+          at = subject.accounting_transactions.payer_accounts(subject.client_id, Client.name).project_accounts(invoice.project.id).first
+          expect(at).not_to be_nil
+        end
+      end
+
+      context "as a client credit account" do
+        subject { FactoryGirl.create :client_credit_receipt }
+        it "should create a transaction for Client Credit account" do
+          at = subject.accounting_transactions.accounts(subject.builder.client_credit_account.id).first
+          expect(at).not_to be_nil
+        end
+      end
+    end
   end
 end
