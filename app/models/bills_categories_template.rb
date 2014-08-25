@@ -56,6 +56,6 @@ class BillsCategoriesTemplate < ActiveRecord::Base
   end
 
   def destroy_purchased_categories_template
-    categories_template.destroy if categories_template && categories_template.purchased && categories_template.bills_categories_templates.empty?
+    categories_template.destroy if categories_template.present? && categories_template.purchased && categories_template.bills_categories_templates.empty?
   end
 end
