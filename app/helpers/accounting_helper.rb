@@ -26,7 +26,7 @@ module AccountingHelper
 
   def select2_receipt_gl_accounts_json
     json = []
-    gl_accounts = @builder.accounts.top.where(:name => [Account::REVENUE, Account::LIABILITIES, Account::EQUITY, Account::ASSETS])
+    gl_accounts = @builder.accounts.top.where(:name => [Account::REVENUE, Account::EXPENSES, Account::LIABILITIES, Account::EQUITY, Account::ASSETS])
     gl_accounts.each do |a|
       filters = a.name == Account::ASSETS ? [Account::BANK_ACCOUNTS] : []
       json << a.as_select2_json(filters)
