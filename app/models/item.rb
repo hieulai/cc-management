@@ -52,6 +52,7 @@ class Item < ActiveRecord::Base
 
   attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file,
                   :change_order, :client_billed, :markup, :bill_memo, :builder_id, :bills_categories_template_id, :purchase_orders_categories_template_id
+  attr_accessor :destroyed_by_parent
   validates :name, presence: true
 
   before_update :check_destroyable, :if => :changed?, :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
@@ -176,7 +177,7 @@ class Item < ActiveRecord::Base
   end
 
   def check_destroyable
-    if undestroyable?
+    if undestroyable? && !destroyed_by_parent
       errors[:base] << "This item cannot be edited/deleted once added to #{dependencies.join(", ")}. Please delete them to edit item details"
       false
     end

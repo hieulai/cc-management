@@ -17,7 +17,7 @@ class BillsCategoriesTemplate < ActiveRecord::Base
 
   belongs_to :categories_template
   has_many :bills_items, :dependent => :destroy
-  has_many :items, :dependent => :destroy
+  has_many :items, :dependent => :delete_all
   has_many :invoices_bills_categories_templates, :dependent => :destroy
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 
@@ -28,7 +28,7 @@ class BillsCategoriesTemplate < ActiveRecord::Base
 
   scope :date_range, lambda { |from_date, to_date| includes(:bill).where('bills.billed_date >= ? AND bills.billed_date <= ?', from_date, to_date) }
 
-  before_update :remove_old_transactions
+  before_update :remove_old_transactions, :set_destroyed_by_parent
   after_save :update_transactions
   after_destroy :destroy_purchased_categories_template
 
@@ -53,6 +53,10 @@ class BillsCategoriesTemplate < ActiveRecord::Base
 
   def remove_old_transactions
     accounting_transactions.destroy_all
+  end
+
+  def set_destroyed_by_parent
+    items.each { |i| i.destroyed_by_parent = true }
   end
 
   def destroy_purchased_categories_template
