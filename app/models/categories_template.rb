@@ -130,6 +130,6 @@ class CategoriesTemplate < ActiveRecord::Base
   end
 
   def destroy_category
-    category.destroy unless category.undestroyable?
+    category.delete unless category.undestroyable?
   end
 end
