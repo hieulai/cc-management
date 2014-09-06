@@ -109,7 +109,7 @@ class CategoriesTemplate < ActiveRecord::Base
   def check_duplicated
     duplications = template.categories_templates.select { |ct| (ct.category.name == category.name) && (ct != self) }
     if duplications.any?
-      errors[:base] << "Category #{category.name} is duplicated"
+      errors[:base] << "Category #{category.name} already existed"
       false
     end
   end
