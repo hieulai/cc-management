@@ -291,7 +291,7 @@ class ProjectsController < ApplicationController
   end
 
   def budget
-    @project = Project.find(params[:id])
+    @project = @builder.projects.find(params[:id])
   end
 
   def show_item
