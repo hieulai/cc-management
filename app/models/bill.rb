@@ -136,12 +136,15 @@ class Bill < ActiveRecord::Base
   end
 
   def category_names
-    if generated?
-      purchase_order.category_names
-    else
-      categories_templates.map { |ct| ct.category.name }.join(",")
-    end
+    categories.map { |c| c.name }.join(",")
+  end
 
+  def categories
+    if generated?
+      purchase_order.categories
+    else
+      categories_templates.map { |ct| ct.category }
+    end
   end
 
   def vnotes

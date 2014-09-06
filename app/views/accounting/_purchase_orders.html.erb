@@ -23,8 +23,8 @@
           <td><%= po.project_name %></td>
           <td>
               <ul>
-                  <% po.category_names.split(",").each do |name| %>
-                    <li><%= name %></li>
+                  <% po.categories.each do |c| %>
+                    <li><%= c.name %></li>
                   <% end %>
               </ul>
           </td>

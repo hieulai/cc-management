@@ -99,7 +99,11 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def category_names
-    categories_templates.map { |ct| ct.category.name }.join(",")
+    categories.map { |c| c.name }.join(",")
+  end
+
+  def categories
+    categories_templates.map { |ct| ct.category }
   end
 
   def has_bill_paid?
