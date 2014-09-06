@@ -13,7 +13,7 @@ class CategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
 
   belongs_to :template
-  belongs_to :category
+  belongs_to :category, inverse_of: :categories_templates
   has_many :bills_categories_templates, :dependent => :destroy
   has_many :purchase_orders_categories_templates, :dependent => :destroy
   has_many :bills, :through => :bills_categories_templates
@@ -26,6 +26,7 @@ class CategoriesTemplate < ActiveRecord::Base
   accepts_nested_attributes_for :items, allow_destroy: true
 
   before_destroy :check_destroyable, :prepend => true
+  before_save :check_duplicated
   after_create :create_accounts
   after_destroy :destroy_items, :destroy_accounts, :destroy_category
 
@@ -101,6 +102,14 @@ class CategoriesTemplate < ActiveRecord::Base
   def check_destroyable
     if self.undestroyable?
       errors[:base] << "This Category Template cannot be deleted once containing items which are added to an invoice"
+      false
+    end
+  end
+
+  def check_duplicated
+    duplications = template.categories_templates.select { |ct| (ct.category.name == category.name) && (ct != self) }
+    if duplications.any?
+      errors[:base] << "Category #{category.name} is duplicated"
       false
     end
   end

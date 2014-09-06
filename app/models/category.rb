@@ -20,7 +20,7 @@ class Category < ActiveRecord::Base
   acts_as_paranoid
 
   belongs_to :builder, :class_name => "Base::Builder"
-  has_many :categories_templates, :dependent => :destroy
+  has_many :categories_templates, inverse_of: :category, :dependent => :destroy
   has_many :change_orders_categories, :dependent => :destroy
   has_many :templates, through: :categories_templates
   has_many :bids, :dependent => :destroy

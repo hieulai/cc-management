@@ -1,7 +1,11 @@
-var addCategory = $("tr.add-category").first();
-if ($('#template-placeholder').attr("data-kind") == "Cost Plus Bid") {
-  $('<%= escape_javascript(render :partial => 'estimates/cost_plus_bid/tr_category'  , :locals => {:category_template => @category_template}) %>').insertBefore(addCategory);
-} else {
-  $('<%= escape_javascript(render :partial => 'tr_category'  , :locals => {:category_template => @category_template}) %>').insertBefore(addCategory);
-}
-Shared.calculateTotals();
+<% if @category_template.errors.any?  %>
+  $.rails.createConfirmDialog('Information', '<%= escape_javascript(@category_template.errors.full_messages.join(".<br/>").html_safe) %>', true);
+<% else %>
+  var addCategory = $("tr.add-category").first();
+  if ($('#template-placeholder').attr("data-kind") == "Cost Plus Bid") {
+    $('<%= escape_javascript(render :partial => 'estimates/cost_plus_bid/tr_category'  , :locals => {:category_template => @category_template}) %>').insertBefore(addCategory);
+  } else {
+    $('<%= escape_javascript(render :partial => 'tr_category'  , :locals => {:category_template => @category_template}) %>').insertBefore(addCategory);
+  }
+  Shared.calculateTotals();
+<% end %>

@@ -19,6 +19,14 @@ describe CategoriesTemplate do
   end
 
   describe "Behaviors" do
+    context "when category belongs to template already" do
+      let(:template) {FactoryGirl.create :has_categories_templates_template}
+      subject { FactoryGirl.build :categories_template, template: template, category: template.categories_templates.first.category }
+      it "should not be added duplicately" do
+        expect(subject.save).to be_false
+      end
+    end
+
     context "when belongs to estimate" do
       subject { FactoryGirl.create :belong_to_estimate_categories_template }
       it "should create GL accounts" do
