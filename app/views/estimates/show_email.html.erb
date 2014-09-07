@@ -6,7 +6,7 @@
             <%= form_tag({:controller => 'estimates', :action => 'send_email', :id => @estimate.id}, :class => 'form-horizontal') do |f| %>
                 <div class="control-group">
                     <%= label_tag :to, 'To', :class => 'col-lg-2 control-label' %>
-                    <div class="controls"><%= text_field_tag :to, @estimate.project.client.email %></div>
+                    <div class="controls"><%= text_field_tag :to, @estimate.project.client.primary_email %></div>
                 </div>
                 <div class="control-group">
                     <%= label_tag :subject, 'Subject', :class => 'col-lg-2 control-label' %>

@@ -5,7 +5,7 @@
 
       <div class="control-group">
           <%= label_tag :to, 'To', class: 'col-lg-2 control-label' %>
-          <div class="controls"><%= text_field_tag :to, @invoice.estimate.project.client.email %></div>
+          <div class="controls"><%= text_field_tag :to, @invoice.estimate.project.client.primary_email %></div>
       </div>
       <div class="control-group">
           <%= label_tag :subject, 'Subject', class: 'col-lg-2 control-label' %>
