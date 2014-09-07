@@ -7,9 +7,11 @@
                 <%= render(:partial => "bill_form") %>
             </div>
             <div class="form-buttons">
+                <div class="btn-group">
                 <%= submit_tag("Save & New", :data => {:form => ".purchasable-form", :original_url => "#{url_for(:action => "new_bill")}"}, :class => 'btn') %>
                 <%= link_to("Cancel", {:action => 'bills'}, :class => 'btn') %>
                 <%= submit_tag("Save & Close", :data => {:form => ".purchasable-form"}, :class => 'btn') %>
+                </div>
             </div>
         </div>
     </div>

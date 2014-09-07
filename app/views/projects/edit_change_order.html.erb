@@ -5,10 +5,11 @@
             <h2>Edit Change Order</h2>
             <%= form_for @change_order, :url => {:action => 'update_change_order', :id => @change_order.id}, :html => {:class => 'form-horizontal'} do |f| %>
                 <%= render :partial => 'shared/errors', :locals => {:obj => @change_order} %>
-                <div class="change-order-actions">
-                    <%= link_to "Print", {:controller => 'projects', :action => 'show_change_order', :id => @change_order.id, :format => :pdf}, :target => '_blank' %>
-                    <br/>
-                    <%= link_to "Email", {:controller => 'projects', :action => 'show_change_order_email', :id => @change_order.id}, :target => '_blank' %>
+                <div class="more-actions">
+                <div class="btn-group">
+                    <%= link_to "Print", {:controller => 'projects', :action => 'show_change_order', :id => @change_order.id, :format => :pdf}, :target => '_blank', class: 'btn' %>
+                    <%= link_to "Email", {:controller => 'projects', :action => 'show_change_order_email', :id => @change_order.id}, :target => '_blank', class: 'btn' %>
+                </div>
                 </div>
                 <%= render(:partial => "change_order_form", :locals => {:f => f}) %>
                 <%= submit_tag "Save", :class => 'btn' %>

@@ -20,24 +20,30 @@
             <div class="zurb-row">
                 <h3>Payments</h3>
                 <div class="button-group">
-                    <%= link_to("+ Payment", {:action => 'new_payment', :original_url => url_for(:action => "payables")}, :id => 'add-payment', :class => 'action vew btn') %>
-                    <%= link_to("All Payments >>", {:action => 'payments'}, :class => 'btn') %>
+                    <div class="btn-group">
+                        <%= link_to("+ Payment", {:action => 'new_payment', :original_url => url_for(:action => "payables")}, :id => 'add-payment', :class => 'action vew btn') %>
+                        <%= link_to("All Payments >>", {:action => 'payments'}, :class => 'btn') %>
+                    </div>
                 </div>
             </div>
 
             <div class="zurb-row">
                 <h3>Bills</h3>
                 <div class="button-group">
-                    <%= link_to("+ Bill", {:action => 'new_bill', :original_url => url_for(:action => "payables")}, :id => 'add-bill', :class => 'action vew btn') %>
-                    <%= link_to("All Bills >>", {:action => 'bills'}, :class => 'btn') %>
+                    <div class="btn-group">
+                        <%= link_to("+ Bill", {:action => 'new_bill', :original_url => url_for(:action => "payables")}, :id => 'add-bill', :class => 'action vew btn') %>
+                        <%= link_to("All Bills >>", {:action => 'bills'}, :class => 'btn') %>
+                    </div>
                 </div>
             </div>
 
             <div class="zurb-row">
                 <h3>POs</h3>
                 <div class="button-group">
-                    <%= link_to("+ Purchase Order", {:action => 'new_purchase_order', :original_url => url_for(:action => "payables")}, :id => 'add-purchase-order', :class => 'action vew btn') %>
-                    <%= link_to("All POs >>", {:action => 'purchase_orders'}, :class => 'btn') %>
+                    <div class="btn-group">
+                        <%= link_to("+ Purchase Order", {:action => 'new_purchase_order', :original_url => url_for(:action => "payables")}, :id => 'add-purchase-order', :class => 'action vew btn') %>
+                        <%= link_to("All POs >>", {:action => 'purchase_orders'}, :class => 'btn') %>
+                    </div>
                 </div>
             </div>
         </div>

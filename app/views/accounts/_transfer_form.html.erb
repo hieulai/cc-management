@@ -40,9 +40,11 @@
 <div class="control-group">
     <div class='controls'>
         <div class="form-buttons">
+            <div class="btn-group">
             <%= f.submit("Save & New", :data => {:form => ".transfer-form", :original_url => "#{url_for(:action => "new_transfer")}"}, :class => 'btn') %>
             <%= link_to("Cancel", {:action => 'list'}, :class => 'btn') %>
             <%= f.submit("Save & Close", :class => 'btn') %>
+            </div>
         </div>
     </div>
 </div>

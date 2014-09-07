@@ -3,10 +3,13 @@
     <div class="zurb-row">
         <div class="columns">
             <h1 class="center">Edit Payment</h1>
-            <%= link_to("Print Check", {:action => 'print_check', :id => @payment.id, :format => :pdf}, :class => 'btn f-right', :target => "_blank") %>
-            <br/>
-            <br/>
-            <%= link_to("Delete", {:action => 'delete_payment', :id => @payment.id}, :class => 'btn btn-danger f-right') %>
+            <div class="more-actions">
+            <div class="btn-group">
+            <%= link_to("Print Check", {:action => 'print_check', :id => @payment.id, :format => :pdf}, :class => 'btn', :target => "_blank") %>
+            
+            <%= link_to("Delete", {:action => 'delete_payment', :id => @payment.id}, :class => 'btn btn-danger') %>
+            </div>
+            </div>
             <%= form_for(@payment, :url => {:action => 'update_payment', :id => @payment.id}, :remote => true, :html => {:class => 'form-horizontal'}) do |f| %>
 
                 <%= render(:partial => "new_payment_form", :locals => {:f => f}) %>

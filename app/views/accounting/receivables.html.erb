@@ -21,8 +21,10 @@
                 <h3>Invoices</h3>
 
                 <div class="button-group">
-                    <%= link_to("+ Invoice", {:action => 'new_invoice', :original_url => url_for(:action => "receivables")}, :id => 'add-invoice', :class => 'action vew btn') %>
-                    <%= link_to("All Invoices >>", {:action => 'invoices'}, :class => 'btn') %>
+                    <div class="btn-group">
+                        <%= link_to("+ Invoice", {:action => 'new_invoice', :original_url => url_for(:action => "receivables")}, :id => 'add-invoice', :class => 'action vew btn') %>
+                        <%= link_to("All Invoices >>", {:action => 'invoices'}, :class => 'btn') %>
+                    </div>
                 </div>
             </div>
 
@@ -30,8 +32,10 @@
                 <h3>Receipts</h3>
 
                 <div class="button-group">
-                    <%= link_to("+ Receipt", {:action => 'new_receipt', :original_url => url_for(:action => "receivables")}, :id => 'add-receipt', :class => 'action vew btn') %>
-                    <%= link_to("All Receipts >>", {:action => 'receipts'}, :class => 'btn') %>
+                    <div class="btn-group">
+                        <%= link_to("+ Receipt", {:action => 'new_receipt', :original_url => url_for(:action => "receivables")}, :id => 'add-receipt', :class => 'action vew btn') %>
+                        <%= link_to("All Receipts >>", {:action => 'receipts'}, :class => 'btn') %>
+                    </div>
                 </div>
             </div>
 
@@ -39,8 +43,10 @@
                 <h3>Deposits</h3>
 
                 <div class="button-group">
-                    <%= link_to("+ Deposit", {:action => 'new_deposit', :original_url => url_for(:action => "receivables")}, :id => 'add-deposit', :class => 'action vew btn') %>
-                    <%= link_to("All Deposits >>", {:action => 'deposits'}, :class => 'btn') %>
+                    <div class="btn-group">
+                        <%= link_to("+ Deposit", {:action => 'new_deposit', :original_url => url_for(:action => "receivables")}, :id => 'add-deposit', :class => 'action vew btn') %>
+                        <%= link_to("All Deposits >>", {:action => 'deposits'}, :class => 'btn') %>
+                    </div>
                 </div>
             </div>
         </div>
