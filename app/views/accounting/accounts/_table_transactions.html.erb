@@ -1,0 +1,16 @@
+<div class="zurb-row">
+
+    <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
+    <table class="grid-view pageless" summary="Payment List">
+        <tr class="header">
+            <th>Date</th>
+            <th>Type</th>
+            <th>Reference #</th>
+            <th>Memo</th>
+            <th>Amount</th>
+            <th>Balance</th>
+        </tr>
+        <%= render(:partial => "accounting/accounts/tr_transactions", :locals => {:transactions => transactions, :balance => balance }) %>
+    </table>
+    <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
+</div>

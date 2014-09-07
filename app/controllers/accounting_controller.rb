@@ -582,18 +582,42 @@ class AccountingController < ApplicationController
   def show_account
     @type = params[:type]
     @object = @builder.send(@type.underscore.pluralize.to_sym).find(params[:id])
-    @project_id = params[:project_id]
+    @project = @builder.projects.find(params[:project_id]) if params[:project_id]
     if params[:page]
       @balance = @object.balance({project_id: params[:project_id], offset: (params[:page].to_i - 1) * Kaminari.config.default_per_page}).to_f
     else
       @balance = @object.balance({project_id: params[:project_id]}).to_f
     end
-    @transactions = @object.transactions({project_id: params[:project_id]}).page params[:page]
+    @transactions = @object.transactions({project_id: params[:project_id]})
     respond_to do |format|
       format.js do
+        @transactions = @transactions.page params[:page]
         render 'accounting/accounts/show_account'
       end
+      format.pdf do
+
+        render :pdf => "#{@type}-#{params[:id]}-Ledgers",
+               :template => 'accounting/accounts/show_account',
+               :layout => 'pdf.html',
+               :show_as_html => params[:debug].present?,
+               :footer => {:center => 'Page [page]'}
+      end
     end
+  end
+
+  def show_account_email
+    @type = params[:type]
+    @object = @builder.send(@type.underscore.pluralize.to_sym).find(params[:id])
+    @project = @builder.projects.find(params[:project_id]) if params[:project_id]
+    render 'accounting/accounts/show_account_email'
+  end
+
+  def send_account_email
+    @type = params[:type]
+    @object = @builder.send(@type.underscore.pluralize.to_sym).find(params[:id])
+    @project = @builder.projects.find(params[:project_id]) if params[:project_id]
+    Mailer.delay.send_account(params[:to], params[:subject], params[:body], @object, @project)
+    redirect_to :action => 'show_account_email', :id => @object.id, :type => @type, :project_id => params[:project_id], :notice => "Email was sent."
   end
 
   private

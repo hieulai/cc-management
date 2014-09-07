@@ -1,0 +1,12 @@
+<%- object ||= @object
+    type ||= @type
+    project ||= @project
+    transactions ||= @transactions
+    balance ||= @balance
+    @builder = object.builder
+%>
+<% if type == Client.name %>
+  <%= render(:partial => "accounting/accounts/client_details", :locals => {:client => object, :project => project, :transactions => transactions, :balance => balance}) %>
+<% elsif type == Vendor.name %>
+  <%= render(:partial => "accounting/accounts/vendor_details", :locals => {:vendor => object, :project => project, :transactions => transactions, :balance => balance}) %>
+<% end %>

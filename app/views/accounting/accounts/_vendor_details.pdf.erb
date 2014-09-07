@@ -1,0 +1,37 @@
+<% content_for :head do %>
+  <%= render(:partial => "shared/company_info") %>
+  <div class="right-header">
+      <table class="top">
+          <tr>
+              <td>Vendor Ledgers</td>
+          </tr>
+      </table>
+      <table class="bottom">
+          <tr>
+              <td>Company Info</td>
+          </tr>
+          <tr>
+              <td>
+                  <%= raw [vendor.company_name, vendor.website].select(&:present?).join("<br/>") %>
+                  <br/>
+                  Service provided: <%= vendor.service_provided %><br/>
+                  Trade: <%= vendor.trade %><br/>
+                  Vendor Type: <%= vendor.type %><br/>
+                  <%= [vendor.address, vendor.city, vendor.state, vendor.zipcode].select(&:present?).join(", ") %>
+              </td>
+          </tr>
+          <%= render(:partial => "shared/profile_account_details", :locals => {:object => vendor.profiles[0] || vendor.profiles.build}) %>
+          <% if project %>
+            <tr>
+                <td>Project</td>
+            </tr>
+            <tr>
+                <td><%= project.name %></td>
+            </tr>
+          <% end %>
+      </table>
+  </div>
+<% end %>
+<%= render(:partial => "accounting/accounts/table_transactions", :locals => {:transactions => transactions, :balance => balance }) %>
+
+

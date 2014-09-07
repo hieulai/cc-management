@@ -1,0 +1,31 @@
+<div>
+    <%= render(:partial => "layouts/accounting_sub_menu")%>
+    <h2 class="center">Send <%= @type %> #<%= @object.id %> Ledgers</h2>
+    <%= form_tag({:action => 'send_account_email', :id => @object.id, :type => @type, :project_id => @project.try(:id)}, class: 'form-horizontal') do |f| %>
+      <div class="control-group">
+          <%= label_tag :to, 'To', class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= text_field_tag :to %></div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :subject, 'Subject', class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= text_field_tag :subject %></div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :attachment, 'Attachment', class: 'col-lg-2 control-label' %>
+          <div class="controls">
+              <%= link_to "#{@type}-#{params[:id]}-Ledgers.pdf", {:action => 'show_account', :id => @object.id, :type => @type, :project_id => @project.try(:id), :format => :pdf}, :target => "_blank" %>
+          </div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :body, 'Body', class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= text_area_tag :body, nil, :rows => 5, :cols => 30 %></div>
+      </div>
+      <div class="control-group">
+          <div class="controls">
+              <%= submit_tag "Send", class: 'btn' %>
+              <%= link_to "Cancel", {:action => "#{@type.underscore}_accounts"} %>
+          </div>
+      </div>
+
+    <% end %>
+</div>

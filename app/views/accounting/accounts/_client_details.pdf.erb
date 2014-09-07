@@ -1,0 +1,35 @@
+<% content_for :head do %>
+  <%= render(:partial => "shared/company_info") %>
+  <div class="right-header">
+      <table class="top">
+          <tr>
+              <td>Client Ledgers</td>
+          </tr>
+      </table>
+      <table class="bottom">
+          <tr>
+              <td>Company Info</td>
+          </tr>
+          <tr>
+              <td>
+                  <%= raw [client.company_name, client.website].select(&:present?).join("<br/>") %>
+                  <br/>
+                  Lead Source: <%= client.lead_source %><br/>
+                  <%= [client.address, client.city, client.state, client.zipcode].select(&:present?).join(", ") %>
+              </td>
+          </tr>
+          <%= render(:partial => "shared/profile_account_details", :locals => {:object => client.profiles[0] || client.profiles.build}) %>
+          <% if project %>
+            <tr>
+                <td>Project</td>
+            </tr>
+            <tr>
+                <td><%= project.name %></td>
+            </tr>
+          <% end %>
+      </table>
+  </div>
+<% end %>
+<%= render(:partial => "accounting/accounts/table_transactions", :locals => {:transactions => transactions, :balance => balance }) %>
+
+

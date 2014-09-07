@@ -1,5 +1,6 @@
 <% if client %>
   <div class="zurb-row">
+
       <div class="large-6 medium-6 columns">
           <p>
               <strong>Company</strong>
@@ -36,8 +37,16 @@
               <%= client.zipcode %>
           </p>
       </div>
-      <div class="large-6 medium-6 columns">
+      <div class="large-4 medium-4 columns">
           <%= render(:partial => "shared/profile_account_details", :locals => {:object => client.profiles[0] || client.profiles.build}) %>
+      </div>
+      <div class="large-2 medium-2 columns">
+          <div class="more-actions">
+              <div class="btn-group">
+                  <%= link_to "Print", {:action => 'show_account', :type => Client.name, :id => client.id, project_id: project.try(:id), :format => :pdf}, :target => '_blank', class: 'btn' %>
+                  <%= link_to "Email", {:action => 'show_account_email', :type => Client.name, :id => client.id, project_id: project.try(:id)}, :target => '_blank', class: 'btn' %>
+              </div>
+          </div>
       </div>
   </div>
   <div class="zurb-row">
@@ -48,20 +57,5 @@
           </p>
       </div>
   </div>
-  <div class="zurb-row">
-
-      <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
-      <table class="grid-view responsive" summary="Payment List">
-          <tr class="header">
-              <th>Date</th>
-              <th>Type</th>
-              <th>Reference #</th>
-              <th>Memo</th>
-              <th>Amount</th>
-              <th>Balance</th>
-          </tr>
-          <%= render(:partial => "accounting/accounts/tr_transactions", :locals => {:transactions => transactions, :balance => balance}) %>
-      </table>
-      <%= paginate transactions, :remote => true, params: {action: "show_account"} %>
-  </div>
+  <%= render(:partial => "accounting/accounts/table_transactions", :locals => {:transactions => transactions, :balance => balance }) %>
 <% end %>

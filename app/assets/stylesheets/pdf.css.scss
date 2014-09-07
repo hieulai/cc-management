@@ -26,6 +26,9 @@ table.item-list {
     border-right: solid 1px #000000;
     text-align: right;
   }
+  td.center {
+    white-space: nowrap;
+  }
   td.description{
     text-align: left;
     padding-left: 20px;
