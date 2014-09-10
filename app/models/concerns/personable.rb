@@ -67,8 +67,12 @@ module Personable
     payments.flat_map { |p| p.bills.job_costed.map { |b| b.project } }.uniq
   end
 
+  def associated_projects_from_bills
+    bills.job_costed.map { |b| b.project }.uniq
+  end
+
   def associated_projects
-    [associated_projects_from_checks, projects_payers.map(&:project)].flatten.uniq
+    [associated_projects_from_checks, associated_projects_from_bills, projects_payers.map(&:project)].flatten.uniq
   end
 
   def project_names_from_checks
