@@ -85,7 +85,7 @@ class Payment < ActiveRecord::Base
   end
 
   def amount(project_id=nil)
-    collection = project_id ? payments_bills.project(project_id) : payments_bills
+    collection = project_id ? payments_bills.estimate(Project.find(project_id).committed_estimate.try(:id)) : payments_bills
     collection.map(&:amount).compact.sum if collection.any?
   end
 
