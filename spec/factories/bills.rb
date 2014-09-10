@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :zero_amount_bill, :class => Bill do
     builder
     billed_date { generate(:date) }
-    estimate
+    estimate :factory => :committed_estimate
     payer :factory => :client
     factory :bill do
       after(:build) do |object, evaluator|

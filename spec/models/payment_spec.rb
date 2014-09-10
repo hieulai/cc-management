@@ -36,6 +36,7 @@ describe Payment do
         bill = subject.bills.first
         at = subject.accounting_transactions.payer_accounts(subject.payer_id, subject.payer_type).project_accounts(bill.project.id).first
         expect(at).not_to be_nil
+        expect(at.amount).to eq(bill.amount * -1)
       end
 
       it "should create a transaction for Account Payable account" do
@@ -47,6 +48,7 @@ describe Payment do
         bill = subject.bills.first
         at = subject.accounting_transactions.accounts(subject.builder.accounts_payable_account.id).project_accounts(bill.project.id).first
         expect(at).not_to be_nil
+        expect(at.amount).to eq(bill.amount * -1)
       end
 
       it "should create a transaction for Bank account" do
@@ -58,6 +60,7 @@ describe Payment do
         bill = subject.bills.first
         at = subject.accounting_transactions.accounts(subject.account.id).project_accounts(bill.project.id).first
         expect(at).not_to be_nil
+        expect(at.amount).to eq(bill.amount * -1)
       end
     end
   end
