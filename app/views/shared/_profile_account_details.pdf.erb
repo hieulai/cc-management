@@ -1,11 +1,13 @@
 <tr>
-    <td>Contact's info</td>
+    <td>Primary Contact</td>
 </tr>
 <tr>
     <td>
-        <%= raw ["#{object.first_name} #{object.last_name}", object.email].compact.join("<br/>") %>
+        <%= raw ["#{object.first_name} #{object.last_name}",
+                 "#{number_to_phone(object.phone1, :area_code => true)} #{object.phone1_tag}",
+                 object.email].select(&:present?).join("<br/>") %>
         <br/>
-        Phone: <%= ["#{number_to_phone(object.phone1, :area_code => true)} #{object.phone1_tag}",
-                    "#{number_to_phone(object.phone2, :area_code => true)}  #{object.phone2_tag}"].compact.join(", ") %>
+        <div class="address-info"></div>
+
     </td>
 </tr>

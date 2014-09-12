@@ -8,7 +8,7 @@
         <% end %>
     </td>
     <td>Bill</td>
-    <td></td>
+    <td><%= t.transactionable.id %></td>
     <td><%= t.transactionable.payer.try(:display_name) %></td>
     <td><%= t.transactionable.notes %></td>
     <td class="right"><%= price_tag(t.amount) %></td>

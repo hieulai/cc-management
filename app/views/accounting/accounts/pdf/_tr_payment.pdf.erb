@@ -1,0 +1,12 @@
+<tr class="clickable <% if t.reconciled %> unclickable <% end %>">
+    <td class="center">
+        <%= t.date %>
+    </td>
+    <td><%= t.transactionable.method %></td>
+    <td><%= t.transactionable.reference %></td>
+    <td></td>
+    <td><%= t.transactionable.memo %>
+    </td>
+    <td class="right"><%= price_tag(t.amount) %></td>
+    <td class="right"><%= price_tag(balance) %></td>
+</tr>

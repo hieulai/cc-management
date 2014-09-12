@@ -1,0 +1,8 @@
+<%- object ||= @object
+    type ||= @type
+    project ||= @project
+    transactions ||= @transactions
+    balance ||= @balance
+    @builder = object.builder
+%>
+<%= render(:partial => "accounting/accounts/pdf/person_details", :locals => {:person => object, :project => project, :transactions => transactions, :balance => balance}) %>

@@ -597,7 +597,7 @@ class AccountingController < ApplicationController
       format.pdf do
 
         render :pdf => "#{@type}-#{params[:id]}-Ledgers",
-               :template => 'accounting/accounts/show_account',
+               :template => 'accounting/accounts/pdf/show_account',
                :layout => 'pdf.html',
                :show_as_html => params[:debug].present?,
                :footer => {:center => 'Page [page]'}

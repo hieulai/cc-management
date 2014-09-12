@@ -5,13 +5,14 @@
             <th>Date</th>
             <th>Type</th>
             <th>Reference #</th>
+            <th>Project</th>
             <th>Memo</th>
             <th>Amount</th>
             <th>Balance</th>
         </tr>
         </thead>
         <tbody>
-        <%= render(:partial => "accounting/accounts/tr_transactions.html.erb", :locals => {:transactions => transactions, :balance => balance}) %>
+        <%= render(:partial => "accounting/accounts/pdf/tr_transactions", :locals => {:transactions => transactions, :balance => balance}) %>
         </tbody>
     </table>
 </div>

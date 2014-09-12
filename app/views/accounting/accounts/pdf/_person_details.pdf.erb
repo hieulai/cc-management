@@ -1,0 +1,50 @@
+<% content_for :javascript do %>
+  <script type='text/javascript'>
+    $(function () {
+      $("div.address-info").first().append($("script.address-info").html());
+    })
+  </script>
+<% end %>
+
+<% content_for :head do %>
+  <%= render(:partial => "shared/company_info") %>
+  <div class="right-header">
+      <table class="top">
+          <tr>
+              <td><%= person.class.name %> Ledger</td>
+          </tr>
+      </table>
+      <table class="bottom">
+          <script type="text/html" class="address-info">
+              <%= [person.address, person.city, person.state, person.zipcode].select(&:present?).join(", ") %>
+          </script>
+          <% if person.company_name.present? %>
+            <tr>
+                <td>
+                    <%= person.company_name %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="address-info">
+                    </div>
+                    <br/>
+                    <%= person.website %>
+                </td>
+            </tr>
+          <% end %>
+          <%= render(:partial => "shared/profile_account_details", :locals => {:object => person.profiles[0] || person.profiles.build}) %>
+          <% if project %>
+            <tr>
+                <td>Project</td>
+            </tr>
+            <tr>
+                <td><%= project.name %></td>
+            </tr>
+          <% end %>
+      </table>
+  </div>
+<% end %>
+<%= render(:partial => "accounting/accounts/pdf/table_transactions", :locals => {:transactions => transactions, :balance => balance }) %>
+
+

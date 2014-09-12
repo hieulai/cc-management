@@ -8,6 +8,7 @@
         <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
         <%= wicked_pdf_javascript_include_tag "wkhtmltopdf_tableSplitHack" -%>
         <%= wicked_pdf_javascript_include_tag "shared" -%>
+        <%= yield :javascript %>
     </head>
     <body>
         <div id="header">

@@ -1,12 +1,12 @@
 <tr class="clickable <% if t.reconciled%> unclickable <% end %>">
     <td class="center">
         <%= t.date %>
-        <%= link_to("Edit", {:controller => 'accounting', :action => 'edit_receipt', :id => t.transactionable_id}, :class => 'action edit clickable-link', :style => 'display: none') %>
     </td>
     <td>
         <%= t.transactionable.client_credit ? "Credit" : "Receipt" %>
     </td>
     <td class="center"><%= t.transactionable.reference || t.transactionable.id %></td>
+    <td></td>
     <td></td>
     <td class="right"><%= price_tag(t.amount) %></td>
     <td class="right"><%= price_tag(balance) %></td>
