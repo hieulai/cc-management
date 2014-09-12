@@ -31,21 +31,16 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
   def assign_company(person)
     result = true
-    if params["#{person.class.name.underscore}_company".to_sym][:company_name].present?
-      person.company = "#{person.class.name}Company".constantize.lookup(params["#{person.class.name.underscore}_company".to_sym])
-      unless person.company.valid?
-        result = false
-        person.company.attributes = params["#{person.class.name.underscore}_company".to_sym]
-        person.company.errors.full_messages.each do |msg|
-          person.errors[:base] << msg
-        end
+    person.company = "#{person.class.name}Company".constantize.lookup(params["#{person.class.name.underscore}_company".to_sym])
+    if person.company && !person.company.valid?
+      result = false
+      person.company.attributes = params["#{person.class.name.underscore}_company".to_sym]
+      person.company.errors.full_messages.each do |msg|
+        person.errors[:base] << msg
       end
     end
     result
   end
-
-
 end

@@ -35,14 +35,14 @@
           <%= co.text_field(:state) %>
       </div>
   </div>
+  <div class="control-group">
+      <%= co.label :address, "Address", :class => 'col-lg-2 control-label' %>
+      <div class="controls">
+          <%= co.text_field(:address) %>
+      </div>
+  </div>
 
 <% end %>
-<div class="control-group">
-    <%= f.label :address, "Address", :class => 'col-lg-2 control-label' %>
-    <div class="controls">
-        <%= f.text_field(:address) %>
-    </div>
-</div>
 <div class="control-group">
     <%= f.label :website, "Website", :class => 'col-lg-2 control-label' %>
     <div class="controls">
