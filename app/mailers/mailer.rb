@@ -57,7 +57,7 @@ class Mailer < ActionMailer::Base
     # create an instance of ActionView, so we can use the render method outside of a controller
     av = PDFRender.new
     av.view_paths = ActionController::Base.view_paths
-    pdf_html = av.render :template => 'accounting/accounts/show_account.pdf.erb',
+    pdf_html = av.render :template => 'accounting/accounts/pdf/show_account.pdf.erb',
                          :layout => 'layouts/pdf.html.erb',
                          :locals => {:object => object, :type => type, :project => project, :transactions => transactions, :balance => balance}
 
