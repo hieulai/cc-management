@@ -534,9 +534,13 @@ table.grid-view .subtotal, table.grid-view .total {
   font-weight: bold;
 }
 
-table.grid-view .total td{
+table.grid-view .total td:first-child{
   font-size: 24.5px;
   font-weight: bold;
+}
+
+table.grid-view .total td{
+  font-size: 100%;
 }
 
 .grid-view table.items th {
