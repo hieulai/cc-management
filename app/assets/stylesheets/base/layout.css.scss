@@ -534,6 +534,11 @@ table.grid-view .subtotal, table.grid-view .total {
   font-weight: bold;
 }
 
+table.grid-view .total td{
+  font-size: 24.5px;
+  font-weight: bold;
+}
+
 .grid-view table.items th {
   background: url("bg.gif") repeat-x scroll left top white;
 }
