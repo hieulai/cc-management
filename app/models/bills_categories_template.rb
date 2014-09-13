@@ -26,6 +26,7 @@ class BillsCategoriesTemplate < ActiveRecord::Base
   attr_accessible :bill_id, :categories_template_id, :category_id, :category_name, :bills_items_attributes, :items_attributes
   attr_accessor :category_id, :category_name
 
+  default_scope includes(:bill).order("bills.billed_date ASC")
   scope :date_range, lambda { |from_date, to_date| includes(:bill).where('bills.billed_date >= ? AND bills.billed_date <= ?', from_date, to_date) }
 
   before_update :remove_old_transactions, :set_destroyed_by_parent
