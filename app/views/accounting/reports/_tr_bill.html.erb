@@ -1,0 +1,12 @@
+<tr class="item item_category_<%= category.id %> id="bill_<%= b_ct.id %>">
+  <td></td>
+	<td>
+        <%= b_ct.bill.id %>
+    </td>
+    <td>
+        <%= b_ct.bill.billed_date %>
+    </td>
+    <td class="right">
+        <%= price_tag(b_ct.price, "amount") %>
+    </td>
+</tr>

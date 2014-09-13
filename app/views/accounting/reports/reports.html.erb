@@ -11,8 +11,11 @@
         </div>
         <div class="zurb-row">
             <div class="columns button-group">
-                <%= link_to("Profit & Loss", {:action => 'profit_loss_report'}, :class => 'btn') %>
-                <%= link_to("Profit & Loss by Project", {:action => 'profit_loss_report', :project => true}, :class => 'btn') %>
+                <div class="btn-group">
+                    <%= link_to("Profit & Loss", {:action => 'profit_loss_report'}, :class => 'btn') %>
+                    <%= link_to("Profit & Loss by Project", {:action => 'profit_loss_report', :project => true}, :class => 'btn') %>
+                    <%= link_to("Project Expense Report", {:action => 'project_expense_report'}, :class => 'btn') %>
+                </div>
             </div>
         </div>
     </div>

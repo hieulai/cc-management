@@ -1,0 +1,10 @@
+<% if flash[:notice].present? %>
+$.rails.createConfirmDialog('Information', '<%= escape_javascript(flash[:notice].html_safe) %>', true);
+<% else
+   options = {from_date: @from_date, to_date: @to_date}
+   project = @builder.projects.find(params[:project_id])
+%>
+$(".pl-report-placeholder").html('<%= escape_javascript(render(:partial => "/accounting/reports/project_expense_report", :locals => {project: project,options: options})) %>');
+Shared.calculateTotals();
+Shared.calculateSubTotals();
+<% end %>

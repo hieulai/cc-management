@@ -1,0 +1,2 @@
+<%= render(:partial => "accounting/reports/project_expense_table.html.erb", :locals => {project: project, from_date: options[:from_date].strftime("%Y-%m-%d"), to_date: options[:to_date].strftime("%Y-%m-%d")}) %>
+<%= link_to("Print", {:action => 'print_project_expense_report', project_id: project.id, from_date: options[:from_date].strftime("%Y-%m-%d"), to_date: options[:to_date].strftime("%Y-%m-%d")}, :class => 'btn', target: "_blank") %>

@@ -1,0 +1,19 @@
+<tr class="category" id="category_<%= category_template.category.id %>">
+    <td class="headline" colspan=4>
+        <h3>
+            <%= category_template.category.name %>
+        </h3>
+    </td>
+</tr>
+<%
+   from_date = from_date.presence || '1900-01-01'
+   to_date =  to_date.presence || '3000-01-01'
+   category_template.bills_categories_templates.date_range(from_date, to_date).each do |b_ct| %>
+  <%= render :partial => 'accounting/reports/tr_bill.html.erb', :locals => {:b_ct => b_ct, :category => category_template.category} %>
+<% end %>
+<tr class="subtotal bill_category_<%= category_template.category.id %>">
+    <td colspan=3>
+        <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div>
+    </td>
+    <td class="right"><div class="subtotal-amount"></div></td>
+</tr>

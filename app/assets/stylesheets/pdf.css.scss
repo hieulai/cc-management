@@ -22,9 +22,21 @@ table {
 }
 
 table.item-list {
+  tr.subtotal {
+    td {
+      border: solid 1px #000000;
+    }
+  }
   td {
     border-right: solid 1px #000000;
     text-align: right;
+  }
+  td.headline {
+    text-align: left;
+    border: solid 1px #000000;
+    h3 {
+      font-weight: normal;
+    }
   }
   td.center {
     white-space: nowrap;

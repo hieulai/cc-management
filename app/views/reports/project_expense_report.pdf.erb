@@ -1,10 +1,11 @@
+<% project = @builder.projects.find(@project_id) %>
+
 <% content_for :head do %>
   <%= render(:partial => "shared/company_info") %>
-  <% project = @builder.projects.find(@project_id) if @project_id.present?  %>
   <div class="right-header">
       <table class="top">
           <tr>
-              <td>P&L Report</td>
+              <td>Project Expense Report</td>
           </tr>
           <tr>
               <td>Date</td>
@@ -42,4 +43,4 @@
       <% end %>
   </div>
 <% end %>
-<%= render(:partial => "accounting/reports/profit_loss_table.html.erb", :locals => {options: {from_date: @from_date, to_date: @to_date, project_id: @project_id}}) %>
+<%= render(:partial => "accounting/reports/project_expense_table.html.erb", :locals => {project: project, from_date: @from_date.strftime("%Y-%m-%d"), to_date: @to_date.strftime("%Y-%m-%d")}) %>

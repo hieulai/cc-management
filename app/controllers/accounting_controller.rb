@@ -513,7 +513,16 @@ class AccountingController < ApplicationController
     end
   end
 
+  def reports
+    render 'accounting/reports/reports'
+  end
+
   def profit_loss_report
+    render 'accounting/reports/profit_loss_report'
+  end
+
+  def project_expense_report
+    render 'accounting/reports/project_expense_report'
   end
 
   def export_profit_loss_report
@@ -528,12 +537,37 @@ class AccountingController < ApplicationController
       flash[:notice] = "From Date and To Date are required"
     end
     respond_to do |format|
-      format.js
+      format.js { render "accounting/reports/export_profit_loss_report" }
+    end
+  end
+
+  def export_project_expense_report
+    msgs = []
+    @project_id = params[:project_id]
+    if @project_id.blank?
+       msgs << "Project is required"
+    end
+    if params[:from_date].present? && params[:to_date].present?
+      @from_date = Date.parse(params[:from_date])
+      @to_date = Date.parse(params[:to_date])
+      if @from_date > @to_date
+        msgs << "From Date has to before To Date"
+      end
+    else
+      msgs << "From Date and To Date are required"
+    end
+    flash[:notice] = msgs.join("<br/>")
+    respond_to do |format|
+      format.js { render "accounting/reports/export_project_expense_report" }
     end
   end
 
   def print_profit_loss_report
     redirect_to controller: "reports", action: "pl_report", from_date: params[:from_date], to_date: params[:to_date], project_id: params[:project_id], format: "pdf"
+  end
+
+  def print_project_expense_report
+    redirect_to controller: "reports", action: "project_expense_report", from_date: params[:from_date], to_date: params[:to_date], project_id: params[:project_id], format: "pdf"
   end
 
   def client_accounts

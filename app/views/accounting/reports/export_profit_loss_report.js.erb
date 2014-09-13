@@ -4,7 +4,7 @@ $.rails.createConfirmDialog('Information', '<%= escape_javascript(flash[:notice]
    options = {from_date: @from_date, to_date: @to_date, project_id: @project_id }
 %>
 
-$(".pl-report-placeholder").html('<%= escape_javascript(render(:partial => "profit_loss_report", :locals => {options: options})) %>');
+$(".pl-report-placeholder").html('<%= escape_javascript(render(:partial => "accounting/reports/profit_loss_report", :locals => {options: options})) %>');
 $('tr[class^=account_]').hide();
 $('.expander').simpleexpand({throwOnMissingTarget: false });
 <% end %>

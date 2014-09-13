@@ -7,13 +7,13 @@
 
 <table class="splitForPrint report">
     <tbody>
-    <%= render(:partial => "accounting/tr_account_balance.html.erb", :locals => {account: r_account, options: options}) %>
-    <%= render(:partial => "accounting/tr_account_balance.html.erb", :locals => {account: c_account, options: options}) %>
+    <%= render(:partial => "accounting/reports/tr_account_balance.html.erb", :locals => {account: r_account, options: options}) %>
+    <%= render(:partial => "accounting/reports/tr_account_balance.html.erb", :locals => {account: c_account, options: options}) %>
     <tr>
         <td class="name">Gross Profit</td>
         <td class="amount calculate"><%= price_tag gross_profit %></td>
     </tr>
-    <%= render(:partial => "accounting/tr_account_balance.html.erb", :locals => {account: e_account, options: options}) %>
+    <%= render(:partial => "accounting/reports/tr_account_balance.html.erb", :locals => {account: e_account, options: options}) %>
     <tr>
         <td class="name">Net Profit</td>
         <td class="amount calculate"><%= price_tag net_profit %></td>

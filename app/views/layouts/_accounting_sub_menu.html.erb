@@ -7,6 +7,6 @@
         <li><%= link_to("Payroll", {:controller => 'accounting', :action => 'payroll'}, :class => active_nav('accounting', 'accounting', 'payroll')) %></li>
         <li><%= link_to("Items", accounting_items_path, :class => active_nav('accounting', 'items')) %></li>
         <li><%= link_to("GL Accounts", {:controller => 'accounts', :action => 'list'}, :class => active_nav('accounts', 'accounts')) %></li>
-        <li><%= link_to("Reports", {:controller => 'accounting', :action => 'reports'}, :class => active_nav('accounting', 'accounting', ['reports', 'profit_loss_report'])) %></li>
+        <li><%= link_to("Reports", {:controller => 'accounting', :action => 'reports'}, :class => active_nav('accounting', 'accounting', ['reports', 'profit_loss_report', 'project_expense_report'])) %></li>
     </ul>
 </div>

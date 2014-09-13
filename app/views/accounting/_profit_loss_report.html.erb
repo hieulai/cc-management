@@ -1,2 +1,0 @@
-<%= render(:partial => "accounting/profit_loss_table.html.erb", :locals => {options: options}) %>
-<%= link_to("Print", {:action => 'print_profit_loss_report', from_date: options[:from_date].strftime("%Y-%m-%d"), to_date: options[:to_date].strftime("%Y-%m-%d"), project_id: options[:project_id]}, :class => 'btn') %>

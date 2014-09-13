@@ -17,5 +17,5 @@
 </tr>
 <% depth+= 1
    account.children.each do |c| %>
-  <%= render(:partial => "accounting/tr_account_balance.html.erb", :locals => {account: c, options: options, :depth => depth}) %>
+  <%= render(:partial => "accounting/reports/tr_account_balance.html.erb", :locals => {account: c, options: options, :depth => depth}) %>
 <% end %>

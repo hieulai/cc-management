@@ -1,0 +1,26 @@
+<% estimate = project.committed_estimate %>
+<table class="grid-view invoiceables-list item-list splitForPrint" summary="Items List">
+    <thead>
+    <tr class="header">
+        <th>Category</th>
+        <th>Bill #</th>
+        <th>Billed Date</th>
+        <th class="price">Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if estimate %>
+      <% estimate.template.try(:categories_templates).try(:each) do |category_template| %>
+        <%= render :partial => 'accounting/reports/tr_category.html.erb', :locals => {:category_template => category_template, :from_date => from_date, :to_date => to_date} %>
+      <% end %>
+    <% end %>
+    <tr class="total large">
+        <td colspan=3>
+            GRAND TOTALS
+        </td>
+        <td class="right">
+            <div class="total-amount"></div>
+        </td>
+    </tr>
+    </tbody>
+</table>
