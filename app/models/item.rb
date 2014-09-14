@@ -39,8 +39,8 @@ class Item < ActiveRecord::Base
   # belongs_to :template
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :change_orders_category
-  belongs_to :bills_categories_template
-  belongs_to :purchase_orders_categories_template
+  belongs_to :bills_categories_template, inverse_of: :items
+  belongs_to :purchase_orders_categories_template, inverse_of: :items
 
   has_many :invoices_items, :dependent => :destroy
   has_many :invoices, :through => :invoices_items
@@ -53,7 +53,6 @@ class Item < ActiveRecord::Base
   attr_accessible :name, :description, :qty, :unit, :estimated_cost, :actual_cost, :committed_cost, :margin, :default, :notes, :file,
                   :change_order, :client_billed, :markup, :bill_memo, :builder_id, :bills_categories_template_id, :purchase_orders_categories_template_id
   attr_accessor :destroyed_by_parent
-  validates :name, presence: true
 
   before_update :check_destroyable, :if => :changed?, :unless => Proc.new { |i| i.changes.size == 1 && i.actual_cost_changed? || i.committed_cost_changed? }
   before_save :reset_markup
@@ -64,6 +63,9 @@ class Item < ActiveRecord::Base
   scope :search_by_name, lambda { |q| where("name ILIKE ?", '%'+ q + '%') }
 
   HEADERS = ["Name", "Description", "Estimated Cost", "Unit", "Margin", "Price", "Notes"]
+
+  validates :name, presence: true
+  validates_presence_of :bill_memo, :if => Proc.new { |i| i.purchased? }
 
   searchable do
     float :qty

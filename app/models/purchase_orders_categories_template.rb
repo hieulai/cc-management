@@ -14,7 +14,7 @@ class PurchaseOrdersCategoriesTemplate < ActiveRecord::Base
   acts_as_paranoid
   belongs_to :purchase_order
   belongs_to :categories_template
-  has_many :items, :dependent => :destroy
+  has_many :items, inverse_of: :purchase_orders_categories_template, :dependent => :destroy
   has_many :purchase_orders_items, :dependent => :destroy
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 

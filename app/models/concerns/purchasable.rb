@@ -6,6 +6,12 @@ module Purchasable
 
     attr_accessible :description, :qty, :estimated_cost, :actual_cost, :memo, :item_id
     before_save :compare_item_costs
+
+    validates_presence_of :memo
+  end
+
+  def bill_memo
+    memo
   end
 
   def compare_item_costs

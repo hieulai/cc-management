@@ -1,5 +1,5 @@
 <tr class="category" id="category_<%= category_template.category.id %>">
-    <td class="headline" colspan=4>
+    <td class="headline" colspan=6>
         <h3>
             <%= category_template.category.name %>
         </h3>
@@ -12,7 +12,7 @@
   <%= render :partial => 'accounting/reports/tr_bill.html.erb', :locals => {:b_ct => b_ct, :category => category_template.category} %>
 <% end %>
 <tr class="subtotal bill_category_<%= category_template.category.id %>">
-    <td colspan=3>
+    <td colspan=5>
         <div class="category-name"><%= category_template.category.name + ' '%>Subtotal</div>
     </td>
     <td class="right"><div class="subtotal-amount"></div></td>

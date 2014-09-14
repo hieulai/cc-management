@@ -17,7 +17,7 @@ class BillsCategoriesTemplate < ActiveRecord::Base
 
   belongs_to :categories_template
   has_many :bills_items, :dependent => :destroy
-  has_many :items, :dependent => :delete_all
+  has_many :items, inverse_of: :bills_categories_template, :dependent => :delete_all
   has_many :invoices_bills_categories_templates, :dependent => :destroy
   has_many :accounting_transactions, as: :transactionable, dependent: :destroy
 

@@ -1,0 +1,19 @@
+<% bill = item.bills_categories_template.bill %>
+<tr class="item item_category_<%= category.id %> id=" bill_<%= item.bills_categories_template.id %>">
+  <td></td>
+  <td class="center">
+      <%= bill.billed_date %>
+  </td>
+  <td>
+      <%= bill.id %>
+  </td>
+  <td class="nowrap">
+      <%= bill.payer.display_name %>
+  </td>
+  <td>
+      <%= item.bill_memo %>
+  </td>
+  <td class="right">
+      <%= price_tag(item.actual_cost, "amount") %>
+  </td>
+</tr>

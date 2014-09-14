@@ -12,6 +12,7 @@ FactoryGirl.define do
     end
 
     factory :has_bills_item do
+      bill_memo { generate(:string) }
       bills_categories_template :factory => :has_bill_bills_categories_template
     end
 

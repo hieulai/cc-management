@@ -1,12 +1,7 @@
-<tr class="item item_category_<%= category.id %> id="bill_<%= b_ct.id %>">
-  <td></td>
-	<td>
-        <%= b_ct.bill.id %>
-    </td>
-    <td>
-        <%= b_ct.bill.billed_date %>
-    </td>
-    <td class="right">
-        <%= price_tag(b_ct.price, "amount") %>
-    </td>
-</tr>
+<% b_ct.bills_items.each do |bi| %>
+  <%= render :partial => 'accounting/reports/tr_item.html.erb', :locals => {:item => bi, :category => category} %>
+<% end %>
+
+<% b_ct.items.each do |i| %>
+  <%= render :partial => 'accounting/reports/tr_item.html.erb', :locals => {:item => i, :category => category} %>
+<% end %>

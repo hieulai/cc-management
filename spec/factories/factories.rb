@@ -3,6 +3,10 @@ FactoryGirl.define do
     "Foo bar #{n}"
   end
 
+  sequence :string do |n|
+    "Lorem #{n}"
+  end
+
   sequence :date do |n|
     Date.new(2000,12,31) + n.days
   end

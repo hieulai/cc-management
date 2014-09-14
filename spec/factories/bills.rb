@@ -47,6 +47,7 @@ FactoryGirl.define do
 
   factory :bills_item do
     item
+    memo { generate(:string) }
     actual_cost 100.0
   end
 end

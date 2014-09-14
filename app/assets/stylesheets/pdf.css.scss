@@ -42,6 +42,9 @@ table.item-list {
       font-weight: normal;
     }
   }
+  td.nowrap {
+    white-space: nowrap;
+  }
   td.center {
     white-space: nowrap;
   }
