@@ -65,7 +65,7 @@ class Item < ActiveRecord::Base
   HEADERS = ["Name", "Description", "Estimated Cost", "Unit", "Margin", "Price", "Notes"]
 
   validates :name, presence: true
-  validates_presence_of :bill_memo, :if => Proc.new { |i| i.purchased? }
+  validate :presence_of_bill_memo
 
   searchable do
     float :qty
@@ -204,5 +204,11 @@ class Item < ActiveRecord::Base
 
   def has_bids?
     bids.any?
+  end
+
+  def presence_of_bill_memo
+    if purchased? && bill_memo.blank?
+      errors[:base] << "Bill memo of #{name} can't be blank"
+    end
   end
 end

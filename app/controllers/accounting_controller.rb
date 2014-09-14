@@ -661,11 +661,6 @@ class AccountingController < ApplicationController
     assign_categories_templates
     @purchasable = klass.new(params[@type.to_sym])
     @purchasable.builder_id = session[:builder_id]
-
-    failed = false
-    unless @purchasable.valid?
-      failed = true
-    end
     if @purchasable.instance_of? Bill
       if params[:bill][:create_payment] == "1"
         payment = Payment.new(params[:payment].merge(:builder_id => session[:builder_id],
@@ -674,16 +669,8 @@ class AccountingController < ApplicationController
         unless payment.valid?
           @bill = @purchasable
           @bill.errors[:base] << "Payment information invalid: <br/> #{payment.errors.full_messages.join("<br/>")}"
-          failed = true
         end
       end
-    end
-    if failed
-      respond_to do |format|
-        format.html { render("new_bill") }
-        format.js { render "purchasable_response" }
-      end
-      return
     end
 
     if @purchasable.save
@@ -698,7 +685,7 @@ class AccountingController < ApplicationController
       end
     else
       @bill = @purchase_order = @purchasable
-      handle_purchasable_errors
+      handle_purchasable_bid_amount_errors
       respond_to do |format|
         format.html { render("new_#{@type}") }
         format.js { render "purchasable_response" }
@@ -726,7 +713,7 @@ class AccountingController < ApplicationController
       end
     else
       @bill = @purchase_order = @purchasable
-      handle_purchasable_errors
+      handle_purchasable_bid_amount_errors
       respond_to do |format|
         format.html { render("edit_#{@type}") }
         format.js { render "purchasable_response" }
@@ -755,12 +742,13 @@ class AccountingController < ApplicationController
     end
   end
 
-  def handle_purchasable_errors
-    if @purchasable.purchasable_items.select { |pi| pi.errors.any? }.any?
+  def handle_purchasable_bid_amount_errors
+    pis = @purchasable.purchasable_items.select { |pi| pi.errors.messages[:bid_amount].present? }
+    if pis.any?
       msg = "Entering this payment will cause you to overpay the bid for following items:"
       msg << "<br/><ul>"
-      @purchasable.purchasable_items.map(&:errors).each do |ie|
-        msg << "<li>#{ie.full_messages.join(".")}</li>" if ie.full_messages.present?
+      pis.each do |pi|
+        msg << "<li>#{pi.errors.messages[:bid_amount].first}</li>"
       end
       msg << "</ul>"
       msg << "You can remedy the issue in one of the following ways:"
