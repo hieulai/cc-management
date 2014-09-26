@@ -249,7 +249,7 @@ class Bill < ActiveRecord::Base
   end
 
   def update_remaining_amount
-    update_column(:remaining_amount, total_amount - paid_amount.to_f)
+    update_column(:remaining_amount, total_amount.to_f - paid_amount.to_f)
   end
 
   private

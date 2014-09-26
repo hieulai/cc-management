@@ -36,6 +36,10 @@ describe Receipt do
 
     context "after create" do
       subject { FactoryGirl.create :receipt }
+      it "should update remaning amount" do
+        expect(subject.remaining_amount).to eq(subject.total_amount)
+      end
+
       it "should create a transaction for Payer" do
         at = subject.accounting_transactions.payer_accounts(subject.payer_id, subject.payer_type).non_project_accounts.first
         expect(at).not_to be_nil

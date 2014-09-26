@@ -58,7 +58,7 @@ class Receipt < ActiveRecord::Base
   before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
   before_destroy :check_destroyable, :prepend => true
   after_initialize :default_values
-  after_save :update_transactions
+  after_save :update_transactions, :update_remaining_amount
 
   validates_presence_of :builder, :method, :received_at
   validates_presence_of :client, :if => Proc.new { |r| r.invoiced || r.client_credit }
@@ -163,6 +163,10 @@ class Receipt < ActiveRecord::Base
       errors[:base] << "This receipt has already been paid in the amount of $#{self.read_attribute(:cached_total_amount)}. Editing a paid receipt requires that all item amounts continue to add up to the original deposit amount. If the original deposit was made for the wrong amount, correct the deposit first and then come back and edit the receipt."
       return false
     end
+  end
+
+  def update_remaining_amount
+    update_column(:remaining_amount, total_amount.to_f - billed_amount.to_f)
   end
 
   private

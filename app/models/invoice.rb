@@ -48,7 +48,7 @@ class Invoice < ActiveRecord::Base
   before_save :check_date_range, :if => Proc.new { |i| i.estimate.cost_plus_bid? && i.bill_from_date && i.bill_to_date }
   before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
   before_destroy :check_destroyable, :prepend => true
-  after_save :update_transactions
+  after_save :update_transactions, :update_remaining_amount
 
   validates_presence_of :estimate, :builder
 
@@ -127,6 +127,10 @@ class Invoice < ActiveRecord::Base
 
   def remove_old_transactions
     accounting_transactions.destroy_all
+  end
+
+  def update_remaining_amount
+    update_column(:remaining_amount, total_amount.to_f - billed_amount.to_f)
   end
 
   private

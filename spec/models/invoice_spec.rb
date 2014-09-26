@@ -43,6 +43,11 @@ describe Invoice do
 
     context "after save" do
       subject { FactoryGirl.create :invoice }
+
+      it "should update remaning amount" do
+        expect(subject.remaining_amount).to eq(subject.total_amount)
+      end
+
       it "should create transactions" do
         expect(subject.accounting_transactions).not_to be_empty
       end
