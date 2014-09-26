@@ -45,6 +45,10 @@ describe Bill do
         expect(at).not_to be_nil
       end
 
+      it "should update remaning amount" do
+        expect(subject.remaining_amount).to eq(subject.total_amount)
+      end
+
       context "as a job costed bill" do
         subject { FactoryGirl.create :bill }
         it "should create a transaction for Accounts Payable account" do

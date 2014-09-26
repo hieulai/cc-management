@@ -55,7 +55,7 @@ class Bill < ActiveRecord::Base
   before_save :check_zero_amount, :check_total_amount_changed
   before_update :clear_old_data, :remove_old_transactions
   before_destroy :check_destroyable, :prepend => true
-  after_save :update_transactions
+  after_save :update_transactions, :update_remaining_amount
   after_touch :index
 
   validates_presence_of :payer, :if => Proc.new { |b| b.purchase_order_id.nil? }
@@ -246,6 +246,10 @@ class Bill < ActiveRecord::Base
 
   def undestroyable?
     paid? || invoiced?
+  end
+
+  def update_remaining_amount
+    update_column(:remaining_amount, total_amount - paid_amount.to_f)
   end
 
   private
