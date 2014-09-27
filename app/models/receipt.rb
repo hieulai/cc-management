@@ -51,7 +51,7 @@ class Receipt < ActiveRecord::Base
   attr_accessor :create_deposit, :account_type
 
   default_scope order("received_at DESC")
-  scope :unbilled, where('remaining_amount is NULL OR remaining_amount > 0')
+  scope :unbilled, where('remaining_amount is NULL OR remaining_amount != 0')
   scope :billed, where('remaining_amount = 0')
   scope :date_range, lambda { |from_date, to_date| where('received_at >= ? AND received_at <= ?', from_date, to_date) }
 

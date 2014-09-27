@@ -34,9 +34,6 @@ class Client < ActiveRecord::Base
   attr_accessible :status, :last_contacted, :lead_source
 
   scope :active, where(status: ACTIVE)
-  scope :has_unbilled_invoices, joins(:invoices).where("invoices.remaining_amount is NULL OR invoices.remaining_amount > 0")
-  scope :has_unbilled_receipts, joins(:receipts).where("receipts.remaining_amount is NULL OR receipts.remaining_amount > 0")
-
   after_touch :index
 
   searchable do
