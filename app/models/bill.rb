@@ -45,7 +45,7 @@ class Bill < ActiveRecord::Base
   attr_accessor :create_payment
 
   default_scope order("billed_date DESC")
-  scope :unpaid, where('remaining_amount is NULL OR remaining_amount > 0')
+  scope :unpaid, where('remaining_amount is NULL OR remaining_amount != 0')
   scope :paid, where('remaining_amount = 0')
   scope :job_costed, where(job_costed: true)
   scope :date_range, lambda { |from_date, to_date| where('billed_date >= ? AND billed_date <= ?', from_date, to_date) }
