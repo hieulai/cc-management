@@ -1,7 +1,7 @@
-<table class="grid-view" summary="Bill List">
+<table class="grid-view" summary="Invoice List">
     <tr class="header">
-        <th></th>
         <th>Invoice #</th>
+        <th>Invoiced Date</th>
         <th>Sent Date</th>
         <th>Project</th>
         <th>Previously Billed</th>
@@ -12,47 +12,39 @@
     <% invoices.each do |i| %>
       <%
          remaining_amount = i.remaining_amount.presence||i.amount
-         if i.receipt_invoice(@receipt.id).present?
-           text_field_display = ""
-           value_display = "none"
-           billed_amount = i.receipt_invoice(@receipt.id).amount
-         else
-           text_field_display = "none"
-           value_display = ""
-           billed_amount = i.billed? ? i.remaining_amount : i.amount
-         end
+         billed_amount = i.receipt_invoice(@receipt.id).amount if i.receipt_invoice(@receipt.id).present?
       %>
-      <tr>
+      <tr class="invoice-row">
           <td class="center">
-              <%= check_box_tag 'invoice-chosen', i.receipt_invoice(@receipt.id).present? ? i.id : "", i.receipt_invoice(@receipt.id).present? %>
-                <%= hidden_field_tag "receipt[receipts_invoices_attributes][][id]", i.receipt_invoice(@receipt.id).try(:id) %>
-              <%= hidden_field_tag "receipt[receipts_invoices_attributes][][invoice_id]", i.id %>
-              <%= hidden_field_tag 'receipt[receipts_invoices_attributes][][_destroy]', !i.receipt_invoice(@receipt.id).present? %>
+              <%= i.reference %>
           </td>
-          <td class="center"><%= i.reference %></td>
+          <td class="center"><%= i.invoice_date %></td>
           <td class="center"><%= i.sent_date %></td>
           <td><%= i.estimate.project.name %></td>
           <td class="right unpaid-amount">
               <%= price_tag(i.billed_amount) %>
           </td>
           <td class="right">
-              <%= price_tag(remaining_amount, "remaining-amount") %>
-              <div class="original-remaining-amount" style="display:none">
-                  <%= remaining_amount %>
+              <%= price_tag(remaining_amount) %>
+              <div class="remaining-amount" style="display: none">
+                  <%= billed_amount.to_f + remaining_amount %>
               </div>
           </td>
           <td class="right">
-              <div class="text-field " style="display: <%= text_field_display %>">
-                  $<%= text_field_tag 'receipt[receipts_invoices_attributes][][amount]', billed_amount, :class => "input-small", :size => 10 %>
-              </div>
-              <div class="value-field" style="display: <%= value_display %>">
-                  <%= price_tag(billed_amount) %>
+              <div class="value-field">
+                  <div class="billed-amount">
+
+                  </div>
               </div>
           </td>
       </tr>
     <% end %>
     <tr class="total xlarge">
         <td colspan="6">TOTALS</td>
-        <td class="right receipt-amount"></td>
+        <td class="right">
+            <div class="total-billed-amount">
+
+            </div>
+        </td>
     </tr>
 </table>

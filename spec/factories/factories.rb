@@ -29,7 +29,7 @@ FactoryGirl.define do
 
   trait :has_projects do
     after(:create) do |object, evaluator|
-      object.projects << FactoryGirl.build(:project)
+      object.projects << FactoryGirl.build(:current_project)
     end
   end
 

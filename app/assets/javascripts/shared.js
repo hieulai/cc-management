@@ -72,7 +72,7 @@ var Shared = (function($){
     };
 
     var updateQueryStringParameter = function (uri, key, value) {
-        var re = new RegExp("([?|&])" + key + "=.*?(&|$)", "i");
+        var re = new RegExp("([?|&])" + key.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") + "=.*?(&|$)", "i");
         var separator = uri.indexOf('?') !== -1 ? "&" : "?";
         if (uri.match(re)) {
             return uri.replace(re, '$1' + key + "=" + value + '$2');
@@ -80,7 +80,7 @@ var Shared = (function($){
         else {
             return uri + separator + key + "=" + value;
         }
-    }
+    };
 
     var initPeopleSelector = function (callback, selector) {
         var format = function (data) {

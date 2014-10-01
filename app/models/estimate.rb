@@ -26,7 +26,6 @@ class Estimate < ActiveRecord::Base
   COST_PLUS ='Cost Plus Bid'
   acts_as_paranoid
 
-  # mount_uploader :data, DataUploader
   belongs_to :builder, :class_name => "Base::Builder"
   belongs_to :project
   has_many :measurements , :dependent => :destroy
@@ -35,6 +34,7 @@ class Estimate < ActiveRecord::Base
   has_many :bids, :dependent => :destroy
   has_many :specifications, :dependent => :destroy
   has_many :bills, :dependent => :destroy
+  has_many :receipts, :dependent => :destroy
   has_many :purchase_orders, :dependent => :destroy
 
   scope :current, where(status: CURRENT)
@@ -51,7 +51,7 @@ class Estimate < ActiveRecord::Base
   before_destroy :check_destroyable, :prepend => true
 
   def undestroyable?
-    bills.any? || invoices.any?
+    bills.any? || invoices.any? || receipts.any?
   end
 
   def kind
@@ -67,50 +67,6 @@ class Estimate < ActiveRecord::Base
     co_categories = ChangeOrdersCategory.where(:change_order_id => project.change_orders.approved.pluck(:id)).uniq
     cos_categories = co_categories.map(&:category).uniq
     cos_categories.reject! { |c| categories.pluck(:name).include? c.name } || Array.new
-  end
-
-  def destroy_with_associations
-    return false if check_destroyable == false
-    template.categories_templates.each do |ct|
-      ct.items.each do |i|
-        i.destroy
-      end
-      ct.purchase_orders.each do |po|
-        if po.bill
-          po.bill.payments.each do |p|
-            p.destroy
-          end
-          po.bill.payments_bills.destroy_all
-          po.bill.delete
-        end
-        po.delete
-      end
-      ct.bills.each do |b|
-        b.payments.each do |p|
-          p.destroy
-        end
-        b.payments_bills.destroy_all
-        b.delete
-      end
-      ct.category.delete if ct.category.present? && !ct.purchased
-      ct.delete
-    end
-    template.delete
-    invoices.each do |i|
-      i.invoices_items.destroy_all
-      i.invoices_bills_categories_templates.destroy_all
-      i.receipts.each do |r|
-        r.receipts_items.destroy_all
-        r.deposits.each do |d|
-          d.destroy
-        end
-        r.deposits_receipts.destroy_all
-        r.delete
-      end
-      i.receipts_invoices.destroy_all
-      i.delete
-    end
-    delete
   end
 
   private

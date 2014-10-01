@@ -1,0 +1,32 @@
+<div class="span6">
+    <div class="control-group">
+        <%= label_tag :create_deposit, "Create Deposit Simultaneously", class: 'col-lg-2 control-label' %>
+        <div class="controls">
+            <%= check_box_tag :create_deposit, 1, false, {:class => 'toggle', :target => '#deposit-from-receipt'} %>
+        </div>
+    </div>
+    <div id="deposit-from-receipt" style="<% if create_deposit.blank? %> display: none
+        <% end %>">
+        <div class="control-group">
+            <%= label_tag 'deposit[account_id]', "Deposit To", class: 'col-lg-2 control-label' %>
+            <div class="controls">
+                <%= hidden_field_tag('deposit[account_id]', nil, :class => "to_select2", :data => {:source => select2_bank_accounts_json}) %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag 'deposit[date]', "Deposit Date", class: 'col-lg-2 control-label' %>
+            <div class="controls">
+                <%= text_field_tag('deposit[date]', nil, class: 'datepicker') %>
+                <%= hidden_field_tag('deposit[date]', nil, id: 'deposit_date_hidden') %>
+            </div>
+        </div>
+        <div class="control-group">
+            <%= label_tag 'deposit[reference]', "Reference #", class: 'col-lg-2 control-label' %>
+            <div class="controls"><%= text_field_tag 'deposit[reference]' %></div>
+        </div>
+        <div class="control-group">
+            <%= label_tag 'deposit[notes]', "Deposit Notes", class: 'col-lg-2 control-label' %>
+            <div class="controls"><%= text_area_tag('deposit[notes]') %></div>
+        </div>
+    </div>
+</div>

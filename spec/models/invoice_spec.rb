@@ -60,37 +60,38 @@ describe Invoice do
       end
 
       it "should create a transaction for Client" do
-        at = subject.accounting_transactions.payer_accounts(subject.estimate.project.client_id, Client.name).non_project_accounts.first
-        expect(at).not_to be_nil
+        expect(subject.accounting_transactions.payer_accounts(subject.estimate.project.client_id, Client.name).non_project_accounts).not_to be_empty
       end
 
       it "should create a transaction for Payer per project" do
-        at = subject.accounting_transactions.payer_accounts(subject.estimate.project.client_id, Client.name).project_accounts(subject.project.id).first
-        expect(at).not_to be_nil
+        expect(subject.accounting_transactions.payer_accounts(subject.estimate.project.client_id, Client.name).project_accounts(subject.project.id)).not_to be_empty
       end
 
       it "should create a transaction for Accounts Receivable account" do
-        at = subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).non_project_accounts.first
-        expect(at).not_to be_nil
+        expect(subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).non_project_accounts).not_to be_empty
       end
 
       it "should create a transaction for Accounts Receivable account per project" do
-        at = subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).project_accounts(subject.project.id).first
-        expect(at).not_to be_nil
+        expect(subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).project_accounts(subject.project.id)).not_to be_empty
       end
 
       it "should create transactions for Revenue accounts" do
         ia = subject.invoices_accounts.first
-        at = ia.accounting_transactions.non_project_accounts.first
-        expect(at).not_to be_nil
+        expect(ia.accounting_transactions.non_project_accounts).not_to be_empty
       end
 
       it "should create transactions for Revenue accounts per project" do
         ia = subject.invoices_accounts.first
-        at = ia.accounting_transactions.project_accounts(subject.project.id).first
-        expect(at).not_to be_nil
+        expect(ia.accounting_transactions.project_accounts(subject.project.id)).not_to be_empty
       end
     end
 
+    context "has leftover amount on receipts" do
+      let(:receipt) { FactoryGirl.create :client_receipt_receipt }
+      subject { FactoryGirl.create :invoice, estimate: receipt.client.projects.first.committed_estimate }
+      it "should charge client credit account" do
+        expect(subject.receipts_invoices.where(receipt_id: receipt.id)).not_to be_empty
+      end
+    end
   end
 end

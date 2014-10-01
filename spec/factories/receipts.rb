@@ -6,24 +6,20 @@ FactoryGirl.define do
     method { generate(:receipt_method) }
     received_at { generate(:date) }
     payer :factory => :client
-    payor "smb"
+    payor { generate(:name) }
     kind "uninvoiced"
 
     after(:build) do |object, evaluator|
       object.receipts_items << FactoryGirl.build(:receipts_item)
     end
 
-    factory :invoiced_receipt do
-      client
-      kind "invoiced"
+    factory :client_receipt_receipt do
+      client factory: :has_projects_client
+      kind "client_receipt"
+      applied_amount 300.0
       after(:build) do |object, evaluator|
-        object.receipts_invoices << FactoryGirl.build(:has_invoice_receipts_invoice)
+        FactoryGirl.create :invoice, estimate: object.client.projects.first.committed_estimate
       end
-    end
-
-    factory :client_credit_receipt do
-      client
-      kind "client_credit"
     end
 
     factory :paid_receipt, traits: [:has_deposits_receipts]

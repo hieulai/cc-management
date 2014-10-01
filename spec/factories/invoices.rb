@@ -17,8 +17,10 @@ FactoryGirl.define do
     end
 
     factory :paid_invoice do
-      after(:build) do |object, evaluator|
-        object.receipts_invoices << FactoryGirl.build(:receipts_invoice)
+      estimate  :factory => :committed_estimate
+      after(:create) do |object, evaluator|
+        FactoryGirl.create(:client_receipt_receipt, client: object.project.client)
+        object.reload
       end
     end
   end

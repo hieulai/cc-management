@@ -37,18 +37,20 @@ class Invoice < ActiveRecord::Base
   attr_accessible :reference, :sent_date, :invoice_date, :estimate_id, :invoices_items_attributes, :remaining_amount,
                   :bill_from_date, :bill_to_date, :cached_total_amount, :invoices_bills_categories_templates_attributes
 
-  default_scope order("created_at DESC")
+  default_scope order("invoice_date ASC, reference ASC")
   scope :unbilled, where('remaining_amount is NULL OR remaining_amount != 0')
   scope :billed, where('remaining_amount = 0')
   scope :date_range, lambda { |from_date, to_date| where('invoice_date >= ? AND invoice_date <= ?', from_date, to_date) }
   scope :project, lambda { |project_id| joins(:estimate).where('estimates.project_id = ?', project_id) }
+  scope :client, lambda { |client_id| joins(:estimate => :project).where('projects.client_id = ?', client_id) }
+  scope :estimate, lambda { |estimate_id| where(estimate_id: estimate_id) }
 
   after_initialize :default_values
   before_save :check_reference
   before_save :check_date_range, :if => Proc.new { |i| i.estimate.cost_plus_bid? && i.bill_from_date && i.bill_to_date }
   before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
   before_destroy :check_destroyable, :prepend => true
-  after_save :update_transactions, :update_remaining_amount
+  after_save :update_transactions, :update_remaining_amount, :charge_client_credit_account
 
   validates_presence_of :estimate, :builder
 
@@ -88,6 +90,10 @@ class Invoice < ActiveRecord::Base
 
   def billed?
     self.receipts.any?
+  end
+
+  def full_billed?
+    remaining_amount == 0
   end
 
   def amount
@@ -131,6 +137,21 @@ class Invoice < ActiveRecord::Base
 
   def update_remaining_amount
     update_column(:remaining_amount, total_amount.to_f - billed_amount.to_f)
+  end
+
+  def charge_client_credit_account
+    raw_ats = AccountingTransaction.where(account_id: builder.client_credit_account.id, payer_type: Client.name, payer_id: project.client_id)
+    ats = raw_ats.non_project_accounts + raw_ats.project_accounts(project.id)
+    ats.sort_by! { |at| at.date }
+    applied_amount = amount
+    ats.each do |at|
+      break if applied_amount == 0
+      at.transactionable.allocate_invoices
+      at.transactionable.remove_old_transactions
+      at.transactionable.update_transactions
+      reload
+      applied_amount = (applied_amount- billed_amount).round(2)
+    end
   end
 
   private

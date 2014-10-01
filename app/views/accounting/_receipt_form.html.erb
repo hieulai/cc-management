@@ -11,20 +11,17 @@
   <%= hidden_field_tag :original_url, params[:original_url] || @original_url %>
 
   <%
-     invoices= @receipt.invoices
-     invoices+= @receipt.client.invoices.unbilled if @receipt.client
-     invoices.uniq!
      uninvoiced_display = @receipt.uninvoiced ? "" : "none"
-     invoiced_display = @receipt.invoiced ? "" : "none"
-     client_credit_display = @receipt.client_credit ? "" : "none"
-     invoiced_client_credit_display = @receipt.invoiced || @receipt.client_credit ? "" : "none"
+     client_receipt_display = @receipt.client_receipt ? "" : "none"
+     job_costed_display = @receipt.client_receipt && @receipt.job_costed ? "" : "none"
+     estimates = @receipt.client ? @receipt.client.projects.has_estimate.map(&:committed_estimate).collect { |s| [s.project.name, s.id] } : []
   %>
 
   <div class="span6" id="receipt-kind" data-kind="<%= @receipt.kind %>">
       <div class="control-group">
           <%= f.label :kind, 'Type', class: 'col-lg-2 control-label' %>
           <div class="controls">
-              <%= f.collection_radio_buttons(:kind, Receipt::TYPES, :first, :last) %>
+              <%= f.collection_radio_buttons(:kind, Receipt::NEW_TYPES, :first, :last) %>
           </div>
       </div>
       <div class="control-group uninvoiced receipt-kind" style="display: <%= uninvoiced_display %>">
@@ -36,17 +33,27 @@
           </div>
       </div>
 
-      <div class="control-group invoiced client_credit receipt-kind client-select" style="display: <%= invoiced_client_credit_display %>">
+      <div class="control-group client_receipt receipt-kind client-select" style="display: <%= client_receipt_display %>">
           <%= f.label :client_id, "Client", class: 'col-lg-2 control-label' %>
           <div class="controls">
               <%= hidden_field_tag "client_name", @receipt.client.try(:display_name), data: {url: people_autocomplete_name_path(type: Client.name)} %>
               <%= f.hidden_field :client_id, class: 'payer-id' %>
-              <%= link_to "", url_for(:action => "show_client_invoices", :receipt_id => @receipt.id), :id => "hidden_client_link", :remote => true, :style => "display: none" %>
+              <%= link_to "", "", :id => "hidden_client_link", :remote => true, :style => "display: none", :data => {template_url: url_for(:action => "show_receipt_invoices", :receipt_id => @receipt.id)} %>
           </div>
       </div>
       <div class="control-group">
           <%= f.label :method, "Payment Type", class: 'col-lg-2 control-label' %>
           <div class="controls"><%= f.select(:method, Receipt::METHODS, {:include_blank => true}) %></div>
+      </div>
+      <div class="control-group client_receipt receipt-kind" style="display: <%= client_receipt_display %>">
+          <%= f.label :job_costed, "Job Costed", class: 'col-lg-2 control-label' %>
+          <div class="controls"><%= f.check_box :job_costed %></div>
+      </div>
+      <div class="control-group client_receipt job_costed receipt-kind estimate-select" style="display: <%= job_costed_display %>">
+          <%= f.label :estimate_id, "Project", class: 'col-lg-2 control-label' %>
+          <div class="controls estimate-placeholder">
+              <%= f.select(:estimate_id, estimates, {:include_blank => true}) %>
+          </div>
       </div>
       <div class="control-group">
           <%= f.label :reference, "Reference #", class: 'col-lg-2 control-label' %>
@@ -59,10 +66,10 @@
               <%= f.hidden_field(:received_at, id: 'receipt_received_date_hidden', :value => f.object.try(:received_at).try(:strftime, '%Y-%m-%d')) %>
           </div>
       </div>
-      <div class="client_credit control-group receipt-kind" style="display: <%= client_credit_display %>">
-          <%= f.label :received_at, "Amount", class: 'col-lg-2 control-label' %>
+      <div class="client_receipt control-group receipt-kind" style="display: <%= client_receipt_display %>">
+          <%= f.label :applied_amount, "Amount", class: 'col-lg-2 control-label' %>
           <div class="controls">
-              <%= f.text_field(:credit_amount) %>
+              <%= f.text_field :applied_amount, value: @receipt.amount %>
           </div>
       </div>
       <div class="control-group">
@@ -72,44 +79,33 @@
   </div>
 
   <% if @receipt.new_record? %>
-    <div class="span6">
-        <div class="control-group">
-            <%= f.label :create_deposit, "Create Deposit Simultaneously", class: 'col-lg-2 control-label' %>
-            <div class="controls">
-                <%= f.check_box :create_deposit, :class => 'toggle', :target => '#deposit-from-receipt' %>
-            </div>
-        </div>
-        <div id="deposit-from-receipt" style="<% unless @receipt.create_deposit == "1" %> display: none
-            <% end %>">
-            <div class="control-group">
-                <%= label_tag 'deposit[account_id]', "Deposit To", class: 'col-lg-2 control-label' %>
-                <div class="controls">
-                    <%= hidden_field_tag('deposit[account_id]', nil, :class => "to_select2", :data => {:source => select2_bank_accounts_json}) %>
-                </div>
-            </div>
-            <div class="control-group">
-                <%= label_tag 'deposit[date]', "Deposit Date", class: 'col-lg-2 control-label' %>
-                <div class="controls">
-                    <%= text_field_tag('deposit[date]', nil, class: 'datepicker') %>
-                    <%= hidden_field_tag('deposit[date]', nil, id: 'deposit_date_hidden') %>
-                </div>
-            </div>
-            <div class="control-group">
-                <%= label_tag 'deposit[reference]', "Reference #", class: 'col-lg-2 control-label' %>
-                <div class="controls"><%= text_field_tag 'deposit[reference]' %></div>
-            </div>
-            <div class="control-group">
-                <%= label_tag 'deposit[notes]', "Deposit Notes", class: 'col-lg-2 control-label' %>
-                <div class="controls"><%= text_area_tag('deposit[notes]') %></div>
-            </div>
-        </div>
-    </div>
+    <%= render(:partial => 'accounting/create_deposit', :locals => {:create_deposit => @create_deposit}) %>
   <% end %>
+
   <div class="uninvoiced receipt-kind" style="display: <%= uninvoiced_display %>">
       <%= render(:partial => 'accounting/uninvoiced_receipts/receipts_items', :locals => {:f => f}) %>
   </div>
-  <div class="invoiced receipt-kind" id="receipt-invoices-placeholder" style="display: <%= invoiced_display %>">
-      <%= render(:partial => "receipt_invoices", :locals => {:f => f, :invoices => invoices}) %>
+  <div class="client_receipt receipt-kind" style="display: <%= client_receipt_display %>">
+      <div id="receipt-invoices-placeholder">
+          <%= render(:partial => "receipt_invoices", :locals => {:f => f, :invoices => @receipt.to_bill_invoices}) %>
+      </div>
+      <div class="control-group">
+          <%= label_tag :previous_client_balance, 'Previous Client Balance', class: 'col-lg-2 control-label' %>
+          <div class="controls">
+              <div class="previous_client_balance">
+                  <% if @receipt.client.present? %>
+                    <%= price_tag(@receipt.client.balance({from_date: '1900-01-01', to_date: @receipt.new_record? ? Time.now : (@receipt.received_at - 1)})) %>
+                  <% end %>
+              </div>
+          </div>
+      </div>
+      <div class="control-group">
+          <%= label_tag :new_client_balance, 'New Client Balance', class: 'col-lg-2 control-label' %>
+          <div class="controls">
+              <div class="new_client_balance">
+              </div>
+          </div>
+      </div>
   </div>
   <div class="form-buttons clearboth">
       <%= submit_tag(@receipt.new_record? ? "Create" : "Save", :class => 'btn') %>

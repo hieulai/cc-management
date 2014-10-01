@@ -82,7 +82,8 @@ class AccountingController < ApplicationController
 
   def create_receipt
     @receipt = @builder.receipts.new(params[:receipt])
-    if params[:receipt][:create_deposit] == "1"
+    @create_deposit = params[:create_deposit]
+    if @create_deposit == "1"
       deposit = @builder.deposits.new(params[:deposit])
       unless deposit.valid?
         @receipt.errors[:base] << "Deposit information invalid: <br/> #{deposit.errors.full_messages.join("<br/>")}"
@@ -455,13 +456,11 @@ class AccountingController < ApplicationController
     end
   end
 
-  def show_client_invoices
-    @invoices = []
+  def show_receipt_invoices
     @receipt = params[:receipt_id].present? ? @builder.receipts.find(params[:receipt_id]) : @builder.receipts.new
-    if params[:receipt].present? && params[:receipt][:client_id].present?
-      @client = Client.find params[:receipt][:client_id]
-      @invoices = @client == @receipt.client ? @client.invoices : @client.invoices.unbilled
-    end
+    @receipt.client = params[:receipt][:client_id].present? ? Client.find(params[:receipt][:client_id]) : nil
+    @receipt.estimate = params[:receipt][:estimate_id].present? ? @builder.estimates.find(params[:receipt][:estimate_id]) : nil
+    @invoices = @receipt.to_bill_invoices
     respond_to do |format|
       format.js {}
     end
@@ -652,6 +651,14 @@ class AccountingController < ApplicationController
     @project = @builder.projects.find(params[:project_id]) if params[:project_id]
     Mailer.delay.send_account(params[:to], params[:subject], params[:body], @object, @project)
     redirect_to :action => 'show_account_email', :id => @object.id, :type => @type, :project_id => params[:project_id], :notice => "Email was sent."
+  end
+
+  def invoices_from_receipt(receipt)
+    return [] unless receipt.client
+    invoices = receipt.estimate.present? ? receipt.invoices.estimate(@receipt.estimate.id) : receipt.invoices.client(@receipt.client_id)
+    invoices+= receipt.estimate.present? ? receipt.estimate.invoices.unbilled : receipt.client.invoices.unbilled
+    invoices.sort_by! { |i| [i.invoice_date, i.reference] }.uniq!
+    invoices
   end
 
   private

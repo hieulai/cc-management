@@ -1,0 +1,6 @@
+<% unless @receipt.estimate %>
+  $(".previous_client_balance").html(Shared.number_to_currency_with_unit("<%= @receipt.client.balance({from_date: '1900-01-01', to_date: @receipt.new_record? ? Time.now : (@receipt.received_at - 1)}) %>", 2, '.', ','));
+  $('.estimate-placeholder').html('<%= escape_javascript( select_tag('receipt[estimate_id]', options_for_select(@receipt.client.projects.has_estimate.map(&:committed_estimate).collect { |s| [s.project.name, s.id] }), {:include_blank => true}))%>')
+<% end %>
+$('#receipt-invoices-placeholder').html('<%= escape_javascript(render :partial =>  'receipt_invoices', :locals => {:invoices => @invoices}) %>');
+Receipt.applyAmounts();

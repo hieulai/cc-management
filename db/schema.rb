@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140805151904) do
+ActiveRecord::Schema.define(:version => 20140930153014) do
 
   create_table "accounting_transactions", :force => true do |t|
     t.string   "name"
@@ -645,7 +645,11 @@ ActiveRecord::Schema.define(:version => 20140805151904) do
     t.string   "kind"
     t.decimal  "credit_amount",       :precision => 10, :scale => 2
     t.time     "deleted_at"
+    t.boolean  "job_costed"
+    t.integer  "estimate_id"
   end
+
+  add_index "receipts", ["estimate_id"], :name => "index_receipts_on_estimate_id"
 
   create_table "receipts_invoices", :force => true do |t|
     t.integer  "receipt_id"

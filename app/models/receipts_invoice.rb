@@ -29,6 +29,6 @@ class ReceiptsInvoice < ActiveRecord::Base
   end
 
   def refund_invoice
-    self.invoice.update_column(:remaining_amount, self.invoice.billed? ? self.invoice.remaining_amount + self.amount_was.to_f : nil)
+    self.invoice.update_column(:remaining_amount, self.invoice.remaining_amount + self.amount_was.to_f)
   end
 end
