@@ -178,7 +178,7 @@ class Receipt < ActiveRecord::Base
   end
 
   def check_total_amount_changed
-    if !self.new_record? && self.billed? && self.applied_amount!= self.read_attribute(:cached_total_amount)
+    if !self.new_record? && self.billed? && self.applied_amount.to_f != self.read_attribute(:cached_total_amount)
       errors[:base] << "This receipt has already been paid in the amount of $#{self.read_attribute(:cached_total_amount)}. Editing a paid receipt requires that all item amounts continue to add up to the original deposit amount. If the original deposit was made for the wrong amount, correct the deposit first and then come back and edit the receipt."
       return false
     end
