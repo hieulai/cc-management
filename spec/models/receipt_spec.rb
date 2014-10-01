@@ -41,13 +41,11 @@ describe Receipt do
       end
 
       it "should create a transaction for Payer" do
-        at = subject.accounting_transactions.payer_accounts(subject.payer_id, subject.payer_type).non_project_accounts.first
-        expect(at).not_to be_nil
+        expect(subject.accounting_transactions.payer_accounts(subject.payer_id, subject.payer_type).non_project_accounts).not_to be_empty
       end
 
       it "should create a transaction for Deposits Held account" do
-        at = subject.accounting_transactions.accounts(subject.builder.deposits_held_account.id).first
-        expect(at).not_to be_nil
+        expect(subject.accounting_transactions.accounts(subject.builder.deposits_held_account.id)).not_to be_empty
       end
 
       context "as an uninvoiced receipt" do
@@ -63,25 +61,22 @@ describe Receipt do
       context "as an client_receipt receipt" do
         subject { FactoryGirl.create :client_receipt_receipt }
         it "should create a transaction for Accounts Receivable account" do
-          at = subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).non_project_accounts.first
-          expect(at).not_to be_nil
+          expect(subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).non_project_accounts).not_to be_empty
         end
 
         it "should create a transaction for Accounts Receivable account per project" do
           invoice = subject.invoices.first
-          at = subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).project_accounts(invoice.project.id).first
-          expect(at).not_to be_nil
+          expect(subject.accounting_transactions.accounts(subject.builder.accounts_receivable_account.id).project_accounts(invoice.project.id)).not_to be_empty
         end
 
         it "should create a transaction for Payer per project" do
           invoice = subject.invoices.first
-          at = subject.accounting_transactions.payer_accounts(subject.client_id, Client.name).project_accounts(invoice.project.id).first
-          expect(at).not_to be_nil
+          expect(subject.accounting_transactions.payer_accounts(subject.client_id, Client.name).project_accounts(invoice.project.id)).not_to be_empty
         end
 
         it "should update client credit account for leftover amount" do
-          at = subject.accounting_transactions.where(payer_id: subject.client_id, payer_type: Client.name, account_id: subject.builder.client_credit_account.id).first
-          expect(at).not_to be_nil
+          expect(subject.accounting_transactions.where(payer_id: nil, payer_type: nil, account_id: subject.builder.client_credit_account.id)).not_to be_empty
+          expect(subject.accounting_transactions.where(payer_id: subject.client_id, payer_type: Client.name, account_id: subject.builder.client_credit_account.id)).not_to be_empty
         end
       end
     end

@@ -158,9 +158,10 @@ class Receipt < ActiveRecord::Base
         accounting_transactions.create(attrs.merge(account_id: builder.accounts_receivable_account.id))
       end
       if credit_amount.to_f > 0
-        attrs = {account_id: builder.client_credit_account.id, date: date, amount: credit_amount.to_f, payer_id: client.id, payer_type: Client.name}
-        attrs[:project_id] = estimate.project_id if estimate
+        attrs = {account_id: builder.client_credit_account.id, date: date, amount: credit_amount.to_f}
         accounting_transactions.create attrs
+        attrs[:project_id] = estimate.project_id if estimate
+        accounting_transactions.create attrs.merge(payer_id: client.id, payer_type: Client.name)
       end
     end
   end
