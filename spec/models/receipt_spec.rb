@@ -75,7 +75,6 @@ describe Receipt do
         end
 
         it "should update client credit account for leftover amount" do
-          expect(subject.accounting_transactions.where(payer_id: nil, payer_type: nil, account_id: subject.builder.client_credit_account.id)).not_to be_empty
           expect(subject.accounting_transactions.where(payer_id: subject.client_id, payer_type: Client.name, account_id: subject.builder.client_credit_account.id)).not_to be_empty
         end
       end

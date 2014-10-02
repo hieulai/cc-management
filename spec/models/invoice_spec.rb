@@ -89,8 +89,14 @@ describe Invoice do
     context "has leftover amount on receipts" do
       let(:receipt) { FactoryGirl.create :client_receipt_receipt }
       subject { FactoryGirl.create :invoice, estimate: receipt.client.projects.first.committed_estimate }
-      it "should charge client credit account" do
+      it "should charge receipts" do
         expect(subject.receipts_invoices.where(receipt_id: receipt.id)).not_to be_empty
+      end
+
+      it "should refund receipts" do
+        subject.estimate = FactoryGirl.create :committed_estimate
+        subject.save
+        expect(subject.receipts_invoices.where(receipt_id: receipt.id)).to be_empty
       end
     end
   end

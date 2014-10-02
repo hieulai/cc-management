@@ -50,7 +50,7 @@ class Invoice < ActiveRecord::Base
   before_save :check_date_range, :if => Proc.new { |i| i.estimate.cost_plus_bid? && i.bill_from_date && i.bill_to_date }
   before_update :check_total_amount_changed, :clear_old_data, :remove_old_transactions
   before_destroy :check_destroyable, :prepend => true
-  after_save :update_transactions, :update_remaining_amount, :charge_client_credit_account
+  after_save :update_transactions, :update_remaining_amount, :allocate_receipts
 
   validates_presence_of :estimate, :builder
 
@@ -139,10 +139,14 @@ class Invoice < ActiveRecord::Base
     update_column(:remaining_amount, total_amount.to_f - billed_amount.to_f)
   end
 
-  def charge_client_credit_account
+  def allocate_receipts
+    receipts.each do |r|
+      r.allocate_invoices
+      r.remove_old_transactions
+      r.update_transactions
+    end
     raw_ats = AccountingTransaction.where(account_id: builder.client_credit_account.id, payer_type: Client.name, payer_id: project.client_id)
-    ats = raw_ats.non_project_accounts + raw_ats.project_accounts(project.id)
-    ats.sort_by! { |at| at.date }
+    ats = raw_ats.non_project_accounts.reject { |at| at.transactionable.estimate.present? && (at.transactionable.estimate != project.committed_estimate) }.sort_by { |at| at.date }
     applied_amount = amount
     ats.each do |at|
       break if applied_amount == 0
