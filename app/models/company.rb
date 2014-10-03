@@ -27,7 +27,7 @@ class Company < ActiveRecord::Base
   attr_accessible :type, :company_name, :year_founded, :office_phone, :website, :address, :city, :state, :zipcode, :tax_id, :logo, :slogan, :image_attributes, :notes
   accepts_nested_attributes_for :image
 
-  validates_uniqueness_of :company_name, scope: [:city, :state, :type], :allow_blank => :true
+  # validates_uniqueness_of :company_name, scope: [:city, :state, :type], :allow_blank => :true
 
   validates_presence_of :city, :state, :if => Proc.new { |c| c.company_name.present? }
 
